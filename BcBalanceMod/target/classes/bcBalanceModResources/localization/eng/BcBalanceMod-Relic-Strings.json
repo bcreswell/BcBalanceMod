@@ -1,0 +1,66 @@
+{
+  "bcBalanceMod:BcEctoplasm": {
+    "NAME": "Ectoplasm",
+    "FLAVOR": "This blob of slime and energy seems to pulse with life.",
+    "DESCRIPTIONS": [
+      "Gain [E] at the start of your turn. NL When you try to pick up #yGold, half of it disappears."
+    ]
+  },
+  "bcBalanceMod:BcSozu": {
+    "NAME": "Sozu",
+    "FLAVOR": "You notice that magical liquids seem to lose their properties when near this relic.",
+    "DESCRIPTIONS": [
+      "Gain [E] at the start of your turn. NL Lose 1 potion slot."
+    ]
+  },
+  "bcBalanceMod:BcBalancingScales": {
+    "NAME": "BC Balancing Scales",
+    "FLAVOR": "Balance is overrated.",
+    "DESCRIPTIONS": [
+      "Adds #b1 extra choice to card rewards. NL Merchant card removals start at 100 gold and don't increase."
+    ]
+  },
+  "bcBalanceMod:EmptyVessel": {
+    "NAME": "Empty Vessel",
+    "FLAVOR": "No cost too great.",
+    "DESCRIPTIONS": [
+      "description"
+    ]
+  },
+  "bcBalanceMod:UnbreakableHeart": {
+    "NAME": "Unbreakable Heart",
+    "FLAVOR": "That beautiful thing was made for me...",
+    "DESCRIPTIONS": [
+      "description"
+    ]
+  },
+  "bcBalanceMod:MonkeyPaw": {
+    "NAME": "Monkey Paw",
+    "FLAVOR": "Careful what you wish for.",
+    "DESCRIPTIONS": [
+      "description"
+    ]
+  },
+  "bcBalanceMod:BcGoldenEye": {
+    "NAME": "Golden Eye",
+    "FLAVOR": "See into the minds of those nearby, predicting their future moves.",
+    "DESCRIPTIONS": [
+      "description"
+    ]
+  },
+  "bcBalanceMod:BcDreamCatcher": {
+    "NAME": "Dream Catcher",
+    "FLAVOR": "The northern tribes would often use dream catchers at night, believing they led to self improvement.",
+    "DESCRIPTIONS": [
+      "description"
+    ]
+  },
+  "bcBalanceMod:BcSundial": {
+    "NAME": "Sundial",
+    "FLAVOR": "\"Early man's foolish obsession with time caused them to look to the sky for guidance, hoping for something permanent.\" - Zoroth",
+    "DESCRIPTIONS": [
+      "Every #b",
+      " times you shuffle your draw pile, gain [E] [E] ."
+    ]
+  }
+}

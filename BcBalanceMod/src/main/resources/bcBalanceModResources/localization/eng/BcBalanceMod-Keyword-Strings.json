@@ -1,0 +1,17 @@
+[
+  {
+    "PROPER_NAME": "Unique",
+    "NAMES": [
+      "unique",
+      "unique."
+    ],
+    "DESCRIPTION": "Unique cards don't have an additional effect if you play multiple copies."
+  },
+  {
+    "PROPER_NAME": "Rebound",
+    "NAMES": [
+      "rebound"
+    ],
+    "DESCRIPTION": "Rebounding a card means that it's put on top of your draw pile."
+  }
+]
