@@ -21,4 +21,5 @@ https://github.com/bcreswell/BcBalanceMod/releases/tag/InitialRelease_v1.0
 
 # Steam Workshop
 To install from Steam, just click "Subscribe" and then when you run Slay the Spire, click "Play with Mods".
+
 https://steamcommunity.com/sharedfiles/filedetails/?id=2830797017
