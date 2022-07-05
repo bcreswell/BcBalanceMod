@@ -1,14 +1,21 @@
 # BcBalanceMod
-Mod for Slay the Spire. Makes changes to the 4 base characters and some of the core mechanics. Adds about 10 new cards for each character.
+Mod for Slay the Spire. 
 
-# Mechanics Changes
-Artifact - no longer blocks self inflicted debuffs. You can still remove these with Orange Pellets though.
+Reworks many of the base game mechanics and cards for the original 4 characters. 
+- New Neow Bonuses
+- New Boss Relic Screen: choose from 3 Boss Relics & 2 Rare Relics
+- 2 New Ascensions to replace Ascensions 12 & 13
+- Redesigned Curse removal system
+- Designed several enemy encounters
+- About half of the original cards have been modified in some way
 
-Intangible - Block doesn't work while Intangible. But it is tracked and restored to you after Intangible expries for the sake of blur, barricade, body slam etc.
+New Content
+- 45 new cards split among original 4 characters (no new orb types or stances)
+- 7 new relics
+- 4 new potions
 
-# Google Doc
-Description of the mod. Work in progress. All the new cards are shown here. Still working on the descriptions for all of the changed cards.
-https://docs.google.com/document/d/19xe15imJCSlaU_WWwwQgxOd32hl-HaRmxX7bmA1qejA/edit?usp=sharing
+The goal of this mod is not to balance around win rate or character performance, but rather to make sure all the cards and their upgrades are tempting and interesting.
 
-# Initial Beta Test Release
-https://github.com/bcreswell/BcBalanceMod/releases/tag/BetaTest_v1.0
+# Initial Release v1.0
+https://github.com/bcreswell/BcBalanceMod/releases/tag/InitialRelease_v1.0
+
