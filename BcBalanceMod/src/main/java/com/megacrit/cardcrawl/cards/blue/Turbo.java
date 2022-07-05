@@ -5,7 +5,8 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.actions.common.GainEnergyAction;
 import com.megacrit.cardcrawl.actions.common.MakeTempCardInDiscardAction;
@@ -63,11 +64,11 @@ public class Turbo extends BcSkillCardBase
     {
         if (!upgraded)
         {
-            return "Gain [B]. NL Draw 2 cards. NL Add a *Void into your discard pile.";
+            return "Gain [B] [B]. NL Draw 1 card. NL Add a *Void into your discard pile.";
         }
         else
         {
-            return "Gain [B] [B]. NL Draw 2 cards. NL Add a *Void into your discard pile.";
+            return "Gain [B] [B] [B]. NL Draw 1 card. NL Add a *Void into your discard pile.";
         }
     }
     
@@ -80,7 +81,7 @@ public class Turbo extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 1 : 2;
+        return !upgraded ? 2 : 3;
     }
     
     @Override
@@ -90,10 +91,10 @@ public class Turbo extends BcSkillCardBase
     }
     //endregion
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new GainEnergyAction(magicNumber));
-        addToBot(new DrawCardAction(2));
+        addToBot(new DrawCardAction(1));
         addToBot(new MakeTempCardInDiscardAction(new VoidCard(), 1));
     }
 }

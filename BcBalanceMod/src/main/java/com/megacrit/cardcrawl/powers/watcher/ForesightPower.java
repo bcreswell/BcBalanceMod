@@ -25,7 +25,7 @@ public class ForesightPower extends AbstractPower
     
     public void updateDescription()
     {
-        this.description = "Your Scrying reveals " + amount + " more cards.";
+        this.description = "Your #yScrying reveals #b" + amount + " more cards.";
     }
     
     static

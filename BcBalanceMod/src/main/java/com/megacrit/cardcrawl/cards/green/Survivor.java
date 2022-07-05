@@ -38,7 +38,7 @@ public class Survivor extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 8 : 12;
+        return !upgraded ? 9 : 13;
     }
     
     @Override
@@ -62,7 +62,7 @@ public class Survivor extends BcSkillCardBase
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        this.addToBot(new GainBlockAction(player, player, this.block));
-        this.addToBot(new DiscardAction(player, player, 1, false));
+        addToBot(new GainBlockAction(player, player, block));
+        addToBot(new DiscardAction(player, player, 1, false));
     }
 }

@@ -5,7 +5,8 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
@@ -17,41 +18,63 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.HeatsinkPower;
 
-public class Heatsinks extends AbstractCard
+public class Heatsinks extends BcPowerCardBase
 {
     public static final String ID = "Heatsinks";
-    private static final CardStrings cardStrings;
     
-    public Heatsinks()
+    //region card parameters
+    @Override
+    public String getDisplayName()
     {
-        super("Heatsinks", cardStrings.NAME, "blue/power/heatsinks", 0, cardStrings.DESCRIPTION, CardType.POWER, CardColor.BLUE, CardRarity.UNCOMMON, CardTarget.SELF);
-        this.baseMagicNumber = 1;
-        this.magicNumber = this.baseMagicNumber;
+        return "Heatsinks";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    @Override
+    public String getImagePath()
     {
-        this.addToBot(new ApplyPowerAction(p, p, new HeatsinkPower(p, this.magicNumber), this.magicNumber));
+        return "blue/power/heatsinks";
     }
     
-    public void upgrade()
+    @Override
+    public int getCost()
     {
-        if (!this.upgraded)
+        return 0;
+    }
+    
+    @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.UNCOMMON;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 1 : 2;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        if (magicNumber == 1)
         {
-            this.upgradeName();
-            this.upgradeMagicNumber(1);
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
+            return "Whenever you play a Power, draw !M! card. NL NL Conserve up to !M! left over energy each turn.";
+        }
+        else
+        {
+            return "Whenever you play a Power, draw !M! cards. NL NL Conserve up to !M! left over energy each turn.";
         }
     }
+    //endregion
     
-    public AbstractCard makeCopy()
+    public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        return new Heatsinks();
-    }
-    
-    static
-    {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Heatsinks");
+        addToBot(new BcApplyPowerAction(new HeatsinkPower(player, magicNumber)));
     }
 }

@@ -21,9 +21,11 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.MonsterStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.AbstractMonster.Intent;
+
 import java.util.Iterator;
 
-public class Centurion extends AbstractMonster {
+public class Centurion extends AbstractMonster
+{
     public static final String ID = "Centurion";
     private static final MonsterStrings monsterStrings;
     public static final String NAME;
@@ -48,153 +50,180 @@ public class Centurion extends AbstractMonster {
     private static final byte SLASH = 1;
     private static final byte PROTECT = 2;
     private static final byte FURY = 3;
-
-    public Centurion(float x, float y) {
-        super(NAME, "Centurion", 80, -14.0F, -20.0F, 250.0F, 330.0F, (String)null, x, y);
-        if (AbstractDungeon.ascensionLevel >= 7) {
-            this.setHp(159, 182);
-        } else {
-            this.setHp(108, 120);
-        }
-
-        if (AbstractDungeon.ascensionLevel >= 17) {
-            this.blockAmount = this.A_17_BLOCK_AMOUNT;
-        } else {
-            this.blockAmount = this.BLOCK_AMOUNT;
-        }
-
-        if (AbstractDungeon.ascensionLevel >= 17)
+    
+    public Centurion(float x, float y)
+    {
+        super(NAME, "Centurion", 80, -14.0F, -20.0F, 250.0F, 330.0F, (String) null, x, y);
+        
+        if (AbstractDungeon.ascensionLevel >= 7)
         {
-            this.slashDmg = 16;
-            this.furyDmg = 8;
-            this.furyHits = 3;
-        }
-        else if (AbstractDungeon.ascensionLevel >= 2)
-        {
-            this.slashDmg = 14;
-            this.furyDmg = 7;
-            this.furyHits = 3;
+            setHp(159, 182);
         }
         else
         {
-            this.slashDmg = 12;
-            this.furyDmg = 6;
-            this.furyHits = 3;
+            setHp(148, 160);
         }
-
+        
+        if (AbstractDungeon.ascensionLevel >= 17)
+        {
+            blockAmount = A_17_BLOCK_AMOUNT;
+        }
+        else
+        {
+            blockAmount = BLOCK_AMOUNT;
+        }
+        
+        if (AbstractDungeon.ascensionLevel >= 17)
+        {
+            slashDmg = 20;
+            furyDmg = 8;
+            furyHits = 3;
+        }
+        else if (AbstractDungeon.ascensionLevel >= 2)
+        {
+            slashDmg = 18;
+            furyDmg = 7;
+            furyHits = 3;
+        }
+        else
+        {
+            slashDmg = 12;
+            furyDmg = 6;
+            furyHits = 3;
+        }
+        
         //start damaged, so the mystic will immediately heal him
-        this.currentHealth = this.maxHealth - 22;
-
-        this.damage.add(new DamageInfo(this, this.slashDmg));
-        this.damage.add(new DamageInfo(this, this.furyDmg));
-        this.loadAnimation("images/monsters/theCity/tank/skeleton.atlas", "images/monsters/theCity/tank/skeleton.json", 1.0F);
-        TrackEntry e = this.state.setAnimation(0, "Idle", true);
+        currentHealth = maxHealth - 55;
+        
+        damage.add(new DamageInfo(this, slashDmg));
+        damage.add(new DamageInfo(this, furyDmg));
+        loadAnimation("images/monsters/theCity/tank/skeleton.atlas", "images/monsters/theCity/tank/skeleton.json", 1.0F);
+        TrackEntry e = state.setAnimation(0, "Idle", true);
         e.setTime(e.getEndTime() * MathUtils.random());
-        this.stateData.setMix("Hit", "Idle", 0.2F);
-        this.state.setTimeScale(0.8F);
+        stateData.setMix("Hit", "Idle", 0.2F);
+        state.setTimeScale(0.8F);
     }
-
-    public void takeTurn() {
-        switch(this.nextMove) {
+    
+    public void takeTurn()
+    {
+        switch (nextMove)
+        {
             case 1:
-                this.playSfx();
+                playSfx();
                 AbstractDungeon.actionManager.addToBottom(new ChangeStateAction(this, "MACE_HIT"));
                 AbstractDungeon.actionManager.addToBottom(new WaitAction(0.3F));
-                AbstractDungeon.actionManager.addToBottom(new DamageAction(AbstractDungeon.player, (DamageInfo)this.damage.get(0), AttackEffect.BLUNT_LIGHT));
+                AbstractDungeon.actionManager.addToBottom(new DamageAction(AbstractDungeon.player, (DamageInfo) damage.get(0), AttackEffect.BLUNT_LIGHT));
                 break;
             case 2:
                 AbstractDungeon.actionManager.addToBottom(new WaitAction(0.25F));
-                AbstractDungeon.actionManager.addToBottom(new GainBlockRandomMonsterAction(this, this.blockAmount));
+                AbstractDungeon.actionManager.addToBottom(new GainBlockRandomMonsterAction(this, blockAmount));
                 break;
             case 3:
-                for(int i = 0; i < this.furyHits; ++i) {
-                    this.playSfx();
+                for (int i = 0; i < furyHits; ++i)
+                {
+                    playSfx();
                     AbstractDungeon.actionManager.addToBottom(new ChangeStateAction(this, "MACE_HIT"));
                     AbstractDungeon.actionManager.addToBottom(new WaitAction(0.3F));
-                    AbstractDungeon.actionManager.addToBottom(new DamageAction(AbstractDungeon.player, (DamageInfo)this.damage.get(1), AttackEffect.BLUNT_HEAVY));
+                    AbstractDungeon.actionManager.addToBottom(new DamageAction(AbstractDungeon.player, (DamageInfo) damage.get(1), AttackEffect.BLUNT_HEAVY));
                 }
         }
-
+        
         AbstractDungeon.actionManager.addToBottom(new RollMoveAction(this));
     }
-
-    private void playSfx() {
+    
+    private void playSfx()
+    {
         int roll = MathUtils.random(1);
-        if (roll == 0) {
+        if (roll == 0)
+        {
             AbstractDungeon.actionManager.addToBottom(new SFXAction("VO_TANK_1A"));
-        } else if (roll == 1) {
+        }
+        else if (roll == 1)
+        {
             AbstractDungeon.actionManager.addToBottom(new SFXAction("VO_TANK_1B"));
-        } else {
+        }
+        else
+        {
             AbstractDungeon.actionManager.addToBottom(new SFXAction("VO_TANK_1C"));
         }
-
+        
     }
-
-    public void changeState(String key) {
+    
+    public void changeState(String key)
+    {
         byte var3 = -1;
-        switch(key.hashCode()) {
+        switch (key.hashCode())
+        {
             case 595384490:
-                if (key.equals("MACE_HIT")) {
+                if (key.equals("MACE_HIT"))
+                {
                     var3 = 0;
                 }
             default:
-                switch(var3) {
+                switch (var3)
+                {
                     case 0:
-                        this.state.setAnimation(0, "Attack", false);
-                        this.state.addAnimation(0, "Idle", true, 0.0F);
+                        state.setAnimation(0, "Attack", false);
+                        state.addAnimation(0, "Idle", true, 0.0F);
                     default:
                 }
         }
     }
-
+    
     protected void getMove(int num)
     {
         int aliveCount = 0;
         AbstractMonster m;
         Iterator var3 = AbstractDungeon.getMonsters().monsters.iterator();
-        while(var3.hasNext()) {
-            m = (AbstractMonster)var3.next();
-            if (!m.isDying && !m.isEscaping) {
+        while (var3.hasNext())
+        {
+            m = (AbstractMonster) var3.next();
+            if (!m.isDying && !m.isEscaping)
+            {
                 ++aliveCount;
             }
         }
-
+        
         //always does big attack when mystic is dead
         if (aliveCount == 1)
         {
-            this.setMove((byte)3, Intent.ATTACK, ((DamageInfo)this.damage.get(1)).base, this.furyHits, true);
+            setMove(FURY, Intent.ATTACK, (damage.get(1)).base, furyHits, true);
         }
-        else if (num >= 65 && !this.lastTwoMoves((byte)2) && !this.lastTwoMoves((byte)3))
+        else if (num >= 65 && !lastTwoMoves(PROTECT))
         {
-            this.setMove((byte)2, Intent.DEFEND);
+            setMove(PROTECT, Intent.DEFEND);
         }
-        else if (!this.lastTwoMoves((byte)1))
+        else if (!lastTwoMoves(SLASH))
         {
-            this.setMove((byte)1, Intent.ATTACK, ((DamageInfo)this.damage.get(0)).base);
+            setMove(SLASH, Intent.ATTACK, ((DamageInfo) damage.get(0)).base);
         }
         else
         {
-            this.setMove((byte)2, Intent.DEFEND);
+            setMove(PROTECT, Intent.DEFEND);
         }
     }
-
-    public void damage(DamageInfo info) {
+    
+    public void damage(DamageInfo info)
+    {
         super.damage(info);
-        if (info.owner != null && info.type != DamageType.THORNS && info.output > 0) {
-            this.state.setAnimation(0, "Hit", false);
-            this.state.setTimeScale(0.8F);
-            this.state.addAnimation(0, "Idle", true, 0.0F);
+        if (info.owner != null && info.type != DamageType.THORNS && info.output > 0)
+        {
+            state.setAnimation(0, "Hit", false);
+            state.setTimeScale(0.8F);
+            state.addAnimation(0, "Idle", true, 0.0F);
         }
-
+        
     }
-
-    public void die() {
-        this.state.setTimeScale(0.1F);
-        this.useShakeAnimation(5.0F);
+    
+    public void die()
+    {
+        state.setTimeScale(0.1F);
+        useShakeAnimation(5.0F);
         super.die();
     }
-
-    static {
+    
+    static
+    {
         monsterStrings = CardCrawlGame.languagePack.getMonsterStrings("Centurion");
         NAME = monsterStrings.NAME;
         MOVES = monsterStrings.MOVES;

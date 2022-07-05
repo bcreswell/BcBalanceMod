@@ -1,7 +1,7 @@
 package com.megacrit.cardcrawl.cards.purple;
 
 import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -43,10 +43,16 @@ public class LikeWater extends BcPowerCardBase
     {
         return CardRarity.UNCOMMON;
     }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "If you're in Calm at the end of your turn, NL gain !M! Block.";
+    }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new ApplyPowerAction(player, player, new LikeWaterPower(player, magicNumber), magicNumber));
+        addToBot(new BcApplyPowerAction(new LikeWaterPower(player, magicNumber)));
     }
 }

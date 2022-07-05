@@ -1,11 +1,11 @@
 package com.megacrit.cardcrawl.cards.green;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.watcher.*;
 import com.megacrit.cardcrawl.cards.*;
-import com.megacrit.cardcrawl.cards.optionCards.*;
 import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.monsters.*;
 
@@ -16,17 +16,39 @@ public class JustImprovising extends BcAttackCardBase
     public static final String ID = BcBalanceMod.makeID("JustImprovising");
     public static AbstractMonster TempTarget;
     
+    ImprovisedDamage dmg;
+    ImprovisedPoison psn;
+    ImprovisedVulnerable vln;
+    ImprovisedBlock blk;
+    
     //region card parameters
     @Override
     public String getDisplayName()
     {
-        return "   Just Improvising";
+        return "Just Improvising";
     }
     
     @Override
     public String getImagePath()
     {
         return "green/justImprovising.png";
+    }
+    
+    @Override
+    protected void onInitialized()
+    {
+        dmg = new ImprovisedDamage();
+        psn = new ImprovisedPoison();
+        vln = new ImprovisedVulnerable();
+        blk = new ImprovisedBlock();
+        
+        if (upgraded)
+        {
+            dmg.upgrade();
+            psn.upgrade();
+            vln.upgrade();
+            blk.upgrade();
+        }
     }
     
     @Override
@@ -56,65 +78,63 @@ public class JustImprovising extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 4 : 5;
-    }
-    
-    static int getImprovisedDamage(boolean isUpgraded, AbstractMonster monster)
-    {
-        int dmg = !isUpgraded ? 4 : 7;
-        
-        if (monster != null)
-        {
-            //using a strike to calculate the damage taking all
-            // buffs and debuffs into account from player and monster.
-            Strike_Green strike = new Strike_Green();
-            strike.baseDamage = dmg;
-            strike.calculateCardDamage(monster);
-            return strike.damage;
-        }
-        else
-        {
-            return dmg;
-        }
-    }
-    
-    static int getImprovisedPoison(boolean isUpgraded)
-    {
-        return !isUpgraded ? 3 : 4;
-    }
-    
-    static int getImprovisedVulnerable(boolean isUpgraded)
-    {
-        return !isUpgraded ? 1 : 2;
-    }
-    
-    static int getImprovisedBlock(boolean isUpgraded)
-    {
-        return !isUpgraded ? 5 : 7;
-    }
-    
-    @Override
-    public int getBlock()
-    {
-        return getImprovisedBlock(upgraded);
+        return 4;
     }
     
     @Override
     public String getBaseDescription()
     {
-        AbstractMonster monster = null;
-        if (BcUtility.isPlayerInCombat())
-        {
-            monster = TempTarget;
-        }
+        String dmgString = BcUtility.getModifiedValueString(dmg.baseDamage, dmg.damage);
+        String blkString = BcUtility.getModifiedValueString(blk.baseBlock, blk.block);
         
-        return "Deal !D! damage, NL then pick one: NL" +
-                       " -Deal " + getImprovisedDamage(upgraded, monster) + " damage. NL " +
-                       " -Inflict " + getImprovisedPoison(upgraded) + " Poison. NL " +
-                       " -Inflict " + getImprovisedVulnerable(upgraded) + " Vulnerable. NL " +
-                       " -Gain " + getBlock() + " Block. ";
+        return "Deal !D! damage, then NL pick one: NL" +
+                       " -Deal " + dmgString + " damage. NL " +
+                       " -Inflict " + psn.getMagicNumber() + " Poison. NL " +
+                       " -Inflict " + vln.getMagicNumber() + " Vulnerable. NL " +
+                       " -Gain " + blkString + " Block. ";
     }
     //endregion
+    
+    @Override
+    public void applyPowers()
+    {
+        dmg.applyPowers();
+        psn.applyPowers();
+        vln.applyPowers();
+        blk.applyPowers();
+        
+        super.applyPowers();
+    }
+    
+    @Override
+    public void calculateCardDamage(AbstractMonster monster)
+    {
+        dmg.calculateCardDamage(monster);
+        
+        super.calculateCardDamage(monster);
+        rawDescription = getFullDescription();
+        initializeDescription();
+    }
+    
+    @Override
+    public void resetAttributes()
+    {
+        dmg.resetAttributes();
+        psn.resetAttributes();
+        vln.resetAttributes();
+        blk.resetAttributes();
+        
+        super.resetAttributes();
+    }
+    
+    @Override
+    protected void onUpgraded()
+    {
+        dmg.upgrade();
+        psn.upgrade();
+        vln.upgrade();
+        blk.upgrade();
+    }
     
     @Override
     public void use(AbstractPlayer player, AbstractMonster monster)
@@ -124,18 +144,17 @@ public class JustImprovising extends BcAttackCardBase
         
         ArrayList<AbstractCard> choices = new ArrayList();
         
-        AbstractCard dmg = new ImprovisedDamage();
-        ImprovisedPoison psn = new ImprovisedPoison();
-        ImprovisedVulnerable vln = new ImprovisedVulnerable();
-        ImprovisedBlock blk = new ImprovisedBlock();
+        dmg = (ImprovisedDamage) dmg.makeStatEquivalentCopy();
+        psn = (ImprovisedPoison) psn.makeStatEquivalentCopy();
+        vln = (ImprovisedVulnerable) vln.makeStatEquivalentCopy();
+        blk = (ImprovisedBlock) blk.makeStatEquivalentCopy();
         
-        if (upgraded)
-        {
-            dmg.upgrade();
-            psn.upgrade();
-            vln.upgrade();
-            blk.upgrade();
-        }
+        dmg.applyPowers();
+        psn.applyPowers();
+        vln.applyPowers();
+        blk.applyPowers();
+        
+        dmg.calculateCardDamage(monster);
         
         choices.add(dmg);
         choices.add(psn);

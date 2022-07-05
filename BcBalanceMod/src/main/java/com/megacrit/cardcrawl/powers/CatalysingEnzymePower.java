@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.powers;
 
+import bcBalanceMod.baseCards.*;
 import bcBalanceMod.util.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -13,41 +14,55 @@ import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 
-public class CatalysingEnzymePower extends AbstractPower
+public class CatalysingEnzymePower extends BcPowerBase
 {
     public static final String POWER_ID = "CatalysingEnzymePower";
     
-    private static final Texture smallIcon = TextureLoader.getTexture("bcBalanceModResources/images/powers/catalysingEnzyme36x36.png");
-    private static final Texture largeIcon = TextureLoader.getTexture("bcBalanceModResources/images/powers/catalysingEnzyme84x84.png");
-    
-    private AbstractCreature source;
-    
-    public CatalysingEnzymePower(AbstractCreature owner, AbstractCreature source, int poisonAmt)
+    public CatalysingEnzymePower(AbstractCreature owner, int amount)
     {
-        this.name = "Catalysing Enzyme";
-        this.ID = POWER_ID;
-        this.owner = owner;
-        this.source = source;
-        this.amount = poisonAmt;
-        if (this.amount >= 9999)
-        {
-            this.amount = 9999;
-        }
-        
-        this.updateDescription();
-        this.region48 = new TextureAtlas.AtlasRegion(smallIcon, 0, 0, smallIcon.getWidth(), smallIcon.getHeight());
-        this.region128 = new TextureAtlas.AtlasRegion(largeIcon, 0, 0, largeIcon.getWidth(), largeIcon.getHeight());
-        this.type = AbstractPower.PowerType.DEBUFF;
-        this.isTurnBased = true;
+        super(owner, amount);
     }
+    
+    //region parameters
+    @Override
+    public String getDisplayName()
+    {
+        return "Catalysing Enzyme";
+    }
+    
+    @Override
+    public String getId()
+    {
+        return POWER_ID;
+    }
+    
+    @Override
+    public String getImagePath()
+    {
+        return "catalysingEnzyme32x32.png";
+    }
+    
+    @Override
+    public PowerType getPowerType()
+    {
+        return PowerType.DEBUFF;
+    }
+    
+    @Override
+    public boolean getCanGoNegative()
+    {
+        return false;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "When taking Poison damage, an equal amount of Catalysing Enzyme is consumed for extra damage.";
+    }
+    //endregion
     
     public void playApplyPowerSfx()
     {
         CardCrawlGame.sound.play("POWER_POISON", 0.05F);
-    }
-    
-    public void updateDescription()
-    {
-        this.description = "When this takes Poison damage, NL Catalysing Enzyme is consumed to deal extra damage.";
     }
 }

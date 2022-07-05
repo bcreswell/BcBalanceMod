@@ -5,60 +5,83 @@
 
 package com.megacrit.cardcrawl.powers;
 
-import com.megacrit.cardcrawl.actions.defect.AnimateSpecificOrbAction;
-import com.megacrit.cardcrawl.actions.defect.ChannelAction;
-import com.megacrit.cardcrawl.actions.defect.TriggerOrbPassiveAction;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.defect.*;
+import com.megacrit.cardcrawl.actions.utility.*;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.orbs.Dark;
+import com.megacrit.cardcrawl.orbs.*;
 
-public class DeepDarknessPower extends AbstractPower
+public class DeepDarknessPower extends BcPowerBase
 {
-    private boolean isUpgraded;
+    public static final String POWER_ID = "DeepDarknessPower";
     
-    public DeepDarknessPower(AbstractCreature owner, boolean isUpgraded)
+    public DeepDarknessPower(AbstractCreature owner, int amount)
     {
-        this.ID = "DeepDarknessPower" + (isUpgraded ? "+" : "");
-        this.name = "The Deep Darkness" + (isUpgraded ? "+" : "");
-        this.owner = owner;
-        this.isUpgraded = isUpgraded;
-        this.amount = 1;
-        this.updateDescription();
-        this.loadRegion("darkembrace");
+        super(owner, amount);
     }
     
-    public void updateDescription()
+    //region parameters
+    @Override
+    public String getDisplayName()
     {
-        if (isUpgraded)
+        return "The Deep Darkness";
+    }
+    
+    @Override
+    public String getId()
+    {
+        return POWER_ID;
+    }
+    
+    @Override
+    public String getImagePath()
+    {
+        return "darkembrace";
+    }
+    
+    @Override
+    public PowerType getPowerType()
+    {
+        return PowerType.BUFF;
+    }
+    
+    @Override
+    public boolean getCanGoNegative()
+    {
+        return false;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        if (amount == 1)
         {
-            this.description = "End of turn: NL If you have an empty orb slot, NL Channel 1 Dark, NL and trigger its passive.";
+            return "End of turn: NL Trigger the passive on all #yDark orbs. NL If you have an empty orb slot, NL Channel a #yDark orb. ";
         }
         else
         {
-            this.description = "End of turn: NL If you have an empty orb slot, NL Channel 1 Dark.";
+            return "End of turn: NL Trigger the passive on all #yDark orbs #b" + amount + " times. NL If you have an empty orb slot, NL Channel a #yDark orb.";
         }
     }
+    //endregion
     
     public void atEndOfTurn(boolean isPlayer)
     {
         if (isPlayer)
         {
-            AbstractPlayer player = AbstractDungeon.player;
-    
             for (int i = 0; i < amount; i++)
             {
-                if (player.hasEmptyOrb())
-                {
-                    Dark darkOrb = new Dark();
-                    addToBot(new ChannelAction(darkOrb));
+                addToBot(new TrueWaitAction(.1f));
+                addToBot(new BcDarkImpulseAction());
+            }
             
-                    if (isUpgraded)
-                    {
-                        addToBot(new TriggerOrbPassiveAction(darkOrb));
-                        addToBot(new AnimateSpecificOrbAction(darkOrb));
-                    }
-                }
+            addToBot(new TrueWaitAction(.1f));
+            
+            if (AbstractDungeon.player.hasEmptyOrb())
+            {
+                addToBot(new ChannelAction(new Dark()));
             }
         }
     }

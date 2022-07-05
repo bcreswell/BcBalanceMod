@@ -1,7 +1,8 @@
 package com.megacrit.cardcrawl.cards.tempCards;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -23,13 +24,19 @@ public class Omega extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 3 : 2;
+        return 3;
     }
     
     @Override
     public String getId()
     {
         return ID;
+    }
+    
+    @Override
+    public boolean getRetain()
+    {
+        return true;
     }
     
     @Override
@@ -43,10 +50,16 @@ public class Omega extends BcPowerCardBase
     {
         return CardRarity.SPECIAL;
     }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "At the end of your turn, deal !M! damage to ALL enemies.";
+    }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        this.addToBot(new ApplyPowerAction(player, player, new OmegaPower(player, magicNumber), magicNumber));
+        addToBot(new BcApplyPowerAction(new OmegaPower(player, magicNumber)));
     }
 }

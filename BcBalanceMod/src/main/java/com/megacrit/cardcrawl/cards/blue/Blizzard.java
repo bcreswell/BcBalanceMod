@@ -5,6 +5,8 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
@@ -22,102 +24,112 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.orbs.Frost;
 import com.megacrit.cardcrawl.vfx.combat.BlizzardEffect;
+
 import java.util.Iterator;
 
-public class Blizzard extends AbstractCard {
+public class Blizzard extends BcAttackCardBase
+{
     public static final String ID = "Blizzard";
-    private static final CardStrings cardStrings;
-
-    public Blizzard() {
-        super("Blizzard", cardStrings.NAME, "blue/attack/blizzard", 1, cardStrings.DESCRIPTION, CardType.ATTACK, CardColor.BLUE, CardRarity.UNCOMMON, CardTarget.ALL_ENEMY);
-        this.baseDamage = 2;
-        this.baseMagicNumber = 2;
-        this.magicNumber = this.baseMagicNumber;
-        this.isMultiDamage = true;
+    
+    //region card parameters
+    @Override
+    public String getImagePath()
+    {
+        return "blue/attack/blizzard";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
+    
+    @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.UNCOMMON;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 2;
+    }
+    
+    @Override
+    public boolean isAoeAttack()
+    {
+        return true;
+    }
+    
+    @Override
+    public int getDamage()
+    {
+        return !upgraded ? 3 : 4;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 3 : 4;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage to ALL enemies. NL When Frost is Channeled, increase this card's damage by !M! this combat.";
+    }
+    
+//    @Override
+//    public String getTemporaryExtraDescription(AbstractMonster monster)
+//    {
+//        int frostCount = getFrostChanneledThisCombat();
+//
+//        return ""+frostCount+" frost channeled";
+//    }
+    //endregion
+    
+    int getFrostChanneledThisCombat()
+    {
         int frostCount = 0;
-        Iterator var4 = AbstractDungeon.actionManager.orbsChanneledThisCombat.iterator();
-
-        while(var4.hasNext()) {
-            AbstractOrb o = (AbstractOrb)var4.next();
-            if (o instanceof Frost) {
-                ++frostCount;
-            }
-        }
-
-        if (upgraded) {
-            this.baseDamage = 3 + frostCount * this.magicNumber;
-        }else {
-            this.baseDamage = 2 + frostCount * this.magicNumber;
-        }
-        this.calculateCardDamage((AbstractMonster)null);
-        if (Settings.FAST_MODE) {
-            this.addToBot(new VFXAction(new BlizzardEffect(frostCount, AbstractDungeon.getMonsters().shouldFlipVfx()), 0.25F));
-        } else {
-            this.addToBot(new VFXAction(new BlizzardEffect(frostCount, AbstractDungeon.getMonsters().shouldFlipVfx()), 1.0F));
-        }
-
-        this.addToBot(new DamageAllEnemiesAction(p, this.multiDamage, this.damageTypeForTurn, AttackEffect.BLUNT_HEAVY, false));
-    }
-
-    public void applyPowers() {
-        int frostCount = 0;
-        Iterator var2 = AbstractDungeon.actionManager.orbsChanneledThisCombat.iterator();
-
-        while(var2.hasNext()) {
-            AbstractOrb o = (AbstractOrb)var2.next();
-            if (o instanceof Frost) {
-                ++frostCount;
-            }
-        }
-
-        if (frostCount > 0) {
-            if (upgraded) {
-                this.baseDamage = 3 + frostCount * this.magicNumber;
-            }else {
-                this.baseDamage = 2 + frostCount * this.magicNumber;
-            }
-            super.applyPowers();
-            this.rawDescription = cardStrings.DESCRIPTION + cardStrings.EXTENDED_DESCRIPTION[0];
-            this.initializeDescription();
-        }
-
-    }
-
-    public void onMoveToDiscard() {
-        this.rawDescription = cardStrings.DESCRIPTION;
-        this.initializeDescription();
-    }
-
-    public void calculateCardDamage(AbstractMonster mo) {
-        super.calculateCardDamage(mo);
-        this.rawDescription = cardStrings.DESCRIPTION;
-        this.rawDescription = this.rawDescription + cardStrings.EXTENDED_DESCRIPTION[0];
-        this.initializeDescription();
-    }
-
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeMagicNumber(1);
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
-    }
-
-    public AbstractCard makeCopy() {
-        return new Blizzard();
-    }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Blizzard");
-        if (Settings.language == Settings.GameLanguage.ENG)
+        for (AbstractOrb orb : AbstractDungeon.actionManager.orbsChanneledThisCombat)
         {
-            //todo: figure out best practice for how to do this.
-            cardStrings.DESCRIPTION = "Deal 2 damage to ALL enemies, NL and !M! more for each Frost Channeled this combat.";
-            cardStrings.UPGRADE_DESCRIPTION = "Deal 3 damage to ALL enemies, NL and !M! more for each Frost Channeled this combat.";
+            if (orb instanceof Frost)
+            {
+                frostCount++;
+            }
         }
+        
+        return frostCount;
+    }
+    
+    @Override
+    public void applyPowers()
+    {
+        baseDamage = getBlizzDamage();
+        calculateCardDamage(null);
+        super.applyPowers();
+    }
+    
+    int getBlizzDamage()
+    {
+        if (BcUtility.isPlayerInCombat())
+        {
+            return getDamage() + (getMagicNumber() * getFrostChanneledThisCombat());
+        }
+        else
+        {
+            return getDamage();
+        }
+    }
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        int frostCount = getFrostChanneledThisCombat();
+        baseDamage = getBlizzDamage();
+        calculateCardDamage(null);
+    
+        addToBot(new VFXAction(new BlizzardEffect(frostCount, AbstractDungeon.getMonsters().shouldFlipVfx()), .5f));
+        addToBot(new DamageAllEnemiesAction(player, multiDamage, damageTypeForTurn, AttackEffect.BLUNT_HEAVY, false));
     }
 }

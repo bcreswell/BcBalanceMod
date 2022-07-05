@@ -27,7 +27,7 @@ public class ImpossiblyFast extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 0;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -45,20 +45,20 @@ public class ImpossiblyFast extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 2 : 3;
+        return 3;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Draw !M! attacks that cost zero. NL Add a Dazed to your draw pile.";
+        return "Draw !M! zero cost cards. NL Add a Dazed to your draw pile.";
     }
     //endregion
     
     @Override
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new TooFastAction(magicNumber));
+        addToBot(new ImpossiblyFastAction(magicNumber));
         addToBot(new MakeTempCardInDrawPileAction(new Dazed(), 1, true, true));
     }
 }

@@ -5,9 +5,9 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
-import com.megacrit.cardcrawl.actions.common.DamageAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
@@ -20,43 +20,69 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.VulnerablePower;
 
-public class BeamCell extends AbstractCard
+public class BeamCell extends BcAttackCardBase
 {
     public static final String ID = "Beam Cell";
-    private static final CardStrings cardStrings;
     
-    public BeamCell()
+    //region card parameters
+    @Override
+    public String getDisplayName()
     {
-        super("Beam Cell", cardStrings.NAME, "blue/attack/beam_cell", 0, cardStrings.DESCRIPTION, CardType.ATTACK, CardColor.BLUE, CardRarity.UNCOMMON, CardTarget.ENEMY);
-        this.baseDamage = 5;
-        this.damage =  baseDamage;
-        this.baseMagicNumber = 1;
-        this.magicNumber = this.baseMagicNumber;
+        return "Beam Cell";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    @Override
+    public String getImagePath()
     {
-        this.addToBot(new DamageAction(m, new DamageInfo(p, this.damage, this.damageTypeForTurn), AttackEffect.BLUNT_HEAVY));
-        this.addToBot(new ApplyPowerAction(m, p, new VulnerablePower(m, this.magicNumber, false), this.magicNumber, true, AttackEffect.NONE));
+        return "blue/attack/beam_cell";
     }
     
-    public AbstractCard makeCopy()
+    @Override
+    public int getCost()
     {
-        return new BeamCell();
+        return 0;
     }
     
-    public void upgrade()
+    @Override
+    public String getId()
     {
-        if (!this.upgraded)
-        {
-            //this.upgradeDamage(1);
-            this.upgradeMagicNumber(1);
-            this.upgradeName();
-        }
+        return ID;
     }
     
-    static
+    @Override
+    public CardRarity getCardRarity()
     {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Beam Cell");
+        return CardRarity.COMMON;
+    }
+    
+    @Override
+    public boolean isAoeAttack()
+    {
+        return false;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 1 : 2;
+    }
+    
+    @Override
+    public int getDamage()
+    {
+        return !upgraded ? 3 : 4;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage. NL Apply !M! Vulnerable.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AttackEffect.BLUNT_HEAVY));
+        addToBot(new BcApplyPowerAction(monster,  new VulnerablePower(monster, magicNumber, false)));
     }
 }

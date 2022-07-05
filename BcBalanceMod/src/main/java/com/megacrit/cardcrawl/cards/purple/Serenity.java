@@ -38,7 +38,7 @@ public class Serenity extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 6 : 8;
+        return !upgraded ? 7 : 9;
     }
     
     @Override

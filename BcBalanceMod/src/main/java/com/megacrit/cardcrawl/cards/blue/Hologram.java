@@ -5,8 +5,8 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
-import com.megacrit.cardcrawl.actions.common.BetterDiscardPileToHandAction;
-import com.megacrit.cardcrawl.actions.common.GainBlockAction;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
@@ -17,44 +17,79 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class Hologram extends AbstractCard
+public class Hologram extends BcSkillCardBase
 {
     public static final String ID = "Hologram";
-    private static final CardStrings cardStrings;
     
-    public Hologram()
+    //region card parameters
+    @Override
+    public String getDisplayName()
     {
-        super("Hologram", cardStrings.NAME, "blue/skill/hologram", 1, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.BLUE, CardRarity.COMMON, CardTarget.SELF);
-        this.baseBlock = 5;
-        this.exhaust = true;
+        return "Hologram";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    @Override
+    public String getImagePath()
     {
-        this.addToBot(new GainBlockAction(p, p, this.block));
-        this.addToBot(new BetterDiscardPileToHandAction(1));
+        return "blue/skill/hologram";
     }
     
-    public void upgrade()
+    @Override
+    public String getId()
     {
-        if (!this.upgraded)
+        return ID;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 0;
+    }
+    
+    @Override
+    public int getBlock()
+    {
+        return !upgraded ? 0 : 3;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.COMMON;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        if (!upgraded)
         {
-            this.upgradeName();
-            //this.upgradeBlock(2);
-            this.exhaust = false;
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
+            return "Retrieve a card of your choice.";
         }
-        
+        else
+        {
+            return "Gain !B! Block. NL Retrieve a card of your choice.";
+        }
     }
     
-    public AbstractCard makeCopy()
+    @Override
+    public boolean isARetrieveCard()
     {
-        return new Hologram();
+        return true;
     }
     
-    static
+    @Override
+    public String getFootnote()
     {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Hologram");
+        return "Can't target cards that have \"Retrieve\" in their description.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        if (upgraded)
+        {
+            addToBot(new GainBlockAction(player, player, block));
+        }
+        addToBot(new HologramAction());
     }
 }

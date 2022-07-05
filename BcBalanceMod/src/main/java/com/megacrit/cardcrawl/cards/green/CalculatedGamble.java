@@ -1,6 +1,8 @@
 package com.megacrit.cardcrawl.cards.green;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.unique.CalculatedGambleAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -44,21 +46,31 @@ public class CalculatedGamble extends BcSkillCardBase
     }
     
     @Override
+    public boolean getRetain()
+    {
+        return upgraded;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
         if (!upgraded)
         {
-            return "Discard your hand, NL then draw that many cards.";
+            return "Choose any number of cards to discard, NL then draw that many cards.";
         }
         else
         {
-            return "Choose any number of cards to discard, NL then draw that many cards.";
+            return "Choose any number of cards to discard, NL then draw that many cards + 1.";
         }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new CalculatedGambleAction(upgraded));
+        addToBot(new CalculatedGambleAction(true));
+        if (upgraded)
+        {
+            addToBot(new DrawCardAction(1));
+        }
     }
 }

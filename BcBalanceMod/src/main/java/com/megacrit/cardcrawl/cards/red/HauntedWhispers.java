@@ -3,7 +3,10 @@ package com.megacrit.cardcrawl.cards.red;
 import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.actions.unique.*;
+import com.megacrit.cardcrawl.cards.*;
 import com.megacrit.cardcrawl.characters.*;
+import com.megacrit.cardcrawl.dungeons.*;
 import com.megacrit.cardcrawl.monsters.*;
 
 public class HauntedWhispers extends BcSkillCardBase
@@ -42,18 +45,6 @@ public class HauntedWhispers extends BcSkillCardBase
     }
     
     @Override
-    public boolean getExhaust()
-    {
-        return true;
-    }
-    
-    @Override
-    public boolean getEthereal()
-    {
-        return true;
-    }
-    
-    @Override
     public int getMagicNumber()
     {
         return 1;
@@ -64,11 +55,53 @@ public class HauntedWhispers extends BcSkillCardBase
     {
         if (!upgraded)
         {
-            return "Pick an Ethereal card from your draw pile and put it in your hand.";
+            return "Draw an Ethereal card of your choice.";
         }
         else
         {
-            return "Pick an Ethereal card from your draw or exhaust piles and put it in your hand.";
+            return "Draw or Exhume an Ethereal card of your choice.";
+        }
+    }
+    
+    @Override
+    public String getFootnote()
+    {
+        if (!upgraded)
+        {
+            return null;
+        }
+        else
+        {
+            return "Can't Exhume cards that also \"Exhaust.\"";
+        }
+    }
+    
+    @Override
+    public String getTemporaryExtraDescription(AbstractMonster monster)
+    {
+        if (upgraded)
+        {
+            return null;
+        }
+        
+        AbstractPlayer player = AbstractDungeon.player;
+        
+        int etherealCount = 0;
+        for (AbstractCard card : player.drawPile.group)
+        {
+            if (card.isEthereal)
+            {
+                etherealCount++;
+            }
+        }
+    
+        if (etherealCount == 1)
+        {
+            return "" + etherealCount + " ethereal in draw pile";
+        }
+        else
+        {
+            return "" + etherealCount + " ethereals in draw pile";
         }
     }
     //endregion
@@ -76,6 +109,6 @@ public class HauntedWhispers extends BcSkillCardBase
     @Override
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new HauntedWhispersAction(magicNumber, upgraded));
+        addToBot(new DrawOfPlayersChoiceAction(magicNumber, upgraded, true, false, false));
     }
 }

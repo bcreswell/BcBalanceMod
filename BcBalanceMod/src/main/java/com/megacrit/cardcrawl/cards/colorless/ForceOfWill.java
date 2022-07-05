@@ -3,7 +3,7 @@ package com.megacrit.cardcrawl.cards.colorless;
 import bcBalanceMod.BcBalanceMod;
 import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -15,13 +15,13 @@ public class ForceOfWill extends BcSkillCardBase
 {
     public static final String ID = BcBalanceMod.makeID("ForceOfWill");
     
+    //region card parameters
     @Override
     public String getImagePath()
     {
         return "colorless/forceOfWill.png";
     }
     
-    //region card parameters
     @Override
     public int getCost()
     {
@@ -47,9 +47,15 @@ public class ForceOfWill extends BcSkillCardBase
     }
     
     @Override
+    public int getBlock()
+    {
+        return !upgraded ? 7 : 11;
+    }
+    
+    @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 2 : 3;
+        return !upgraded ? 1 : 2;
     }
     
     @Override
@@ -61,7 +67,7 @@ public class ForceOfWill extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Inflict !M! Weak on ALL enemies.";
+        return "Inflict !M! Weak on ALL enemies. NL Gain !B! Block for each enemy that intends to attack you.";
     }
     
     @Override
@@ -71,12 +77,35 @@ public class ForceOfWill extends BcSkillCardBase
     }
     //endregion
     
+    int getAttackingMonstersCount()
+    {
+        int count = 0;
+        if (BcUtility.isPlayerInCombat())
+        {
+            for (AbstractMonster monster : AbstractDungeon.getCurrRoom().monsters.monsters)
+            {
+                if (!monster.isDeadOrEscaped() && (monster.getIntentBaseDmg() >= 0))
+                {
+                    count++;
+                }
+            }
+        }
+        
+        return count;
+    }
+    
     @Override
     public void use(AbstractPlayer player, AbstractMonster m)
     {
         for (AbstractMonster monster : AbstractDungeon.getCurrRoom().monsters.monsters)
         {
-            addToBot(new ApplyPowerAction(monster, player, new WeakPower(monster, this.magicNumber, false), this.magicNumber, true, AbstractGameAction.AttackEffect.NONE));
+            addToBot(new ApplyPowerAction(monster, player, new WeakPower(monster, 1, false), 1, true, AbstractGameAction.AttackEffect.NONE));
+        }
+        
+        int attackingMonstersCount = getAttackingMonstersCount();
+        for (int i = 0; i < attackingMonstersCount; i++)
+        {
+            addToBot(new GainBlockAction(AbstractDungeon.player, AbstractDungeon.player, block));
         }
     }
 }

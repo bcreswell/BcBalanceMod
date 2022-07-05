@@ -47,6 +47,12 @@ public class NinjaVanish extends BcSkillCardBase
     @Override
     public boolean getRetain()
     {
+        return true;
+    }
+    
+    @Override
+    public boolean getInnate()
+    {
         return upgraded;
     }
     
@@ -57,22 +63,9 @@ public class NinjaVanish extends BcSkillCardBase
     }
     
     @Override
-    public int getBlock()
-    {
-        return !upgraded ? 0 : 3;
-    }
-    
-    @Override
     public String getBaseDescription()
     {
-        if (getBlock() > 0)
-        {
-            return "Gain 1 Intangible NL and !B! Block. NL End your turn.";
-        }
-        else
-        {
-            return "Gain 1 Intangible. NL End your turn.";
-        }
+        return "Gain 1 Intangible. NL End your turn.";
     }
     //endregion
     
@@ -81,10 +74,6 @@ public class NinjaVanish extends BcSkillCardBase
     {
         addToBot(new VFXAction(new NinjaVanishEffect(player.hb.cX, player.hb.cY)));
         addToBot(new ApplyPowerAction(player, player, new IntangiblePlayerPower(player, 1), 1));
-        if (upgraded)
-        {
-            addToBot(new GainBlockAction(player, block));
-        }
         addToBot(new PressEndTurnButtonAction());
     }
 }

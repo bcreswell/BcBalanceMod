@@ -47,7 +47,7 @@ public class GhostlyArmor extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 20 : 28;
+        return !upgraded ? 17 : 25;
     }
     
     @Override

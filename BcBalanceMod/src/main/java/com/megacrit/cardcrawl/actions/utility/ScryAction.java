@@ -1,6 +1,7 @@
 package com.megacrit.cardcrawl.actions.utility;
 
 import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -11,30 +12,21 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.powers.*;
+import com.megacrit.cardcrawl.powers.watcher.*;
 import com.megacrit.cardcrawl.relics.*;
 
 import java.util.Iterator;
 
 public class ScryAction extends AbstractGameAction
 {
-    private static final UIStrings uiStrings;
-    public static final String[] TEXT;
     CardGroup scryGroup = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-    int originalAmount;
-    boolean dmgDone = false;
-    
-    static
-    {
-        uiStrings = CardCrawlGame.languagePack.getUIString("ReprogramAction");
-        TEXT = uiStrings.TEXT;
-    }
-    
     private float startingDuration;
+    boolean scryFinished;
+    boolean firstUpdate;
     
     public ScryAction(int numCards)
     {
-        amount = numCards;
-        originalAmount = amount;
+        amount = numCards + BcUtility.getPowerAmount(ForesightPower.POWER_ID);
         if (AbstractDungeon.player.hasRelic("GoldenEye"))
         {
             AbstractDungeon.player.getRelic("GoldenEye").flash();
@@ -44,6 +36,8 @@ public class ScryAction extends AbstractGameAction
         actionType = AbstractGameAction.ActionType.CARD_MANIPULATION;
         startingDuration = Settings.ACTION_DUR_FAST;
         duration = startingDuration;
+        scryFinished = false;
+        firstUpdate = true;
     }
     
     public void update()
@@ -55,75 +49,92 @@ public class ScryAction extends AbstractGameAction
         }
         else
         {
-            if (duration == startingDuration)
+            if (firstUpdate)
             {
-                for (AbstractPower power : player.powers)
-                {
-                    power.onScry();
-                }
+                firstUpdate = false;
                 
+                //region first update
                 //scry can shuffle discard pile into draw pile if needed.
                 if (amount > player.drawPile.size())
                 {
-                    for (AbstractRelic r : AbstractDungeon.player.relics)
+                    BcBalancingScales scales = (BcBalancingScales) player.getRelic(BcBalancingScales.ID);
+                    if (scales != null)
                     {
-                        r.onShuffle();
+                        scales.onSpecialScryShuffle();
                     }
                     
+                    //this is a weird shuffle algorithm. Wanted to shuffle only the discard pile part and leave the draw pile in it's current order
+                    //the reason: if you can see that 1 card in your draw pile is an important one, dont want to lose track of it because you scryed
+                    //so we randomize the order of the discard pile but put it underneath the existing draw pile without disturbing their order.
                     while (!player.discardPile.isEmpty())
                     {
                         AbstractCard card = player.discardPile.getRandomCard(true);
                         //'false' here moves the card to the top of the deck,
                         player.discardPile.moveToDeck(card, false);
                         // but should be bottom instead, so we gotta monkey with it
-                        card = player.drawPile.group.remove(player.drawPile.group.size()  - 1);
+                        card = player.drawPile.group.remove(player.drawPile.group.size() - 1);
                         player.drawPile.addToBottom(card);
                     }
                 }
-    
+                
                 amount = Math.min(amount, player.drawPile.size());
-    
+                
                 for (int i = 0; i < amount; i++)
                 {
                     AbstractCard card = player.drawPile.group.get((player.drawPile.group.size() - i) - 1);
                     scryGroup.addToBottom(card);
                 }
                 
-                AbstractDungeon.gridSelectScreen.open(scryGroup, amount, true, TEXT[0]);
-            }
-            else
-            {
-                if (!AbstractDungeon.gridSelectScreen.selectedCards.isEmpty())
+                if (scryGroup.size() > 0)
                 {
-                    for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards)
+                    AbstractDungeon.gridSelectScreen.open(scryGroup, amount, true, "Choose any number of cards to discard.", false);
+                }
+                else
+                {
+                    isDone = true;
+                }
+                //endregion
+            }
+            else if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.GRID)
+            {
+                if (!scryFinished)
+                {
+                    scryFinished = true;
+                    
+                    if (!AbstractDungeon.gridSelectScreen.selectedCards.isEmpty())
                     {
-                        player.drawPile.moveToDiscardPile(card);
+                        //region after player has made scry selections
+                        for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards)
+                        {
+                            player.drawPile.moveToDiscardPile(card);
+                        }
+                        AbstractDungeon.gridSelectScreen.selectedCards.clear();
                     }
                     
-                    AbstractDungeon.gridSelectScreen.selectedCards.clear();
-                }
-    
-                for (AbstractCard card : player.discardPile.group)
-                {
-                    card.triggerOnScry();
-                }
-                
-                if (!dmgDone)
-                {
-                    dmgDone = true;
-                    if (scryGroup.size() > 0)
+                    for (AbstractCard card : player.drawPile.group)
                     {
-                        int dmgTimes = BcUtility.getPowerAmount(TheFireWillSpreadPower.POWER_ID);
-                        for (int i = 0; i < dmgTimes; i++)
+                        card.triggerOnScry();
+                    }
+                    
+                    for (AbstractCard card : player.discardPile.group)
+                    {
+                        card.triggerOnScry();
+                    }
+                    
+                    for (AbstractPower power : player.powers)
+                    {
+                        if (power instanceof BcPowerBase)
                         {
-                            //limited by the actual number of cards available to the scry action
-                            addToBot(new TheFireWillSpreadAction(scryGroup.size()));
+                            ((BcPowerBase) power).onScry(amount);
                         }
+                        power.onScry();
                     }
                 }
+                else
+                {
+                    tickDuration();
+                }
             }
-            
-            tickDuration();
         }
     }
 }

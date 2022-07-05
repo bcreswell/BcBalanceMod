@@ -1,7 +1,8 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -23,7 +24,7 @@ public class Establishment extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -47,18 +48,18 @@ public class Establishment extends BcPowerCardBase
     @Override
     public boolean getInnate()
     {
-        return upgraded;
+        return true;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "End of Turn: NL Reduce the cost of a random Retained Attack or Skill by 1 for the rest of combat.";
+        return "End of turn: NL Reduce the cost of a random Retained non-Rare card by 1 for the rest of combat.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new ApplyPowerAction(player, player, new EstablishmentPower(player, magicNumber), magicNumber));
+        addToBot(new BcApplyPowerAction(new EstablishmentPower(player, magicNumber)));
     }
 }

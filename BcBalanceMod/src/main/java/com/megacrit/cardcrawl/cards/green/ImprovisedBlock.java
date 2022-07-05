@@ -21,6 +21,12 @@ public class ImprovisedBlock extends BcAttackCardBase
     }
     
     @Override
+    public CardColor getCardColor()
+    {
+        return CardColor.COLORLESS;
+    }
+    
+    @Override
     public String getImagePath()
     {
         return "green/improvisedBlock.png";
@@ -59,7 +65,7 @@ public class ImprovisedBlock extends BcAttackCardBase
     @Override
     public int getBlock()
     {
-        return JustImprovising.getImprovisedBlock(upgraded);
+        return !upgraded ? 4 : 8;
     }
     
     @Override
@@ -81,7 +87,7 @@ public class ImprovisedBlock extends BcAttackCardBase
         if (player != null)
         {
             applyPowersToBlock();
-            this.addToBot(new GainBlockAction(player, player, this.block));
+            addToBot(new GainBlockAction(player, player, block));
         }
         JustImprovising.TempTarget = null;
     }

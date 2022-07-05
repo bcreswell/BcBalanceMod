@@ -1,6 +1,7 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.watcher.ConjureBladeAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.tempCards.Expunger;
@@ -41,7 +42,7 @@ public class ConjureBlade extends BcSkillCardBase
     @Override
     public boolean getRetain()
     {
-        return true;
+        return upgraded;
     }
     
     @Override
@@ -57,28 +58,27 @@ public class ConjureBlade extends BcSkillCardBase
     }
     
     @Override
+    public int getMagicNumber()
+    {
+        return 1;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
+        if (magicNumber == 0)
         {
             return "Shuffle an *Expunger into your draw pile that attacks X times.";
         }
         else
         {
-            return "Shuffle an *Expunger into your draw pile that attacks X+1 times.";
+            return "Shuffle an *Expunger into your draw pile that attacks X+" + magicNumber + " times.";
         }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        if (!upgraded)
-        {
-            addToBot(new ConjureBladeAction(player, freeToPlayOnce, energyOnUse));
-        }
-        else
-        {
-            addToBot(new ConjureBladeAction(player, freeToPlayOnce, energyOnUse + 1));
-        }
+        addToBot(new ConjureBladeAction(player, freeToPlayOnce, energyOnUse + magicNumber));
     }
 }

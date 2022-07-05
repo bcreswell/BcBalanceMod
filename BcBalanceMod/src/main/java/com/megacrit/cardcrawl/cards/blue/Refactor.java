@@ -45,6 +45,12 @@ public class Refactor extends BcSkillCardBase
     }
     
     @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
     public String getImagePath()
     {
         return "blue/refactor.png";
@@ -53,13 +59,7 @@ public class Refactor extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 0;
-    }
-    
-    @Override
-    public String getId()
-    {
-        return ID;
+        return 1;
     }
     
     @Override
@@ -75,21 +75,20 @@ public class Refactor extends BcSkillCardBase
     }
     
     @Override
+    public boolean getRetain()
+    {
+        return upgraded;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Exhaust any number of cards in your hand. NL Replace them with random cards of a the same color.";
-        }
-        else
-        {
-            return "Exhaust any number of cards in your hand. NL Replace them with random upgraded cards of a the same color.";
-        }
+        return "Exhaust any number of cards in your hand. Replace them with random upgraded cards of a the same color.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        this.addToBot(new RefactorAction(upgraded));
+        addToBot(new RefactorAction(true));
     }
 }

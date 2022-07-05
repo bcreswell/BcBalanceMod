@@ -43,7 +43,7 @@ public class ThunderClap extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
     }
     
     @Override

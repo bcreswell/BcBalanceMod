@@ -41,7 +41,7 @@ public class NormalizeStrengthAction extends AbstractGameAction
             addToBot(new ApplyPowerAction(owner, owner, new StrengthPower(owner, -afterReboundStr), -afterReboundStr));
         }
         
-        addToBot(new RemoveSpecificPowerAction(owner, owner, WeakPower.POWER_ID));
+        //addToBot(new RemoveSpecificPowerAction(owner, owner, WeakPower.POWER_ID));
         
         isDone = true;
     }

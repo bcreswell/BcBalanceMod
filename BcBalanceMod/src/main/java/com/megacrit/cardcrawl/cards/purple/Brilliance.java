@@ -43,7 +43,7 @@ public class Brilliance extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 8 : 12;
+        return !upgraded ? 10 : 14;
     }
     
     @Override

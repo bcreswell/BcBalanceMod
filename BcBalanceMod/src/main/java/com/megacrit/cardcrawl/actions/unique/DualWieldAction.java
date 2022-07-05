@@ -102,6 +102,7 @@ public class DualWieldAction extends AbstractGameAction
     {
         AbstractCard dualWieldedCard = card.makeStatEquivalentCopy();
         dualWieldedCard.glowColor = card.glowColor;
+        dualWieldedCard.freeToPlayOnce = true;
         addToTop(new MakeTempCardInHandAction(dualWieldedCard));
     }
     

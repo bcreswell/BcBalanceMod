@@ -15,7 +15,7 @@ public class UnnaturalRegeneration extends BcPowerCardBase
     @Override
     public String getDisplayName()
     {
-        return "       Unnatural Regeneration";
+        return "Unnatural Regeneration";
     }
     
     @Override
@@ -27,13 +27,13 @@ public class UnnaturalRegeneration extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 2 : 1;
+        return 2;
     }
     
     @Override
-    public boolean getEthereal()
+    public boolean getInnate()
     {
-        return true;
+        return upgraded;
     }
     
     @Override
@@ -45,7 +45,7 @@ public class UnnaturalRegeneration extends BcPowerCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override

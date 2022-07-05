@@ -9,12 +9,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.ClearCardQueueAction;
 import com.megacrit.cardcrawl.actions.GameActionManager;
-import com.megacrit.cardcrawl.actions.common.DiscardAtEndOfTurnAction;
-import com.megacrit.cardcrawl.actions.common.DrawCardAction;
-import com.megacrit.cardcrawl.actions.common.EnableEndTurnButtonAction;
-import com.megacrit.cardcrawl.actions.common.EndTurnAction;
-import com.megacrit.cardcrawl.actions.common.GainEnergyAndEnableControlsAction;
-import com.megacrit.cardcrawl.actions.common.MonsterStartTurnAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.utility.WaitAction;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -88,7 +83,7 @@ public abstract class AbstractRoom implements Disposable
     public boolean rewardAllowed = true;
     public boolean rewardTime = false;
     public boolean skipMonsterTurn = false;
-    public int baseRareCardChance = 3;
+    public int baseRareCardChance = 2;
     public int baseUncommonCardChance = 37;
     public int rareCardChance;
     public int uncommonCardChance;
@@ -536,7 +531,8 @@ public abstract class AbstractRoom implements Disposable
     {
         AbstractDungeon.player.applyEndOfTurnTriggers();
         AbstractDungeon.actionManager.addToBottom(new ClearCardQueueAction());
-        AbstractDungeon.actionManager.addToBottom(new DiscardAtEndOfTurnAction());
+        //AbstractDungeon.actionManager.addToBottom(new DiscardAtEndOfTurnAction());
+        AbstractDungeon.actionManager.addToBottom(new DiscardAtEndOfTurnActionNew());
         Iterator var1 = AbstractDungeon.player.drawPile.group.iterator();
         
         AbstractCard c;

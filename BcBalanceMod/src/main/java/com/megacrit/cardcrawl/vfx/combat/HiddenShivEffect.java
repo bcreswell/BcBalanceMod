@@ -9,8 +9,8 @@ import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
 public class HiddenShivEffect extends AbstractGameEffect
 {
-    public static final float DelayBetweenShivs = .2f;
-    public static final float Speed = 100f * Settings.scale;
+    public static final float ShivFlyingDuration = .1f;
+    public static final float Speed = 130f * Settings.scale;
     
     private float sourceX;
     private float sourceY;

@@ -1,15 +1,13 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.actions.utility.ScryAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 public class CutThroughFate extends BcAttackCardBase
@@ -44,7 +42,7 @@ public class CutThroughFate extends BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 2 : 3;
+        return 3;
     }
     
     @Override
@@ -62,17 +60,15 @@ public class CutThroughFate extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        int scryAmount = BcUtility.getActualScryAmount(getMagicNumber());
-        return "Deal !D! damage. NL Scry " + scryAmount + ". NL Draw 1 card.";
+        return "Deal !D! damage. NL Scry " + BcUtility.getScryString(getMagicNumber()) + ". NL Draw 1 card.";
     }
-    
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.SLASH_DIAGONAL));
-        int scryAmount = BcUtility.getActualScryAmount(magicNumber);
-        addToBot(new ScryAction(scryAmount));
+        
+        addToBot(new ScryAction(magicNumber));
         addToBot(new DrawCardAction(player, 1));
     }
 }

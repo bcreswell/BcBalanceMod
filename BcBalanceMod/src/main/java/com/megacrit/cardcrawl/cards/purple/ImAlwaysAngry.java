@@ -1,6 +1,7 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.*;
 import com.megacrit.cardcrawl.actions.animations.*;
 import com.megacrit.cardcrawl.actions.common.*;
@@ -13,6 +14,7 @@ import com.megacrit.cardcrawl.dungeons.*;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.*;
+import com.megacrit.cardcrawl.stances.*;
 import com.megacrit.cardcrawl.vfx.combat.*;
 
 public class ImAlwaysAngry extends BcAttackCardBase
@@ -23,7 +25,7 @@ public class ImAlwaysAngry extends BcAttackCardBase
     @Override
     public String getDisplayName()
     {
-        return "  I'm Always Angry";
+        return "I'm Always Angry";
     }
     
     @Override
@@ -47,13 +49,13 @@ public class ImAlwaysAngry extends BcAttackCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 7 : 10;
+        return !upgraded ? 4 : 6;
     }
     
     @Override
     public int getDamage()
     {
-        return !upgraded ? 7 : 10;
+        return !upgraded ? 8 : 12;
     }
     
     @Override
@@ -77,26 +79,28 @@ public class ImAlwaysAngry extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Gain !B! Block. NL Wrath: Gain [W] . NL Otherwise: NL Enter Wrath.";
+        //return "Deal !D! damage. NL Gain !B! Block. NL Wrath: Gain [W] [W] . NL Otherwise: NL Enter Wrath.";
+        return "Wrath: This costs 0. NL Deal !D! damage. NL Gain !B! Block. NL Enter Wrath.";
     }
     //endregion
+    
+    @Override
+    public boolean freeToPlay()
+    {
+        if (BcUtility.isPlayerInStance(WrathStance.STANCE_ID))
+        {
+            return true;
+        }
+        else
+        {
+            return super.freeToPlay();
+        }
+    }
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new GainBlockAction(player, player, block));
-//
-//        addToBot(new WaitAction(0.1F));
-//        addToBot(new VFXAction(new IronWaveEffect(player.hb.cX, player.hb.cY, monster.hb.cX), 0.5F));
-        
         addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_LIGHT));
-        
-        if (player.stance.ID.equals("Wrath"))
-        {
-            addToBot(new GainEnergyAction(1));
-        }
-        else
-        {
-            this.addToBot(new ChangeStanceAction("Wrath"));
-        }
+        addToBot(new ChangeStanceAction("Wrath"));
     }
 }

@@ -1,15 +1,8 @@
 package com.megacrit.cardcrawl.cards.colorless;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.DrawCardAction;
-import com.megacrit.cardcrawl.actions.common.DrawFromDiscardAction;
-import com.megacrit.cardcrawl.actions.common.EmptyDeckShuffleAction;
-import com.megacrit.cardcrawl.actions.common.ShuffleAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.RetrieveRandomCardsAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 public class DeepBreath extends BcSkillCardBase
@@ -36,35 +29,9 @@ public class DeepBreath extends BcSkillCardBase
     }
     
     @Override
-    public String getDisplayName()
-    {
-        return "Deep Breath";
-    }
-    
-    @Override
-    public String getBaseDescription()
-    {
-        return "Draw !M! cards randomly from your discard pile.";
-    }
-    
-    @Override
     public int getMagicNumber()
     {
-        //number of cards to draw
-        if (!upgraded)
-        {
-            return 2;
-        }
-        else
-        {
-            return 3;
-        }
-    }
-    
-    @Override
-    public boolean getExhaust()
-    {
-        return true;
+        return !upgraded ? 2 : 3;
     }
     
     @Override
@@ -72,13 +39,28 @@ public class DeepBreath extends BcSkillCardBase
     {
         return CardRarity.UNCOMMON;
     }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Retrieve !M! cards randomly.";
+    }
+    
+    @Override
+    public boolean isARetrieveCard()
+    {
+        return true;
+    }
+    
+    @Override
+    public String getFootnote()
+    {
+        return "Can't target cards that have \"Retrieve\" in their description.";
+    }
     //endregion
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        for (int i = 0; i < magicNumber; i++)
-        {
-            addToBot(new DrawFromDiscardAction());
-        }
+        addToBot(new RetrieveRandomCardsAction(false, magicNumber));
     }
 }

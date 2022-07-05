@@ -1,14 +1,11 @@
 package com.megacrit.cardcrawl.powers;
 
-import com.megacrit.cardcrawl.actions.common.DrawFromDiscardAction;
-import com.megacrit.cardcrawl.actions.common.MakeTempCardInHandAction;
-import com.megacrit.cardcrawl.actions.utility.TrueWaitAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.actions.common.RetrieveRandomCardsAction;
+import com.megacrit.cardcrawl.actions.utility.*;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.PowerStrings;
-import org.lwjgl.opengl.AMDDebugOutput;
 
 public class MagnetismPower extends AbstractPower
 {
@@ -42,21 +39,9 @@ public class MagnetismPower extends AbstractPower
     {
         if (!AbstractDungeon.getMonsters().areMonstersBasicallyDead())
         {
-            this.flash();
-            
-            for (int i = 0; i < this.amount; ++i)
-            {
-                addToBot(new TrueWaitAction(.3f));
-                addToBot(new DrawFromDiscardAction());
-                /*
-                AbstractCard card = AbstractDungeon.returnTrulyRandomColorlessCardInCombat().makeCopy();
-                if (isUpgraded)
-                {
-                    card.upgrade();
-                }
-                this.addToBot(new MakeTempCardInHandAction(card, 1, false));
-                */
-            }
+            addToBot(new TrueWaitAction(.3f));
+            addToBot(new FlashBuffAction(this));
+            addToBot(new RetrieveRandomCardsAction(true, amount));
         }
     }
     

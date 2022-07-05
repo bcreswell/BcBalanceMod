@@ -6,10 +6,8 @@ import com.badlogic.gdx.graphics.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.*;
-import com.megacrit.cardcrawl.localization.PotionStrings;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 
@@ -29,15 +27,14 @@ public class RetainPotion extends CustomPotion
     public void initializeData()
     {
         potency = getPotency();
-        description = "Retain your Energy, Block, and the cards in your hand, for " + potency + " turn.";
-        tips.clear();
-        tips.add(new PowerTip(name, description));
-    }
-    
-    public void upgradePotion()
-    {
-        potency += 1;
-        description = "Retain your Energy, Block, and the cards in your hand, for " + potency + " turns.";
+        if (potency == 1)
+        {
+            description = "Retain your Energy, Block, and the cards in your hand, for " + potency + " turn.";
+        }
+        else
+        {
+            description = "Retain your Energy, Block, and the cards in your hand, for " + potency + " turns.";
+        }
         tips.clear();
         tips.add(new PowerTip(name, description));
     }
@@ -48,7 +45,7 @@ public class RetainPotion extends CustomPotion
         {
             AbstractPlayer player = AbstractDungeon.player;
             
-            addToBot(new BcApplyPowerAction(new ConservePower(player, potency)));
+            addToBot(new BcApplyPowerAction(new ConserveEnergyPower(player, potency)));
             addToBot(new BcApplyPowerAction(new BlurPower(player, potency)));
             addToBot(new BcApplyPowerAction(new EquilibriumPower(player, potency)));
         }

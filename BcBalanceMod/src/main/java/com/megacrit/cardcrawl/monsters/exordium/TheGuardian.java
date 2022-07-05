@@ -55,10 +55,10 @@ public class TheGuardian extends AbstractMonster
     private static final int ROLL_DMG = 9;
     private static final int A_2_ROLL_DMG = 10;
     private int fierceBashDamage;
-    private int whirlwindDamage = 5;
-    private int twinSlamDamage = 8;
+    private int whirlwindDamage;
+    private int twinSlamDamage;
     private int rollDamage;
-    private int whirlwindCount = 4;
+    private int whirlwindCount;
     private int DEFENSIVE_BLOCK = 20;
     private int fierceBashBlockAmount;
     private int thornsDamage = 3;
@@ -91,19 +91,24 @@ public class TheGuardian extends AbstractMonster
         fierceBashDamage = 32;
         rollDamage = 9;
         dmgThreshold = 30;
+        whirlwindCount = 4;
+        twinSlamDamage = 8;
+        whirlwindDamage = 5;
         
         //bosses are deadlier
         if (AbstractDungeon.ascensionLevel >= 4)
         {
             fierceBashDamage = 36;
-            rollDamage = 10;
+            rollDamage = 12;
+            whirlwindCount = 5;
+            twinSlamDamage = 9;
         }
         
         //bosses have more HP
         if (AbstractDungeon.ascensionLevel >= 9)
         {
             //setHp(250);
-            setHp(280);
+            setHp(300);
             dmgThreshold = 35;
         }
         
@@ -140,25 +145,25 @@ public class TheGuardian extends AbstractMonster
     {
         switch (nextMove)
         {
-            case 1:
+            case CLOSE_UP:
                 useCloseUp();
                 break;
-            case 2:
+            case FIERCE_BASH:
                 useFierceBash();
                 break;
-            case 3:
+            case ROLL_ATTACK:
                 useRollAttack();
                 break;
-            case 4:
+            case TWIN_SLAM:
                 useTwinSmash();
                 break;
-            case 5:
+            case WHIRLWIND:
                 useWhirlwind();
                 break;
-            case 6:
+            case CHARGE_UP:
                 useChargeUp();
                 break;
-            case 7:
+            case VENT_STEAM:
                 useVentSteam();
                 break;
             default:
@@ -239,11 +244,11 @@ public class TheGuardian extends AbstractMonster
     {
         if (isOpen)
         {
-            setMove(CHARGEUP_NAME, (byte) 6, AbstractMonster.Intent.DEFEND);
+            setMove(CHARGEUP_NAME, CHARGE_UP, AbstractMonster.Intent.DEFEND);
         }
         else
         {
-            setMove((byte) 3, AbstractMonster.Intent.ATTACK, ((DamageInfo) damage.get(1)).base);
+            setMove(ROLL_ATTACK, AbstractMonster.Intent.ATTACK, ((DamageInfo) damage.get(1)).base);
         }
         
     }

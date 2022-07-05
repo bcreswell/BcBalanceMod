@@ -23,12 +23,6 @@ public class MemoriesOfRuin extends BcSkillCardBase
     }
     
     @Override
-    public String getBaseDescription()
-    {
-        return "Lose " + getHpLoss() + " HP. NL Suffer " + getVulnerableCount() + " Vulnerable. NL Gain !M! Regen. NL (" + getTotalHealing() + " healing total)";
-    }
-    
-    @Override
     public String getImagePath()
     {
         return "red/memoriesOfRuin.png";
@@ -49,7 +43,7 @@ public class MemoriesOfRuin extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 2 : 1;
+        return !upgraded ? 1 : 0;
     }
     
     public int getVulnerableCount()
@@ -59,7 +53,6 @@ public class MemoriesOfRuin extends BcSkillCardBase
     
     public int getHpLoss()
     {
-        //21 - 8 = 13 profit healing
         return 8;
     }
     
@@ -80,15 +73,29 @@ public class MemoriesOfRuin extends BcSkillCardBase
     {
         return true;
     }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Sacrifice " + getHpLoss() + " HP. NL Suffer " + getVulnerableCount() + " Vulnerable. NL Gain !M! Regen.";
+    }
+    
+    @Override
+    public String getFootnote()
+    {
+        return " #g" + getTotalHealing() + " healing ";
+    }
+    
     //endregion
     
     @Override
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        this.addToBot(new VFXAction(new OfferingEffect(), 0.5F));
-        this.addToBot(new LoseHPAction(player, player, getHpLoss()));
-        this.addToBot(new ApplyPowerAction(player, player, new VulnerablePower(player, getVulnerableCount(), false), getVulnerableCount()));
-        this.addToBot(new ApplyPowerAction(player, player, new RegenPower(player, magicNumber), magicNumber));
+        addToBot(new VFXAction(new OfferingEffect(), 0.5F));
+        addToBot(new LoseHPAction(player, player, getHpLoss()));
+        
+        addToBot(new BcApplyPowerAction(new VulnerablePower(player, getVulnerableCount(), false)));
+        addToBot(new BcApplyPowerAction(new RegenPower(player, magicNumber)));
     }
     
     int getTotalHealing()

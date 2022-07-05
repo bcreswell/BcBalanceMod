@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.actions.utility.WaitAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToDiscardEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToHandEffect;
@@ -24,8 +25,9 @@ public class MakeTempCardInHandAction extends AbstractGameAction {
         this.amount = 1;
         this.actionType = AbstractGameAction.ActionType.CARD_MANIPULATION;
         this.c = card;
-        if (this.c.type != AbstractCard.CardType.CURSE && this.c.type != AbstractCard.CardType.STATUS && AbstractDungeon.player.hasPower("MasterRealityPower")) {
-            this.c.upgrade();
+        for(AbstractPower power : AbstractDungeon.player.powers)
+        {
+            power.onCardCreated(c);
         }
         
         this.isOtherCardInCenter = isOtherCardInCenter;
@@ -42,8 +44,9 @@ public class MakeTempCardInHandAction extends AbstractGameAction {
         this.amount = amount;
         this.actionType = AbstractGameAction.ActionType.CARD_MANIPULATION;
         this.c = card;
-        if (this.c.type != AbstractCard.CardType.CURSE && this.c.type != AbstractCard.CardType.STATUS && AbstractDungeon.player.hasPower("MasterRealityPower")) {
-            this.c.upgrade();
+        for(AbstractPower power : AbstractDungeon.player.powers)
+        {
+            power.onCardCreated(c);
         }
         
     }

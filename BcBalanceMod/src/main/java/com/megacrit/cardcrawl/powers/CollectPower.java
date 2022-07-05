@@ -45,19 +45,13 @@ public class CollectPower extends AbstractPower
     
     public void updateDescription()
     {
-        String miracleDescription = "#yMiracle";
-        if (BcUtility.playerHasPower(MasterRealityPower.POWER_ID))
-        {
-            miracleDescription += "+";
-        }
-        
         if (amount == 1)
         {
-            description = "At the start of your next turn, put a " + miracleDescription + " into your hand.";
+            description = "At the start of your next turn, put a #yMiracle into your hand.";
         }
         else
         {
-            description = "At the start of your next #b" + amount + " turns, put a " + miracleDescription + " into your hand.";
+            description = "At the start of your next #b" + amount + " turns, put a #yMiracle into your hand.";
         }
     }
     
@@ -65,24 +59,14 @@ public class CollectPower extends AbstractPower
     {
         flash();
         AbstractCard card = new Miracle();
-        //card.upgrade();
-        
-        //will be upgraded by master reality:
         addToBot(new MakeTempCardInHandAction(card));
-        
-        if (amount <= 1)
-        {
-            addToBot(new RemoveSpecificPowerAction(owner, owner, "Collect"));
-        }
-        else
-        {
-            addToBot(new ReducePowerAction(owner, owner, "Collect", 1));
-        }
+    
+        addToBot(new ReducePowerAction(owner, owner, POWER_ID, 1));
     }
     
     static
     {
-        powerStrings = CardCrawlGame.languagePack.getPowerStrings("Collect");
+        powerStrings = CardCrawlGame.languagePack.getPowerStrings(POWER_ID);
         NAME = powerStrings.NAME;
         DESCRIPTIONS = powerStrings.DESCRIPTIONS;
     }

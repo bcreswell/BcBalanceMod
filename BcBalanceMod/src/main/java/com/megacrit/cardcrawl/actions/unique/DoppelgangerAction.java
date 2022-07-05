@@ -6,70 +6,55 @@
 package com.megacrit.cardcrawl.actions.unique;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.AbstractGameAction.ActionType;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.powers.DrawCardNextTurnPower;
 import com.megacrit.cardcrawl.powers.EnergizedPower;
+import com.megacrit.cardcrawl.relics.*;
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 
 public class DoppelgangerAction extends AbstractGameAction
 {
-    private boolean freeToPlayOnce;
-    private boolean upgraded;
-    private AbstractPlayer p;
-    private int energyOnUse;
+    boolean upgraded;
+    AbstractPlayer player;
+    int energyOnUse;
     
-    public DoppelgangerAction(AbstractPlayer p, boolean upgraded, boolean freeToPlayOnce, int energyOnUse)
+    public DoppelgangerAction(AbstractPlayer player, boolean upgraded, boolean freeToPlayOnce, int energyOnUse)
     {
-        this.p = p;
+        this.player = player;
         this.upgraded = upgraded;
-        this.freeToPlayOnce = freeToPlayOnce;
-        this.duration = Settings.ACTION_DUR_XFAST;
-        this.actionType = ActionType.SPECIAL;
+        duration = Settings.ACTION_DUR_XFAST;
+        actionType = ActionType.SPECIAL;
         this.energyOnUse = energyOnUse;
     }
     
     public void update()
     {
         int effect = EnergyPanel.totalCount;
-        if (this.energyOnUse != -1)
+        if (energyOnUse != -1)
         {
-            effect = this.energyOnUse;
+            effect = energyOnUse;
         }
+        player.energy.use(EnergyPanel.totalCount);
         
-        if (this.p.hasRelic("Chemical X"))
+        if (player.hasRelic(ChemicalX.ID))
         {
             effect += 2;
-            this.p.getRelic("Chemical X").flash();
+            player.getRelic(ChemicalX.ID).flash();
         }
         
-        if (this.upgraded)
+        if (upgraded)
         {
             effect++;
         }
         
         if (effect > 0)
         {
-            this.addToBot(new ApplyPowerAction(this.p, this.p, new EnergizedPower(this.p, effect), effect));
+            addToBot(new BcApplyPowerAction(new EnergizedPower(player, effect)));
+            addToBot(new BcApplyPowerAction(new DrawCardNextTurnPower(player, effect)));
         }
         
-        //one extra card draw when not upgraded
-        if (!upgraded)
-        {
-            this.addToBot(new ApplyPowerAction(this.p, this.p, new DrawCardNextTurnPower(this.p, effect + 1), effect + 1));
-        }
-        else if (effect > 0)
-        {
-            this.addToBot(new ApplyPowerAction(this.p, this.p, new DrawCardNextTurnPower(this.p, effect), effect));
-        }
-        
-        if (!this.freeToPlayOnce)
-        {
-            this.p.energy.use(EnergyPanel.totalCount);
-        }
-        
-        this.isDone = true;
+        isDone = true;
     }
 }

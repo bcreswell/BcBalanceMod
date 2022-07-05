@@ -67,7 +67,6 @@ public class DoubleDamagePower extends AbstractPower
             {
                 this.addToBot(new ReducePowerAction(this.owner, this.owner, "Double Damage", 1));
             }
-            
         }
     }
     

@@ -1,6 +1,5 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
@@ -14,56 +13,38 @@ import com.megacrit.cardcrawl.powers.watcher.ForesightPower;
 import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
 import com.megacrit.cardcrawl.vfx.combat.GiantEyeEffect;
 
-public class Foresight extends BcPowerCardBase
-{
+public class Foresight extends AbstractCard {
     public static final String ID = "Wireheading";
+    private static final CardStrings cardStrings;
     
-    //region card parameters
-    @Override
-    public String getImagePath()
-    {
-        return "purple/power/foresight";
+    public Foresight() {
+        super("Wireheading", cardStrings.NAME, "purple/power/foresight", 1, cardStrings.DESCRIPTION, AbstractCard.CardType.POWER, CardColor.COLORLESS, CardRarity.SPECIAL, AbstractCard.CardTarget.NONE);
+        this.baseMagicNumber = 3;
+        this.magicNumber = this.baseMagicNumber;
     }
     
-    @Override
-    public int getCost()
-    {
-        return 0;
-    }
-    
-    @Override
-    public String getId()
-    {
-        return ID;
-    }
-    
-    @Override
-    public CardRarity getCardRarity()
-    {
-        return CardRarity.UNCOMMON;
-    }
-    
-    @Override
-    public int getMagicNumber()
-    {
-        return !upgraded ? 2 : 3;
-    }
-    
-    @Override
-    public String getBaseDescription()
-    {
-        return "Your Scrying reveals !M! more cards.";
-    }
-    //endregion
-    
-    public void use(AbstractPlayer p, AbstractMonster m)
-    {
-        if (p != null)
-        {
-            addToBot(new VFXAction(new BorderFlashEffect(Color.VIOLET, true)));
-            addToBot(new VFXAction(new GiantEyeEffect(p.hb.cX, p.hb.cY + 300.0F * Settings.scale, new Color(1.0F, 0.8F, 1.0F, 0.0F))));
+    public void use(AbstractPlayer p, AbstractMonster m) {
+        if (p != null) {
+            this.addToBot(new VFXAction(new BorderFlashEffect(Color.VIOLET, true)));
+            this.addToBot(new VFXAction(new GiantEyeEffect(p.hb.cX, p.hb.cY + 300.0F * Settings.scale, new Color(1.0F, 0.8F, 1.0F, 0.0F))));
         }
         
-        addToBot(new ApplyPowerAction(p, p, new ForesightPower(p, magicNumber), magicNumber));
+        this.addToBot(new ApplyPowerAction(p, p, new ForesightPower(p, this.magicNumber), this.magicNumber));
+    }
+    
+    public void upgrade() {
+        if (!this.upgraded) {
+            this.upgradeName();
+            this.upgradeMagicNumber(1);
+        }
+        
+    }
+    
+    public AbstractCard makeCopy() {
+        return new Foresight();
+    }
+    
+    static {
+        cardStrings = CardCrawlGame.languagePack.getCardStrings("Wireheading");
     }
 }

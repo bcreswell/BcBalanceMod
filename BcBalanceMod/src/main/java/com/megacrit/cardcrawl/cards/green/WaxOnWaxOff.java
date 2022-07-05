@@ -1,6 +1,7 @@
 package com.megacrit.cardcrawl.cards.green;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.monsters.*;
@@ -52,11 +53,11 @@ public class WaxOnWaxOff extends BcPowerCardBase
     {
         if (magicNumber == 1)
         {
-            return "Each turn: NL The first time you Discard, NL Draw a card.";
+            return "The first time you Discard each turn, NL Draw a card.";
         }
         else
         {
-            return "Each turn: NL The first !M! times you Discard, NL Draw a card.";
+            return "The first !M! times you Discard each turn, NL Draw a card.";
         }
     }
     //endregion
@@ -64,7 +65,7 @@ public class WaxOnWaxOff extends BcPowerCardBase
     @Override
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new ApplyPowerAction(player, player, new WaxOnPower(player, magicNumber), magicNumber));
-        addToBot(new ApplyPowerAction(player, player, new WaxOffPower(player, magicNumber), magicNumber));
+        addToBot(new BcApplyPowerAction(new WaxOnPower(player, magicNumber)));
+        addToBot(new BcApplyPowerAction(new WaxOffPower(player, magicNumber)));
     }
 }

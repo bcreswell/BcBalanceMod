@@ -13,7 +13,7 @@ public class Rupture extends AbstractCard {
     private static final CardStrings cardStrings;
     
     public Rupture() {
-        super("Rupture", cardStrings.NAME, "red/power/rupture", 1, cardStrings.DESCRIPTION, AbstractCard.CardType.POWER, CardColor.COLORLESS, AbstractCard.CardRarity.SPECIAL, AbstractCard.CardTarget.SELF);
+        super("Rupture", cardStrings.NAME, "red/power/rupture", 1, cardStrings.DESCRIPTION, AbstractCard.CardType.POWER, CardColor.COLORLESS, CardRarity.SPECIAL, AbstractCard.CardTarget.SELF);
         this.baseMagicNumber = 1;
         this.magicNumber = this.baseMagicNumber;
     }

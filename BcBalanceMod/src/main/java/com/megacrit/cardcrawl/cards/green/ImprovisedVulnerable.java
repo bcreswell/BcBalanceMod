@@ -21,6 +21,12 @@ public class ImprovisedVulnerable extends BcAttackCardBase
     }
     
     @Override
+    public CardColor getCardColor()
+    {
+        return CardColor.COLORLESS;
+    }
+    
+    @Override
     public String getImagePath()
     {
         return "green/improvisedVulnerable.png";
@@ -59,7 +65,7 @@ public class ImprovisedVulnerable extends BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return JustImprovising.getImprovisedVulnerable(upgraded);
+        return !upgraded ? 1 : 2;
     }
     
     @Override

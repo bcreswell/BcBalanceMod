@@ -32,7 +32,7 @@ public class TalkToTheHand extends AbstractCard {
         if (!this.upgraded) {
             this.upgradeName();
             this.upgradeDamage(2);
-            this.upgradeMagicNumber(2);
+            this.upgradeMagicNumber(1);
         }
         
     }

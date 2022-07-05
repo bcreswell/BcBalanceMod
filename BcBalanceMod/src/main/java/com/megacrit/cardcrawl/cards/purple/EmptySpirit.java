@@ -49,7 +49,7 @@ public class EmptySpirit extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
@@ -67,6 +67,7 @@ public class EmptySpirit extends BcSkillCardBase
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
+        EmptyBlahAction.preActionDraw();
         addToBot(new EmptyBlahAction());
     }
 }

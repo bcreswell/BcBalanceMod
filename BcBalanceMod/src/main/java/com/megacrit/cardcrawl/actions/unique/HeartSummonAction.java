@@ -43,7 +43,7 @@ public class HeartSummonAction extends AbstractGameAction
                 monster.init();
                 monster.applyPowers();
                 
-                AbstractDungeon.getCurrRoom().monsters.add(monster);
+                AbstractDungeon.getCurrRoom().monsters.monsters.add(0, monster);
                 if (ModHelper.isModEnabled("Lethality"))
                 {
                     addToBot(new ApplyPowerAction(monster, monster, new StrengthPower(monster, 3), 3));
@@ -54,7 +54,7 @@ public class HeartSummonAction extends AbstractGameAction
                     addToBot(new ApplyPowerAction(monster, monster, new SlowPower(monster, 0)));
                 }
                 
-                for(AbstractRelic relic : AbstractDungeon.player.relics)
+                for (AbstractRelic relic : AbstractDungeon.player.relics)
                 {
                     relic.onSpawnMonster(monster);
                 }

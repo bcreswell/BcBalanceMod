@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.defect.ChannelAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -23,50 +24,72 @@ import com.megacrit.cardcrawl.orbs.Lightning;
 import com.megacrit.cardcrawl.orbs.Plasma;
 import com.megacrit.cardcrawl.vfx.RainbowCardEffect;
 
-public class Rainbow extends AbstractCard {
+public class Rainbow extends BcSkillCardBase
+{
     public static final String ID = "Rainbow";
-    private static final CardStrings cardStrings;
-
-    public Rainbow() {
-        super("Rainbow", cardStrings.NAME, "blue/skill/rainbow", 2, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.BLUE, CardRarity.RARE, CardTarget.SELF);
-        this.showEvokeValue = true;
-        this.showEvokeOrbCount = 3;
-        this.exhaust = true;
+    
+    //region card parameters
+    @Override
+    public int getChanneledOrbCount()
+    {
+        return !upgraded ? 3 : 4;
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new VFXAction(new RainbowCardEffect()));
-        this.addToBot(new ChannelAction(new Lightning()));
-        this.addToBot(new ChannelAction(new Frost()));
-        this.addToBot(new ChannelAction(new Dark()));
+    
+    @Override
+    public String getImagePath()
+    {
+        return "blue/skill/rainbow";
+    }
+    
+    @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.RARE;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 1;
+    }
+    
+    @Override
+    public boolean getExhaust()
+    {
+        return true;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        if (!upgraded)
+        {
+            return "Channel 1 Lightning, NL 1 Frost and NL 1 Dark.";
+        }
+        else
+        {
+            return "Channel 1 Lightning, NL 1 Frost, NL 1 Dark and NL 1 Plasma.";
+        }
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new VFXAction(new RainbowCardEffect()));
+        
+        addToBot(new ChannelAction(new Lightning()));
+        addToBot(new ChannelAction(new Frost()));
+        addToBot(new ChannelAction(new Dark()));
+        
         if (upgraded)
         {
-            this.addToBot(new ChannelAction(new Plasma()));
-        }
-    }
-
-    public AbstractCard makeCopy() {
-        return new Rainbow();
-    }
-
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            //.exhaust = false;
-            this.showEvokeOrbCount = 4;
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
-
-    }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Rainbow");
-        if (Settings.language == Settings.GameLanguage.ENG)
-        {
-            //todo: figure out best practice for how to do this.
-            cardStrings.DESCRIPTION = "Channel 1 Lightning, NL 1 Frost and 1 Dark. NL Exhaust.";
-            cardStrings.UPGRADE_DESCRIPTION = "Channel 1 Lightning, NL 1 Frost, 1 Dark NL and 1 Plasma. NL Exhaust.";
+            addToBot(new ChannelAction(new Plasma()));
         }
     }
 }

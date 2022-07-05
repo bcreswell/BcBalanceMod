@@ -61,7 +61,7 @@ public class PiercingWail extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 4 : 5;
+        return !upgraded ? 5 : 7;
     }
     
     @Override
@@ -73,7 +73,7 @@ public class PiercingWail extends BcSkillCardBase
     @Override
     public boolean getRetain()
     {
-        return upgraded;
+        return true;
     }
     
     @Override

@@ -59,6 +59,6 @@ public class Mayhem extends BcPowerCardBase
     
     public void use(AbstractPlayer p, AbstractMonster m)
     {
-        this.addToBot(new ApplyPowerAction(p, p, new MayhemPower(p,1), 1));
+        addToBot(new ApplyPowerAction(p, p, new MayhemPower(p,1), 1));
     }
 }

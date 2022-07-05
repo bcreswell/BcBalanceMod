@@ -47,15 +47,21 @@ public class Choke extends BcAttackCardBase
     }
     
     @Override
+    public boolean isAoeAttack()
+    {
+        return false;
+    }
+    
+    @Override
     public int getDamage()
     {
         return 9;
     }
     
     @Override
-    public boolean isAoeAttack()
+    public String getBaseDescription()
     {
-        return false;
+        return "Deal !D! damage. NL Whenever you play a card this turn, the enemy loses !M! HP.";
     }
     //endregion
     

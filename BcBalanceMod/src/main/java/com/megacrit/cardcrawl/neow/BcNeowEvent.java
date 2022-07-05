@@ -451,21 +451,23 @@ public class BcNeowEvent extends AbstractEvent
         this.rewards.add(new BcNeowReward(1));
         this.rewards.add(new BcNeowReward(2));
         this.rewards.add(new BcNeowReward(3));
+        this.rewards.add(new BcNeowReward(4));
         this.roomEventText.clearRemainingOptions();
         
-        BcNeowReward reward = this.rewards.get(0);
-        this.roomEventText.optionList.set(0, new LargeDialogOptionButton(0, reward.rewardDescription, reward.getPreviewCard(), reward.getPreviewRelic()));
-        // .updateDialogOption(0, ((BcNeowReward) this.rewards.get(0)).rewardDescription);
+        this.roomEventText.optionList.set(0, getNewDialogOption(0, rewards.get(0)));
+        this.roomEventText.optionList.add(getNewDialogOption(1,rewards.get(1)));
+        this.roomEventText.optionList.add(getNewDialogOption(2,rewards.get(2)));
+        this.roomEventText.optionList.add(getNewDialogOption(3,rewards.get(3)));
+        this.roomEventText.optionList.add(getNewDialogOption(4, rewards.get(4)));
         
-        reward = this.rewards.get(1);
-        this.roomEventText.addDialogOption(reward.rewardDescription, reward.getPreviewCard(), reward.getPreviewRelic());
-        
-        reward = this.rewards.get(2);
-        this.roomEventText.addDialogOption(reward.rewardDescription, reward.getPreviewCard(), reward.getPreviewRelic());
-        
-        reward = this.rewards.get(3);
-        this.roomEventText.addDialogOption(reward.rewardDescription, reward.getPreviewCard(), reward.getPreviewRelic());
         this.screenNum = 3;
+    }
+    
+    LargeDialogOptionButton getNewDialogOption(int slot, BcNeowReward reward)
+    {
+        LargeDialogOptionButton button = new LargeDialogOptionButton(slot, reward.rewardDescription, reward.getPreviewCard(), reward.getPreviewRelic());
+        button.secondCardToPreview = reward.getSecondaryPreviewCard();
+        return button;
     }
     
     private void dismissBubble()

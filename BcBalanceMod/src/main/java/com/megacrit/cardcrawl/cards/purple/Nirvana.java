@@ -1,47 +1,55 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.dungeons.*;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.powers.watcher.NirvanaPower;
+import com.megacrit.cardcrawl.powers.watcher.*;
+import com.megacrit.cardcrawl.vfx.*;
 
-public class Nirvana extends AbstractCard
+public class Nirvana extends BcPowerCardBase
 {
     public static final String ID = "Nirvana";
-    private static final CardStrings cardStrings;
     
-    public Nirvana()
+    //region card parameters
+    @Override
+    public String getImagePath()
     {
-        super("Nirvana", cardStrings.NAME, "purple/power/nirvana", 1, cardStrings.DESCRIPTION, AbstractCard.CardType.POWER, AbstractCard.CardColor.PURPLE, AbstractCard.CardRarity.UNCOMMON, AbstractCard.CardTarget.SELF);
-        this.baseMagicNumber = 4;
-        this.magicNumber = this.baseMagicNumber;
+        return "purple/power/nirvana";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    @Override
+    public String getId()
     {
-        this.addToBot(new ApplyPowerAction(p, p, new NirvanaPower(p, this.magicNumber), this.magicNumber));
+        return ID;
     }
     
-    public AbstractCard makeCopy()
+    @Override
+    public CardRarity getCardRarity()
     {
-        return new Nirvana();
+        return CardRarity.UNCOMMON;
     }
     
-    public void upgrade()
+    @Override
+    public int getCost()
     {
-        if (!this.upgraded)
-        {
-            this.upgradeName();
-            this.upgradeMagicNumber(3);
-        }
-        
+        return !upgraded ? 1 : 0;
     }
     
-    static
+    @Override
+    public String getBaseDescription()
     {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Nirvana");
+        return "When you Scry or gain Mantra, also gain Block for the same amount. NL NL When play an *Insight or *Miracle, gain 1 Block.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        AbstractDungeon.effectsQueue.add(new SpotlightPlayerEffect());
+        addToBot(new BcApplyPowerAction(new NirvanaPower(player, 1)));
     }
 }

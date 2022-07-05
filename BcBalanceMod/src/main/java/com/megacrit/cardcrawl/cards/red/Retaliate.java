@@ -40,32 +40,39 @@ public class Retaliate extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
-    
-    public int getRetaliateDamage()
+    @Override
+    public int getMagicNumber()
     {
-        int dmg = !upgraded ? 18 : 24;
-        
-        if (BcUtility.isPlayerInCombat())
-        {
-            return dmg + BcUtility.getCurrentStrength();
-        }
-        
-        return dmg;
+        return !upgraded ? 20 : 30;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Until next turn, NL Retaliate for " + getRetaliateDamage() + " damage the first time each enemy attacks. NL (increased by strength)";
+        int str = BcUtility.getCurrentStrength();
+        
+        String retaliateDmgString = "" + (getMagicNumber() + str);
+        
+        if (str > 0)
+        {
+            retaliateDmgString = "#g" + retaliateDmgString;
+        }
+        else if (str < 0)
+        {
+            retaliateDmgString = "#r" + retaliateDmgString;
+        }
+        
+        return "Until next turn, NL Retaliate for " + retaliateDmgString + " damage the first time each enemy attacks. NL (modified by Strength)";
     }
     //endregion
     
     @Override
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new BcApplyPowerAction(new RetaliatePower(player, getRetaliateDamage())));
+        int retaliateDmg = magicNumber + BcUtility.getCurrentStrength();
+        addToBot(new BcApplyPowerAction(new RetaliatePower(player, retaliateDmg)));
     }
 }

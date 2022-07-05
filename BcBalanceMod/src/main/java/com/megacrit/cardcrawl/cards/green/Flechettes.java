@@ -5,6 +5,8 @@
 
 package com.megacrit.cardcrawl.cards.green;
 
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.unique.FlechetteAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -18,71 +20,99 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+
 import java.util.Iterator;
 
-public class Flechettes extends AbstractCard {
+public class Flechettes extends BcAttackCardBase
+{
     public static final String ID = "Flechettes";
-    private static final CardStrings cardStrings;
-
-    public Flechettes() {
-        super("Flechettes", cardStrings.NAME, "green/attack/flechettes", 1, cardStrings.DESCRIPTION, CardType.ATTACK, CardColor.GREEN, CardRarity.UNCOMMON, CardTarget.ENEMY);
-        this.baseDamage = 3;
+    
+    //region card parameters
+    @Override
+    public String getImagePath()
+    {
+        return "green/attack/flechettes";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new FlechetteAction(m, new DamageInfo(p, this.damage, this.damageTypeForTurn)));
-        this.rawDescription = cardStrings.DESCRIPTION;
-        this.initializeDescription();
+    
+    @Override
+    public String getId()
+    {
+        return ID;
     }
-
-    public void applyPowers() {
-        super.applyPowers();
-        int count = 0;
-        Iterator var2 = AbstractDungeon.player.hand.group.iterator();
-
-        while(var2.hasNext()) {
-            AbstractCard c = (AbstractCard)var2.next();
-            if (c.type == CardType.SKILL) {
-                ++count;
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.UNCOMMON;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 1;
+    }
+    
+    @Override
+    public int getDamage()
+    {
+        return !upgraded ? 4 : 6;
+    }
+    
+    @Override
+    public boolean isAoeAttack()
+    {
+        return false;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage for each Skill card in hand.";
+    }
+    //endregion
+    
+    @Override
+    public void calculateCardDamage(AbstractMonster mo)
+    {
+        super.calculateCardDamage(mo);
+    }
+    
+    @Override
+    public void calculateDamageDisplay(AbstractMonster mo)
+    {
+        super.calculateDamageDisplay(mo);
+    }
+    
+    @Override
+    public String getTemporaryExtraDescription(AbstractMonster monster)
+    {
+        int skillCount = 0;
+        for (AbstractCard card : AbstractDungeon.player.hand.group)
+        {
+            if (card.type == CardType.SKILL)
+            {
+                skillCount++;
             }
         }
-
-        this.rawDescription = cardStrings.DESCRIPTION;
-        this.rawDescription = this.rawDescription + cardStrings.EXTENDED_DESCRIPTION[0] + count;
-        if (count == 1) {
-            this.rawDescription = this.rawDescription + cardStrings.EXTENDED_DESCRIPTION[1];
-        } else {
-            this.rawDescription = this.rawDescription + cardStrings.EXTENDED_DESCRIPTION[2];
-        }
-
-        this.initializeDescription();
-    }
-
-    public void onMoveToDiscard() {
-        this.rawDescription = cardStrings.DESCRIPTION;
-        this.initializeDescription();
-    }
-
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeDamage(2);
-        }
-    }
-
-    public AbstractCard makeCopy() {
-        return new Flechettes();
-    }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Flechettes");
-        if (Settings.language == Settings.GameLanguage.ENG)
+        
+        String colorPrefix = "";
+        if (damage > baseDamage)
         {
-            //todo: figure out best practice for how to do this.
-            cardStrings.DESCRIPTION = "Deal !D! damage for each Skill in your hand.";
-            cardStrings.UPGRADE_DESCRIPTION = "Deal !D! damage for each Skill in your hand.";
-            cardStrings.EXTENDED_DESCRIPTION[1] = " skills).";
-            cardStrings.EXTENDED_DESCRIPTION[2] = " skills).";
+            colorPrefix = "#g";
         }
+        else if (damage < baseDamage)
+        {
+            colorPrefix = "#r";
+        }
+        
+        //bc: other stuff can impact this calculation. doesn't need to be perfect. ex: akabeko, hidden shiv, etc.
+        int totalBaseDamage = skillCount * damage;
+        
+        return "!D! x #b" + skillCount + " = " + colorPrefix + totalBaseDamage + " damage";
+    }
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new FlechetteAction(monster, new DamageInfo(player, damage, damageTypeForTurn)));
     }
 }

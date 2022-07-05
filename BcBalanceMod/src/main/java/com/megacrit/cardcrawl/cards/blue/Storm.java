@@ -1,7 +1,7 @@
 package com.megacrit.cardcrawl.cards.blue;
 
 import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -23,7 +23,13 @@ public class Storm extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return 1;
+    }
+    
+    @Override
+    public boolean getInnate()
+    {
+        return upgraded;
     }
     
     @Override
@@ -53,6 +59,6 @@ public class Storm extends BcPowerCardBase
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        this.addToBot(new ApplyPowerAction(player, player, new StormPower(player, this.magicNumber), this.magicNumber));
+        addToBot(new BcApplyPowerAction(new StormPower(player, magicNumber)));
     }
 }

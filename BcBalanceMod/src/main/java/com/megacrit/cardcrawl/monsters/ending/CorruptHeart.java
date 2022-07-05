@@ -48,6 +48,7 @@ public class CorruptHeart extends AbstractMonster
     public static final String NAME;
     public static final String[] MOVES;
     public static final String[] DIALOG;
+    int blockAfterNotAttacking;
     
     static
     {
@@ -97,6 +98,7 @@ public class CorruptHeart extends AbstractMonster
     int cycleNumber;
     int initialBeatOfDeath;
     int damageCap;
+    int bigAttackIncrement;
     
     
     AbstractPlayer player;
@@ -112,33 +114,40 @@ public class CorruptHeart extends AbstractMonster
         type = AbstractMonster.EnemyType.BOSS;
         player = AbstractDungeon.player;
         
-        if (AbstractDungeon.ascensionLevel >= 9)
+        initialBeatOfDeath = 1;
+        damageCap = 350;
+        multiAttackBase = 2;
+        multiAttackCount = 15;
+        bigAttackBase = 20;
+        blockAfterNotAttacking = 20;
+        bigAttackIncrement = 10;
+        
+        if (AbstractDungeon.ascensionLevel >= 20)
+        {
+            setHp(1600);
+        }
+        else if (AbstractDungeon.ascensionLevel >= 9)
         {
             //setHp(800);
-            setHp(1300);
+            setHp(1100);
         }
         else
         {
-            //setHp(750);
-            setHp(1000);
+            setHp(750);
         }
-        
-        initialBeatOfDeath = 1;
-        damageCap = 300;
-        multiAttackBase = 2;
-        multiAttackCount = 12;
-        bigAttackBase = 20;
         
         if (AbstractDungeon.ascensionLevel >= 4)
         {
             bigAttackBase = 30;
-            multiAttackCount = 15;
+            multiAttackBase = 3;
+            bigAttackIncrement = 15;
         }
         
         if (AbstractDungeon.ascensionLevel >= 19)
         {
             initialBeatOfDeath = 2;
-            damageCap = 250;
+            blockAfterNotAttacking = 30;
+            bigAttackIncrement = 20;
         }
         
         multiAttackInfo = new DamageInfo(this, multiAttackBase);
@@ -148,12 +157,12 @@ public class CorruptHeart extends AbstractMonster
         
         //pick which monsters to summon
         int x = -360;
-        int y = 20;
+        int y = 0;
         
         int x1 = -250;
         int y1 = 20;
         int x2 = -530;
-        int y2 = 0;
+        int y2 = -20;
         
         if (AbstractDungeon.ascensionLevel < 20)
         {
@@ -168,7 +177,7 @@ public class CorruptHeart extends AbstractMonster
             }
             else if (summonVal == 2)
             {
-                monstersToSummon.add(new SpikeSlime_L(x, y));
+                monstersToSummon.add(new Sentry(x, y));
             }
         }
         else //ascension 20
@@ -215,16 +224,17 @@ public class CorruptHeart extends AbstractMonster
             addToBot(new VFXAction(new HeartBuffEffect(hb.cX, hb.cY)));
             
             addToBot(new ApplyPowerAction(this, this, new StrengthPower(this, 2), 2));
+            addToBot(new GainBlockAction(this, this, blockAfterNotAttacking));
             
             if (cycleNumber <= 3)
             {
                 addToBot(new ApplyPowerAction(this, this, new ArtifactPower(this, 2), 2));
             }
-            else if (cycleNumber == 5)
+            else if (cycleNumber == 6)
             {
                 addToBot(new ApplyPowerAction(this, this, new PainfulStabsPower(this)));
             }
-            else if (cycleNumber >= 6)
+            else if (cycleNumber >= 7)
             {
                 addToBot(new ApplyPowerAction(this, this, new BeatOfDeathPower(this, 1), 1));
             }
@@ -246,6 +256,8 @@ public class CorruptHeart extends AbstractMonster
             addToBot(new ApplyPowerAction(player, this, new FrailPower(player, 2, true), 2));
             addToBot(new ApplyPowerAction(player, this, new WeakPower(player, 2, true), 2));
             
+            addToBot(new GainBlockAction(this, this, blockAfterNotAttacking));
+            
             addToBot(new MakeTempCardInDrawPileAction(new Dazed(), 1, true, false, false, (float) Settings.WIDTH * 0.2F, (float) Settings.HEIGHT / 2.0F));
             addToBot(new MakeTempCardInDrawPileAction(new Slimed(), 1, true, false, false, (float) Settings.WIDTH * 0.35F, (float) Settings.HEIGHT / 2.0F));
             addToBot(new MakeTempCardInDrawPileAction(new Wound(), 1, true, false, false, (float) Settings.WIDTH * 0.5F, (float) Settings.HEIGHT / 2.0F));
@@ -265,7 +277,7 @@ public class CorruptHeart extends AbstractMonster
             addToBot(new NormalizeStrengthAction(this));
             
             addToBot(new ApplyPowerAction(this, this, new BeatOfDeathPower(this, initialBeatOfDeath), initialBeatOfDeath));
-            
+            addToBot(new GainBlockAction(this, this, blockAfterNotAttacking));
             addToBot(new HeartSummonAction(monstersToSummon));
         }
     }
@@ -289,7 +301,7 @@ public class CorruptHeart extends AbstractMonster
     
     public void doBigAttackMove(boolean showIntent)
     {
-        bigAttackInfo.base = bigAttackBase + cycleNumber * 10;
+        bigAttackInfo.base = bigAttackBase + (cycleNumber - 1) * bigAttackIncrement;
         
         if (showIntent)
         {

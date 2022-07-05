@@ -55,7 +55,7 @@ public class Reprogram extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 1 : 2;
+        return 2;
     }
     
     @Override

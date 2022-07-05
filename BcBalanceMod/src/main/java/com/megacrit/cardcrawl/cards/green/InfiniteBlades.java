@@ -6,7 +6,7 @@
 package com.megacrit.cardcrawl.cards.green;
 
 import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
@@ -28,7 +28,7 @@ public class InfiniteBlades extends BcPowerCardBase
     @Override
     public void onInitialized()
     {
-        this.cardsToPreview = new Shiv();
+        cardsToPreview = new Shiv();
     }
     
     @Override
@@ -66,17 +66,17 @@ public class InfiniteBlades extends BcPowerCardBase
     {
         if (getMagicNumber() == 1)
         {
-            return "Start of turn: NL Create a Hidden Shiv.";
+            return "Start of turn: NL Create a *Hidden Shiv.";
         }
         else
         {
-            return "Start of turn: NL Create !M! Hidden Shivs.";
+            return "Start of turn: NL Create !M! *Hidden Shivs.";
         }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        this.addToBot(new ApplyPowerAction(player, player, new InfiniteBladesPower(player, magicNumber), magicNumber));
+        addToBot(new BcApplyPowerAction(new InfiniteBladesPower(player, magicNumber)));
     }
 }

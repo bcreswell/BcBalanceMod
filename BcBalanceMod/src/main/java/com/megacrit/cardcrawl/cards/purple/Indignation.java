@@ -7,7 +7,6 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-//retiring this card
 public class Indignation extends AbstractCard {
     public static final String ID = "Indignation";
     private static final CardStrings cardStrings;

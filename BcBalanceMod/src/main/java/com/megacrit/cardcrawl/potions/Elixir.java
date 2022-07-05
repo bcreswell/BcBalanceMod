@@ -31,9 +31,8 @@ public class Elixir extends AbstractPotion {
 
     public void initializeData() {
         this.potency = this.getPotency();
-        if ((Settings.language == Settings.GameLanguage.ENG) && (this.potency > 1))
+        if (potency > 1)
         {
-            //todo: figure out best practice for how to do this.
             this.description = "#yExhaust any number of cards in your hand. NL Sacred Bark: Heal for 5.";
         }
         else

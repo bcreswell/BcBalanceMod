@@ -1,7 +1,7 @@
 package com.megacrit.cardcrawl.cards.red;
 
 import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -23,7 +23,7 @@ public class DoubleTap extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return 0;
     }
     
     @Override
@@ -41,24 +41,25 @@ public class DoubleTap extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return 1;
-    }
-    
-    @Override
-    public boolean getRetain()
-    {
-        return upgraded;
+        return !upgraded ? 1 : 2;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "This turn, your next Attack is played twice.";
+        if (magicNumber == 1)
+        {
+            return "This turn, your next Attack is played twice.";
+        }
+        else
+        {
+            return "This turn, your next !M! Attacks are played twice.";
+        }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new ApplyPowerAction(player, player, new DoubleTapPower(player, magicNumber), magicNumber));
+        addToBot(new BcApplyPowerAction(new DoubleTapPower(player, magicNumber)));
     }
 }

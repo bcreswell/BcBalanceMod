@@ -41,6 +41,8 @@ public class StormOfSteelAction extends AbstractGameAction
                 {
                     addToBot(new RandomHiddenShivAction(source));
                 }
+                
+                addToBot(new ReducePowerAction(player, player, HiddenShivPower.POWER_ID, hiddenShivPower.amount));
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.*;
 import com.megacrit.cardcrawl.actions.animations.*;
 import com.megacrit.cardcrawl.actions.common.*;
@@ -73,22 +74,21 @@ public class Crescendo extends BcSkillCardBase
     {
         if (magicNumber > 0)
         {
-            addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.RED_TEXT_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.2F));
+            addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.RED_TEXT_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.3F));
             
             //inflict Vulnerable on all enemies
             for (AbstractMonster monster : AbstractDungeon.getCurrRoom().monsters.monsters)
             {
-                addToBot(
-                        new ApplyPowerAction(
+                addToBot(new ApplyPowerAction(
+                        monster,
+                        player,
+                        new VulnerablePower(
                                 monster,
-                                player,
-                                new VulnerablePower(
-                                        monster,
-                                        magicNumber,
-                                        false),
                                 magicNumber,
-                                true,
-                                AbstractGameAction.AttackEffect.NONE));
+                                false),
+                        magicNumber,
+                        true,
+                        AbstractGameAction.AttackEffect.NONE));
             }
         }
         

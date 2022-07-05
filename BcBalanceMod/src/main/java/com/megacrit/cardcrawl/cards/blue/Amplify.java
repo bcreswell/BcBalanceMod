@@ -5,7 +5,8 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
@@ -18,42 +19,63 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AmplifyPower;
 
-public class Amplify extends AbstractCard {
+public class Amplify extends BcSkillCardBase
+{
     public static final String ID = "Amplify";
-    private static final CardStrings cardStrings;
-
-    public Amplify() {
-        super("Amplify", cardStrings.NAME, "blue/skill/amplify", 1, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.BLUE, CardRarity.UNCOMMON, CardTarget.SELF);
-        this.baseMagicNumber = 1;
-        this.magicNumber = this.baseMagicNumber;
-        this.exhaust = true;
+    
+    //region Description
+    @Override
+    public String getImagePath()
+    {
+        return "blue/skill/amplify";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new ApplyPowerAction(p, p, new AmplifyPower(p, this.magicNumber), this.magicNumber));
+    
+    @Override
+    public String getId()
+    {
+        return ID;
     }
-
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeMagicNumber(1);
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
-
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.UNCOMMON;
     }
-
-    public AbstractCard makeCopy() {
-        return new Amplify();
+    
+    @Override
+    public int getCost()
+    {
+        return 1;
     }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Amplify");
-        if (Settings.language == Settings.GameLanguage.ENG)
+    
+    @Override
+    public boolean getExhaust()
+    {
+        return true;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 1 : 2;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        if (magicNumber == 1)
         {
-            //todo: figure out best practice for how to do this.
-            cardStrings.DESCRIPTION = "Your next Power card is played twice. Exhaust.";
-            cardStrings.UPGRADE_DESCRIPTION = "Your next !M! Power cards are played twice. Exhaust.";
+            return "Your next Power card is played twice.";
         }
+        else
+        {
+            return "Your next !M! Power cards are played twice.";
+        }
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new BcApplyPowerAction(new AmplifyPower(player, magicNumber)));
     }
 }

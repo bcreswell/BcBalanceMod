@@ -8,36 +8,28 @@ package com.megacrit.cardcrawl.actions.common;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
-import com.megacrit.cardcrawl.cards.colorless.RitualDagger;
+import com.megacrit.cardcrawl.cards.colorless.*;
 import com.megacrit.cardcrawl.cards.optionCards.BecomeAlmighty;
 import com.megacrit.cardcrawl.cards.optionCards.FameAndFortune;
 import com.megacrit.cardcrawl.cards.optionCards.LiveForever;
-import com.megacrit.cardcrawl.cards.tempCards.Beta;
-import com.megacrit.cardcrawl.cards.tempCards.Expunger;
-import com.megacrit.cardcrawl.cards.tempCards.Omega;
+import com.megacrit.cardcrawl.cards.tempCards.*;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
-import com.megacrit.cardcrawl.localization.UIStrings;
-import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToDiscardEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToHandEffect;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.Map;
 
 public class RefactorAction extends AbstractGameAction
 {
-    public static int numExhausted;
-    boolean isUpgraded = false;
+    boolean createsUpgradedCards = false;
     
-    public RefactorAction(boolean isUpgraded)
+    public RefactorAction(boolean createsUpgradedCards)
     {
-        this.isUpgraded = isUpgraded;
+        this.createsUpgradedCards = createsUpgradedCards;
         this.duration = this.startDuration = Settings.ACTION_DUR_FAST;
         this.actionType = ActionType.EXHAUST;
     }
@@ -61,71 +53,110 @@ public class RefactorAction extends AbstractGameAction
         
         if (!AbstractDungeon.handCardSelectScreen.wereCardsRetrieved)
         {
-            Iterator cardIterator = AbstractDungeon.handCardSelectScreen.selectedCards.group.iterator();
-            ArrayList<AbstractCard> cardList = new ArrayList<AbstractCard>();
-            
-            while (cardIterator.hasNext())
+            ArrayList<AbstractCard> cardsToExhaust = new ArrayList<>();
+            for (AbstractCard card : AbstractDungeon.handCardSelectScreen.selectedCards.group)
             {
-                cardList.add((AbstractCard) cardIterator.next());
+                cardsToExhaust.add(card);
+            }
+            AbstractDungeon.handCardSelectScreen.wereCardsRetrieved = true;
+            
+            if (cardsToExhaust.isEmpty())
+            {
+                return;
             }
             
-            //dont know why i thought reverse was needed
-            //Collections.reverse(cardList);
-            
-            for (int i = 0; i < cardList.size(); i++)
+            ArrayList<AbstractCard> cardsToCreate = new ArrayList<>();
+            CardGroup possibleCardsToCreate;
+            for (AbstractCard cardToExhaust : cardsToExhaust)
             {
-                AbstractCard cardToExhaust = cardList.get(i);
-                
-                //create a new card of the same color and type
-                AbstractCard refactoredCard = getRandomCardByTypeAndColor(cardToExhaust.type, cardToExhaust.color);
-                if (isUpgraded || cardToExhaust.upgraded)
+                AbstractCard cardToCreate = null;
+                possibleCardsToCreate = getCardsByTypeAndColor(cardToExhaust.type, cardToExhaust.color);
+                while (cardToCreate == null)
                 {
-                    refactoredCard.upgrade();
+                    //create a new card of the same color and type
+                    cardToCreate = possibleCardsToCreate.getRandomCard(true).makeCopy();
+    
+                    if (possibleCardsToCreate.size() >= cardsToExhaust.size() * 2)
+                    {
+                        //ensure the new cards aren't part of the original set
+                        for (AbstractCard existingCard : cardsToExhaust)
+                        {
+                            if (cardToCreate.cardID.equals(existingCard.cardID))
+                            {
+                                cardToCreate = null;
+                            }
+                        }
+                    }
+                    //if there are too few cards to ensure that new cards wont be part of the original set, just check each card individually instead
+                    else if (cardToCreate.cardID.equals(cardToExhaust.cardID))
+                    {
+                        cardToCreate = null;
+                    }
                 }
                 
-                player.hand.moveToExhaustPile(cardToExhaust);
+                if (cardToCreate.canUpgrade() &&
+                            (createsUpgradedCards || cardToExhaust.upgraded))
+                {
+                    cardToCreate.upgrade();
+                }
                 
-                refactoredCard.current_x = -1000.0F * Settings.xScale;
+                cardsToCreate.add(cardToCreate);
+            }
+            
+            for (AbstractCard cardToExhaust : cardsToExhaust)
+            {
+                player.hand.moveToExhaustPile(cardToExhaust);
+            }
+            
+            for (AbstractCard cardToCreate : cardsToCreate)
+            {
+                cardToCreate.current_x = -1000.0F * Settings.xScale;
                 if (AbstractDungeon.player.hand.size() < 10)
                 {
-                    AbstractDungeon.effectList.add(new ShowCardAndAddToHandEffect(refactoredCard, (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F));
+                    AbstractDungeon.effectList.add(new ShowCardAndAddToHandEffect(cardToCreate, (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F));
                 }
                 else
                 {
-                    AbstractDungeon.effectList.add(new ShowCardAndAddToDiscardEffect(refactoredCard, (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F));
+                    AbstractDungeon.effectList.add(new ShowCardAndAddToDiscardEffect(cardToCreate, (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F));
                 }
             }
-            
-            AbstractDungeon.handCardSelectScreen.wereCardsRetrieved = true;
         }
         
         tickDuration();
     }
     
-    AbstractCard getRandomCardByTypeAndColor(AbstractCard.CardType type, AbstractCard.CardColor color)
+    CardGroup getCardsByTypeAndColor(AbstractCard.CardType type, AbstractCard.CardColor color)
     {
-        CardGroup anyCard = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-        for (Iterator<Map.Entry<String, AbstractCard>> iterator = CardLibrary.cards.entrySet().iterator(); iterator.hasNext(); )
+        CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+        for (AbstractCard card : CardLibrary.cards.values())
         {
-            Map.Entry<String, AbstractCard> keyValuePair = iterator.next();
-            AbstractCard card = keyValuePair.getValue();
-            
+            boolean illAllowIt = false;
             if ((card.type == type) &&
                         (card.color == color) &&
-                        (card.rarity != AbstractCard.CardRarity.BASIC) &&
-                        !card.cardID.equals(Expunger.ID) &&
-                        !card.cardID.equals(Beta.ID) &&
-                        !card.cardID.equals(BecomeAlmighty.ID) &&
-                        !card.cardID.equals(FameAndFortune.ID) &&
-                        !card.cardID.equals(LiveForever.ID) &&
-                        !card.cardID.equals(Omega.ID) &&
-                        !card.cardID.equals(RitualDagger.ID))
+                        (card.rarity != AbstractCard.CardRarity.BASIC))
             {
-                anyCard.addToBottom(card);
+                if (card.rarity == AbstractCard.CardRarity.SPECIAL)
+                {
+                    //extra spice!
+                    if (card.cardID.equals(Apparition.ID) ||
+                                card.cardID.equals(Bite.ID) ||
+                                card.cardID.equals(JAX.ID))
+                    {
+                        illAllowIt = true;
+                    }
+                }
+                else
+                {
+                    illAllowIt = true;
+                }
+            }
+            
+            if (illAllowIt && !card.hasTag(AbstractCard.CardTags.HEALING))
+            {
+                group.addToBottom(card);
             }
         }
         
-        anyCard.shuffle(AbstractDungeon.cardRng);
-        return anyCard.getRandomCard(true).makeCopy();
+        return group;
     }
 }

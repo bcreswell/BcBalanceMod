@@ -5,57 +5,101 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.unique.MulticastAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardTarget;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardType;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.localization.CardStrings;
+import com.megacrit.cardcrawl.dungeons.*;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.orbs.*;
+import com.megacrit.cardcrawl.relics.*;
+import com.megacrit.cardcrawl.ui.panels.*;
 
-public class MultiCast extends AbstractCard
+public class MultiCast extends BcSkillCardBase
 {
     public static final String ID = "Multi-Cast";
-    private static final CardStrings cardStrings;
     
-    public MultiCast()
+    //region card parameters
+    @Override
+    public String getImagePath()
     {
-        super("Multi-Cast", cardStrings.NAME, "blue/skill/multicast", -1, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.BLUE, CardRarity.RARE, CardTarget.NONE);
-        this.showEvokeValue = true;
+        return "blue/skill/multicast";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    @Override
+    public String getId()
     {
-        this.addToBot(new MulticastAction(p, this.energyOnUse, this.upgraded, this.freeToPlayOnce));
+        return ID;
     }
     
-    public void upgrade()
+    @Override
+    public CardRarity getCardRarity()
     {
-        if (!this.upgraded)
+        return CardRarity.RARE;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return -1;
+    }
+    
+    @Override
+    public int getNumberOfOrbsEvokedDirectly()
+    {
+        return 1;
+    }
+    
+    @Override
+    public int getEvokeIterations()
+    {
+        int evokeCount = 0;
+        AbstractPlayer player = AbstractDungeon.player;
+        
+        if (BcUtility.isPlayerInCombat() && player.hasOrb())
         {
-            this.upgradeName();
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
+            evokeCount = EnergyPanel.totalCount;
+            if (energyOnUse > evokeCount)
+            {
+                evokeCount = energyOnUse;
+            }
+            
+            if (player.hasRelic(ChemicalX.ID))
+            {
+                evokeCount += 2;
+            }
+            
+            if (upgraded)
+            {
+                evokeCount++;
+            }
+            
+            AbstractOrb orbToEvoke = AbstractDungeon.player.orbs.get(0);
+            if ((orbToEvoke instanceof Frost) || (orbToEvoke instanceof Lightning))
+            {
+                evokeCount++;
+            }
+        }
+        
+        return evokeCount;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        if (!upgraded)
+        {
+            return "Evoke your next orb multiple times. NL Lightning or Frost: NL X+1 times. NL Dark or Plasma: NL X times.";
+        }
+        else
+        {
+            return "Evoke your next orb multiple times. NL Lightning or Frost: NL X+2 times. NL Dark or Plasma: NL X+1 times.";
         }
     }
+    //endregion
     
-    public AbstractCard makeCopy()
+    public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        return new MultiCast();
-    }
-    
-    static
-    {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Multi-Cast");
-        if (Settings.language == Settings.GameLanguage.ENG)
-        {
-            //todo: figure out best practice for how to do this.
-            cardStrings.DESCRIPTION = "Evoke your next orb multiple times. NL Lightning or Frost: NL      X+1 times. NL Dark or Plasma: NL    X times.";
-            cardStrings.UPGRADE_DESCRIPTION = "Evoke your next orb multiple times. NL Lightning or Frost: NL    X+2 times. NL Dark or Plasma: NL    X+1 times.";
-        }
+        addToBot(new MulticastAction(getEvokeIterations()));
     }
 }

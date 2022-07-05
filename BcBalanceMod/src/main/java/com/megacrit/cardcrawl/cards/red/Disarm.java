@@ -55,6 +55,12 @@ public class Disarm extends BcSkillCardBase
     {
         return !upgraded ? 2 : 3;
     }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Enemy loses !M! Strength.";
+    }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)

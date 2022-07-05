@@ -58,6 +58,12 @@ public class CarveReality extends BcAttackCardBase
     {
         return false;
     }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage. NL Add a *Smite into your hand.";
+    }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)

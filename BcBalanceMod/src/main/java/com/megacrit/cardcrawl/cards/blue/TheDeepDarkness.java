@@ -7,7 +7,8 @@ package com.megacrit.cardcrawl.cards.blue;
 
 import basemod.abstracts.CustomCard;
 import bcBalanceMod.BcBalanceMod;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.CardStrings;
@@ -16,46 +17,56 @@ import com.megacrit.cardcrawl.powers.DeepDarknessPower;
 
 import static bcBalanceMod.BcBalanceMod.makeCardPath;
 
-public class TheDeepDarkness extends CustomCard
+public class TheDeepDarkness extends BcPowerCardBase
 {
     public static final String ID = BcBalanceMod.makeID("TheDeepDarkness");
-    private static final CardStrings cardStrings;
     
-    public TheDeepDarkness()
+    //region card parameters
+    @Override
+    public String getDisplayName()
     {
-        super(ID, cardStrings.NAME, makeCardPath("blue/theDeepDarkness.png"), 2, cardStrings.DESCRIPTION, CardType.POWER, CardColor.BLUE, CardRarity.RARE, CardTarget.SELF);
+        return "The Deep Darkness";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    @Override
+    public String getImagePath()
     {
-        this.addToBot(new ApplyPowerAction(p, p, new DeepDarknessPower(p, upgraded), 1));
+        return "blue/theDeepDarkness.png";
     }
     
-    public void upgrade()
+    @Override
+    public int getCost()
     {
-        if (!this.upgraded)
-        {
-            this.upgradeName();
-            //this.upgradeBaseCost(2);
-            
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
+        return 2;
     }
     
-    static
+    @Override
+    public String getId()
     {
-        cardStrings = new CardStrings();
-        //extra spaces to move it out from under the energy cost
-        if (Settings.BIG_TEXT_MODE)
-        {
-            cardStrings.NAME = "   The Deep Darkness";
-        }
-        else
-        {
-            cardStrings.NAME = " The Deep Darkness";
-        }
-        cardStrings.DESCRIPTION = "End of turn: NL If you have an empty orb slot, NL Channel 1 Dark.";
-        cardStrings.UPGRADE_DESCRIPTION = "End of turn: NL If you have an empty orb slot, NL  Channel 1 Dark, NL and trigger its passive.";
+        return ID;
+    }
+    
+    @Override
+    public boolean getInnate()
+    {
+        return upgraded;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.RARE;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "End of turn: NL Trigger the passive on ALL Dark orbs. NL If you have an empty orb slot, Channel a Dark orb.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new BcApplyPowerAction(new DeepDarknessPower(player, 1)));
     }
 }

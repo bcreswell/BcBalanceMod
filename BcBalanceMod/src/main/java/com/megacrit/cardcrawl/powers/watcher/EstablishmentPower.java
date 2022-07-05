@@ -26,17 +26,18 @@ public class EstablishmentPower extends AbstractPower
     {
         if (amount == 1)
         {
-            description = "End of Turn: NL Reduce the cost of a random Retained Attack or Skill by 1 for the rest of combat.";
+            description = "End of turn: NL Reduce the cost of a random Retained non-Rare card by 1 for the rest of combat.";
         }
         else
         {
-            description = "End of Turn: NL Reduce the cost of " + amount + " random Retained Attacks or Skills by 1 for the rest of combat.";
+            description = "End of turn: NL Reduce the cost of " + amount + " random Retained non-Rare cards by 1 for the rest of combat.";
         }
     }
     
     public void atEndOfTurn(boolean isPlayer)
     {
         flash();
+        
         addToBot(new EstablishmentPowerAction(amount));
     }
     

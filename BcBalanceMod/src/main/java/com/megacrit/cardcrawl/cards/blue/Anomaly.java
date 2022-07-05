@@ -1,7 +1,9 @@
 package com.megacrit.cardcrawl.cards.blue;
 
 import bcBalanceMod.BcBalanceMod;
-import bcBalanceMod.*;  import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.actions.defect.ChannelAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -36,6 +38,12 @@ public class Anomaly extends BcSkillCardBase
     public int getCost()
     {
         return upgraded ? 1 : 2;
+    }
+    
+    @Override
+    public int getChanneledOrbCount()
+    {
+        return 1;
     }
     
     @Override

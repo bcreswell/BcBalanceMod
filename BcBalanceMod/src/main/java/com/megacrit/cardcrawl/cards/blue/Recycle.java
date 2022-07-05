@@ -5,55 +5,87 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.defect.RecycleAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardTarget;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardType;
+import com.megacrit.cardcrawl.cards.red.*;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class Recycle extends AbstractCard {
+public class Recycle extends BcSkillCardBase
+{
     public static final String ID = "Recycle";
-    private static final CardStrings cardStrings;
-
-    public Recycle() {
-        super("Recycle", cardStrings.NAME, "blue/skill/recycle", 0, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.BLUE, CardRarity.UNCOMMON, CardTarget.SELF);
-    }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        RecycleAction recycle = new RecycleAction();
-        if (upgraded)
-        {
-            recycle.upgrade();
-        }
-        this.addToBot(recycle);
-    }
-
-    public void upgrade()
+    
+    //region card parameters
+    @Override
+    public String getImagePath()
     {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
+        return "blue/skill/recycle";
+    }
+    
+    @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.COMMON;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 0;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 0 : 1;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        if (!upgraded)
+        {
+            return "Exhaust a card. NL Gain its cost as [B].";
+        }
+        else
+        {
+            return "Exhaust a card. NL Gain its cost as [B]. NL Draw a card.";
         }
     }
-
-    public AbstractCard makeCopy() {
-        return new Recycle();
+    
+    @Override
+    public String getFootnote()
+    {
+        return TrueGrit.NothingFootnote;
     }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Recycle");
-        if (Settings.language == Settings.GameLanguage.ENG)
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        //does nothing if there's no target to exhaust
+        if (player.hand.size() >= 2)
         {
-            //todo: figure out best practice for how to do this.
-            cardStrings.DESCRIPTION = "Exhaust a card. NL Gain [B] equal to NL its cost - 1. NL X-Cost: gain your current [B] - 1.";
-            cardStrings.UPGRADE_DESCRIPTION = "Exhaust a card. NL Gain [B] equal to NL its cost. NL X-Cost: gain your current [B].";
+            addToBot(new RecycleAction());
+    
+            if (magicNumber > 0)
+            {
+                addToBot(new DrawCardAction(magicNumber));
+            }
         }
     }
 }

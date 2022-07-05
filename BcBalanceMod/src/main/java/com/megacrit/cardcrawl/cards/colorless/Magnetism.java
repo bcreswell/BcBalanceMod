@@ -1,7 +1,8 @@
 package com.megacrit.cardcrawl.cards.colorless;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -29,7 +30,7 @@ public class Magnetism extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -47,13 +48,26 @@ public class Magnetism extends BcPowerCardBase
     @Override
     public boolean getInnate()
     {
-        return upgraded;
+        return true;
+    }
+    
+    @Override
+    public boolean isARetrieveCard()
+    {
+        return true;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Start of turn: NL Draw 1 card randomly from your discard pile.";
+        if (magicNumber == 1)
+        {
+            return "Start of turn: NL Retrieve a card randomly.";
+        }
+        else
+        {
+            return "Start of turn: NL Retrieve !M! cards randomly.";
+        }
     }
     
     @Override
@@ -63,14 +77,8 @@ public class Magnetism extends BcPowerCardBase
     }
     //endregion
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        MagnetismPower magnetismBuff =  new MagnetismPower(p, this.magicNumber);
-        //if (upgraded)
-        //{
-        //    magnetismBuff.upgrade();
-        //}
-        
-        this.addToBot(new ApplyPowerAction(p, p, magnetismBuff, this.magicNumber));
+        addToBot(new BcApplyPowerAction(new MagnetismPower(player, magicNumber)));
     }
 }

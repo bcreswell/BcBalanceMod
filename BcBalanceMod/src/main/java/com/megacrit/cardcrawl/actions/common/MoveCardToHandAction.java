@@ -1,0 +1,81 @@
+package com.megacrit.cardcrawl.actions.common;
+
+import com.megacrit.cardcrawl.actions.*;
+import com.megacrit.cardcrawl.cards.*;
+import com.megacrit.cardcrawl.characters.*;
+import com.megacrit.cardcrawl.dungeons.*;
+import com.megacrit.cardcrawl.powers.*;
+import com.megacrit.cardcrawl.relics.*;
+
+public class MoveCardToHandAction extends AbstractGameAction
+{
+    AbstractCard cardToMove;
+    
+    public MoveCardToHandAction(AbstractCard cardToMove)
+    {
+        this.cardToMove = cardToMove;
+        duration = 0;
+    }
+    
+    @Override
+    public void update()
+    {
+        AbstractPlayer player = AbstractDungeon.player;
+        
+        cardToMove.unhover();
+        
+        if (player.drawPile.contains(cardToMove))
+        {
+            cardToMove.triggerWhenDrawn();
+            
+            if (player.hand.size() == 10)
+            {
+                player.drawPile.moveToDiscardPile(cardToMove);
+                player.createHandIsFullDialog();
+            }
+            else
+            {
+                player.drawPile.moveToHand(cardToMove, player.drawPile);
+            }
+            
+            for (AbstractPower power : player.powers)
+            {
+                power.onCardDraw(cardToMove);
+            }
+            
+            for (AbstractRelic relic : player.relics)
+            {
+                relic.onCardDraw(cardToMove);
+            }
+        }
+        else if (player.discardPile.contains(cardToMove))
+        {
+            if (player.hand.size() == 10)
+            {
+                player.createHandIsFullDialog();
+            }
+            else
+            {
+                player.discardPile.moveToHand(cardToMove, player.discardPile);
+            }
+        }
+        else if (player.exhaustPile.contains(cardToMove))
+        {
+            if (player.hand.size() == 10)
+            {
+                player.exhaustPile.moveToDiscardPile(cardToMove);
+                player.createHandIsFullDialog();
+            }
+            else
+            {
+                player.exhaustPile.moveToHand(cardToMove, player.exhaustPile);
+            }
+        }
+        
+        player.hand.refreshHandLayout();
+        player.hand.glowCheck();
+        player.hand.applyPowers();
+        
+        isDone = true;
+    }
+}

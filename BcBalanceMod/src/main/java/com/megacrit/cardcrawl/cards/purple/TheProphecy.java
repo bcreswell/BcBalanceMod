@@ -3,7 +3,9 @@ package com.megacrit.cardcrawl.cards.purple;
 import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.animations.*;
 import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.actions.defect.*;
 import com.megacrit.cardcrawl.characters.*;
+import com.megacrit.cardcrawl.dungeons.*;
 import com.megacrit.cardcrawl.monsters.*;
 import com.megacrit.cardcrawl.vfx.combat.*;
 
@@ -51,7 +53,7 @@ public class TheProphecy extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Choose 1 of your cards. NL The next time you draw it, enter Divinity. NL Shuffle all your cards into the draw pile.";
+        return "Choose 1 of your cards. NL The next time you draw it, enter Divinity. NL Shuffle ALL cards into your draw pile.";
     }
     //endregion
     
@@ -60,5 +62,9 @@ public class TheProphecy extends BcSkillCardBase
     {
         addToBot(new VFXAction(new ThirdEyeEffect(player.hb.cX, player.hb.cY)));
         addToBot(new TheProphecyAction());
+        
+        //this is how reboot shuffles all
+        addToBot(new ShuffleAllAction());
+        addToBot(new ShuffleAction(AbstractDungeon.player.drawPile, false));
     }
 }

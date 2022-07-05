@@ -1,18 +1,20 @@
 package com.megacrit.cardcrawl.cards.red;
 
 import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.*;
+import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.cards.*;
+import com.megacrit.cardcrawl.core.*;
+import com.megacrit.cardcrawl.dungeons.*;
+import com.megacrit.cardcrawl.powers.*;
 
 public class HellfirePower extends BcPowerBase
 {
     public static final String POWER_ID = "HellfirePower";
-    String idOffset;
     
-    public HellfirePower(String idOffset, int amount)
+    public HellfirePower(AbstractCreature owner, int amount)
     {
-        super(null, amount);
-        this.idOffset = idOffset;
-        this.ID += idOffset;
-        updateDescription();
+        super(owner, amount);
     }
     
     //region parameters
@@ -31,13 +33,19 @@ public class HellfirePower extends BcPowerBase
     @Override
     public String getImagePath()
     {
-        return "hellfire35x35.png";
+        return "hellfire32x32.png";
     }
     
     @Override
     public PowerType getPowerType()
     {
         return PowerType.BUFF;
+    }
+    
+    @Override
+    public boolean isAppliedQuietly()
+    {
+        return true;
     }
     
     @Override
@@ -49,14 +57,22 @@ public class HellfirePower extends BcPowerBase
     @Override
     public String getBaseDescription()
     {
-        if (amount >= Combust.CombustThreshold)
-        {
-            return "Start of turn: If this is your biggest Hellfire, it will be consumed dealing " + amount + " damage to ALL enemies.";
-        }
-        else
-        {
-            return "Hellfire grows as you lose HP. If you have at least 10 at the start of your turn, it is consumed to deal that much damage to ALL enemies.";
-        }
+        return "Deal #b" + amount + " damage to ALL enemies at the start of your next turn.";
     }
     //endregion
+    
+    public void atStartOfTurnPostDraw()
+    {
+        if (!AbstractDungeon.getMonsters().areMonstersBasicallyDead())
+        {
+            if (amount > 0)
+            {
+                flash();
+                addToBot(new DamageAllEnemiesAction(owner, DamageInfo.createDamageMatrix(amount, true), DamageInfo.DamageType.THORNS, AbstractGameAction.AttackEffect.FIRE));
+                
+                amount = 0;
+                addToBot(new RemovePowerIfEmptyAction(owner, POWER_ID, true));
+            }
+        }
+    }
 }

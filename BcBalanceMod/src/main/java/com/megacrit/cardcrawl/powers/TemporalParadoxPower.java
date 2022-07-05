@@ -2,25 +2,25 @@ package com.megacrit.cardcrawl.powers;
 
 import bcBalanceMod.baseCards.*;
 import com.badlogic.gdx.graphics.*;
+import com.megacrit.cardcrawl.actions.animations.*;
 import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.actions.utility.*;
 import com.megacrit.cardcrawl.core.*;
 import com.megacrit.cardcrawl.dungeons.*;
 import com.megacrit.cardcrawl.relics.*;
 import com.megacrit.cardcrawl.vfx.*;
 import com.megacrit.cardcrawl.vfx.combat.*;
 
-import java.util.*;
-
 public class TemporalParadoxPower extends BcPowerBase
 {
     public static final String POWER_ID = "TemporalParadoxPower";
-    public int HpTarget;
+    public int hpTarget;
     
     public TemporalParadoxPower(AbstractCreature owner, int amount)
     {
         super(owner, amount);
         
-        HpTarget = owner.currentHealth;
+        hpTarget = owner.currentHealth;
         updateDescription();
     }
     
@@ -65,11 +65,11 @@ public class TemporalParadoxPower extends BcPowerBase
     {
         if (amount == 1)
         {
-            return "Return to " + HpTarget + " health in " + amount + " turn.";
+            return "Return to " + hpTarget + " health in " + amount + " turn.";
         }
         else
         {
-            return "Return to " + HpTarget + " health in " + amount + " turns.";
+            return "Return to " + hpTarget + " health in " + amount + " turns.";
         }
     }
     //endregion
@@ -82,27 +82,13 @@ public class TemporalParadoxPower extends BcPowerBase
         {
             if (!owner.isDying)
             {
-                owner.currentHealth = HpTarget;
-                if (owner.currentHealth > owner.maxHealth)
-                {
-                    owner.currentHealth = owner.maxHealth;
-                }
-                
-                if (((float) owner.currentHealth > (float) owner.maxHealth / 2.0F)
-                            && owner.isBloodied)
-                {
-                    owner.isBloodied = false;
-                    for (AbstractRelic relic : AbstractDungeon.player.relics)
-                    {
-                        relic.onNotBloodied();
-                    }
-                }
-                
-                owner.healthBarUpdatedEvent();
-    
                 CardCrawlGame.sound.play("POWER_TIME_WARP", 0.05F);
                 AbstractDungeon.effectsQueue.add(new BorderFlashEffect(Color.GOLD, true));
                 AbstractDungeon.topLevelEffectsQueue.add(new TimeWarpTurnEndEffect());
+                
+                addToBot(new TrueWaitAction(.3f));
+                addToBot(new VFXAction(new SanctityEffect(AbstractDungeon.player.hb.cX, AbstractDungeon.player.hb.cY)));
+                addToBot(new RewindHealthAction(owner, hpTarget));
             }
             
             addToBot(new RemoveSpecificPowerAction(owner, owner, ID));

@@ -40,6 +40,12 @@ public class Burn extends BcStatusCardBase
     {
         return !upgraded ? 2 : 4;
     }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Unplayable. NL At the end of your turn, take !M! damage.";
+    }
     //endregion
     
     public void use(AbstractPlayer p, AbstractMonster m)

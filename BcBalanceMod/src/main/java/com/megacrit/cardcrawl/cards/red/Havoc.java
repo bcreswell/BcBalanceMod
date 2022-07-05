@@ -23,7 +23,7 @@ public class Havoc extends AbstractCard {
     private static final CardStrings cardStrings;
 
     public Havoc() {
-        super("Havoc", cardStrings.NAME, "red/skill/havoc", 0, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.RED, CardRarity.COMMON, CardTarget.NONE);
+        super("Havoc", cardStrings.NAME, "red/skill/havoc", 0, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.RED, CardRarity.UNCOMMON, CardTarget.NONE);
         exhaust = true;
     }
 
@@ -54,7 +54,6 @@ public class Havoc extends AbstractCard {
         cardStrings = CardCrawlGame.languagePack.getCardStrings("Havoc");
         if (Settings.language == Settings.GameLanguage.ENG)
         {
-            //todo: figure out best practice for how to do this.
             cardStrings.DESCRIPTION = "Play the top card of your draw pile and Exhaust it. NL Exhaust.";
             cardStrings.UPGRADE_DESCRIPTION = "Play the top card of your draw pile and Exhaust it.";
         }

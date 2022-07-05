@@ -5,7 +5,8 @@
 
 package com.megacrit.cardcrawl.cards.green;
 
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
@@ -17,37 +18,57 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.EnergizedPower;
 
-public class Outmaneuver extends AbstractCard {
+public class Outmaneuver extends BcSkillCardBase
+{
     public static final String ID = "Outmaneuver";
-    private static final CardStrings cardStrings;
-
-    public Outmaneuver() {
-        super("Outmaneuver", cardStrings.NAME, "green/skill/outmaneuver", 1, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.GREEN, CardRarity.UNCOMMON, CardTarget.NONE);
+    
+    //region card parameters
+    @Override
+    public String getImagePath()
+    {
+        return "green/skill/outmaneuver";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        if (!this.upgraded) {
-            this.addToBot(new ApplyPowerAction(p, p, new EnergizedPower(p, 2), 2));
-        } else {
-            this.addToBot(new ApplyPowerAction(p, p, new EnergizedPower(p, 3), 3));
+    
+    @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.COMMON;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 1;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 2 : 3;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        if (!upgraded)
+        {
+            return "Next turn, NL gain [G] [G].";
         }
-
-    }
-
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
+        else
+        {
+            return "Next turn, NL gain [G] [G] [G].";
         }
-
     }
-
-    public AbstractCard makeCopy() {
-        return new Outmaneuver();
-    }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Outmaneuver");
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new BcApplyPowerAction(new EnergizedPower(player, magicNumber)));
     }
 }

@@ -9,18 +9,10 @@ import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 import com.megacrit.cardcrawl.actions.common.*;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardTarget;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardType;
 import com.megacrit.cardcrawl.cards.DamageInfo.DamageType;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.*;
 
@@ -68,28 +60,25 @@ public class BodySlam extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
+        String blockLosePercent = "25%";//!upgraded ? "30%" : "20%";
+        
+        String description = null;
         if (BcUtility.isPlayerInCombat())
         {
-            if (!upgraded)
-            {
-                return "Deal !D! damage (150% of your Block), then lose half of your Block.";
-            }
-            else
-            {
-                return "Deal !D! damage (200% of your Block), then lose half of your Block.";
-            }
+            int blockToLose = getBlockToLose();
+            description = "Deal !D! damage (based on your Block). NL Then lose " + blockToLose + " Block (" + blockLosePercent + ").";
         }
         else
         {
-            if (!upgraded)
-            {
-                return "Deal damage equal to 150% of your Block, then lose half of your Block.";
-            }
-            else
-            {
-                return "Deal damage equal to 200% of your Block, then lose half of your Block.";
-            }
+            description = "Deal damage equal to your Block. NL Then lose " + blockLosePercent + " of your Block.";
         }
+        
+        if (upgraded)
+        {
+            description += " NL Draw a card.";
+        }
+        
+        return description;
     }
     //endregion
     
@@ -100,39 +89,19 @@ public class BodySlam extends BcAttackCardBase
         if (BcUtility.isPlayerInCombat())
         {
             bodySlamDmg += AbstractDungeon.player.currentBlock;
-            bodySlamDmg += BcUtility.getPowerAmount(GhostlyBlock.POWER_ID);
-        }
-        
-        if (upgraded)
-        {
-            bodySlamDmg *= 2f;
-        }
-        else
-        {
-            bodySlamDmg *= 1.5f;
+            bodySlamDmg += BcUtility.getPowerAmount(GhostlyBlockPower.POWER_ID);
         }
         
         return bodySlamDmg;
     }
     
-    public void use(AbstractPlayer player, AbstractMonster monster)
+    int getBlockToLose()
     {
-        baseDamage = getBodySlamDamage();
+        int ghostlyBlock = BcUtility.getPowerAmount(GhostlyBlockPower.POWER_ID);
+        int totalBlock = AbstractDungeon.player.currentBlock + ghostlyBlock;
         
-        calculateCardDamage(monster);
-        
-        addToBot(new DamageAction(monster, new DamageInfo(player, damage, DamageType.NORMAL), AttackEffect.BLUNT_HEAVY));
-        
-        if (AbstractDungeon.player.currentBlock > 1)
-        {
-            addToBot(new GainBlockAction(player, -AbstractDungeon.player.currentBlock / 2));
-        }
-        
-        int ghostlyBlock = BcUtility.getPowerAmount(GhostlyBlock.POWER_ID);
-        if (ghostlyBlock > 1)
-        {
-            addToBot(new BcApplyPowerAction(new GhostlyBlock(player, -ghostlyBlock / 2)));
-        }
+        return (int) ((float) totalBlock * .25f);
+        //return (int) (!upgraded ? (totalBlock * .3f) : (totalBlock * .2f));
     }
     
     public void applyPowers()
@@ -153,5 +122,30 @@ public class BodySlam extends BcAttackCardBase
         
         rawDescription = getFullDescription();
         initializeDescription();
+    }
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        calculateCardDamage(monster);
+        addToBot(new DamageAction(monster, new DamageInfo(player, damage, DamageType.NORMAL), AttackEffect.BLUNT_HEAVY));
+        
+        int blockToRemove = getBlockToLose();
+        
+        if (blockToRemove > 0)
+        {
+            if (BcUtility.playerHasPower(GhostlyBlockPower.POWER_ID))
+            {
+                addToBot(new BcApplyPowerAction(new GhostlyBlockPower(player, -blockToRemove)));
+            }
+            else
+            {
+                addToBot(new GainBlockAction(player, -blockToRemove));
+            }
+        }
+        
+        if (upgraded)
+        {
+            addToBot(new DrawCardAction(1));
+        }
     }
 }

@@ -59,6 +59,12 @@ public class Hemokinesis extends BcAttackCardBase
     {
         return !upgraded ? 16 : 21;
     }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Sacrifice !M! HP. NL Deal !D! damage.";
+    }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)

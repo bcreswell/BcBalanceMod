@@ -18,7 +18,7 @@ public class NinjaScroll extends AbstractRelic
     
     public String getUpdatedDescription()
     {
-        return "Start each combat with " + AMOUNT + " Hidden Shivs.";
+        return "Start each combat with " + AMOUNT + " #yHidden #yShivs.";
     }
     
     public void atBattleStartPreDraw()

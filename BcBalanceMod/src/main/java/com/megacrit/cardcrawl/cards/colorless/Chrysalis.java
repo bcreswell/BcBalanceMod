@@ -64,9 +64,9 @@ public class Chrysalis extends BcSkillCardBase
     }
     //endregion
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        for (int i = 0; i < this.magicNumber; ++i)
+        for (int i = 0; i < magicNumber; ++i)
         {
             AbstractCard card = AbstractDungeon.returnTrulyRandomCardInCombat(AbstractCard.CardType.SKILL).makeCopy();
             if (upgraded)
@@ -81,7 +81,7 @@ public class Chrysalis extends BcSkillCardBase
                 card.isCostModified = true;
             }
             
-            this.addToBot(new MakeTempCardInDrawPileAction(card, 1, true, true));
+            addToBot(new MakeTempCardInDrawPileAction(card, 1, true, true));
         }
     }
 }

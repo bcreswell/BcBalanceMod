@@ -6,9 +6,10 @@
 package com.megacrit.cardcrawl.cards.blue;
 
 import basemod.abstracts.CustomCard;
-import bcBalanceMod.BcBalanceMod;
+import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.actions.unique.*;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.CardStrings;
@@ -25,7 +26,7 @@ public class DependencyInversion extends BcSkillCardBase
     @Override
     public String getDisplayName()
     {
-        return "      Dependency Inversion";
+        return "Dependency Inversion";
     }
     
     @Override
@@ -67,8 +68,16 @@ public class DependencyInversion extends BcSkillCardBase
     
     public void use(AbstractPlayer player, AbstractMonster m)
     {
+        //precalculating the draw value rather than letting a queued action resolve it because that can
+        // lead to this drawing itself even if done from a single draw action.
+        int drawAmount = magicNumber;
+        if ( BcUtility.getCurrentFocus() <= 0)
+        {
+            //will be negative by the time we draw
+            drawAmount++;
+        }
+        
         addToBot(new BcApplyPowerAction(new FocusPower(player, -1)));
-        addToBot(new DrawCardAction(player, magicNumber));
-        addToBot(new DependencyInversionDrawAction(player, 1));
+        addToBot(new DrawCardAction(drawAmount));
     }
 }

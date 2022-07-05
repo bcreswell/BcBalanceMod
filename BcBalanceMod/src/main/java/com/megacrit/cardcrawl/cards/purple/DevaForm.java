@@ -59,7 +59,7 @@ public class DevaForm extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return " At the start of your turn, gain [W] NL and increase this gain by !M!.";
+        return "At the start of your turn, gain [W] and increase this gain by !M!.";
     }
     //endregion
     

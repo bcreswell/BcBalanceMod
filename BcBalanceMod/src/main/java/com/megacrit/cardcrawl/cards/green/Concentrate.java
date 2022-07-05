@@ -70,7 +70,7 @@ public class Concentrate extends BcSkillCardBase
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        this.addToBot(new DiscardAction(player, player, 2, false));
-        this.addToBot(new GainEnergyAction(this.magicNumber));
+        addToBot(new DiscardAction(player, player, 2, false));
+        addToBot(new GainEnergyAction(magicNumber));
     }
 }

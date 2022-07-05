@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.cards.green;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.unique.DoppelgangerAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
@@ -17,39 +18,63 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class Doppelganger extends AbstractCard {
+public class Doppelganger extends BcSkillCardBase
+{
     public static final String ID = "Doppelganger";
-    private static final CardStrings cardStrings;
-
-    public Doppelganger() {
-        super("Doppelganger", cardStrings.NAME, "green/skill/doppelganger", -1, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.GREEN, CardRarity.RARE, CardTarget.SELF);
-        this.exhaust = true;
+    
+    //region card parameters
+    @Override
+    public String getImagePath()
+    {
+        return "green/skill/doppelganger";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new DoppelgangerAction(p, this.upgraded, this.freeToPlayOnce, this.energyOnUse));
+    
+    @Override
+    public String getId()
+    {
+        return ID;
     }
-
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
-
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.UNCOMMON;
     }
-
-    public AbstractCard makeCopy() {
-        return new Doppelganger();
+    
+    @Override
+    public int getCost()
+    {
+        return -1;
     }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Doppelganger");
-        if (Settings.language == Settings.GameLanguage.ENG)
+    
+    @Override
+    public boolean getRetain()
+    {
+        return true;
+    }
+    
+    @Override
+    public boolean getExhaust()
+    {
+        return true;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        if (!upgraded)
         {
-            //todo: figure out best practice for how to do this.
-            cardStrings.DESCRIPTION = "Next turn, draw X+1 cards and gain X [G]. NL Exhaust.";
-            cardStrings.UPGRADE_DESCRIPTION = "Next turn, draw X+1 cards and gain X+1 [G]. NL Exhaust.";
+            return "Next turn, draw X cards and gain X [G].";
         }
+        else
+        {
+            return "Next turn, draw X+1 cards and gain X+1 [G].";
+        }
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new DoppelgangerAction(player, upgraded, freeToPlayOnce, energyOnUse));
     }
 }

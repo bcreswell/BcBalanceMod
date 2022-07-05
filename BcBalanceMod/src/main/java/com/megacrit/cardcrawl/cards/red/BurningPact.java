@@ -2,12 +2,17 @@ package com.megacrit.cardcrawl.cards.red;
 
 import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.*;
+import com.megacrit.cardcrawl.actions.animations.*;
 import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.actions.utility.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.dungeons.*;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.vfx.combat.*;
 
 public class BurningPact extends BcSkillCardBase
 {
@@ -41,7 +46,7 @@ public class BurningPact extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 2 : 3;
+        return !upgraded ? 3 : 4;
     }
     
     public int getHpLoss()
@@ -52,19 +57,26 @@ public class BurningPact extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Exhaust a card, NL then draw !M! cards. NL Lose " + getHpLoss() + " HP.";
+        return "Sacrifice " + getHpLoss() + " HP. NL Exhaust a card. NL Draw !M! cards.";
+    }
+    
+    @Override
+    public String getFootnote()
+    {
+        return TrueGrit.NothingFootnote;
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        //you don't get the draw if you didn't do the exhaust
+        //does nothing if there's no target to exhaust
         if (player.hand.size() >= 2)
         {
+            AbstractDungeon.effectList.add(new FlashAtkImgEffect(player.hb.cX, player.hb.cY, AbstractGameAction.AttackEffect.FIRE, false));
+            addToBot(new LoseHPAction(player, player, getHpLoss()));
+            addToBot(new TrueWaitAction(.2f));
             addToBot(new ExhaustAction(1, false));
             addToBot(new DrawCardAction(player, magicNumber));
         }
-        
-        addToBot(new LoseHPAction(player, player, getHpLoss()));
     }
 }

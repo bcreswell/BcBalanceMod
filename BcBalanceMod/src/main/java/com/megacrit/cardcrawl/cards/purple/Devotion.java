@@ -1,7 +1,8 @@
 package com.megacrit.cardcrawl.cards.purple;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.utility.SFXAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -13,45 +14,53 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.watcher.DevotionPower;
 import com.megacrit.cardcrawl.vfx.combat.DevotionEffect;
 
-public class Devotion extends AbstractCard {
+public class Devotion extends BcPowerCardBase
+{
     public static final String ID = "Devotion";
-    private static final CardStrings cardStrings;
     
-    public Devotion() {
-        super("Devotion", cardStrings.NAME, "purple/power/devotion", 1, cardStrings.DESCRIPTION, AbstractCard.CardType.POWER, AbstractCard.CardColor.PURPLE, CardRarity.UNCOMMON, AbstractCard.CardTarget.NONE);
-        this.baseMagicNumber = 2;
-        this.magicNumber = this.baseMagicNumber;
+    //region card parameters
+    @Override
+    public String getImagePath()
+    {
+        return "purple/power/devotion";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new SFXAction("HEAL_2", -0.4F, true));
-        float doop = 0.8F;
-        if (Settings.FAST_MODE) {
-            doop = 0.0F;
-        }
+    @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.UNCOMMON;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 0;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 1 : 2;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "At the start of your turn, gain !M! Mantra.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new SFXAction("HEAL_2", -0.4F, true));
+        addToBot(new VFXAction(new DevotionEffect(), 0.5F));
         
-        this.addToBot(new VFXAction(new DevotionEffect(), doop));
-        this.addToBot(new ApplyPowerAction(p, p, new DevotionPower(p, this.magicNumber), this.magicNumber));
-    }
-    
-    public AbstractCard makeCopy() {
-        return new Devotion();
-    }
-    
-    public void initializeDescription() {
-        super.initializeDescription();
-        this.keywords.add(GameDictionary.ENLIGHTENMENT.NAMES[0].toLowerCase());
-    }
-    
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeMagicNumber(1);
-        }
-        
-    }
-    
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Devotion");
+        addToBot(new BcApplyPowerAction(new DevotionPower(player, magicNumber)));
     }
 }

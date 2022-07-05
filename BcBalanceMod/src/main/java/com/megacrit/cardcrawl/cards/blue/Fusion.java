@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.defect.ChannelAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -9,37 +10,65 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.orbs.Plasma;
 
-public class Fusion extends AbstractCard {
+public class Fusion extends BcSkillCardBase
+{
     public static final String ID = "Fusion";
-    private static final CardStrings cardStrings;
     
-    public Fusion() {
-        super("Fusion", cardStrings.NAME, "blue/skill/fusion", 2, cardStrings.DESCRIPTION, AbstractCard.CardType.SKILL, AbstractCard.CardColor.BLUE, AbstractCard.CardRarity.COMMON, AbstractCard.CardTarget.SELF);
-        this.baseMagicNumber = 1;
-        this.magicNumber = this.baseMagicNumber;
+    //region card parameters
+    @Override
+    public String getImagePath()
+    {
+        return "blue/skill/fusion";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        for(int i = 0; i < this.magicNumber; ++i) {
-            AbstractOrb orb = new Plasma();
-            this.addToBot(new ChannelAction(orb));
-        }
-        
+    @Override
+    public String getId()
+    {
+        return ID;
     }
     
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeBaseCost(1);
-        }
-        
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.COMMON;
     }
     
-    public AbstractCard makeCopy() {
-        return new Fusion();
+    @Override
+    public int getCost()
+    {
+        return 1;
     }
     
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Fusion");
+    @Override
+    public boolean getExhaust()
+    {
+        return !upgraded;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return 1;
+    }
+    
+    @Override
+    public int getChanneledOrbCount()
+    {
+        return 1;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Channel !M! Plasma.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        for (int i = 0; i < magicNumber; i++)
+        {
+            addToBot(new ChannelAction(new Plasma()));
+        }        
     }
 }

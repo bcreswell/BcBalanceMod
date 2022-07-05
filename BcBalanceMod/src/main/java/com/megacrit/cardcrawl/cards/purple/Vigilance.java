@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.cards.purple;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -17,34 +18,52 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class Vigilance extends AbstractCard {
+public class Vigilance extends BcSkillCardBase
+{
     public static final String ID = "Vigilance";
-    private static final CardStrings cardStrings;
-
-    public Vigilance() {
-        super("Vigilance", cardStrings.NAME, "purple/skill/vigilance", 2, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.PURPLE, CardRarity.BASIC, CardTarget.SELF);
-        this.baseBlock = 10;
-        this.block = this.baseBlock;
+    
+    //region card parameters
+    @Override
+    public String getImagePath()
+    {
+        return "purple/skill/vigilance";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new GainBlockAction(p, this.block));
-        this.addToBot(new ChangeStanceAction("Calm"));
+    
+    @Override
+    public String getId()
+    {
+        return ID;
     }
-
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeBlock(6);
-        }
-
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.BASIC;
     }
-
-    public AbstractCard makeCopy() {
-        return new Vigilance();
+    
+    @Override
+    public int getBlock()
+    {
+        return !upgraded ? 10 : 16;
     }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Vigilance");
+    
+    @Override
+    public int getCost()
+    {
+        return 2;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        //changed the order for the sake of new Wave of the Hand.
+        return "Enter Calm. NL Gain !B! Block.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new ChangeStanceAction("Calm"));
+        addToBot(new GainBlockAction(player, block));
     }
 }

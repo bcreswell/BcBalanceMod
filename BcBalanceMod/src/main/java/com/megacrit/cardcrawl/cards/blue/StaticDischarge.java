@@ -57,7 +57,7 @@ public class StaticDischarge extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Whenever you deal or take unblocked attack damage, Channel !M! Lightning.";
+        return "Whenever you take unblocked attack damage or play an Attack that deals unblocked damage, Channel !M! Lightning.";
     }
     //endregion
     

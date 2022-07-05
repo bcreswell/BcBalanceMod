@@ -65,7 +65,6 @@ public class Prepared extends AbstractCard
         cardStrings = CardCrawlGame.languagePack.getCardStrings("Prepared");
         if (Settings.language == Settings.GameLanguage.ENG)
         {
-            //todo: figure out best practice for how to do this.
             cardStrings.DESCRIPTION = "Retain. NL Draw !M! card. NL Discard !M! card.";
             cardStrings.UPGRADE_DESCRIPTION = "Retain. NL Draw !M! cards. NL Discard !M! cards.";
         }

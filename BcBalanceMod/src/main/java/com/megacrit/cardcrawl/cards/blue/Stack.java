@@ -36,37 +36,26 @@ public class Stack extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
     }
     
-    public int getExtraBlock()
+    @Override
+    public int getMagicNumber()
     {
         return !upgraded ? 2 : 5;
-    }
-    
-    public int getBlock()
-    {
-        if (BcUtility.isPlayerInCombat())
-        {
-            return AbstractDungeon.player.discardPile.size() + getExtraBlock();
-        }
-        else
-        {
-            return getExtraBlock();
-        }
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Gain Block equal to the number of cards in your discard pile +" + getExtraBlock() + ".";
+        return "Gain Block equal to the number of cards in your discard pile + !M!.";
     }
     //endregion
     
     @Override
-    public String getTemporaryExtraDescription()
+    public String getTemporaryExtraDescription(AbstractMonster monster)
     {
-        return "( !B! block.)";
+        return "!B! block";
     }
     
     public void use(AbstractPlayer player, AbstractMonster monster)
@@ -76,7 +65,7 @@ public class Stack extends BcSkillCardBase
     
     public void applyPowers()
     {
-        baseBlock = getBlock();
+        baseBlock = AbstractDungeon.player.discardPile.size() + magicNumber;
         
         super.applyPowers();
     }

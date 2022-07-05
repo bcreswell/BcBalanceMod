@@ -50,7 +50,7 @@ public class Brutality extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Start of turn: NL Lose 1 HP and NL draw a card.";
+        return "Start of turn: NL Sacrifice 1 HP and NL Draw a card.";
     }
     //endregion
     

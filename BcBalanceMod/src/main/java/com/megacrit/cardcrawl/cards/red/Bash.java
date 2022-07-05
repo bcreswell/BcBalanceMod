@@ -68,6 +68,12 @@ public class Bash extends BcAttackCardBase
     {
         return false;
     }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage. NL Apply !M! Vulnerable.";
+    }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)

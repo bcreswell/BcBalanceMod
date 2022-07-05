@@ -1,8 +1,10 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.brashmonkey.spriter.*;
 import com.megacrit.cardcrawl.actions.animations.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.utility.*;
 import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.monsters.*;
@@ -58,23 +60,31 @@ public class SpeedOfFate extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 3 : 5;
+        return !upgraded ? 4 : 5;
     }
     
     @Override
     public String getBaseDescription()
     {
-        int scryAmount = BcUtility.getActualScryAmount(getMagicNumber());
-        return "Scry " + scryAmount + ".";
+        if (!upgraded)
+        {
+            return "Scry " + BcUtility.getScryString(getMagicNumber()) + ".";
+        }
+        else
+        {
+            return "Scry " + BcUtility.getScryString(getMagicNumber()) + ". NL Draw a Card.";
+        }
     }
     //endregion
     
     @Override
     public void use(AbstractPlayer player, AbstractMonster var2)
     {
-        int scryAmount = BcUtility.getActualScryAmount(magicNumber);
-        
         addToBot(new VFXAction(new ThirdEyeEffect(player.hb.cX, player.hb.cY)));
-        addToBot(new ScryAction(scryAmount));
+        addToBot(new ScryAction(magicNumber));
+        if (upgraded)
+        {
+            addToBot(new DrawCardAction(1));
+        }
     }
 }

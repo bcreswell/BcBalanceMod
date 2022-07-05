@@ -9,8 +9,10 @@ import bcBalanceMod.*;
 import com.brashmonkey.spriter.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.ActionType;
+import com.megacrit.cardcrawl.actions.animations.*;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.ExhaustSpecificCardAction;
+import com.megacrit.cardcrawl.actions.utility.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardType;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -19,6 +21,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.*;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
+import com.megacrit.cardcrawl.vfx.combat.*;
 
 import java.util.Iterator;
 
@@ -50,12 +53,13 @@ public class SeverSoulAction extends AbstractGameAction
                     attackCount++;
                 }
             }
-            
             for (int i = 0; i < attackCount; i++)
             {
                 AbstractMonster randomTarget = BcUtility.getRandomTarget();
                 if (randomTarget != null)
                 {
+                    addToBot(new SFXAction("ORB_LIGHTNING_EVOKE", 0.1F));
+                    addToBot(new VFXAction(new LightningEffect(randomTarget.hb.cX, randomTarget.hb.cY)));
                     addToBot(new DamageAction(randomTarget, info, AttackEffect.LIGHTNING));
                 }
             }

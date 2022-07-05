@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.ReduceCostAction;
@@ -10,36 +11,63 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class Streamline extends AbstractCard {
+public class Streamline extends BcAttackCardBase
+{
     public static final String ID = "Streamline";
-    private static final CardStrings cardStrings;
     
-    public Streamline() {
-        super("Streamline", cardStrings.NAME, "blue/attack/streamline", 2, cardStrings.DESCRIPTION, AbstractCard.CardType.ATTACK, AbstractCard.CardColor.BLUE, AbstractCard.CardRarity.UNCOMMON, AbstractCard.CardTarget.ENEMY);
-        this.baseDamage = 15;
-        this.baseMagicNumber = 1;
-        this.magicNumber = this.baseMagicNumber;
+    //region card parameters
+    @Override
+    public String getImagePath()
+    {
+        return "blue/attack/streamline";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new DamageAction(m, new DamageInfo(p, this.damage, this.damageTypeForTurn), AbstractGameAction.AttackEffect.SLASH_DIAGONAL));
-        this.addToBot(new ReduceCostAction(this.uuid, this.magicNumber));
+    @Override
+    public String getId()
+    {
+        return ID;
     }
     
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeDamage(5);
-            this.initializeDescription();
-        }
-        
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.COMMON;
     }
     
-    public AbstractCard makeCopy() {
-        return new Streamline();
+    @Override
+    public int getCost()
+    {
+        return 2;
     }
     
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Streamline");
+    @Override
+    public int getMagicNumber()
+    {
+        return 1;
+    }
+    
+    @Override
+    public int getDamage()
+    {
+        return !upgraded ? 15 : 20;
+    }
+    
+    @Override
+    public boolean isAoeAttack()
+    {
+        return false;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage. NL Reduce this card's cost by !M! this combat.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.SLASH_DIAGONAL));
+        addToBot(new ReduceCostAction(uuid, magicNumber));
     }
 }

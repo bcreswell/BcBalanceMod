@@ -21,7 +21,6 @@ import com.megacrit.cardcrawl.powers.*;
 public class Combust extends BcPowerCardBase
 {
     public static final String ID = "Combust";
-    public static final int CombustThreshold = 0;
     
     //region card parameters
     @Override

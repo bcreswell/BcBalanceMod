@@ -59,14 +59,20 @@ public class Cleave extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 15 : 20;
+        return !upgraded ? 15 : 22;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage to ALL enemies.";
     }
     //endregion
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new SFXAction("ATTACK_HEAVY"));
-        addToBot(new VFXAction(p, new CleaveEffect(), 0.1F));
-        addToBot(new DamageAllEnemiesAction(p, multiDamage, damageTypeForTurn, AttackEffect.NONE));
+        addToBot(new VFXAction(player, new CleaveEffect(), 0.1F));
+        addToBot(new DamageAllEnemiesAction(player, multiDamage, damageTypeForTurn, AttackEffect.NONE));
     }    
 }

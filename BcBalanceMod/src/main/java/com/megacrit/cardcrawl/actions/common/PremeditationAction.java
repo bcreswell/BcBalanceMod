@@ -20,10 +20,12 @@ public class PremeditationAction extends AbstractGameAction
     public static final String[] TEXT;
     public static int numExhausted;
     public int shivsPerDiscard;
+    public int maxDiscards;
     
-    public PremeditationAction(int shivsPerDiscard)
+    public PremeditationAction(int shivsPerDiscard, int maxDiscards)
     {
         this.shivsPerDiscard = shivsPerDiscard;
+        this.maxDiscards = maxDiscards;
         duration = this.startDuration = Settings.ACTION_DUR_FAST;
         actionType = ActionType.DISCARD;
     }
@@ -40,7 +42,7 @@ public class PremeditationAction extends AbstractGameAction
                 return;
             }
             
-            AbstractDungeon.handCardSelectScreen.open(TEXT[0], 10, true, true);
+            AbstractDungeon.handCardSelectScreen.open("Discard", maxDiscards, false, true, false,false,true);
             tickDuration();
         }
         else if (!AbstractDungeon.handCardSelectScreen.wereCardsRetrieved)
@@ -50,14 +52,14 @@ public class PremeditationAction extends AbstractGameAction
             {
                 int shivCount = discardCount * shivsPerDiscard;
                 addToBot(new ApplyPowerAction(player, player, new HiddenShivPower(player, shivCount), shivCount));
-                
+
 //                if (blockPerDiscard > 0)
 //                {
 //                    int blockToGain = blockPerDiscard * discardCount;
 //                    addToBot(new GainBlockAction(AbstractDungeon.player, AbstractDungeon.player, blockToGain));
 //                }
                 
-                for(AbstractCard card : AbstractDungeon.handCardSelectScreen.selectedCards.group)
+                for (AbstractCard card : AbstractDungeon.handCardSelectScreen.selectedCards.group)
                 {
                     AbstractDungeon.player.hand.moveToDiscardPile(card);
                     GameActionManager.incrementDiscard(false);

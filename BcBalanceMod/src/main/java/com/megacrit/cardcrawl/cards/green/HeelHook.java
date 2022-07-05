@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.cards.green;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.unique.HeelHookAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -17,48 +18,74 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.*;
+
 import java.util.Iterator;
 
-public class HeelHook extends AbstractCard {
+public class HeelHook extends BcAttackCardBase
+{
     public static final String ID = "Heel Hook";
-    private static final CardStrings cardStrings;
-
-    public HeelHook() {
-        super("Heel Hook", cardStrings.NAME, "green/attack/heel_hook", 1, cardStrings.DESCRIPTION, CardType.ATTACK, CardColor.GREEN, CardRarity.UNCOMMON, CardTarget.ENEMY);
-        this.baseDamage = 5;
+    
+    //region card parameters
+    @Override
+    public String getImagePath()
+    {
+        return "green/attack/heel_hook";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new HeelHookAction(m, new DamageInfo(p, this.damage, this.damageTypeForTurn)));
+    
+    @Override
+    public String getId()
+    {
+        return ID;
     }
-
-    public void triggerOnGlowCheck() {
-        this.glowColor = AbstractCard.BLUE_BORDER_GLOW_COLOR.cpy();
-        Iterator var1 = AbstractDungeon.getCurrRoom().monsters.monsters.iterator();
-
-        while(var1.hasNext()) {
-            AbstractMonster m = (AbstractMonster)var1.next();
-            if (!m.isDeadOrEscaped() && m.hasPower("Weakened")) {
-                this.glowColor = AbstractCard.GOLD_BORDER_GLOW_COLOR.cpy();
-                break;
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.COMMON;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 1;
+    }
+    
+    @Override
+    public boolean isAoeAttack()
+    {
+        return false;
+    }
+    
+    @Override
+    public int getDamage()
+    {
+        return !upgraded ? 6 : 10;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage. NL If the enemy has Weak, NL gain [G] and NL draw 1 card.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new HeelHookAction(monster, new DamageInfo(player, damage, damageTypeForTurn)));
+    }
+    
+    @Override
+    public boolean isGlowingGold()
+    {
+        for(AbstractMonster monster : AbstractDungeon.getCurrRoom().monsters.monsters)
+        {
+            if (!monster.isDeadOrEscaped() && monster.hasPower(WeakPower.POWER_ID))
+            {
+                return true;
             }
         }
-
-    }
-
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeDamage(3);
-        }
-
-    }
-
-    public AbstractCard makeCopy() {
-        return new HeelHook();
-    }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Heel Hook");
+        
+        return false;
     }
 }

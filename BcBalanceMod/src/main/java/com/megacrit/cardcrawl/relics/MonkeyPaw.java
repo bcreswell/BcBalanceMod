@@ -37,18 +37,28 @@ public class MonkeyPaw extends CustomRelic implements ClickableRelic
     private static final Texture IMG1 = TextureLoader.getTexture(makeRelicPath("monkeyPaw1.png"));
     private static final Texture IMG2 = TextureLoader.getTexture(makeRelicPath("monkeyPaw2.png"));
     private static final Texture IMG3 = TextureLoader.getTexture(makeRelicPath("monkeyPaw3.png"));
+    private static final Texture outline0 = TextureLoader.getTexture(makeRelicOutlinePath("monkeyPaw0.png"));
+    private static final Texture outline1 = TextureLoader.getTexture(makeRelicOutlinePath("monkeyPaw1.png"));
+    private static final Texture outline2 = TextureLoader.getTexture(makeRelicOutlinePath("monkeyPaw2.png"));
+    private static final Texture outline3 = TextureLoader.getTexture(makeRelicOutlinePath("monkeyPaw3.png"));
     static Texture[] images = new Texture[4];
+    static Texture[] outlines = new Texture[4];
     
     public MonkeyPaw()
     {
-        super(ID, IMG3, RelicTier.COMMON, LandingSound.FLAT);
+        super(ID, IMG3, outline3, RelicTier.COMMON, LandingSound.FLAT);
         
         images[0] = IMG0;
         images[1] = IMG1;
         images[2] = IMG2;
         images[3] = IMG3;
         
-        //wishesRemaining
+        outlines[0] = outline0;
+        outlines[1] = outline1;
+        outlines[2] = outline2;
+        outlines[3] = outline3;
+        
+        //wishes remaining
         setCounter(3);
     }
     
@@ -63,10 +73,9 @@ public class MonkeyPaw extends CustomRelic implements ClickableRelic
         this.counter = counter;
         if (counter <= 0)
         {
-            //i think this gets rid of the number
             this.counter = -2;
-            this.grayscale = true;
-            this.usedUp = true;
+            grayscale = true;
+            usedUp = true;
         }
         
         updateImage();
@@ -141,7 +150,7 @@ public class MonkeyPaw extends CustomRelic implements ClickableRelic
     
     void updateImage()
     {
-        int imgIndex = BcUtility.clamp(0, counter, 3);
-        setTexture(images[imgIndex]);
+        int index = BcUtility.clamp(0, counter, 3);
+        setTextureOutline(images[index], outlines[index]);
     }
 }

@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ModHelper;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
+import com.megacrit.cardcrawl.rooms.*;
 
 public class DarkstonePeriapt extends AbstractRelic
 {
@@ -34,7 +35,7 @@ public class DarkstonePeriapt extends AbstractRelic
     public void atBattleStart()
     {
         int curseCount = 0;
-        for(AbstractCard card : AbstractDungeon.player.masterDeck.group)
+        for (AbstractCard card : AbstractDungeon.player.masterDeck.group)
         {
             if (card.type == AbstractCard.CardType.CURSE)
             {
@@ -44,9 +45,9 @@ public class DarkstonePeriapt extends AbstractRelic
         
         if (curseCount > 0)
         {
-            this.flash();
-            this.addToTop(new RelicAboveCreatureAction(AbstractDungeon.player, this));
-            this.addToTop(new HealAction(AbstractDungeon.player, AbstractDungeon.player, curseCount, 0.0F));
+            flash();
+            addToTop(new RelicAboveCreatureAction(AbstractDungeon.player, this));
+            addToTop(new HealAction(AbstractDungeon.player, AbstractDungeon.player, curseCount, 0.0F));
         }
     }
     

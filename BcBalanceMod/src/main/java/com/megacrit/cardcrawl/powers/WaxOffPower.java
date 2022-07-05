@@ -5,62 +5,63 @@
 
 package com.megacrit.cardcrawl.powers;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 
-public class WaxOffPower extends AbstractPower
+public class WaxOffPower extends BcPowerBase
 {
     public static final String POWER_ID = "WaxOffPower";
-    boolean isDuringTurn = true; //needs to start in true state in case they discard on the same turn its played
-    int previousDiscardCount = 0;
     
     public WaxOffPower(AbstractCreature owner, int amount)
     {
-        this.name = "Wax Off";
-        this.ID = POWER_ID;
-        this.owner = owner;
-        this.amount = amount;
-        this.updateDescription();
-        previousDiscardCount = GameActionManager.totalDiscardedThisTurn;
-        this.loadRegion("wave_of_the_hand");
+        super(owner, amount);
     }
     
-    public void onDrawOrDiscard()
+    //region parameters
+    @Override
+    public String getDisplayName()
     {
-        if (isDuringTurn)
-        {
-            AbstractPlayer player = AbstractDungeon.player;
-            
-            int discardCount = GameActionManager.totalDiscardedThisTurn;
-            if (discardCount > previousDiscardCount)
-            {
-                int toDraw = discardCount - previousDiscardCount;
-                previousDiscardCount = discardCount;
-                
-                for(int i =0 ;i < toDraw; i++)
-                {
-                    addToBot(new WaxOffDrawAction());
-                }
-            }
-        }
+        return "Wax Off";
     }
     
-    public void atStartOfTurnPostDraw()
+    @Override
+    public String getId()
     {
-        previousDiscardCount = GameActionManager.totalDiscardedThisTurn;
-        isDuringTurn = true;
+        return POWER_ID;
     }
     
-    public void atEndOfTurnPreEndTurnCards(boolean isPlayer)
+    @Override
+    public String getImagePath()
     {
-        isDuringTurn = false;
+        return "waxOff32x32.png";
     }
     
-    public void updateDescription()
+    @Override
+    public PowerType getPowerType()
     {
-        description = "Remaining Draw per Discard NL for this turn: "+ amount;
+        return PowerType.BUFF;
+    }
+    
+    @Override
+    public boolean getCanGoNegative()
+    {
+        return false;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Remaining Draw per Discard NL for this turn: " + amount;
+    }
+    //endregion
+    
+    @Override
+    public void onManualDiscard()
+    {
+        addToBot(new WaxOffDrawAction());
     }
 }

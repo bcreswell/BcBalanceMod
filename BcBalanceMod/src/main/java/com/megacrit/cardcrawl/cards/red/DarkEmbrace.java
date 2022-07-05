@@ -67,14 +67,14 @@ public class DarkEmbrace extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Lose !M! HP. NL Whenever a card is Exhausted, NL draw 1 card.";
+        return "Sacrifice !M! HP. NL Whenever a card is Exhausted, NL draw 1 card.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        this.addToBot(new VFXAction(new OfferingEffect(), 0.5F));
-        this.addToBot(new LoseHPAction(player, player, this.magicNumber));
-        this.addToBot(new ApplyPowerAction(player, player, new DarkEmbracePower(player, 1), 1));
+        addToBot(new VFXAction(new OfferingEffect(), 0.5F));
+        addToBot(new LoseHPAction(player, player, magicNumber));
+        addToBot(new ApplyPowerAction(player, player, new DarkEmbracePower(player, 1), 1));
     }
 }

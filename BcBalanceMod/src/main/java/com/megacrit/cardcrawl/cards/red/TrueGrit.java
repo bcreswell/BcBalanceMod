@@ -12,6 +12,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 public class TrueGrit extends BcSkillCardBase
 {
     public static final String ID = "True Grit";
+    public static final String NothingFootnote = "Does nothing if it NL lacks a target card.";
     
     //region card parameters
     @Override
@@ -49,22 +50,26 @@ public class TrueGrit extends BcSkillCardBase
     {
         if (!upgraded)
         {
-            return "Exhaust a card at random, NL then Gain !B! Block.";
+            return "Exhaust a random card. NL Gain !B! Block.";
         }
         else
         {
-            return "Exhaust a card, NL then Gain !B! Block.";
+            return "Exhaust a card. NL Gain !B! Block.";
         }
+    }
+    
+    @Override
+    public String getFootnote()
+    {
+        return TrueGrit.NothingFootnote;
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        //you don't get the block if you didn't do the exhaust
+        //does nothing if there's no target to exhaust
         if (player.hand.size() >= 2)
         {
-            addToBot(new GainBlockAction(player, player, block));
-    
             if (upgraded)
             {
                 addToBot(new ExhaustAction(1, false));
@@ -73,6 +78,8 @@ public class TrueGrit extends BcSkillCardBase
             {
                 addToBot(new ExhaustAction(1, true, false, false));
             }
+            
+            addToBot(new GainBlockAction(player, player, block));
         }
     }
 }

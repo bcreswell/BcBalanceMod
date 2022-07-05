@@ -42,13 +42,19 @@ public class DeceiveReality extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 4 : 7;
+        return !upgraded ? 5 : 8;
     }
     
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Gain !B! Block. NL Add a *Safety into NL your hand.";
     }
     //endregion
     

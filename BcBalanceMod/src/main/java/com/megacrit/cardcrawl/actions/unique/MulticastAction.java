@@ -20,8 +20,9 @@ import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 public class MulticastAction extends AbstractGameAction
 {
     private boolean freeToPlayOnce = false;
-    private AbstractPlayer p;
     private int energyOnUse = -1;
+    private int evokeCount = -1;
+    private AbstractPlayer p;
     private boolean upgraded;
     
     public MulticastAction(AbstractPlayer p, int energyOnUse, boolean upgraded, boolean freeToPlayOnce)
@@ -34,49 +35,31 @@ public class MulticastAction extends AbstractGameAction
         this.freeToPlayOnce = freeToPlayOnce;
     }
     
+    public MulticastAction(int evokeCount)
+    {
+        this.duration = Settings.ACTION_DUR_XFAST;
+        this.actionType = ActionType.SPECIAL;
+        this.evokeCount = evokeCount;
+    }
+    
     public void update()
     {
-        if (AbstractDungeon.player.hasOrb())
+        if (evokeCount > 0)
         {
-            int evokeCount = EnergyPanel.totalCount;
-            if (this.energyOnUse != -1)
+            for (int i = 0; i < evokeCount - 1; ++i)
             {
-                evokeCount = this.energyOnUse;
+                addToBot(new EvokeWithoutRemovingOrbAction(1));
             }
             
-            if (this.p.hasRelic("Chemical X"))
-            {
-                evokeCount += 2;
-                this.p.getRelic("Chemical X").flash();
-            }
-            
-            if (this.upgraded)
-            {
-                ++evokeCount;
-            }
-            
-            AbstractOrb orbToEvoke = AbstractDungeon.player.orbs.get(0);
-            if ((orbToEvoke instanceof Frost) || (orbToEvoke instanceof Lightning))
-            {
-                evokeCount++;
-            }
-            
-            if (evokeCount > 0)
-            {
-                for (int i = 0; i < evokeCount - 1; ++i)
-                {
-                    this.addToBot(new EvokeWithoutRemovingOrbAction(1));
-                }
-                
-                this.addToBot(new AnimateOrbAction(1));
-                this.addToBot(new EvokeOrbAction(1));
-                if (!this.freeToPlayOnce)
-                {
-                    this.p.energy.use(EnergyPanel.totalCount);
-                }
-            }
+            addToBot(new AnimateOrbAction(1));
+            addToBot(new EvokeOrbAction(1));
         }
         
-        this.isDone = true;
+        if (!freeToPlayOnce)
+        {
+            AbstractDungeon.player.energy.use(EnergyPanel.totalCount);
+        }
+        
+        isDone = true;
     }
 }

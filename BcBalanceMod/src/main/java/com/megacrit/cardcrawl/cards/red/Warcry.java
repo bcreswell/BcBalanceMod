@@ -56,7 +56,6 @@ public class Warcry extends AbstractCard {
         cardStrings = CardCrawlGame.languagePack.getCardStrings("Warcry");
         if (Settings.language == Settings.GameLanguage.ENG)
         {
-            //todo: figure out best practice for how to do this.
             cardStrings.DESCRIPTION = "Draw !M! cards. NL Put a card from your hand onto the top of your draw pile. NL Exhaust.";
             cardStrings.UPGRADE_DESCRIPTION = "Draw !M! cards. NL Put a card from your hand onto the top of your draw pile. NL Exhaust.";
         }

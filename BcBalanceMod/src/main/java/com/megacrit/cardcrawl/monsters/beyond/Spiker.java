@@ -89,7 +89,7 @@ public class Spiker extends AbstractMonster
                 AbstractDungeon.actionManager.addToBottom(new DamageAction(AbstractDungeon.player, (DamageInfo) damage.get(0), AbstractGameAction.AttackEffect.SLASH_HORIZONTAL));
                 break;
             case 2:
-                ++thornsCount;
+                thornsCount++;
                 AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(this, this, new ThornsPower(this, 2), 2));
         }
         
@@ -98,7 +98,7 @@ public class Spiker extends AbstractMonster
     
     protected void getMove(int num)
     {
-        if (thornsCount >= 2)
+        if (thornsCount > 5)
         {
             setMove((byte) 1, AbstractMonster.Intent.ATTACK, (damage.get(0)).base);
         }

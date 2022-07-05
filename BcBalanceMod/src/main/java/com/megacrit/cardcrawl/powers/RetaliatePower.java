@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.monsters.*;
+import com.megacrit.cardcrawl.powers.watcher.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,15 +58,9 @@ public class RetaliatePower extends AbstractPower
             alreadyRetaliatedList.add(attackingMonster);
             
             flash();
-    
-            //using an attack card to calculate the damage so that all damage modifiers apply normally.
-            Strike_Red tempStrike = new Strike_Red();
-            //removing strength here because it will be added back via calculate damage
-            tempStrike.baseDamage = amount - BcUtility.getCurrentStrength();
-            tempStrike.calculateCardDamage(attackingMonster);
             
             addToBot(new TrueWaitAction(.3f));
-            addToBot(new DamageAction(attackingMonster, new DamageInfo(owner, tempStrike.damage, DamageInfo.DamageType.NORMAL), AbstractGameAction.AttackEffect.SLASH_HEAVY));
+            addToBot(new DamageAction(attackingMonster, new DamageInfo(owner, amount, DamageInfo.DamageType.THORNS), AbstractGameAction.AttackEffect.SLASH_HEAVY));
         }
         
         return damageAmount;
@@ -78,7 +73,6 @@ public class RetaliatePower extends AbstractPower
     
     public void updateDescription()
     {
-        alreadyRetaliatedList.clear();
         description = "The first time each enemy deals damage to you, deal " + amount + " in return.";
     }
 }

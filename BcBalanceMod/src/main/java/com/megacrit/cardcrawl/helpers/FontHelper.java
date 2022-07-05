@@ -615,7 +615,7 @@ public class FontHelper
         {
             y = (float) Math.round(y) + 0.25F;
         }
-        
+    
         if (font.getData().scaleX == 1.0F)
         {
             x = (float) MathUtils.round(x);
@@ -623,12 +623,46 @@ public class FontHelper
             offsetX = (float) MathUtils.round(offsetX);
             offsetY = (float) MathUtils.round(offsetY);
         }
-        
+    
         mx4.setToRotation(0.0F, 0.0F, 1.0F, angle);
         rotatedTextTmp.x = offsetX;
         rotatedTextTmp.y = offsetY;
         rotatedTextTmp.rotate(angle);
         mx4.trn(x + rotatedTextTmp.x, y + rotatedTextTmp.y, 0.0F);
+        sb.end();
+        sb.setTransformMatrix(mx4);
+        sb.begin();
+        font.setColor(c);
+        layout.setText(font, msg);
+        font.draw(sb, (CharSequence) msg, -layout.width / 2.0F, layout.height / 2.0F);
+        sb.end();
+        sb.setTransformMatrix(rotatedTextMatrix);
+        sb.begin();
+    }
+    
+    public static void renderRotatedText2(SpriteBatch sb, BitmapFont font, String msg, float x, float y, float offsetX, float offsetY, float angle, Color c)
+    {
+        mx4.setToRotation(0.0F, 0.0F, 1.0F, angle);
+    
+        rotatedTextTmp.x = offsetX;
+        rotatedTextTmp.y = offsetY;
+        rotatedTextTmp.rotate(angle);
+        
+        if (angle == 0f)
+        {
+            mx4.trn(
+                Math.round(x + rotatedTextTmp.x),
+                Math.round(y + rotatedTextTmp.y),
+                0.0F);
+        }
+        else
+        {
+            mx4.trn(
+                    x + rotatedTextTmp.x,
+                    y + rotatedTextTmp.y,
+                    0.0F);
+        }
+        
         sb.end();
         sb.setTransformMatrix(mx4);
         sb.begin();

@@ -5,7 +5,8 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.unique.DiscoveryImprovedAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -24,7 +25,7 @@ public class HelloWorld extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 0;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -42,7 +43,7 @@ public class HelloWorld extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return 4;
+        return !upgraded ? 3 : 5;
     }
     
     @Override
@@ -54,28 +55,18 @@ public class HelloWorld extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        if (upgraded)
-        {
-            return "Choose 1 of !M! upgraded common cards to create.";
-        }
-        else
-        {
-            return "Choose 1 of !M! common cards to create.";
-        }
+        return "Create 1 of !M! upgraded common cards.";
     }
     
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        DiscoveryImprovedAction discoveryAction = new DiscoveryImprovedAction(magicNumber, false, upgraded, null, CardRarity.COMMON);
-        discoveryAction.excludedCardIds.add(HelloWorld.ID);
-        addToBot(discoveryAction);
-        //this.addToBot(new ApplyPowerAction(p, p, new HelloWorldPower(p, 1, upgraded), 1));
+        addToBot(new DiscoveryImprovedAction(magicNumber, false, true, null, CardRarity.COMMON, ID));
     }
 }

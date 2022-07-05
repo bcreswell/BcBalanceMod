@@ -2,13 +2,15 @@ package com.megacrit.cardcrawl.cards.purple;
 
 import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.animations.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.watcher.*;
+import com.megacrit.cardcrawl.vfx.combat.*;
 
 public class NaturalViolentFire extends BcPowerCardBase
 {
@@ -18,7 +20,7 @@ public class NaturalViolentFire extends BcPowerCardBase
     @Override
     public String getDisplayName()
     {
-        return "    Natural, Violent Fire";
+        return "Natural, Violent Fire";
     }
     
     @Override
@@ -46,20 +48,15 @@ public class NaturalViolentFire extends BcPowerCardBase
     }
     
     @Override
-    public int getMagicNumber()
-    {
-        return 1;
-    }
-    
-    @Override
     public String getBaseDescription()
     {
-        return "If you're in Wrath at the start of the turn, NL Gain [W] .";
+        return "If you're in Wrath at the start of your turn, NL gain [W] and NL draw a card.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster m)
     {
-        addToBot(new ApplyPowerAction(player, player, new NaturalViolentFirePower(player, magicNumber), magicNumber));
+        addToBot(new VFXAction(player, new InflameEffect(player), 1.0F));
+        addToBot(new BcApplyPowerAction(new NaturalViolentFirePower(player, 1)));
     }
 }

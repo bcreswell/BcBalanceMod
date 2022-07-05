@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.cards.colorless;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -9,38 +10,66 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.GainStrengthPower;
 import com.megacrit.cardcrawl.powers.StrengthPower;
 
-public class DarkShackles extends AbstractCard {
+public class DarkShackles extends BcSkillCardBase
+{
     public static final String ID = "Dark Shackles";
-    private static final CardStrings cardStrings;
     
-    public DarkShackles() {
-        super("Dark Shackles", cardStrings.NAME, "colorless/skill/dark_shackles", 0, cardStrings.DESCRIPTION, AbstractCard.CardType.SKILL, AbstractCard.CardColor.COLORLESS, AbstractCard.CardRarity.UNCOMMON, AbstractCard.CardTarget.ENEMY);
-        this.exhaust = true;
-        this.baseMagicNumber = 7;
-        this.magicNumber = this.baseMagicNumber;
+    //region card parameters
+    @Override
+    public String getImagePath()
+    {
+        return "colorless/skill/dark_shackles";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new ApplyPowerAction(m, p, new StrengthPower(m, -this.magicNumber), -this.magicNumber));
-        if (m != null && !m.hasPower("Artifact")) {
-            this.addToBot(new ApplyPowerAction(m, p, new GainStrengthPower(m, this.magicNumber), this.magicNumber));
+    @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
+    public CardTarget getCardTarget()
+    {
+        return CardTarget.ENEMY;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.UNCOMMON;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 0;
+    }
+    
+    @Override
+    public boolean getExhaust()
+    {
+        return true;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 9 : 15;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Temporarily reduce an enemy's Strength by !M!.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new ApplyPowerAction(monster, player, new StrengthPower(monster, -magicNumber), -magicNumber));
+        if ((monster != null) && !monster.hasPower("Artifact"))
+        {
+            addToBot(new ApplyPowerAction(monster, player, new GainStrengthPower(monster, magicNumber), magicNumber));
         }
-        
-    }
-    
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeMagicNumber(4);
-        }
-        
-    }
-    
-    public AbstractCard makeCopy() {
-        return new DarkShackles();
-    }
-    
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Dark Shackles");
     }
 }

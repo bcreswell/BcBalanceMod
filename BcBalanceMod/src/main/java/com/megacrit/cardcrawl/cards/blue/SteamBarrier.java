@@ -50,7 +50,13 @@ public class SteamBarrier extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 7 : 10;
+        return !upgraded ? 6 : 9;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Gain !B! Block. Decrease this card's Block by 1 this combat.";
     }
     //endregion
     

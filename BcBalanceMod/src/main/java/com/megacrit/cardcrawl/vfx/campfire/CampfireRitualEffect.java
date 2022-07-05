@@ -13,8 +13,8 @@ import com.megacrit.cardcrawl.relics.*;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.CampfireUI;
 import com.megacrit.cardcrawl.rooms.RestRoom;
-import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
-import com.megacrit.cardcrawl.vfx.cardManip.PurgeCardEffect;
+import com.megacrit.cardcrawl.vfx.*;
+import com.megacrit.cardcrawl.vfx.cardManip.*;
 import com.megacrit.cardcrawl.vfx.combat.*;
 
 public class CampfireRitualEffect extends AbstractGameEffect
@@ -45,10 +45,26 @@ public class CampfireRitualEffect extends AbstractGameEffect
         {
             AbstractCard curseToRemove = AbstractDungeon.gridSelectScreen.selectedCards.get(0);
             CardCrawlGame.metricData.addCampfireChoiceData("PURGE", curseToRemove.getMetricID());
+            
             CardCrawlGame.sound.play("CARD_EXHAUST");
             AbstractDungeon.topLevelEffects.add(new PurgeCardEffect(curseToRemove, (float) (Settings.WIDTH / 2), (float) (Settings.HEIGHT / 2)));
             AbstractDungeon.player.masterDeck.removeCard(curseToRemove);
             AbstractDungeon.gridSelectScreen.selectedCards.clear();
+    
+            CardGroup upgradeableCards = AbstractDungeon.player.masterDeck.getUpgradableCards();
+            if (!upgradeableCards.isEmpty())
+            {
+                AbstractCard c = upgradeableCards.getRandomCard(true);
+                
+                AbstractDungeon.effectsQueue.add(
+                        new UpgradeShineEffect(
+                                (float) Settings.WIDTH / 2.0F,
+                                (float) Settings.HEIGHT / 2.0F));
+                
+                c.upgrade();
+                AbstractDungeon.player.bottledCardUpgradeCheck(c);
+                AbstractDungeon.effectsQueue.add(new ShowCardBrieflyEffect(c.makeStatEquivalentCopy()));
+            }
         }
         
         if (duration < 1.0F && !openedScreen)

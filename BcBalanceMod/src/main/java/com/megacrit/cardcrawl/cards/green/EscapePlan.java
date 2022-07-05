@@ -1,6 +1,7 @@
 package com.megacrit.cardcrawl.cards.green;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.unique.EscapePlanAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -20,7 +21,7 @@ public class EscapePlan extends BcSkillCardBase
     @Override
     public String getImagePath()
     {
-        return "green/skill/escape_plan";
+        return "green/escapePlan.png";
     }
     
     @Override
@@ -50,7 +51,7 @@ public class EscapePlan extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override
@@ -58,7 +59,7 @@ public class EscapePlan extends BcSkillCardBase
     {
         if (!upgraded)
         {
-            return "Create one: NL - *Panic *Button, NL - *Dark *Shackles or NL - *Force *of *Will.";
+            return "Create one: NL - *Panic *Button, NL - *Dark *Shackles, or NL - *Force *of *Will.";
         }
         else
         {
@@ -74,7 +75,7 @@ public class EscapePlan extends BcSkillCardBase
         choices.add(new DarkShackles());
         choices.add(new ForceOfWill());
         
-        if (this.upgraded)
+        if (upgraded)
         {
             for (AbstractCard card : choices)
             {

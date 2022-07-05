@@ -32,7 +32,7 @@ public class WaxOffDrawAction extends AbstractGameAction
             
             if (waxOffPower.amount <= 0)
             {
-                addToBot(new RemoveSpecificPowerAction(player, player, WaxOffPower.POWER_ID));
+                addToBot(new RemovePowerIfEmptyAction(player, WaxOffPower.POWER_ID));
             }
         }
         

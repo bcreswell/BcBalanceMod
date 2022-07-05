@@ -5,7 +5,9 @@
 
 package com.megacrit.cardcrawl.orbs;
 
+import bcBalanceMod.*;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
@@ -13,7 +15,7 @@ import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.ImageMaster;
+import com.megacrit.cardcrawl.helpers.*;
 import com.megacrit.cardcrawl.localization.OrbStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.vfx.combat.FrostOrbActivateEffect;
@@ -41,6 +43,7 @@ public class Frost extends AbstractOrb
         this.passiveAmount = this.basePassiveAmount;
         this.updateDescription();
         this.channelAnimTimer = 0.5F;
+        evokeColor = new Color(.7F, .7F, 1F, c.a);
     }
     
     public void updateDescription()
@@ -48,7 +51,7 @@ public class Frost extends AbstractOrb
         this.applyFocus();
         if (Settings.language == Settings.GameLanguage.ENG)
         {
-            this.description = "#yPassive: At the end of turn, gain #b" + this.passiveAmount + " #yBlock. NL #yEvoke: Gain #b" + this.evokeAmount + " #yBlock. (minimum: "+this.baseEvokeAmount+").";
+            this.description = "#yPassive: At the end of turn, gain #b" + this.passiveAmount + " #yBlock. NL #yEvoke: Gain #b" + this.evokeAmount + " #yBlock. (minimum: " + this.baseEvokeAmount + ").";
         }
         else
         {
@@ -58,7 +61,10 @@ public class Frost extends AbstractOrb
     
     public void onEvoke()
     {
-        AbstractDungeon.actionManager.addToTop(new GainBlockAction(AbstractDungeon.player, AbstractDungeon.player, this.evokeAmount));
+        if (evokeAmount > 0)
+        {
+            AbstractDungeon.actionManager.addToBottom(new GainBlockAction(AbstractDungeon.player, AbstractDungeon.player, evokeAmount));
+        }
     }
     
     //evoke no longer goes below the base value
@@ -97,15 +103,15 @@ public class Frost extends AbstractOrb
     
     public void onEndOfTurn()
     {
-        float speedTime = 0.6F / (float) AbstractDungeon.player.orbs.size();
-        if (Settings.FAST_MODE)
-        {
-            speedTime = 0.0F;
-        }
-        
-        AbstractDungeon.actionManager.addToBottom(new VFXAction(new OrbFlareEffect(this, OrbFlareColor.FROST), speedTime));
         if (this.passiveAmount > 0)
         {
+            float speedTime = 0.6F / (float) AbstractDungeon.player.orbs.size();
+            if (Settings.FAST_MODE)
+            {
+                speedTime = 0.0F;
+            }
+            
+            AbstractDungeon.actionManager.addToBottom(new VFXAction(new OrbFlareEffect(this, OrbFlareColor.FROST), speedTime));
             AbstractDungeon.actionManager.addToBottom(new GainBlockAction(AbstractDungeon.player, AbstractDungeon.player, this.passiveAmount, true));
         }
     }
@@ -125,7 +131,7 @@ public class Frost extends AbstractOrb
         this.renderText(sb);
         this.hb.render(sb);
     }
-    
+        
     public void playChannelSFX()
     {
         CardCrawlGame.sound.play("ORB_FROST_CHANNEL", 0.1F);

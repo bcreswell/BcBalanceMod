@@ -8,20 +8,9 @@ package com.megacrit.cardcrawl.cards.blue;
 import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardTarget;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardType;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.powers.EquilibriumPower;
-import com.megacrit.cardcrawl.powers.FocusPower;
+import com.megacrit.cardcrawl.powers.*;
 
 public class Equilibrium extends BcSkillCardBase
 {
@@ -55,20 +44,43 @@ public class Equilibrium extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 12 : 14;
+        return !upgraded ? 6 : 8;
     }
     
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 3 : 6;
+        return !upgraded ? 12 : 16;
     }
     
     @Override
     public String getBaseDescription()
     {
-        int b = getBlock();
-        return "Retain your hand this turn. NL If you have zero Focus, gain " + (b + getMagicNumber()) + " block. Otherwise " + b + " Block.";
+        int zeroB = BcUtility.getModifiedBlock(getMagicNumber());
+        int b = BcUtility.getModifiedBlock(getBlock());
+        String zeroFocusBlock = null;
+        String otherwiseBlock = null;
+        
+        if (BcUtility.isPlayerInCombat())
+        {
+            if (BcUtility.getCurrentFocus() == 0)
+            {
+                zeroFocusBlock = "Zero Focus: " + BcUtility.getModifiedValueString(getMagicNumber(), zeroB) + " Block.";
+                otherwiseBlock = "#aOtherwise: #a" + b + " #aBlock.";
+            }
+            else
+            {
+                zeroFocusBlock = "#aZero #aFocus: #a" + zeroB + " #aBlock.";
+                otherwiseBlock = "Otherwise: " + BcUtility.getModifiedValueString(getBlock(), b) + " Block.";
+            }
+        }
+        else
+        {
+            zeroFocusBlock = "Zero Focus: " + zeroB + " Block.";
+            otherwiseBlock = "Otherwise: " + b + " Block.";
+        }
+        
+        return "Retain your hand and Block this turn. NL Gain some Block. NL " + zeroFocusBlock + " NL " + otherwiseBlock;
     }
     //endregion
     
@@ -76,6 +88,7 @@ public class Equilibrium extends BcSkillCardBase
     {
         addToBot(new GainBlockAction(player, player, block));
         addToBot(new BcApplyPowerAction(new EquilibriumPower(player, 1)));
+        addToBot(new BcApplyPowerAction(new BlurPower(player, 1)));
     }
     
     public boolean isGlowingGold()
@@ -88,11 +101,9 @@ public class Equilibrium extends BcSkillCardBase
         baseBlock = getBlock();
         if (BcUtility.getCurrentFocus() == 0)
         {
-            baseBlock += getMagicNumber();
+            baseBlock = getMagicNumber();
         }
         
         super.applyPowers();
-        
-        initializeDescription();
     }
 }

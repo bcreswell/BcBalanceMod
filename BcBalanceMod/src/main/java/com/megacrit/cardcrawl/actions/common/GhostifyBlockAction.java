@@ -1,18 +1,8 @@
 package com.megacrit.cardcrawl.actions.common;
 
-import com.evacipated.cardcrawl.mod.stslib.blockmods.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.unique.RestoreRetainedCardsAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.*;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 
 public class GhostifyBlockAction extends AbstractGameAction
 {
@@ -28,17 +18,23 @@ public class GhostifyBlockAction extends AbstractGameAction
         //if no longer intangible, return block to normal
         if (owner.getPower(IntangiblePlayerPower.POWER_ID) == null)
         {
-            AbstractPower ghostlyBlockPower = owner.getPower(GhostlyBlock.POWER_ID);
+            AbstractPower ghostlyBlockPower = owner.getPower(GhostlyBlockPower.POWER_ID);
             if ((ghostlyBlockPower != null) && (ghostlyBlockPower.amount > 0))
             {
+                AbstractPower juggernautPower = owner.getPower(JuggernautPower.POWER_ID);
+                if (juggernautPower != null)
+                {
+                    //the block gain from turning ghostly block back into normal block shouldn't trigger juggernaut to deal damage.
+                    ((JuggernautPower)juggernautPower).SkipNextBlockGain = true;
+                }
                 addToBot(new GainBlockAction(owner, ghostlyBlockPower.amount));
-                addToBot(new RemoveSpecificPowerAction(owner, owner, GhostlyBlock.POWER_ID));
+                addToBot(new RemoveSpecificPowerAction(owner, owner, GhostlyBlockPower.POWER_ID));
             }
         }
         else if (owner.currentBlock > 0)
         {
             //otherwise, ghostify their current block
-            addToBot(new BcApplyPowerAction(new GhostlyBlock(owner, owner.currentBlock)));
+            addToBot(new BcApplyPowerAction(new GhostlyBlockPower(owner, owner.currentBlock)));
             owner.loseBlock(owner.currentBlock, true);
         }
         

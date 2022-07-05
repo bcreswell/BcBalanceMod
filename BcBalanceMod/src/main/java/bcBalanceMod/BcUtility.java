@@ -3,6 +3,8 @@ package bcBalanceMod;
 import basemod.*;
 import bcBalanceMod.baseCards.*;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.*;
 import com.megacrit.cardcrawl.actions.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -11,19 +13,98 @@ import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.core.*;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.*;
-import com.megacrit.cardcrawl.helpers.input.*;
 import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.monsters.*;
+import com.megacrit.cardcrawl.orbs.*;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.powers.watcher.*;
-import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.*;
+import com.megacrit.cardcrawl.ui.panels.*;
+import com.megacrit.cardcrawl.unlock.*;
+import com.megacrit.cardcrawl.vfx.cardManip.*;
+import org.apache.logging.log4j.*;
 
 import java.util.*;
 
 public class BcUtility
 {
-    //region combat queries
+    public static final Color corruptedGlow = new Color(1f, 0, 1f, 1);
+    public static final Color etherealTextColor = new Color(1f, .7f, 1f, 1);
+    public static final Color normalGlowColor = new Color(0.2F, 0.9F, 1.0F, 0.25F);
+    public static final Color retainGlowColor = new Color(0.9f, 0.75F, .6F, 0.4F);
+    public static final Color dimTextColor = new Color(0.3f, 0.3F, .3F, 1);
+    public static final Color dimCardColor = new Color(0.3f, 0.3F, .3F, .1f);
+    
+    public static final int RitualCurseRemovalSacrifice = 5;
+    public static final int RitualCurseRemovalSacrificeA12 = 7;
+    public static HashMap<String, Texture> imgMap = new HashMap<>();
+    
+    static TextureAtlas.AtlasRegion darkFireAtkImg;
+    static boolean hasAddedKeywords = false;
+    
+    //region queries
+    public static TextureAtlas.AtlasRegion getDarkFireAttackImg()
+    {
+        if (darkFireAtkImg == null)
+        {
+            Texture texture = getTexture("bcBalanceModResources/images/vfx/bluePurpleFire300x300.png");
+            darkFireAtkImg = new TextureAtlas.AtlasRegion(
+                    texture,
+                    0,
+                    0,
+                    texture.getWidth(),
+                    texture.getHeight());
+        }
+        
+        return darkFireAtkImg;
+    }
+    
+    public static Texture getTexture(String path)
+    {
+        Texture texture;
+        if (imgMap.containsKey(path))
+        {
+            texture = imgMap.get(path);
+        }
+        else
+        {
+            texture = ImageMaster.loadImage(path);
+            texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            imgMap.put(path, texture);
+        }
+        
+        return texture;
+    }
+    
+    public static int getCurseRemovalSacrificeAmount()
+    {
+        if (AbstractDungeon.ascensionLevel >= 12)
+        {
+            return RitualCurseRemovalSacrificeA12;
+        }
+        else
+        {
+            return RitualCurseRemovalSacrifice;
+        }
+    }
+    
+    public static boolean isCombatCard(AbstractCard card)
+    {
+        if (isPlayerInCombat())
+        {
+            AbstractPlayer player = AbstractDungeon.player;
+            if (player.hand.contains(card) ||
+                        player.drawPile.contains(card) ||
+                        player.discardPile.contains(card) ||
+                        player.exhaustPile.contains(card))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     public static int getCurrentFocus()
     {
         if (isPlayerInCombat())
@@ -142,223 +223,422 @@ public class BcUtility
     public static AbstractMonster getRandomTarget()
     {
         return AbstractDungeon.getMonsters().getRandomMonster(null, true, AbstractDungeon.cardRandomRng);
-//        AbstractMonster randomTarget = null;
-//
-//        for (AbstractMonster monster : AbstractDungeon.getCurrRoom().monsters)
-//        {
-//            if (!monster.isDeadOrEscaped())
-//            {
-//                this.glowColor = AbstractCard.GOLD_BORDER_GLOW_COLOR.cpy();
-//                break;
-//            }
-//        }
+    }
+    
+    static Color grayColor = new Color(.5f, .5f, .5f, 1);
+    
+    public static Color getStringColor(char colorChar)
+    {
+        if (colorChar == 'b')
+        {
+            return Settings.BLUE_TEXT_COLOR;
+        }
+        else if (colorChar == 'r')
+        {
+            return Settings.RED_TEXT_COLOR;
+        }
+        else if (colorChar == 'g')
+        {
+            return Settings.GREEN_TEXT_COLOR;
+        }
+        else if (colorChar == 'a')
+        {
+            return grayColor;
+        }
+        else
+        {
+            return Settings.CREAM_COLOR;
+        }
+    }
+    
+    public static String getModifiedValueString(int originalValue, int newValue)
+    {
+        if (newValue == originalValue)
+        {
+            return Integer.toString(newValue);
+        }
+        else if (newValue > originalValue)
+        {
+            return "#g" + newValue;
+        }
+        else //if (newValue < originalValue)
+        {
+            return "#r" + newValue;
+        }
+    }
+    
+    public static int getModifiedBlock(int originalBlock)
+    {
+        if (!isPlayerInCombat())
+        {
+            return originalBlock;
+        }
+        
+        AbstractPlayer player = AbstractDungeon.player;
+        
+        float block = (float) originalBlock;
+        
+        for (AbstractPower power : player.powers)
+        {
+            block = power.modifyBlock(block);
+        }
+        
+        for (AbstractPower power : player.powers)
+        {
+            block = power.modifyBlockLast(block);
+        }
+        
+        if (block < 0.0F)
+        {
+            block = 0.0F;
+        }
+        
+        int finalBlock = MathUtils.floor(block);
+        
+        return finalBlock;
+    }
+    
+    public static String getScryString(int baseScry)
+    {
+        int actualScry = baseScry + BcUtility.getPowerAmount(ForesightPower.POWER_ID);
+        if (actualScry > baseScry)
+        {
+            return "#g" + actualScry;
+        }
+        else
+        {
+            return Integer.toString(actualScry);
+        }
+    }
+    
+    public static String getCharacterName()
+    {
+        switch (AbstractDungeon.player.chosenClass)
+        {
+            case IRONCLAD:
+                return "Ironclad";
+            case THE_SILENT:
+                return "Silent";
+            case DEFECT:
+                return "Defect";
+            case WATCHER:
+                return "Watcher";
+            default:
+                return AbstractDungeon.player.name;
+        }
+    }
+    
+    public static int getOrbNumber(AbstractOrb orb)
+    {
+        for (int i = 0; i < AbstractDungeon.player.orbs.size(); i++)
+        {
+            if (AbstractDungeon.player.orbs.get(i) == orb)
+            {
+                return i;
+            }
+        }
+        
+        return -1;
+    }
+    
+    public static int getActualCardCost(AbstractCard card)
+    {
+        if (!BcUtility.isPlayerInCombat())
+        {
+            return card.cost;
+        }
+        else
+        {
+            if (card.cost == -1) //x-cost
+            {
+                return EnergyPanel.totalCount;
+            }
+            else if (card.freeToPlay()) //costForTurn still returns non-zero when its actually free.
+            {
+                return 0;
+            }
+            else
+            {
+                return card.costForTurn;
+            }
+        }
     }
     //endregion
     
-    //region cards
-    public static int getActualScryAmount(int baseScry)
+    //region get cards
+    public static CardGroup getAllPossibleCards(AbstractCard.CardRarity rarity,
+                                                AbstractCard.CardType type,
+                                                AbstractCard.CardColor nativeColor,
+                                                boolean includeColorless,
+                                                boolean includeNative,
+                                                boolean includeForeign,
+                                                String excludedId)
     {
-        if (isPlayerInCombat())
+        if (type == AbstractCard.CardType.STATUS)
         {
-            AbstractPlayer player = AbstractDungeon.player;
-            AbstractPower foresightPower = player.getPower(ForesightPower.POWER_ID);
-            
-            if (foresightPower != null)
-            {
-                baseScry += foresightPower.amount;
-            }
+            includeColorless = true;
         }
         
-        return baseScry;
-    }
-    
-    public static ArrayList<AbstractCard> getRandomCardChoices(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean isColorless, int choiceCount, Random rng)
-    {
-        ArrayList<AbstractCard> possibleCards = getPossibleCards(rarity, type, isColorless, choiceCount, rng);
+        boolean includeStatuses = type == AbstractCard.CardType.STATUS;
+        boolean includeCurses = (type == AbstractCard.CardType.CURSE) || (rarity == AbstractCard.CardRarity.CURSE);
         
-        ArrayList<AbstractCard> choices = new ArrayList<>();
-        for (int i = 0; i < choiceCount; i++)
+        if (nativeColor == null)
         {
-            choices.add(possibleCards.get(i));
+            nativeColor = AbstractDungeon.player.getCardColor();
         }
         
-        return choices;
-    }
-    
-    public static AbstractCard getRandomCard(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean isColorless, Random rng)
-    {
-        ArrayList<AbstractCard> possibleCards = getPossibleCards(rarity, type, isColorless, 1, rng);
-        if (possibleCards.size() > 0)
+        if (nativeColor == AbstractCard.CardColor.COLORLESS)
         {
-            return possibleCards.get(0);
-        }
-        else
-        {
-            return null;
-        }
-    }
-    
-    static ArrayList<AbstractCard> getPossibleCards(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean isColorless, int atLeast, Random rng)
-    {
-        if (rarity == AbstractCard.CardRarity.CURSE)
-        {
-            type = AbstractCard.CardType.CURSE;
-            isColorless = false;
-        }
-        
-        if (type == AbstractCard.CardType.CURSE)
-        {
-            rarity = AbstractCard.CardRarity.CURSE;
-            isColorless = false;
+            includeColorless = true;
         }
         
         CardGroup possibleCards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-        if (type == AbstractCard.CardType.STATUS)
+        for (AbstractCard card : CardLibrary.getAllCards())
         {
-            for (AbstractCard card : CardLibrary.cards.values())
+            if (card.cardID.equals(excludedId))
             {
-                if (card.type == AbstractCard.CardType.STATUS)
-                {
-                    possibleCards.addToBottom(card.makeCopy());
-                }
+                continue;
             }
+            
+            //exclude basic and special by default unless explicitly requested.
+            if (((card.rarity == AbstractCard.CardRarity.BASIC) || (card.rarity == AbstractCard.CardRarity.SPECIAL)) &&
+                        rarity == null)
+            {
+                continue;
+            }
+            
+            if ((rarity != null) &&
+                        (card.rarity != rarity))
+            {
+                continue;
+            }
+            
+            if ((type != null) &&
+                        (card.type != type))
+            {
+                continue;
+            }
+            
+            if (!includeStatuses &&
+                        (card.type == AbstractCard.CardType.STATUS))
+            {
+                continue;
+            }
+            
+            if (!includeCurses &&
+                        (card.type == AbstractCard.CardType.CURSE))
+            {
+                continue;
+            }
+            
+            if (!includeColorless &&
+                        (card.color == AbstractCard.CardColor.COLORLESS))
+            {
+                continue;
+            }
+            
+            if (!includeNative &&
+                        (card.color == nativeColor))
+            {
+                continue;
+            }
+            
+            if (!includeForeign &&
+                        (card.color != nativeColor) &&
+                        (card.color != AbstractCard.CardColor.COLORLESS) &&
+                        (card.color != AbstractCard.CardColor.CURSE))
+            {
+                continue;
+            }
+            
+            possibleCards.addToBottom(card.makeStatEquivalentCopy());
+        }
+        
+        return possibleCards;
+    }
+    
+    public static ArrayList<AbstractCard> getRandomCards(AbstractCard.CardRarity rarity,
+                                                         AbstractCard.CardType type,
+                                                         boolean includeColorless,
+                                                         boolean includeNative,
+                                                         boolean includeForeign,
+                                                         int amount,
+                                                         String excludedId)
+    {
+        CardGroup possibleCards = getAllPossibleCards(rarity, type, null, includeColorless, includeNative, includeForeign, excludedId);
+        
+        return getRandomCardsFromGroup(possibleCards, amount);
+    }
+    
+    public static AbstractCard getRandomCard(AbstractCard.CardRarity rarity,
+                                             AbstractCard.CardType type,
+                                             boolean includeColorless,
+                                             boolean includeNative,
+                                             boolean includeForeign)
+    
+    {
+        CardGroup possibleCards = getAllPossibleCards(rarity, type, null, includeColorless, includeNative, includeForeign, null);
+        
+        if (possibleCards.isEmpty())
+        {
+            return null;
         }
         else
         {
-            while (possibleCards.size() < atLeast)
-            {
-                AbstractCard.CardRarity actualRarity = rarity;
-                if (rarity == null)
-                {
-                    actualRarity = getRandomRarity();
-                }
-                
-                AbstractCard.CardType actualType = type;
-                if (type == null)
-                {
-                    actualType = getRandomType();
-                }
-                
-                CardGroup existingGroup = null;
-                switch (actualRarity)
-                {
-                    case COMMON:
-                        existingGroup = AbstractDungeon.commonCardPool;
-                        break;
-                    case UNCOMMON:
-                        existingGroup = AbstractDungeon.uncommonCardPool;
-                        break;
-                    case RARE:
-                        existingGroup = AbstractDungeon.rareCardPool;
-                        break;
-                    case CURSE:
-                        existingGroup = AbstractDungeon.curseCardPool;
-                        break;
-                }
-                
-                if (isColorless)
-                {
-                    existingGroup = AbstractDungeon.colorlessCardPool;
-                }
-                
-                for (AbstractCard card : existingGroup.group)
-                {
-                    if ((card.rarity == actualRarity) && (card.type == actualType))
-                    {
-                        possibleCards.addToBottom(card.makeCopy());
-                    }
-                }
-            }
+            return possibleCards.getRandomCard(AbstractDungeon.cardRandomRng);
         }
-        
-        possibleCards.shuffle(rng);
-        return possibleCards.group;
     }
     
-    public static ArrayList<AbstractCard> getAllCardsByRarity(AbstractCard.CardRarity rarity)
+    static ArrayList<AbstractCard> getRandomCardsFromGroup(CardGroup group, int amount)
     {
-        CardGroup group = null;
-        switch (rarity)
+        group.shuffle();
+        
+        amount = Math.min(amount, group.size());
+        
+        ArrayList<AbstractCard> result = new ArrayList<>();
+        for (int i = 0; i < amount; i++)
         {
-            case RARE:
-                group = AbstractDungeon.rareCardPool;
-                break;
-            case UNCOMMON:
-                group = AbstractDungeon.uncommonCardPool;
-                break;
-            case COMMON:
-                group = AbstractDungeon.commonCardPool;
-                break;
-            case CURSE:
-                group = AbstractDungeon.curseCardPool;
-                break;
-            default:
-                return null;
+            result.add(group.group.get(i));
         }
         
-        ArrayList<AbstractCard> cards = new ArrayList<AbstractCard>();
-        for (AbstractCard card : group.group)
+        return result;
+    }
+    
+    public static void removeCardFromMasterLibrary(String cardId)
+    {
+        AbstractCard card = CardLibrary.getCard(cardId);
+        if (card == null)
         {
-            cards.add(card.makeCopy());
+            return;
         }
+        
+        switch (card.color)
+        {
+            case RED:
+                CardLibrary.redCards--;
+                if (UnlockTracker.isCardSeen(card.cardID))
+                {
+                    CardLibrary.seenRedCards--;
+                }
+                break;
+            case GREEN:
+                CardLibrary.greenCards--;
+                if (UnlockTracker.isCardSeen(card.cardID))
+                {
+                    CardLibrary.seenGreenCards--;
+                }
+                break;
+            case PURPLE:
+                CardLibrary.purpleCards--;
+                if (UnlockTracker.isCardSeen(card.cardID))
+                {
+                    CardLibrary.seenPurpleCards--;
+                }
+                break;
+            case BLUE:
+                CardLibrary.blueCards--;
+                if (UnlockTracker.isCardSeen(card.cardID))
+                {
+                    CardLibrary.seenBlueCards--;
+                }
+                break;
+            case COLORLESS:
+                CardLibrary.colorlessCards--;
+                if (UnlockTracker.isCardSeen(card.cardID))
+                {
+                    CardLibrary.seenColorlessCards--;
+                }
+                break;
+            case CURSE:
+                CardLibrary.curseCards--;
+                if (UnlockTracker.isCardSeen(card.cardID))
+                {
+                    CardLibrary.seenCurseCards--;
+                }
+                //CardLibrary.curses.put(card.cardID, card);
+        }
+        
+        if (!UnlockTracker.isCardSeen(card.cardID))
+        {
+            card.isSeen = false;
+        }
+        
+        CardLibrary.cards.remove(card.cardID);
+        CardLibrary.totalCardCount--;
+    }
+    
+    public static void logAllCards()
+    {
+        logCardsForCharacter("Ironclad", AbstractCard.CardColor.RED);
+        logCardsForCharacter("Silent", AbstractCard.CardColor.GREEN);
+        logCardsForCharacter("Defect", AbstractCard.CardColor.BLUE);
+        logCardsForCharacter("Watcher", AbstractCard.CardColor.PURPLE);
+    }
+    
+    static CardGroup getCardGroup(AbstractCard.CardColor color, AbstractCard.CardRarity rarity, AbstractCard.CardType type)
+    {
+        CardGroup cards = getAllPossibleCards(rarity, type, color, false, true, false, null);
+        cards.sortAlphabetically(true);
         
         return cards;
     }
     
-    public static AbstractCard.CardRarity getRandomRarity()
+    static void logCardsForCharacter(String characterName, AbstractCard.CardColor color)
     {
-        switch (AbstractDungeon.cardRng.random(0, 2))
-        {
-            case 0:
-                return AbstractCard.CardRarity.COMMON;
-            case 1:
-                return AbstractCard.CardRarity.UNCOMMON;
-            case 2:
-            default:
-                return AbstractCard.CardRarity.RARE;
-        }
-    }
-    
-    public static AbstractCard.CardType getRandomType()
-    {
-        switch (AbstractDungeon.cardRng.random(0, 2))
-        {
-            case 0:
-                return AbstractCard.CardType.ATTACK;
-            case 1:
-                return AbstractCard.CardType.SKILL;
-            case 2:
-            default:
-                return AbstractCard.CardType.POWER;
-        }
-    }
-    
-    public static AbstractCard getRandomCardFromDeck(String cardId, ArrayList<AbstractCard> cardList, Random rng)
-    {
-        AbstractPlayer player = AbstractDungeon.player;
+        CardGroup commonAttacks = getCardGroup(color, AbstractCard.CardRarity.COMMON, AbstractCard.CardType.ATTACK);
+        CardGroup commonSkills = getCardGroup(color, AbstractCard.CardRarity.COMMON, AbstractCard.CardType.SKILL);
+        CardGroup uncommonAttacks = getCardGroup(color, AbstractCard.CardRarity.UNCOMMON, AbstractCard.CardType.ATTACK);
+        CardGroup uncommonSkills = getCardGroup(color, AbstractCard.CardRarity.UNCOMMON, AbstractCard.CardType.SKILL);
+        CardGroup uncommonPowers = getCardGroup(color, AbstractCard.CardRarity.UNCOMMON, AbstractCard.CardType.POWER);
+        CardGroup rareAttacks = getCardGroup(color, AbstractCard.CardRarity.RARE, AbstractCard.CardType.ATTACK);
+        CardGroup rareSkills = getCardGroup(color, AbstractCard.CardRarity.RARE, AbstractCard.CardType.SKILL);
+        CardGroup rarePowers = getCardGroup(color, AbstractCard.CardRarity.RARE, AbstractCard.CardType.POWER);
         
-        for (AbstractCard deckCard : player.masterDeck.group)
-        {
-            boolean invalidChoice = false;
-            for (AbstractCard existingCard : cardList)
-            {
-                if ((existingCard == deckCard) ||
-                            ((cardId != null) && !cardId.equals(deckCard.cardID)))
-                {
-                    invalidChoice = true;
-                    break;
-                }
-            }
-            
-            if (!invalidChoice)
-            {
-                return deckCard;
-            }
-        }
+        String indent = "";
+        Logger log = BcBalanceMod.logger;
         
-        return null;
+        int total = commonAttacks.size() + uncommonAttacks.size() + rareAttacks.size() +
+                            commonSkills.size() + uncommonSkills.size() + rareSkills.size()
+                            + uncommonPowers.size() + rarePowers.size();
+        
+        log.info(characterName + " Cards(" + total + ")");
+        log.info("  -Rares(" + (rareAttacks.size() + rareSkills.size() + rarePowers.size()) + ")");
+        log.info("  -Uncommons(" + (uncommonAttacks.size() + uncommonSkills.size() + uncommonPowers.size()) + ")");
+        log.info("  -Commons(" + (commonAttacks.size() + commonSkills.size()) + ")");
+        indent = "      -";
+        log.info("  -Attacks(" + (commonAttacks.size() + uncommonAttacks.size() + rareAttacks.size()) + ")");
+        log.info("    -Common(" + commonAttacks.size() + ")");
+        logCardGroup(indent, commonAttacks);
+        log.info("    -Uncommon(" + uncommonAttacks.size() + ")");
+        logCardGroup(indent, uncommonAttacks);
+        log.info("    -Rare(" + rareAttacks.size() + ")");
+        logCardGroup(indent, rareAttacks);
+        
+        log.info("  -Skills(" + (commonSkills.size() + uncommonSkills.size() + rareSkills.size()) + ")");
+        log.info("    -Common(" + commonSkills.size() + ")");
+        logCardGroup(indent, commonSkills);
+        log.info("    -Uncommon(" + uncommonSkills.size() + ")");
+        logCardGroup(indent, uncommonSkills);
+        log.info("    -Rare(" + rareSkills.size() + ")");
+        logCardGroup(indent, rareSkills);
+        
+        log.info("  -Powers(" + (uncommonPowers.size() + rarePowers.size()) + ")");
+        log.info("    -Uncommon(" + uncommonPowers.size() + ")");
+        logCardGroup(indent, uncommonPowers);
+        log.info("    -Rare(" + rarePowers.size() + ")");
+        logCardGroup(indent, rarePowers);
     }
     
+    static void logCardGroup(String indent, CardGroup cardGroup)
+    {
+//        for (AbstractCard card : cardGroup.group)
+//        {
+//            BcBalanceMod.logger.info(indent + card.name);
+//        }
+    }
+    //endregion
+    
+    //region card manipulation
     public static void setGlowColor(AbstractCard card, Color color)
     {
         card.glowColor = color.cpy();
@@ -367,6 +647,51 @@ public class BcUtility
             BcCardBase bcCard = (BcCardBase) card;
             bcCard.defaultGlow = color.cpy();
         }
+    }
+    
+    public static void makeCardManuallyEthereal(AbstractCard card)
+    {
+        card.isEthereal = true;
+        if (card instanceof BcCardBase)
+        {
+            ((BcCardBase) card).isManuallyEthereal = true;
+        }
+    }
+    
+    public static void addNewCardToHandOrDiscard(AbstractCard card)
+    {
+        card.current_x = -1000.0F * Settings.xScale;
+        if (AbstractDungeon.player.hand.size() < 10)
+        {
+            AbstractDungeon.effectList.add(
+                    new ShowCardAndAddToHandEffect(
+                            card,
+                            (float) Settings.WIDTH / 2.0F,
+                            (float) Settings.HEIGHT / 2.0F));
+        }
+        else
+        {
+            AbstractDungeon.effectList.add(
+                    new ShowCardAndAddToDiscardEffect(
+                            card,
+                            (float) Settings.WIDTH / 2.0F,
+                            (float) Settings.HEIGHT / 2.0F));
+        }
+    }
+    //endregion
+    
+    //region monsters
+    public static boolean lastTwoMoves(AbstractMonster monster, byte move)
+    {
+        ArrayList<Byte> moveHistory = monster.moveHistory;
+        
+        if (moveHistory.isEmpty())
+        {
+            return false;
+        }
+        
+        return ((moveHistory.get(moveHistory.size() - 1) == move) ||
+                        ((moveHistory.size() > 1) && (moveHistory.get(moveHistory.size() - 2) == move)));
     }
     //endregion
     
@@ -403,18 +728,13 @@ public class BcUtility
         return false;
     }
     
-    public static AbstractRelic getRelicCopyFromLibrary(String relicId)
-    {
-        return RelicLibrary.getRelic(relicId).makeCopy();
-    }
-    
     public static ArrayList<AbstractRelic> getRandomRelics(int amount, AbstractRelic.RelicTier tier)
     {
         ArrayList<AbstractRelic> randomRelics = new ArrayList<AbstractRelic>();
         
         while (randomRelics.size() < amount)
         {
-            AbstractRelic potentialRelic = getRandomRelic(tier);
+            AbstractRelic potentialRelic = getRandomRelic(tier, null);
             
             boolean isDuplicate = false;
             for (AbstractRelic existingRelic : randomRelics)
@@ -439,7 +759,7 @@ public class BcUtility
         String relicId = null;
         while (relicId == null)
         {
-            relicId = returnRandomRelicId(AbstractRelic.RelicTier.BOSS);
+            relicId = returnRandomRelicId(AbstractRelic.RelicTier.BOSS, null);
             
             if (excludeEvolvedStarterRelics)
             {
@@ -456,9 +776,9 @@ public class BcUtility
         return RelicLibrary.getRelic(relicId).makeCopy();
     }
     
-    public static AbstractRelic getRandomRelic(AbstractRelic.RelicTier tier)
+    public static AbstractRelic getRandomRelic(AbstractRelic.RelicTier tier, ArrayList<String> additionalChoices)
     {
-        return RelicLibrary.getRelic(returnRandomRelicId(tier)).makeCopy();
+        return RelicLibrary.getRelic(returnRandomRelicId(tier, additionalChoices)).makeCopy();
     }
     
     public static void removeRelicFromDungeon(String relicKey)
@@ -470,7 +790,7 @@ public class BcUtility
         AbstractDungeon.bossRelicPool.remove(relicKey);
     }
     
-    static String returnRandomRelicId(AbstractRelic.RelicTier tier)
+    static String returnRandomRelicId(AbstractRelic.RelicTier tier, ArrayList<String> additionalChoices)
     {
         String retVal = null;
         while (retVal == null)
@@ -480,21 +800,21 @@ public class BcUtility
                 case COMMON:
                     if (AbstractDungeon.commonRelicPool.isEmpty())
                     {
-                        retVal = returnRandomRelicId(AbstractRelic.RelicTier.UNCOMMON);
+                        retVal = returnRandomRelicId(AbstractRelic.RelicTier.UNCOMMON, additionalChoices);
                     }
                     else
                     {
-                        retVal = getRandomRelicIdFromPool(AbstractDungeon.commonRelicPool);
+                        retVal = getRandomRelicIdFromPool(AbstractDungeon.commonRelicPool, additionalChoices);
                     }
                     break;
                 case UNCOMMON:
                     if (AbstractDungeon.uncommonRelicPool.isEmpty())
                     {
-                        retVal = returnRandomRelicId(AbstractRelic.RelicTier.RARE);
+                        retVal = returnRandomRelicId(AbstractRelic.RelicTier.RARE, additionalChoices);
                     }
                     else
                     {
-                        retVal = getRandomRelicIdFromPool(AbstractDungeon.uncommonRelicPool);
+                        retVal = getRandomRelicIdFromPool(AbstractDungeon.uncommonRelicPool, additionalChoices);
                     }
                     break;
                 case RARE:
@@ -504,17 +824,17 @@ public class BcUtility
                     }
                     else
                     {
-                        retVal = getRandomRelicIdFromPool(AbstractDungeon.rareRelicPool);
+                        retVal = getRandomRelicIdFromPool(AbstractDungeon.rareRelicPool, additionalChoices);
                     }
                     break;
                 case SHOP:
                     if (AbstractDungeon.shopRelicPool.isEmpty())
                     {
-                        retVal = returnRandomRelicId(AbstractRelic.RelicTier.UNCOMMON);
+                        retVal = returnRandomRelicId(AbstractRelic.RelicTier.UNCOMMON, additionalChoices);
                     }
                     else
                     {
-                        retVal = getRandomRelicIdFromPool(AbstractDungeon.shopRelicPool);
+                        retVal = getRandomRelicIdFromPool(AbstractDungeon.shopRelicPool, additionalChoices);
                     }
                     break;
                 case BOSS:
@@ -524,7 +844,7 @@ public class BcUtility
                     }
                     else
                     {
-                        retVal = getRandomRelicIdFromPool(AbstractDungeon.bossRelicPool);
+                        retVal = getRandomRelicIdFromPool(AbstractDungeon.bossRelicPool, additionalChoices);
                     }
                     break;
                 default:
@@ -539,7 +859,7 @@ public class BcUtility
         return retVal;
     }
     
-    static String getRandomRelicIdFromPool(ArrayList<String> relicPool)
+    static String getRandomRelicIdFromPool(ArrayList<String> relicPool, ArrayList<String> additionalChoices)
     {
         if (relicPool.isEmpty())
         {
@@ -547,7 +867,31 @@ public class BcUtility
         }
         else
         {
-            return relicPool.get(AbstractDungeon.relicRng.random(0, relicPool.size() - 1));
+            ArrayList<String> finalRelicPool = new ArrayList<>();
+            finalRelicPool.addAll(relicPool);
+            
+            if (additionalChoices != null)
+            {
+                for (String additionalChoice : additionalChoices)
+                {
+                    boolean isDuplicate = false;
+                    for (String relic : relicPool)
+                    {
+                        if (additionalChoice.equals(relic))
+                        {
+                            isDuplicate = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!isDuplicate)
+                    {
+                        finalRelicPool.add(additionalChoice);
+                    }
+                }
+            }
+            
+            return finalRelicPool.get(AbstractDungeon.relicRng.random(0, finalRelicPool.size() - 1));
         }
     }
     //endregion
@@ -562,32 +906,22 @@ public class BcUtility
     {
         return Math.max(min, Math.min(max, value));
     }
+    
+    public static boolean isInteger(String str)
+    {
+        try
+        {
+            Integer.parseInt(str.trim());
+            return true;
+        }
+        catch (NumberFormatException nfe)
+        {
+        }
+        return false;
+    }
     //endregion
     
-    public static String getCharacterName()
-    {
-        switch (AbstractDungeon.player.chosenClass)
-        {
-            case IRONCLAD:
-                return "Ironclad";
-            case THE_SILENT:
-                return "Silent";
-            case DEFECT:
-                return "Defect";
-            case WATCHER:
-                return "Watcher";
-            default:
-                return AbstractDungeon.player.name;
-        }
-    }
-    
     //region system fixes
-    public static void leaveContollerMode()
-    {
-        ReflectionHacks.RMethod m = ReflectionHacks.privateMethod(InputHelper.class, "leaveControllerMode");
-        m.invoke(null);
-    }
-    
     public static void popuplateLocalizationPlaceholders()
     {
         String modName = BcBalanceMod.getModID();
@@ -603,6 +937,36 @@ public class BcUtility
         }
         
         //ReflectionHacks.setPrivateStaticFinal(LocalizedStrings.class, typeMap, localizationStrings);
+    }
+    
+    public static void addKeywords()
+    {
+        if (!hasAddedKeywords)
+        {
+            hasAddedKeywords = true;
+            addKeyword(
+                    new String[]{"rebound", "rebounded", "rebounds"},
+                    "Rebounded cards are added to the top of the Draw Pile.");
+            
+            addKeyword(
+                    new String[]{"exhume", "exhumes", "exhumed"},
+                    "Exhuming a card brings it back from the Exhaust Pile and adds it to your hand.");
+            
+            addKeyword(
+                    new String[]{"retrieve", "retrieves", "retrieved"},
+                    "Retrieving a card brings it back from the discard pile and adds it in your hand.");
+            
+            GameDictionary.keywords.put("retain", "Retained cards are not discarded at the end of turn. NL Retained #yBlock doesn't expire at the start of your next turn.");
+        }
+    }
+    
+    static void addKeyword(String[] names, String description)
+    {
+        for (String name : names)
+        {
+            GameDictionary.keywords.put(name, description);
+            GameDictionary.parentWord.put(name, names[0]);
+        }
     }
     //endregion
 }

@@ -73,11 +73,11 @@ public class Corruption extends BcPowerCardBase
     {
         if (!upgraded)
         {
-            return "ALL Skills are now Ethereal, Exhaust, NL and cost 1 less.";
+            return "ALL Skills cost 1 less and Exhaust when played. NL End of turn: NL Exhaust all remaining Skills in your hand.";
         }
         else
         {
-            return "ALL Skills are now Ethereal, Exhaust, NL and are free.";
+            return "ALL Skills cost 0 and Exhaust when played. NL End of turn: NL Exhaust all remaining Skills in your hand.";
         }
     }
     //endregion
@@ -95,12 +95,12 @@ public class Corruption extends BcPowerCardBase
         if (upgraded)
         {
             addToBot(new RemoveSpecificPowerAction(player, player, BcCorruptionPower.POWER_ID));
-            addToBot(new ApplyPowerAction(player, player, new BcCorruptionPower(true)));
+            addToBot(new BcApplyPowerAction(new BcCorruptionPower(true)));
         }
         else if (!BcUtility.playerHasPower(BcCorruptionPower.POWER_ID+"+"))
         {
             //only add unupgraded corruption if upgraded version doesn't already exist
-            addToBot(new ApplyPowerAction(player, player, new BcCorruptionPower(false)));
+            addToBot(new BcApplyPowerAction(new BcCorruptionPower(false)));
         }
     }
 }

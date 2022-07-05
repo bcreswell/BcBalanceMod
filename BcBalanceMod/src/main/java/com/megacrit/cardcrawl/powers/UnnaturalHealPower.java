@@ -31,7 +31,7 @@ public class UnnaturalHealPower extends BcPowerBase
     @Override
     public String getImagePath()
     {
-        return "unnaturalHeal35x35.png";
+        return "unnaturalHeal32x32.png";
     }
     
     @Override

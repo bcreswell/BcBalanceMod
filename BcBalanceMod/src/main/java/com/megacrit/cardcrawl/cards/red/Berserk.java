@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.cards.red;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -9,41 +10,57 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.BerserkPower;
 import com.megacrit.cardcrawl.powers.VulnerablePower;
 
-public class Berserk extends AbstractCard
+public class Berserk extends BcPowerCardBase
 {
     public static final String ID = "Berserk";
-    private static final CardStrings cardStrings;
     
-    public Berserk()
+    //region card parameters
+    @Override
+    public String getDisplayName()
     {
-        super("Berserk", cardStrings.NAME, "red/power/berserk", 0, cardStrings.DESCRIPTION, AbstractCard.CardType.POWER, AbstractCard.CardColor.RED, AbstractCard.CardRarity.RARE, AbstractCard.CardTarget.SELF);
-        baseMagicNumber = 2;
-        magicNumber = baseMagicNumber;
+        return "Berserk";
     }
+    
+    @Override
+    public String getImagePath()
+    {
+        return "red/power/berserk";
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return !upgraded ? 1 : 0;
+    }
+    
+    @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.RARE;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return 1;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Suffer !M! Vulnerable. NL At the start of your turn, gain [R].";
+    }
+    //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new BcApplyPowerAction(new VulnerablePower(player, magicNumber, false)));
         addToBot(new BcApplyPowerAction(new BerserkPower(player, 1)));
-    }
-    
-    public void upgrade()
-    {
-        if (!upgraded)
-        {
-            upgradeName();
-            upgradeMagicNumber(-1);
-        }
-        
-    }
-    
-    public AbstractCard makeCopy()
-    {
-        return new Berserk();
-    }
-    
-    static
-    {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Berserk");
     }
 }

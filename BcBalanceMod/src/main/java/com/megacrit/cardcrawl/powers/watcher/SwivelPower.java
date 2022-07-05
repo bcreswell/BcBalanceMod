@@ -25,27 +25,47 @@ public class SwivelPower extends AbstractPower
     {
         if (amount == 1)
         {
-            description = "Your next Attack that costs 2 or more will refund its energy.";
+            description = "Your next Attack that would cost 2 or more will instead cost 0.";
         }
         else
         {
-            description = "Your next " + amount + " Attacks that costs 2 or more will refund its energy.";
+            description = "Your next " + amount + " Attacks that costs 2 or more will instead cost 0.";
         }
+    }
+    
+    public boolean shouldCardBeFree(AbstractCard card)
+    {
+        if ((card.type == AbstractCard.CardType.ATTACK) &&
+                    (card.costForTurn >= RefundThreshold) &&
+                    !card.purgeOnUse &&
+                    (amount > 0))
+        {
+            return true;
+        }
+        
+        return false;
     }
     
     public void onUseCard(AbstractCard card, UseCardAction action)
     {
-        if ((card.type == AbstractCard.CardType.ATTACK) && (card.costForTurn >= RefundThreshold) && !card.purgeOnUse && (amount > 0))
+        if (shouldCardBeFree(card))
         {
+            //already made free by AbstractCard
             flash();
-            
-            addToBot(new GainEnergyAction(card.costForTurn));
-            
-            amount--;
-            if (amount <= 0)
-            {
-                addToTop(new RemoveSpecificPowerAction(owner, owner, POWER_ID));
-            }
+            addToBot(new ReducePowerAction(owner, owner, POWER_ID, 1));
         }
+        
+//        if ((card.type == AbstractCard.CardType.ATTACK) && (card.costForTurn >= RefundThreshold) && !card.purgeOnUse && (amount > 0))
+//        {
+//            flash();
+//
+//            addToBot(new GainEnergyAction(card.costForTurn));
+//
+//            amount--;
+//            if (amount <= 0)
+//            {
+//                addToTop(new RemoveSpecificPowerAction(owner, owner, POWER_ID));
+//            }
+//        }
     }
 }

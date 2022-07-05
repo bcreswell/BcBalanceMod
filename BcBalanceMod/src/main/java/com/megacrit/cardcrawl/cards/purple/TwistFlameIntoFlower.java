@@ -18,13 +18,19 @@ public class TwistFlameIntoFlower extends BcSkillCardBase
     @Override
     public String getDisplayName()
     {
-        return "Twist Flame\n into Flower";
+        return "Twist Flame into Flower";
     }
     
     @Override
     public String getImagePath()
     {
         return "purple/twistFlameIntoFlower.png";
+    }
+    
+    @Override
+    protected void onInitialized()
+    {
+        tags.add(AbstractCard.CardTags.HEALING);
     }
     
     @Override
@@ -52,9 +58,15 @@ public class TwistFlameIntoFlower extends BcSkillCardBase
     }
     
     @Override
+    public boolean getRetain()
+    {
+        return true;
+    }
+    
+    @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 11 : 13;
+        return !upgraded ? 9 : 13;
     }
     
     @Override

@@ -1,6 +1,7 @@
 package com.megacrit.cardcrawl.cards.green;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.unique.MalaiseAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -34,7 +35,7 @@ public class Malaise extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.RARE;
+        return CardRarity.UNCOMMON;
     }
     
     @Override

@@ -22,7 +22,7 @@ public class SpotWeakness extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 0;
+        return 1;
     }
     
     @Override
@@ -34,7 +34,7 @@ public class SpotWeakness extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
@@ -46,13 +46,13 @@ public class SpotWeakness extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return 5;
+        return !upgraded ? 5 : 7;
     }
     
     @Override
     public boolean getRetain()
     {
-        return upgraded;
+        return true;
     }
     
     @Override
@@ -80,31 +80,6 @@ public class SpotWeakness extends BcSkillCardBase
     {
         return validTargetExists();
     }
-    
-//    public boolean canUse(AbstractPlayer player, AbstractMonster monster)
-//    {
-//        if (!super.canUse(player, monster))
-//        {
-//            return false;
-//        }
-//        else
-//        {
-//            if ((monster == null) || (player == null))
-//            {
-//                return validTargetExists();
-//            }
-//
-//            if (monster.getIntentBaseDmg() < 0)
-//            {
-//                cantUseMessage = "Enemy isn't attacking.";
-//                return false;
-//            }
-//            else
-//            {
-//                return true;
-//            }
-//        }
-//    }
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {

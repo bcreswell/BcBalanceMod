@@ -1,17 +1,19 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
-import com.megacrit.cardcrawl.actions.common.DamageAction;
-import com.megacrit.cardcrawl.actions.common.GainBlockAction;
-import com.megacrit.cardcrawl.actions.utility.ScryAction;
+import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.actions.utility.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.dungeons.*;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.vfx.*;
 import com.megacrit.cardcrawl.vfx.combat.FlickCoinEffect;
 
 public class JustLucky extends BcAttackCardBase
@@ -40,25 +42,26 @@ public class JustLucky extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.RARE;
     }
     
     @Override
     public int getDamage()
     {
-        return !upgraded ? 3 : 4;
+        return 4;
     }
     
     @Override
     public int getBlock()
     {
-        return !upgraded ? 2 : 3;
+        return 3;
     }
     
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 1 : 2;
+        //scry
+        return 2;
     }
     
     @Override
@@ -70,17 +73,27 @@ public class JustLucky extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        int scryAmount = BcUtility.getActualScryAmount(getMagicNumber());
-        return "Scry " + scryAmount + ". NL Gain !B! Block. NL Deal !D! damage.";
+        if (!upgraded)
+        {
+            return "Scry " + BcUtility.getScryString(getMagicNumber()) + ". NL Gain !B! Block. NL Deal !D! damage. NL 50% chance: 3x damage.";
+        }
+        else
+        {
+            return "Draw 1. NL Scry " + BcUtility.getScryString(getMagicNumber()) + ". NL Gain !B! Block. NL Deal !D! damage. NL 50% chance: 3x damage.";
+        }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        int scryAmount = BcUtility.getActualScryAmount(magicNumber);
-        addToBot(new ScryAction(scryAmount));
-        addToBot(new VFXAction(new FlickCoinEffect(player.hb.cX, player.hb.cY, monster.hb.cX, monster.hb.cY), 0.3F));
+        if (upgraded)
+        {
+            addToBot(new DrawCardAction(1));
+            //wait to give them time to see the drawn card before scry window pops up
+            addToBot(new TrueWaitAction(.8f));
+        }
+        addToBot(new ScryAction(magicNumber));
         addToBot(new GainBlockAction(player, player, block));
-        addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.NONE));
+        addToBot(new JustLuckyAction(monster, player, this));
     }
 }

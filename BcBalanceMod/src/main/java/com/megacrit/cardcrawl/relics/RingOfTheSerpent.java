@@ -12,50 +12,48 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.relics.AbstractRelic.LandingSound;
 import com.megacrit.cardcrawl.relics.AbstractRelic.RelicTier;
 
-public class RingOfTheSerpent extends AbstractRelic {
+public class RingOfTheSerpent extends AbstractRelic
+{
     public static final String ID = "Ring of the Serpent";
-    private static final int NUM_CARDS = 1;
-
-    public RingOfTheSerpent() {
+    private static final int NUM_CARDS = 2;
+    
+    public RingOfTheSerpent()
+    {
         super("Ring of the Serpent", "serpent_ring.png", RelicTier.BOSS, LandingSound.CLINK);
     }
-
+    
     public String getUpdatedDescription()
     {
-        if (Settings.language == Settings.GameLanguage.ENG)
-        {
-            return "Replaces #gRing #gof #gthe #gSnake. NL Turn 1: draw #b2 extra cards. NL Turn 2 and on: draw #b1 extra card.";
-        }
-        else
-        {
-            return this.DESCRIPTIONS[0] + this.DESCRIPTIONS[1];
-        }
+        return "Replaces #gRing #gof #gthe #gSnake. NL At the start of your turn, draw #b" + NUM_CARDS + " additional cards.";
     }
-
-    public void onEquip() {
-        ++AbstractDungeon.player.masterHandSize;
+    
+    public void onEquip()
+    {
+        //AbstractDungeon.player.masterHandSize += NUM_CARDS;
     }
-
-    public void onUnequip() {
-        --AbstractDungeon.player.masterHandSize;
+    
+    public void onUnequip()
+    {
+        //AbstractDungeon.player.masterHandSize -= NUM_CARDS;
     }
-
-    public void atTurnStart() {
-        this.flash();
+    
+    public void atTurnStart()
+    {
+        flash();
+        addToBot(new DrawCardAction(NUM_CARDS));
     }
-
-    //added this ring of the snake logic
+    
     public void atBattleStart()
     {
-        this.addToBot(new RelicAboveCreatureAction(AbstractDungeon.player, this));
-        this.addToBot(new DrawCardAction(AbstractDungeon.player, 1));
     }
-
-    public boolean canSpawn() {
+    
+    public boolean canSpawn()
+    {
         return AbstractDungeon.player.hasRelic("Ring of the Snake");
     }
-
-    public AbstractRelic makeCopy() {
+    
+    public AbstractRelic makeCopy()
+    {
         return new RingOfTheSerpent();
     }
 }

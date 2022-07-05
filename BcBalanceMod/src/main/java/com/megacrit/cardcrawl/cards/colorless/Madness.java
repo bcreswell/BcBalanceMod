@@ -22,7 +22,7 @@ public class Madness extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return 0;
     }
     
     @Override
@@ -40,7 +40,13 @@ public class Madness extends BcSkillCardBase
     @Override
     public boolean getEthereal()
     {
-        return true;
+        return !upgraded;
+    }
+    
+    @Override
+    public boolean getRetain()
+    {
+        return upgraded;
     }
     
     @Override

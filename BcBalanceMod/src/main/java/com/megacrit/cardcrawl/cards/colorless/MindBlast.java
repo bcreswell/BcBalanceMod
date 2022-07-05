@@ -79,7 +79,6 @@ public class MindBlast extends AbstractCard
         cardStrings = CardCrawlGame.languagePack.getCardStrings("Mind Blast");
         if (Settings.language == Settings.GameLanguage.ENG)
         {
-            //todo: figure out best practice for how to do this.
             cardStrings.DESCRIPTION = "Innate. Deal damage equal to draw pile or discard pile size, whichever is bigger.";
             cardStrings.UPGRADE_DESCRIPTION = "Innate. Deal damage equal to draw pile or discard pile size, whichever is bigger.";
         }

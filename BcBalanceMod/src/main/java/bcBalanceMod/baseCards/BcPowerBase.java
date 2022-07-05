@@ -138,30 +138,42 @@ public abstract class BcPowerBase extends AbstractPower
         return BuffDebuffApplicationType.Stacking;
     }
     
+    public boolean isAppliedQuietly()
+    {
+        return false;
+    }
+    
     public final void updateDescription()
     {
         description = getFullDescription();
     }
     
-    public final void stackPower(int stackAmount)
+    public void stackPower(int stackAmount)
     {
         amount += stackAmount;
-        
-        if (amount < 0)
+    
+        if (applicationType == BuffDebuffApplicationType.Unique)
         {
-            if (!canGoNegative)
-            {
-                amount = 0;
-            }
-            else if (amount <= -999)
-            {
-                amount = -999;
-            }
+            amount = -1;
         }
-        
-        if (amount >= 999)
+        else
         {
-            amount = 999;
+            if (amount < 0)
+            {
+                if (!canGoNegative)
+                {
+                    amount = 0;
+                }
+                else if (amount <= -999)
+                {
+                    amount = -999;
+                }
+            }
+    
+            if (amount >= 999)
+            {
+                amount = 999;
+            }
         }
         
         if (stackAmount != 0)
@@ -169,16 +181,41 @@ public abstract class BcPowerBase extends AbstractPower
             fontScale = 8.0F;
             onPowerStacked();
         }
+        updateDescription();
     }
     
     public final void reducePower(int reduceAmount)
     {
         stackPower(-reduceAmount);
+        updateDescription();
     }
     
     public void onPowerStacked()
     {
     
+    }
+    
+    @Override
+    public void atStartOfTurn()
+    {
+        super.atStartOfTurn();
+        updateDescription();
+    }
+    
+    @Override
+    public void atEndOfTurn(boolean isPlayer)
+    {
+        super.atEndOfTurn(isPlayer);
+        updateDescription();
+    }
+    
+    public void onManualDiscard()
+    {
+    
+    }
+    
+    public void onScry(int amount)
+    {
     }
     
     public static enum BuffDebuffApplicationType

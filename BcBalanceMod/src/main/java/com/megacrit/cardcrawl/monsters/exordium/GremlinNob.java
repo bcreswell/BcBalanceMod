@@ -49,6 +49,8 @@ public class GremlinNob extends AbstractMonster
     private static final int ANGRY_LEVEL = 2;
     private boolean usedBellow;
     private boolean canVuln;
+    private int vulnerableCount;
+    private  int strengthOnEnrage;
     
     public GremlinNob(float x, float y)
     {
@@ -63,7 +65,10 @@ public class GremlinNob extends AbstractMonster
         type = EnemyType.ELITE;
         dialogX = -60.0F * Settings.scale;
         dialogY = 50.0F * Settings.scale;
+        
         canVuln = setVuln;
+        vulnerableCount = 2;
+        
         if (AbstractDungeon.ascensionLevel >= 8)
         {
             setHp(85, 90);
@@ -84,6 +89,12 @@ public class GremlinNob extends AbstractMonster
             rushDmg = 14;
         }
         
+        strengthOnEnrage = 1;
+        if (AbstractDungeon.ascensionLevel >= 18)
+        {
+            strengthOnEnrage = 2;
+        }
+        
         damage.add(new DamageInfo(this, rushDmg));
         damage.add(new DamageInfo(this, bashDmg));
         loadAnimation("images/monsters/theBottom/nobGremlin/skeleton.atlas", "images/monsters/theBottom/nobGremlin/skeleton.json", 1.0F);
@@ -95,31 +106,26 @@ public class GremlinNob extends AbstractMonster
     {
         switch (nextMove)
         {
-            case BULL_RUSH:
-                AbstractDungeon.actionManager.addToBottom(new AnimateSlowAttackAction(this));
-                AbstractDungeon.actionManager.addToBottom(new DamageAction(AbstractDungeon.player, (DamageInfo) damage.get(0), AttackEffect.BLUNT_HEAVY));
+            case BULL_RUSH:                
+                addToBot(new AnimateSlowAttackAction(this));
+                addToBot(new DamageAction(AbstractDungeon.player, (DamageInfo) damage.get(0), AttackEffect.BLUNT_HEAVY));
                 break;
             case SKULL_BASH:
-                AbstractDungeon.actionManager.addToBottom(new AnimateSlowAttackAction(this));
-                AbstractDungeon.actionManager.addToBottom(new DamageAction(AbstractDungeon.player, (DamageInfo) damage.get(1), AttackEffect.BLUNT_HEAVY));
+                addToBot(new AnimateSlowAttackAction(this));
+                addToBot(new DamageAction(AbstractDungeon.player, (DamageInfo) damage.get(1), AttackEffect.BLUNT_HEAVY));
                 if (canVuln)
-                {
-                    int vulnCount = 2;
-                    if (AbstractDungeon.ascensionLevel >= 18)
-                    {
-                        vulnCount = 3;
-                    }
-    
-                    AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(AbstractDungeon.player, this, new VulnerablePower(AbstractDungeon.player, vulnCount, true), vulnCount));
+                {    
+                    addToBot(new ApplyPowerAction(AbstractDungeon.player, this,
+                            new VulnerablePower(AbstractDungeon.player, vulnerableCount, true), vulnerableCount));
                 }
                 break;
             case BELLOW:
                 playSfx();
-                AbstractDungeon.actionManager.addToBottom(new TalkAction(this, DIALOG[0], 1.0F, 3.0F));
-                AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(this, this, new AngerPower(this, 2), 2));
+                addToBot(new TalkAction(this, DIALOG[0], 1.0F, 3.0F));
+                addToBot(new ApplyPowerAction(this, this, new AngerPower(this, strengthOnEnrage), strengthOnEnrage));
         }
         
-        AbstractDungeon.actionManager.addToBottom(new RollMoveAction(this));
+        addToBot(new RollMoveAction(this));
     }
     
     private void playSfx()
@@ -127,15 +133,15 @@ public class GremlinNob extends AbstractMonster
         int roll = MathUtils.random(2);
         if (roll == 0)
         {
-            AbstractDungeon.actionManager.addToBottom(new SFXAction("VO_GREMLINNOB_1A"));
+            addToBot(new SFXAction("VO_GREMLINNOB_1A"));
         }
         else if (roll == 1)
         {
-            AbstractDungeon.actionManager.addToBottom(new SFXAction("VO_GREMLINNOB_1B"));
+            addToBot(new SFXAction("VO_GREMLINNOB_1B"));
         }
         else
         {
-            AbstractDungeon.actionManager.addToBottom(new SFXAction("VO_GREMLINNOB_1C"));
+            addToBot(new SFXAction("VO_GREMLINNOB_1C"));
         }
         
     }

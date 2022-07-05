@@ -25,9 +25,11 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.AbstractMonster.Intent;
 import com.megacrit.cardcrawl.powers.FrailPower;
 import com.megacrit.cardcrawl.powers.StrengthPower;
+
 import java.util.Iterator;
 
-public class Healer extends AbstractMonster {
+public class Healer extends AbstractMonster
+{
     public static final String ID = "Healer";
     private static final MonsterStrings monsterStrings;
     public static final String NAME;
@@ -51,198 +53,212 @@ public class Healer extends AbstractMonster {
     private static final byte ATTACK = 1;
     private static final byte HEAL = 2;
     private static final byte BUFF = 3;
-
-    public Healer(float x, float y) {
-        super(NAME, "Healer", 56, 0.0F, -20.0F, 230.0F, 250.0F, (String)null, x, y);
-        if (AbstractDungeon.ascensionLevel >= 7) {
-            this.setHp(44, 48);
-        } else {
-            this.setHp(42, 46);
+    
+    public Healer(float x, float y)
+    {
+        super(NAME, "Healer", 56, 0.0F, -20.0F, 230.0F, 250.0F, (String) null, x, y);
+        if (AbstractDungeon.ascensionLevel >= 7)
+        {
+            setHp(44, 48);
         }
-
-        if (AbstractDungeon.ascensionLevel >= 17) {
-            this.magicDmg = 9;
-            this.strAmt = 2;
-            this.healAmt = 38;
-            this.healThreshold = 20;
-        } else if (AbstractDungeon.ascensionLevel >= 2) {
-            this.magicDmg = 9;
-            this.strAmt = 2;
-            this.healAmt = 24;
-            this.healThreshold = 20;
-        } else {
-            this.magicDmg = 8;
-            this.strAmt = 2;
-            this.healAmt = 16;
-            this.healThreshold = 16;
+        else
+        {
+            setHp(42, 46);
         }
-
-        this.damage.add(new DamageInfo(this, this.magicDmg));
-        this.loadAnimation("images/monsters/theCity/healer/skeleton.atlas", "images/monsters/theCity/healer/skeleton.json", 1.0F);
-        TrackEntry e = this.state.setAnimation(0, "Idle", true);
-        this.stateData.setMix("Hit", "Idle", 0.2F);
+        
+        if (AbstractDungeon.ascensionLevel >= 17)
+        {
+            magicDmg = 9;
+            strAmt = 2;
+            healAmt = 38;
+            healThreshold = 30;
+        }
+        else if (AbstractDungeon.ascensionLevel >= 2)
+        {
+            magicDmg = 9;
+            strAmt = 2;
+            healAmt = 24;
+            healThreshold = 20;
+        }
+        else
+        {
+            magicDmg = 8;
+            strAmt = 2;
+            healAmt = 15;
+            healThreshold = 15;
+        }
+        
+        damage.add(new DamageInfo(this, magicDmg));
+        loadAnimation("images/monsters/theCity/healer/skeleton.atlas", "images/monsters/theCity/healer/skeleton.json", 1.0F);
+        TrackEntry e = state.setAnimation(0, "Idle", true);
+        stateData.setMix("Hit", "Idle", 0.2F);
         e.setTime(e.getEndTime() * MathUtils.random());
-        this.state.setTimeScale(0.8F);
+        state.setTimeScale(0.8F);
     }
-
-    public void takeTurn() {
+    
+    public void takeTurn()
+    {
         Iterator var1;
         AbstractMonster m;
-        label35:
-        switch(this.nextMove) {
-            case 1:
-                this.playSfx();
+label35:
+        switch (nextMove)
+        {
+            case ATTACK:
+                playSfx();
                 AbstractDungeon.actionManager.addToBottom(new AnimateSlowAttackAction(this));
-                AbstractDungeon.actionManager.addToBottom(new DamageAction(AbstractDungeon.player, (DamageInfo)this.damage.get(0), AttackEffect.SLASH_DIAGONAL));
+                AbstractDungeon.actionManager.addToBottom(new DamageAction(AbstractDungeon.player, (DamageInfo) damage.get(0), AttackEffect.SLASH_DIAGONAL));
                 AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(AbstractDungeon.player, this, new FrailPower(AbstractDungeon.player, 2, true), 2));
                 break;
-            case 2:
-                this.playSfx();
+            case HEAL:
+                playSfx();
                 AbstractDungeon.actionManager.addToBottom(new ChangeStateAction(this, "STAFF_RAISE"));
                 AbstractDungeon.actionManager.addToBottom(new WaitAction(0.25F));
                 var1 = AbstractDungeon.getMonsters().monsters.iterator();
-
-                while(true) {
-                    if (!var1.hasNext()) {
+                
+                while (true)
+                {
+                    if (!var1.hasNext())
+                    {
                         break label35;
                     }
-
-                    m = (AbstractMonster)var1.next();
-                    if (!m.isDying && !m.isEscaping) {
+                    
+                    m = (AbstractMonster) var1.next();
+                    if (!m.isDying && !m.isEscaping)
+                    {
                         if (m == this)
                         {
-                            AbstractDungeon.actionManager.addToBottom(new HealAction(m, this, this.healAmt/2));
+                            AbstractDungeon.actionManager.addToBottom(new HealAction(m, this, healAmt / 3));
                         }
                         else
                         {
-                            AbstractDungeon.actionManager.addToBottom(new HealAction(m, this, this.healAmt));
+                            AbstractDungeon.actionManager.addToBottom(new HealAction(m, this, healAmt));
                         }
                     }
                 }
-            case 3:
-                this.playSfx();
+            case BUFF:
+                playSfx();
                 AbstractDungeon.actionManager.addToBottom(new ChangeStateAction(this, "STAFF_RAISE"));
                 AbstractDungeon.actionManager.addToBottom(new WaitAction(0.25F));
                 var1 = AbstractDungeon.getMonsters().monsters.iterator();
-
-                while(var1.hasNext()) {
-                    m = (AbstractMonster)var1.next();
-                    if (!m.isDying && !m.isEscaping) {
-                        AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(m, this, new StrengthPower(m, this.strAmt), this.strAmt));
+                
+                while (var1.hasNext())
+                {
+                    m = (AbstractMonster) var1.next();
+                    if (!m.isDying && !m.isEscaping)
+                    {
+                        AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(m, this, new StrengthPower(m, strAmt), strAmt));
                     }
                 }
         }
-
+        
         AbstractDungeon.actionManager.addToBottom(new RollMoveAction(this));
     }
-
-    private void playSfx() {
-        if (MathUtils.randomBoolean()) {
+    
+    private void playSfx()
+    {
+        if (MathUtils.randomBoolean())
+        {
             AbstractDungeon.actionManager.addToBottom(new SFXAction("VO_HEALER_1A"));
-        } else {
+        }
+        else
+        {
             AbstractDungeon.actionManager.addToBottom(new SFXAction("VO_HEALER_1B"));
         }
-
+        
     }
-
-    private void playDeathSfx() {
+    
+    private void playDeathSfx()
+    {
         int roll = MathUtils.random(2);
-        if (roll == 0) {
+        if (roll == 0)
+        {
             CardCrawlGame.sound.play("VO_HEALER_2A");
-        } else if (roll == 1) {
+        }
+        else if (roll == 1)
+        {
             CardCrawlGame.sound.play("VO_HEALER_2B");
-        } else {
+        }
+        else
+        {
             CardCrawlGame.sound.play("VO_HEALER_2C");
         }
-
+        
     }
-
-    public void changeState(String key) {
+    
+    public void changeState(String key)
+    {
         byte var3 = -1;
-        switch(key.hashCode()) {
+        switch (key.hashCode())
+        {
             case -1729868403:
-                if (key.equals("STAFF_RAISE")) {
+                if (key.equals("STAFF_RAISE"))
+                {
                     var3 = 0;
                 }
             default:
-                switch(var3) {
+                switch (var3)
+                {
                     case 0:
-                        this.state.setAnimation(0, "Attack", false);
-                        this.state.setTimeScale(0.8F);
-                        this.state.addAnimation(0, "Idle", true, 0.0F);
+                        state.setAnimation(0, "Attack", false);
+                        state.setTimeScale(0.8F);
+                        state.addAnimation(0, "Idle", true, 0.0F);
                     default:
                 }
         }
     }
-
-    protected void getMove(int num) {
-        int needToHeal = 0;
-        Iterator var3 = AbstractDungeon.getMonsters().monsters.iterator();
-
-        while(var3.hasNext()) {
-            AbstractMonster m = (AbstractMonster)var3.next();
-            if (!m.isDying && !m.isEscaping) {
-                needToHeal += m.maxHealth - m.currentHealth;
-            }
-        }
-
-        if (AbstractDungeon.ascensionLevel >= 17)
+    
+    protected void getMove(int num)
+    {
+        int missingTeamHealth = 0;
+        
+        for (AbstractMonster monster : AbstractDungeon.getMonsters().monsters)
         {
-            if (needToHeal >= healThreshold && !this.lastTwoMoves((byte)2))
+            if (!monster.isDying && !monster.isEscaping)
             {
-                this.setMove((byte)2, Intent.MAGIC);
-                return;
+                missingTeamHealth += monster.maxHealth - monster.currentHealth;
             }
         }
-        else if (AbstractDungeon.ascensionLevel >= 2)
+        
+        if (missingTeamHealth >= healThreshold)
         {
-            if (needToHeal >= healThreshold && !this.lastTwoMoves((byte)2))
-            {
-                this.setMove((byte)2, Intent.MAGIC);
-                return;
-            }
+            setMove(HEAL, Intent.MAGIC);
         }
-        else if (needToHeal >= healThreshold && !this.lastTwoMoves((byte)2))
+        else if (num >= 50)
         {
-            this.setMove((byte)2, Intent.MAGIC);
-            return;
+            setMove(ATTACK, Intent.ATTACK_DEBUFF, damage.get(0).base);
         }
-
-        if (AbstractDungeon.ascensionLevel >= 17) {
-            if (num >= 40 && !this.lastMove((byte)1)) {
-                this.setMove((byte)1, Intent.ATTACK_DEBUFF, ((DamageInfo)this.damage.get(0)).base);
-                return;
-            }
-        } else if (num >= 40 && !this.lastTwoMoves((byte)1)) {
-            this.setMove((byte)1, Intent.ATTACK_DEBUFF, ((DamageInfo)this.damage.get(0)).base);
-            return;
+        else if (!lastTwoMoves(BUFF))
+        {
+            setMove(BUFF, Intent.BUFF);
         }
-
-        if (!this.lastTwoMoves((byte)3)) {
-            this.setMove((byte)3, Intent.BUFF);
-        } else {
-            this.setMove((byte)1, Intent.ATTACK_DEBUFF, ((DamageInfo)this.damage.get(0)).base);
+        else
+        {
+            setMove(ATTACK, Intent.ATTACK_DEBUFF, damage.get(0).base);
         }
     }
-
-    public void damage(DamageInfo info) {
+    
+    public void damage(DamageInfo info)
+    {
         super.damage(info);
-        if (info.owner != null && info.type != DamageType.THORNS && info.output > 0) {
-            this.state.setAnimation(0, "Hit", false);
-            this.state.setTimeScale(0.8F);
-            this.state.addAnimation(0, "Idle", true, 0.0F);
+        if (info.owner != null && info.type != DamageType.THORNS && info.output > 0)
+        {
+            state.setAnimation(0, "Hit", false);
+            state.setTimeScale(0.8F);
+            state.addAnimation(0, "Idle", true, 0.0F);
         }
-
+        
     }
-
-    public void die() {
-        this.playDeathSfx();
-        this.state.setTimeScale(0.1F);
-        this.useShakeAnimation(5.0F);
+    
+    public void die()
+    {
+        playDeathSfx();
+        state.setTimeScale(0.1F);
+        useShakeAnimation(5.0F);
         super.die();
     }
-
-    static {
+    
+    static
+    {
         monsterStrings = CardCrawlGame.languagePack.getMonsterStrings("Healer");
         NAME = monsterStrings.NAME;
         MOVES = monsterStrings.MOVES;

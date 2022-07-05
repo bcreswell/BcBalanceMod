@@ -1,9 +1,10 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -28,7 +29,7 @@ public class Fasting extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 2 : 1;
+        return 1;
     }
     
     @Override
@@ -40,25 +41,28 @@ public class Fasting extends BcPowerCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override
     public int getMagicNumber()
     {
-        return 3;
+        return !upgraded ? 3 : 4;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Gain !M! Strength. NL Gain !M! Dexterity. NL Gain 1 less [W] at the start of each turn.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        if (player != null)
-        {
-            this.addToBot(new VFXAction(new FastingEffect(player.hb.cX, player.hb.cY, Color.CHARTREUSE)));
-        }
+        addToBot(new VFXAction(new FastingEffect(player.hb.cX, player.hb.cY, Color.CHARTREUSE)));
         
-        this.addToBot(new ApplyPowerAction(player, player, new StrengthPower(player, this.magicNumber), this.magicNumber));
-        this.addToBot(new ApplyPowerAction(player, player, new DexterityPower(player, this.magicNumber), this.magicNumber));
-        this.addToBot(new ApplyPowerAction(player, player, new EnergyDownPower(player, 1, true), 1));
+        addToBot(new BcApplyPowerAction(new StrengthPower(player, magicNumber)));
+        addToBot(new BcApplyPowerAction(new DexterityPower(player, magicNumber)));
+        addToBot(new BcApplyPowerAction(new EnergyDownPower(player, 1, true)));
     }
 }

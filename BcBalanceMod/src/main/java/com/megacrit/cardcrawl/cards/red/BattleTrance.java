@@ -1,8 +1,7 @@
 package com.megacrit.cardcrawl.cards.red;
 
 import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
-import com.megacrit.cardcrawl.actions.common.DrawCardAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -55,6 +54,6 @@ public class BattleTrance extends BcSkillCardBase
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new DrawCardAction(player, magicNumber));
-        addToBot(new ApplyPowerAction(player, player, new NoDrawPower(player)));
+        addToBot(new BcApplyPowerAction(new NoDrawPower(player)));
     }
 }

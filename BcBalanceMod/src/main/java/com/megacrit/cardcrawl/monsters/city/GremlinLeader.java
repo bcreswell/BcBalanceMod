@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.monsters.city;
 
+import bcBalanceMod.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.esotericsoftware.spine.AnimationState;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
@@ -102,15 +103,22 @@ public class GremlinLeader extends AbstractMonster
     public void update()
     {
         super.update();
-        
+    
         int gremlinCount = getGremlinCount();
+        int reinforcementsRemaining = getReinforcementsRemaining();
         if (previousGremlinCount != gremlinCount)
         {
-            previousGremlinCount = gremlinCount;
-            if (!isDying && !isDead)
+            //if you drop the gremlin count lower than 2 then he will summon, but only during your turn.
+            //TODO: figure out how to determine if its the player's turn or not
+            if (!isDying &&
+                        !isDead &&
+                        (previousGremlinCount >= 2) &&
+                        (gremlinCount < 2) &&
+                        (reinforcementsRemaining > 0))
             {
                 rollMove();
             }
+            previousGremlinCount = gremlinCount;
         }
     }
     

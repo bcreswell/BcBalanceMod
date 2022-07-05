@@ -1321,7 +1321,14 @@ label113:
         c.setAngle(0.0F);
         c.drawScale = 0.12F;
         c.targetDrawScale = 0.75F;
-        c.current_x = DRAW_PILE_X;
+        if (group == AbstractDungeon.player.drawPile)
+        {
+            c.current_x = DRAW_PILE_X;
+        }
+        else if ((group == AbstractDungeon.player.exhaustPile) || (group == AbstractDungeon.player.discardPile))
+        {
+            c.current_x = DISCARD_PILE_X;
+        }
         c.current_y = DRAW_PILE_Y;
         group.removeCard(c);
         AbstractDungeon.player.hand.addToTop(c);

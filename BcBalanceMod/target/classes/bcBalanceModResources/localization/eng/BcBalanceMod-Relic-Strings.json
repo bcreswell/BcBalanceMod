@@ -13,6 +13,21 @@
       "Gain [E] at the start of your turn. NL Lose 1 potion slot."
     ]
   },
+  "bcBalanceMod:BcAbacus": {
+    "NAME": "The Abacus",
+    "FLAVOR": "\"One...Two...Three...\"",
+    "DESCRIPTIONS": [
+      "Whenever you shuffle your draw pile, gain #b",
+      " #yBlock."
+    ]
+  },
+  "bcBalanceMod:BcHoveringKite": {
+    "NAME": "Hovering Kite",
+    "FLAVOR": "The Kite floats around you in battle, propelled by a mysterious force.",
+    "DESCRIPTIONS": [
+      "The first time you discard a card each turn, gain [E] ."
+    ]
+  },
   "bcBalanceMod:BcBalancingScales": {
     "NAME": "BC Balancing Scales",
     "FLAVOR": "Balance is overrated.",
@@ -25,6 +40,13 @@
     "FLAVOR": "No cost too great.",
     "DESCRIPTIONS": [
       "description"
+    ]
+  },
+  "bcBalanceMod:PowerGlove": {
+    "NAME": "Power Glove",
+    "FLAVOR": "I love the Power Glove. It’s so bad.",
+    "DESCRIPTIONS": [
+      "Start each combat with 1 Strength. NL The first time each turn you play a card that costs 2 or more, gain 1 Energy."
     ]
   },
   "bcBalanceMod:UnbreakableHeart": {
@@ -41,11 +63,39 @@
       "description"
     ]
   },
-  "bcBalanceMod:BcGoldenEye": {
-    "NAME": "Golden Eye",
-    "FLAVOR": "See into the minds of those nearby, predicting their future moves.",
+  "bcBalanceMod:RotaryMechanism": {
+    "NAME": "Rotary Mechanism",
+    "FLAVOR": "Its an old component, but it checks out.",
     "DESCRIPTIONS": [
-      "description"
+      "Up to 3 times per combat: NL Right click to rotate your orbs clockwise."
+    ]
+  },
+  "bcBalanceMod:BcTheAbacus": {
+    "NAME": "The Abacus",
+    "FLAVOR": "\"One...Two...Three...\"",
+    "DESCRIPTIONS": [
+      "Whenever you empty your draw pile, gain #b6 Block"
+    ]
+  },
+  "bcBalanceMod:GoldenFeather": {
+    "NAME": "Golden Feather",
+    "FLAVOR": "A reminder of one's purpose.",
+    "DESCRIPTIONS": [
+      "Once per combat: NL Right click to exit your stance."
+    ]
+  },
+  "bcBalanceMod:PersonalDigitalAssistant": {
+    "NAME": "Personal Digital Assistant",
+    "FLAVOR": "\"Clear my schedule.\"",
+    "DESCRIPTIONS": [
+      "Whenever you Evoke an orb, gain x Block."
+    ]
+  },
+  "bcBalanceMod:BcMelange": {
+    "NAME": "Melange",
+    "FLAVOR": "Mysterious sands from an unknown origin. Smells of cinnamon.",
+    "DESCRIPTIONS": [
+      "At the start of your turn, Scry 3."
     ]
   },
   "bcBalanceMod:BcDreamCatcher": {

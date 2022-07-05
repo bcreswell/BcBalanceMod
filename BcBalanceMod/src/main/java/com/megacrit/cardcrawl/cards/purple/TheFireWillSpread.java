@@ -1,11 +1,13 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.animations.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.monsters.*;
 import com.megacrit.cardcrawl.powers.*;
+import com.megacrit.cardcrawl.powers.watcher.*;
 import com.megacrit.cardcrawl.vfx.combat.*;
 
 public class TheFireWillSpread extends BcPowerCardBase
@@ -16,7 +18,7 @@ public class TheFireWillSpread extends BcPowerCardBase
     @Override
     public String getDisplayName()
     {
-        return "    The Fire Will Spread";
+        return "The Fire Will Spread";
     }
     
     @Override
@@ -28,7 +30,7 @@ public class TheFireWillSpread extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return 2;
     }
     
     @Override
@@ -40,26 +42,30 @@ public class TheFireWillSpread extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 1 : 2;
+        return !upgraded ? 7 : 9;
+    }
+    
+    public int getScryBonus()
+    {
+        return !upgraded ? 2 : 3;
     }
     
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
+    }
+    
+    @Override
+    public boolean getEthereal()
+    {
+        return !upgraded;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (getMagicNumber() == 1)
-        {
-            return "When you Scry, NL a random enemy is damaged for the Scry amount.";
-        }
-        else
-        {
-            return "When you Scry, NL !M! random enemies are damaged for the Scry amount.";
-        }
+        return "+" + getScryBonus() + " to ALL Scrying. NL When you Scry, deal !M! damage to a random enemy 3 times.";
     }
     //endregion
     
@@ -67,6 +73,8 @@ public class TheFireWillSpread extends BcPowerCardBase
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new VFXAction(new ThirdEyeEffect(player.hb.cX, player.hb.cY)));
-        addToBot(new ApplyPowerAction(player, player, new TheFireWillSpreadPower(player, magicNumber),magicNumber));
+        addToBot(new VFXAction(player, new InflameEffect(player), 1.0F));
+        addToBot(new BcApplyPowerAction(new ForesightPower(player, getScryBonus())));
+        addToBot(new BcApplyPowerAction(new TheFireWillSpreadPower(player, magicNumber)));
     }
 }

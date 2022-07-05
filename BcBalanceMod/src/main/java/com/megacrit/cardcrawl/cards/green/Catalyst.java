@@ -64,14 +64,20 @@ public class Catalyst extends BcSkillCardBase
     }
     
     @Override
+    public boolean getExhaust()
+    {
+        return true;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
-        return "Inflict !M! Catalysing Enzyme. NL When your Poison deals damage, the Catalysing Enzyme is consumed to deal extra damage.";
+        return "Inflict !M! Catalysing Enzyme. NL When your Poison deals damage, an equal amount of Catalysing Enzyme is consumed for extra damage.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        this.addToBot(new ApplyPowerAction(monster, player, new CatalysingEnzymePower(monster, player, this.magicNumber), this.magicNumber, AbstractGameAction.AttackEffect.POISON));
+        addToBot(new ApplyPowerAction(monster, player, new CatalysingEnzymePower(monster, magicNumber), magicNumber, AbstractGameAction.AttackEffect.POISON));
     }
 }

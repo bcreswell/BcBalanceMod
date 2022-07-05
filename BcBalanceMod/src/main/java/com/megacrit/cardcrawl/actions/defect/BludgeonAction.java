@@ -3,6 +3,7 @@ package com.megacrit.cardcrawl.actions.defect;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.DamageInfo;
+import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -29,13 +30,21 @@ public class BludgeonAction extends AbstractGameAction
     {
         if (duration == Settings.ACTION_DUR_FASTER && target != null)
         {
+            AbstractPlayer player = AbstractDungeon.player;
             AbstractDungeon.effectList.add(new FlashAtkImgEffect(target.hb.cX, target.hb.cY, AbstractGameAction.AttackEffect.BLUNT_HEAVY));
             
             target.damage(info);
             if (target.isDying || target.currentHealth <= 0)
             {
                 addToBot(new GainEnergyAction(energyGainAmt));
-                addToBot(new DrawCardAction(drawAmt));
+                if ((player.drawPile.size() == 0) && (player.discardPile.size() == 1))
+                {
+                    //dont draw, because it will just draw itself. that 1 card in the discard pile is the bludgeon.
+                }
+                else
+                {
+                    addToBot(new DrawCardAction(drawAmt));
+                }
             }
             
             if (AbstractDungeon.getCurrRoom().monsters.areMonstersBasicallyDead())

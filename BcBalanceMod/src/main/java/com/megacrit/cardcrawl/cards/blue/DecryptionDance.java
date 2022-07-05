@@ -7,7 +7,7 @@ package com.megacrit.cardcrawl.cards.blue;
 
 import bcBalanceMod.BcBalanceMod;
 import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.DecryptionDancePower;
@@ -62,6 +62,6 @@ public class DecryptionDance extends BcPowerCardBase
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new ApplyPowerAction(player, player, new DecryptionDancePower(player), 1));
+        addToBot(new BcApplyPowerAction(new DecryptionDancePower(player, 1)));
     }
 }

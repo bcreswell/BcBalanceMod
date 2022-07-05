@@ -15,14 +15,6 @@ public class NightmarePower extends BcPowerBase
     private static final PowerStrings powerStrings;
     public static final String NAME;
     public static final String[] DESCRIPTIONS;
-    
-    static
-    {
-        powerStrings = CardCrawlGame.languagePack.getPowerStrings("Night Terror");
-        NAME = powerStrings.NAME;
-        DESCRIPTIONS = powerStrings.DESCRIPTIONS;
-    }
-    
     private AbstractCard card;
     
     public NightmarePower(AbstractCreature owner, int cardAmt, AbstractCard copyMe)
@@ -75,7 +67,7 @@ public class NightmarePower extends BcPowerBase
     {
         if (card != null)
         {
-            return DESCRIPTIONS[0] + amount + " " + FontHelper.colorString(card.name, "y") + DESCRIPTIONS[1];
+            return "Create #b" + amount + " " + FontHelper.colorString(card.name, "y") + " cards next turn.";
         }
         else
         {
@@ -87,6 +79,13 @@ public class NightmarePower extends BcPowerBase
     public void atStartOfTurn()
     {
         addToBot(new MakeTempCardInHandAction(card, amount));
-        addToBot(new RemoveSpecificPowerAction(owner, owner, "Night Terror"));
+        addToBot(new RemoveSpecificPowerAction(owner, owner, ID));
+    }
+    
+    static
+    {
+        powerStrings = CardCrawlGame.languagePack.getPowerStrings("Night Terror");
+        NAME = powerStrings.NAME;
+        DESCRIPTIONS = powerStrings.DESCRIPTIONS;
     }
 }

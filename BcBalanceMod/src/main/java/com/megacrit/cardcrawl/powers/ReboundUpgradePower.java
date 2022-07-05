@@ -5,8 +5,8 @@
 
 package com.megacrit.cardcrawl.powers;
 
-import com.megacrit.cardcrawl.actions.common.ReducePowerAction;
-import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.actions.utility.WaitAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -16,48 +16,68 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower.PowerType;
 
-public class ReboundUpgradePower extends AbstractPower
+public class ReboundUpgradePower extends BcPowerBase
 {
+    public static final String POWER_ID = "ReboundUpgradePower";
+    
     public ReboundUpgradePower(AbstractCreature owner, int amount)
     {
-        this.name = "On the Rebound";
-        this.ID = "ReboundUpgrade";
-        this.owner = owner;
-        this.amount = amount;
-        this.updateDescription();
-        this.loadRegion("swivel");
-        this.isTurnBased = true;
-        this.type = PowerType.BUFF;
+        super(owner, amount);
     }
     
-    public void updateDescription()
+    //region parameters
+    @Override
+    public String getDisplayName()
     {
-        if (this.amount > 1)
+        return "On the Rebound";
+    }
+    
+    @Override
+    public String getId()
+    {
+        return POWER_ID;
+    }
+    
+    @Override
+    public String getImagePath()
+    {
+        return "reboundUpgrade32x32.png";
+    }
+    
+    @Override
+    public PowerType getPowerType()
+    {
+        return PowerType.BUFF;
+    }
+    
+    @Override
+    public boolean getCanGoNegative()
+    {
+        return false;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        if (amount == 1)
         {
-            this.description = "Upgrade the next #b" + this.amount + " cards drawn.";
+            return "Upgrade the next card drawn.";
         }
         else
         {
-            this.description = "Upgrade the next card drawn.";
+            return "Upgrade the next #b" + amount + " cards drawn.";
         }
     }
+    //endregion
     
     public void onCardDraw(AbstractCard card)
     {
         if ((amount > 0) && card.canUpgrade())
         {
-            --this.amount;
-            this.flash();
-            
-            card.upgrade();
-            card.superFlash();
-            card.applyPowers();
-            
-            if (amount == 0)
-            {
-                this.addToBot(new RemoveSpecificPowerAction(this.owner, this.owner, this.ID));
-                updateDescription();
-            }
+            amount--;
+            flash();
+            addToBot(new UpgradeSpecificCardAction(card));
+            addToBot(new RemovePowerIfEmptyAction(owner, POWER_ID));
         }
     }
 }

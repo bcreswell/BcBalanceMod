@@ -7,7 +7,7 @@ package com.megacrit.cardcrawl.actions.unique;
 
 import bcBalanceMod.BcUtility;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.*;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.screens.CardRewardScreen;
@@ -25,7 +25,7 @@ public class DiscoveryImprovedAction extends AbstractGameAction
     AbstractCard.CardType cardType;
     AbstractCard.CardRarity cardRarity;
     boolean upgradeCard = false;
-    public ArrayList<String> excludedCardIds = new ArrayList<String>();
+    String generatorId;
     
     public DiscoveryImprovedAction(int choiceCount, boolean makeItFree, boolean upgradeCard, AbstractCard.CardType cardType,
                                    AbstractCard.CardRarity cardRarity)
@@ -35,24 +35,37 @@ public class DiscoveryImprovedAction extends AbstractGameAction
         this.upgradeCard = upgradeCard;
         this.cardType = cardType;
         this.cardRarity = cardRarity;
-        this.actionType = ActionType.CARD_MANIPULATION;
-        this.duration = Settings.ACTION_DUR_FAST;
+        actionType = ActionType.CARD_MANIPULATION;
+        duration = Settings.ACTION_DUR_FAST;
+    }
+    
+    public DiscoveryImprovedAction(int choiceCount, boolean makeItFree, boolean upgradeCard, AbstractCard.CardType cardType,
+                                   AbstractCard.CardRarity cardRarity, String generatorId)
+    {
+        this.choiceCount = choiceCount;
+        this.makeItFree = makeItFree;
+        this.upgradeCard = upgradeCard;
+        this.cardType = cardType;
+        this.cardRarity = cardRarity;
+        this.generatorId = generatorId;
+        actionType = ActionType.CARD_MANIPULATION;
+        duration = Settings.ACTION_DUR_FAST;
     }
     
     public void update()
     {
         if (AbstractDungeon.getMonsters().areMonstersBasicallyDead())
         {
-            this.isDone = true;
+            isDone = true;
         }
-        else if (this.duration == Settings.ACTION_DUR_FAST)
+        else if (duration == Settings.ACTION_DUR_FAST)
         {
-            AbstractDungeon.cardRewardScreen.customCombatOpen(this.generateCardChoices(), CardRewardScreen.TEXT[1], true);
-            this.tickDuration();
+            AbstractDungeon.cardRewardScreen.customCombatOpen(generateCardChoices(), CardRewardScreen.TEXT[1], true);
+            tickDuration();
         }
         else
         {
-            if (!this.retrieveCard)
+            if (!retrieveCard)
             {
                 if (AbstractDungeon.cardRewardScreen.discoveryCard != null)
                 {
@@ -75,56 +88,29 @@ public class DiscoveryImprovedAction extends AbstractGameAction
                     AbstractDungeon.cardRewardScreen.discoveryCard = null;
                 }
                 
-                this.retrieveCard = true;
+                retrieveCard = true;
             }
             
-            this.tickDuration();
+            tickDuration();
         }
     }
     
     private ArrayList<AbstractCard> generateCardChoices()
     {
-        ArrayList<AbstractCard> choices = new ArrayList<AbstractCard>();
+        ArrayList<AbstractCard> choices = BcUtility.getRandomCards(
+                cardRarity,
+                cardType,
+                false,
+                true,
+                false,
+                choiceCount,
+                generatorId);
         
-        while (choices.size() < choiceCount)
+        if (upgradeCard)
         {
-            AbstractCard card = BcUtility.getRandomCard(
-                    cardRarity,
-                    cardType,
-                    false,
-                    AbstractDungeon.cardRng);
-            
-            if (card == null)
+            for(AbstractCard card : choices)
             {
-                continue;
-            }
-    
-            boolean invalidChoice = false;
-            for (String excludedId : excludedCardIds)
-            {
-                if (card.cardID.equals(excludedId))
-                {
-                    invalidChoice = true;
-                    break;
-                }
-            }
-            
-            for (AbstractCard existingCard : choices)
-            {
-                if (existingCard.cardID.equals(card.cardID))
-                {
-                    invalidChoice = true;
-                    break;
-                }
-            }
-            
-            if (!invalidChoice)
-            {
-                if (upgradeCard)
-                {
-                    card.upgrade();
-                }
-                choices.add(card);
+                card.upgrade();
             }
         }
         

@@ -77,7 +77,7 @@ public class LightAsAFeather extends BcAttackCardBase
         }
         else
         {
-            return "Deal !D! damage. NL Shuffle an Insight into your draw pile. NL Gain !M! Mantra.";
+            return "Deal !D! damage. NL Gain !M! Mantra. NL Shuffle an Insight into your draw pile.";
         }
     }
     //endregion
@@ -86,11 +86,12 @@ public class LightAsAFeather extends BcAttackCardBase
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_LIGHT));
-        addToBot(new MakeTempCardInDrawPileAction(cardsToPreview.makeStatEquivalentCopy(), 1, true, true));
         
         if (magicNumber > 0)
         {
-            addToBot(new ApplyPowerAction(player, player, new MantraPower(player, magicNumber), magicNumber));
+            addToBot(new BcApplyPowerAction(new MantraPower(player, magicNumber)));
         }
+        
+        addToBot(new MakeTempCardInDrawPileAction(cardsToPreview.makeStatEquivalentCopy(), 1, true, true));
     }
 }

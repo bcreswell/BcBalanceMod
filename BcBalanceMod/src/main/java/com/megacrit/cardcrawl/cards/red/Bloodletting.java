@@ -1,13 +1,12 @@
 package com.megacrit.cardcrawl.cards.red;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.animations.*;
 import com.megacrit.cardcrawl.actions.common.*;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.*;
+import com.megacrit.cardcrawl.vfx.combat.*;
 
 public class Bloodletting extends BcSkillCardBase
 {
@@ -38,6 +37,12 @@ public class Bloodletting extends BcSkillCardBase
         return CardRarity.COMMON;
     }
     
+    @Override
+    public boolean getEthereal()
+    {
+        return true;
+    }
+    
     public int getHealthLost()
     {
         return 3;
@@ -45,7 +50,7 @@ public class Bloodletting extends BcSkillCardBase
     
     public int getEnergyGained()
     {
-        return 2;
+        return !upgraded ? 2 : 3;
     }
     
     @Override
@@ -53,23 +58,20 @@ public class Bloodletting extends BcSkillCardBase
     {
         if (!upgraded)
         {
-            return "Lose " + getHealthLost() + " HP. NL Gain [R] [R].";
+            return "Sacrifice " + getHealthLost() + " HP. NL Gain [R] [R]. NL Conserve any leftover energy for next turn.";
         }
         else
         {
-            return "Lose " + getHealthLost() + " HP. NL Gain [R] [R]. NL Retain your leftover energy until next turn.";
+            return "Sacrifice " + getHealthLost() + " HP. NL Gain [R] [R] [R]. NL Conserve any leftover energy for next turn.";
         }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
+        addToBot(new VFXAction(new OfferingEffect(), 0.1F));
         addToBot(new LoseHPAction(player, player, getHealthLost()));
         addToBot(new GainEnergyAction(getEnergyGained()));
-        
-        if (upgraded)
-        {
-            addToBot(new ApplyPowerAction(player, player, new ConservePower(player, 1), 1));
-        }
+        addToBot(new BcApplyPowerAction(new ConserveEnergyPower(player, 1)));
     }
 }

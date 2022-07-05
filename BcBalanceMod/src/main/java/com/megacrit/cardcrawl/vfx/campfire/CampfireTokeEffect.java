@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.localization.UIStrings;
+import com.megacrit.cardcrawl.relics.*;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.CampfireUI;
 import com.megacrit.cardcrawl.rooms.RestRoom;
@@ -44,6 +45,8 @@ public class CampfireTokeEffect extends AbstractGameEffect {
             AbstractDungeon.topLevelEffects.add(new PurgeCardEffect(card, (float)(Settings.WIDTH / 2), (float)(Settings.HEIGHT / 2)));
             AbstractDungeon.player.masterDeck.removeCard(card);
             AbstractDungeon.gridSelectScreen.selectedCards.clear();
+    
+            AbstractDungeon.player.heal(BcBalancingScales.TokeHealAmount, true);
         }
         
         if (this.duration < 1.0F && !this.openedScreen) {

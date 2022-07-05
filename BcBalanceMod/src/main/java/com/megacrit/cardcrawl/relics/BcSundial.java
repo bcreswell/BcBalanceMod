@@ -9,9 +9,8 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 public class BcSundial extends AbstractRelic
 {
     public static final String ID = BcBalanceMod.makeID("BcSundial");
-    private static final int NUM_TURNS = 3;
-    private static final int ENERGY_AMT = 2;
-    private static final int CardDrawPerEnergyGain = 20;
+    private static final int ENERGY_AMT = 1;
+    private static final int CardDrawPerEnergyGain = 24;
     
     public BcSundial()
     {
@@ -25,7 +24,7 @@ public class BcSundial extends AbstractRelic
     
     private String setDescription(AbstractPlayer.PlayerClass c)
     {
-        return "Every #b" + CardDrawPerEnergyGain + " cards you draw, gain [E] [E] .";
+        return "Every #b" + CardDrawPerEnergyGain + " cards you draw, NL gain [E] .";
     }
     
     public void onEquip()

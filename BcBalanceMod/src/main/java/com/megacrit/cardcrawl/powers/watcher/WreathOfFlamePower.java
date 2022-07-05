@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
+import com.megacrit.cardcrawl.cards.purple.*;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.PowerStrings;
@@ -14,18 +15,18 @@ import com.megacrit.cardcrawl.stances.*;
 public class WreathOfFlamePower extends AbstractPower
 {
     public static final String POWER_ID = "WreathOfFlamePower";
-    private static final PowerStrings powerStrings;
+    boolean hasAppliedExtraDamage;
     
     public WreathOfFlamePower(AbstractCreature owner, int amount)
     {
-        this.name = "Wreath of Flame";
-        this.ID = POWER_ID;
+        name = "Wreath of Flame";
+        ID = POWER_ID;
         this.owner = owner;
         this.amount = amount;
-        this.updateDescription();
-        this.loadRegion("vigor");
-        this.type = AbstractPower.PowerType.BUFF;
-        this.isTurnBased = false;
+        updateDescription();
+        loadRegion("vigor");
+        type = AbstractPower.PowerType.BUFF;
+        isTurnBased = false;
     }
     
     public void updateDescription()
@@ -39,7 +40,7 @@ public class WreathOfFlamePower extends AbstractPower
         {
             if (type == DamageInfo.DamageType.NORMAL)
             {
-                return damage + (float) this.amount;
+                return damage + (float) amount;
             }
         }
         
@@ -48,18 +49,16 @@ public class WreathOfFlamePower extends AbstractPower
     
     public void onUseCard(AbstractCard card, UseCardAction action)
     {
-        if (BcUtility.isPlayerInStance(WrathStance.STANCE_ID) || BcUtility.isPlayerInStance(DivinityStance.STANCE_ID))
+        //tantrum is a special case were you can start outside wrath/divinity, but you'll be in wrath/divinity by the time the damage is applied
+        if (BcUtility.isPlayerInStance(WrathStance.STANCE_ID) ||
+                    BcUtility.isPlayerInStance(DivinityStance.STANCE_ID) ||
+                    (card.cardID.equals(Tantrum.ID)))
         {
             if (card.type == AbstractCard.CardType.ATTACK)
             {
-                this.flash();
-                this.addToBot(new RemoveSpecificPowerAction(this.owner, this.owner, "Vigor"));
+                flash();
+                addToBot(new RemoveSpecificPowerAction(owner, owner, POWER_ID));
             }
         }
-    }
-    
-    static
-    {
-        powerStrings = CardCrawlGame.languagePack.getPowerStrings("Vigor");
     }
 }

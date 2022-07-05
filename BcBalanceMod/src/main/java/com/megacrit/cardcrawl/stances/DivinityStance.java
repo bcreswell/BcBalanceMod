@@ -63,7 +63,13 @@ public class DivinityStance extends AbstractStance
     
     public void updateDescription()
     {
-        this.description = "Upon entering this #yStance, gain [W] [W] [W] . Attacks deal triple damage. Retain your energy until next turn. Exit this #yStance at the start of your next turn.";
+        this.description = "Upon triggering this #yStance, gain [W] [W] [W] . Attacks deal triple damage. Retain your energy until next turn. Exit this #yStance at the start of your next turn.";
+    }
+    
+    //happens even if you're already in the stance
+    public void onRenteringStance()
+    {
+        AbstractDungeon.actionManager.addToBottom(new GainEnergyAction(3));
     }
     
     public void onEnterStance()
@@ -80,7 +86,7 @@ public class DivinityStance extends AbstractStance
         AbstractDungeon.actionManager.addToBottom(new GainEnergyAction(3));
         
         AbstractPlayer player = AbstractDungeon.player;
-        AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(player, player, new ConservePower(player, 1), 1));
+        AbstractDungeon.actionManager.addToBottom(new BcApplyPowerAction(new ConserveEnergyPower(player, 1)));
     }
     
     public void onExitStance()

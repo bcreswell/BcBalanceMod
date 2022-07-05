@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.orbs;
 
+import bcBalanceMod.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,7 +23,8 @@ import com.megacrit.cardcrawl.vfx.combat.PlasmaOrbActivateEffect;
 import com.megacrit.cardcrawl.vfx.combat.PlasmaOrbPassiveEffect;
 import com.megacrit.cardcrawl.vfx.combat.OrbFlareEffect.OrbFlareColor;
 
-public class Plasma extends AbstractOrb {
+public class Plasma extends AbstractOrb
+{
     public static final String ORB_ID = "Plasma";
     private static final OrbStrings orbString;
     public static final String[] DESC;
@@ -31,8 +33,9 @@ public class Plasma extends AbstractOrb {
     private float vfxIntervalMax = 0.4F;
     private static final float ORB_WAVY_DIST = 0.04F;
     private static final float PI_4 = 12.566371F;
-
-    public Plasma() {
+    
+    public Plasma()
+    {
         this.ID = "Plasma";
         this.img = ImageMaster.ORB_PLASMA;
         this.name = orbString.NAME;
@@ -43,39 +46,49 @@ public class Plasma extends AbstractOrb {
         this.updateDescription();
         this.angle = MathUtils.random(360.0F);
         this.channelAnimTimer = 0.5F;
+        evokeColor = new Color(.9F, .9F, .9F, this.c.a);
+        hidePassiveValue = true;
+        hideEvokeUnlessShown = true;
     }
-
-    public void updateDescription() {
+    
+    public void updateDescription()
+    {
         this.applyFocus();
-        this.description = DESC[0] + DESC[1];
+        this.description = "#yPassive: Start of turn: Gain [B] . NL #yEvoke: Gain [B] [B] . NL Plasma is unaffected by #yFocus.";
     }
-
-    public void onEvoke() {
+    
+    public void onEvoke()
+    {
         AbstractDungeon.actionManager.addToTop(new GainEnergyAction(this.evokeAmount));
     }
-
-    public void onStartOfTurn() {
+    
+    public void onStartOfTurn()
+    {
         AbstractDungeon.actionManager.addToBottom(new VFXAction(new OrbFlareEffect(this, OrbFlareColor.PLASMA), 0.1F));
         AbstractDungeon.actionManager.addToBottom(new GainEnergyAction(this.passiveAmount));
     }
-
-    public void triggerEvokeAnimation() {
+    
+    public void triggerEvokeAnimation()
+    {
         CardCrawlGame.sound.play("ORB_PLASMA_EVOKE", 0.1F);
         AbstractDungeon.effectsQueue.add(new PlasmaOrbActivateEffect(this.cX, this.cY));
     }
-
-    public void updateAnimation() {
+    
+    public void updateAnimation()
+    {
         super.updateAnimation();
         this.angle += Gdx.graphics.getDeltaTime() * 45.0F;
         this.vfxTimer -= Gdx.graphics.getDeltaTime();
-        if (this.vfxTimer < 0.0F) {
+        if (this.vfxTimer < 0.0F)
+        {
             AbstractDungeon.effectList.add(new PlasmaOrbPassiveEffect(this.cX, this.cY));
             this.vfxTimer = MathUtils.random(this.vfxIntervalMin, this.vfxIntervalMax);
         }
-
+        
     }
-
-    public void render(SpriteBatch sb) {
+    
+    public void render(SpriteBatch sb)
+    {
         this.shineColor.a = this.c.a / 2.0F;
         sb.setColor(this.shineColor);
         sb.draw(this.img, this.cX - 48.0F, this.cY - 48.0F + this.bobEffect.y, 48.0F, 48.0F, 96.0F, 96.0F, this.scale + MathUtils.sin(this.angle / 12.566371F) * 0.04F * Settings.scale, this.scale, this.angle, 0, 0, 96, 96, false, false);
@@ -85,23 +98,19 @@ public class Plasma extends AbstractOrb {
         this.renderText(sb);
         this.hb.render(sb);
     }
-
-    protected void renderText(SpriteBatch sb) {
-        if (this.showEvokeValue) {
-            FontHelper.renderFontCentered(sb, FontHelper.cardEnergyFont_L, Integer.toString(this.evokeAmount), this.cX + NUM_X_OFFSET, this.cY + this.bobEffect.y / 2.0F + NUM_Y_OFFSET - 4.0F * Settings.scale, new Color(0.2F, 1.0F, 1.0F, this.c.a), this.fontScale);
-        }
-
-    }
-
-    public void playChannelSFX() {
+    
+    public void playChannelSFX()
+    {
         CardCrawlGame.sound.play("ORB_PLASMA_CHANNEL", 0.1F);
     }
-
-    public AbstractOrb makeCopy() {
+    
+    public AbstractOrb makeCopy()
+    {
         return new Plasma();
     }
-
-    static {
+    
+    static
+    {
         orbString = CardCrawlGame.languagePack.getOrbString("Plasma");
         DESC = orbString.DESCRIPTION;
     }

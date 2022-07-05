@@ -59,7 +59,7 @@ public class PanicButton extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Gain !B! Block. You cannot gain Block from cards for !M! turns.";
+        return "Gain !B! Block. NL You cannot gain Block from cards for !M! turns.";
     }
     //endregion
     

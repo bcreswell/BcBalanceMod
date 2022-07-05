@@ -21,6 +21,12 @@ public class ImprovisedPoison extends  BcAttackCardBase
     }
     
     @Override
+    public CardColor getCardColor()
+    {
+        return CardColor.COLORLESS;
+    }
+    
+    @Override
     public String getImagePath()
     {
         return "green/improvisedPoison.png";
@@ -29,7 +35,7 @@ public class ImprovisedPoison extends  BcAttackCardBase
     @Override
     public int getCost()
     {
-        return 0;
+        return -2;
     }
     
     @Override
@@ -59,7 +65,7 @@ public class ImprovisedPoison extends  BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return JustImprovising.getImprovisedPoison(upgraded);
+        return !upgraded ? 3 : 5;
     }
     
     @Override

@@ -32,9 +32,15 @@ public class Dualcast extends BcSkillCardBase
     }
     
     @Override
-    protected void onInitialized()
+    public int getNumberOfOrbsEvokedDirectly()
     {
-        showEvokeValue = true;
+        return 1;
+    }
+    
+    @Override
+    public int getEvokeIterations()
+    {
+        return 2;
     }
     
     @Override
@@ -77,7 +83,7 @@ public class Dualcast extends BcSkillCardBase
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new AnimateOrbAction(1));
-        addToBot(new EvokeWithoutRemovingOrbAction(1));
+        addToBot(new EvokeWithoutRemovingOrbAction(1, true));
         addToBot(new AnimateOrbAction(1));
         addToBot(new EvokeOrbAction(1));
     }

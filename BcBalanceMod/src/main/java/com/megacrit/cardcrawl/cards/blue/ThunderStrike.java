@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.defect.NewThunderStrikeAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -9,86 +10,96 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.orbs.Lightning;
+
 import java.util.Iterator;
 
-public class ThunderStrike extends AbstractCard {
+public class ThunderStrike extends BcAttackCardBase
+{
     public static final String ID = "Thunder Strike";
-    private static final CardStrings cardStrings;
     
-    public ThunderStrike() {
-        super("Thunder Strike", cardStrings.NAME, "blue/attack/thunder_strike", 3, cardStrings.DESCRIPTION, AbstractCard.CardType.ATTACK, AbstractCard.CardColor.BLUE, AbstractCard.CardRarity.RARE, AbstractCard.CardTarget.ALL_ENEMY);
-        this.baseMagicNumber = 0;
-        this.magicNumber = 0;
-        this.baseDamage = 9;
-        this.tags.add(AbstractCard.CardTags.STRIKE);
+    //region card parameters
+    @Override
+    public String getDisplayName()
+    {
+        return "Thunder Strike";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.baseMagicNumber = 0;
-        Iterator var3 = AbstractDungeon.actionManager.orbsChanneledThisCombat.iterator();
-        
-        while(var3.hasNext()) {
-            AbstractOrb o = (AbstractOrb)var3.next();
-            if (o instanceof Lightning) {
-                ++this.baseMagicNumber;
+    @Override
+    public String getImagePath()
+    {
+        return "blue/attack/thunder_strike";
+    }
+    
+    @Override
+    protected void onInitialized()
+    {
+        tags.add(AbstractCard.CardTags.STRIKE);
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 3;
+    }
+    
+    @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.RARE;
+    }
+    
+    @Override
+    public boolean isAoeAttack()
+    {
+        return true;
+    }
+    
+    @Override
+    public int getDamage()
+    {
+        return !upgraded ? 7 : 10;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage to a random enemy for each Lightning Channeled this combat.";
+    }
+    //endregion
+    
+    int getLightningCount()
+    {
+        int lightningCount = 0;
+        for (AbstractOrb orb : AbstractDungeon.actionManager.orbsChanneledThisCombat)
+        {
+            if (orb instanceof Lightning)
+            {
+                lightningCount++;
             }
         }
         
-        this.magicNumber = this.baseMagicNumber;
+        return lightningCount;
+    }
+    
+    @Override
+    public String getTemporaryExtraDescription(AbstractMonster monster)
+    {
+        return "lightning count: "+ getLightningCount();
+    }
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        int lightningCount = getLightningCount();
         
-        for(int i = 0; i < this.magicNumber; ++i) {
-            this.addToBot(new NewThunderStrikeAction(this));
+        for (int i = 0; i < lightningCount; ++i)
+        {
+            addToBot(new NewThunderStrikeAction(this));
         }
-        
-    }
-    
-    public void applyPowers() {
-        super.applyPowers();
-        this.baseMagicNumber = 0;
-        this.magicNumber = 0;
-        Iterator var1 = AbstractDungeon.actionManager.orbsChanneledThisCombat.iterator();
-        
-        while(var1.hasNext()) {
-            AbstractOrb o = (AbstractOrb)var1.next();
-            if (o instanceof Lightning) {
-                ++this.baseMagicNumber;
-            }
-        }
-        
-        if (this.baseMagicNumber > 0) {
-            this.rawDescription = cardStrings.DESCRIPTION + cardStrings.EXTENDED_DESCRIPTION[0];
-            this.initializeDescription();
-        }
-        
-    }
-    
-    public void onMoveToDiscard() {
-        this.rawDescription = cardStrings.DESCRIPTION;
-        this.initializeDescription();
-    }
-    
-    public void calculateCardDamage(AbstractMonster mo) {
-        super.calculateCardDamage(mo);
-        if (this.baseMagicNumber > 0) {
-            this.rawDescription = cardStrings.DESCRIPTION + cardStrings.EXTENDED_DESCRIPTION[0];
-        }
-        
-        this.initializeDescription();
-    }
-    
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeDamage(3);
-        }
-        
-    }
-    
-    public AbstractCard makeCopy() {
-        return new ThunderStrike();
-    }
-    
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Thunder Strike");
     }
 }

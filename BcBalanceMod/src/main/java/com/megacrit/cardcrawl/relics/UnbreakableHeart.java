@@ -26,13 +26,14 @@ import static bcBalanceMod.BcBalanceMod.makeRelicPath;
 public class UnbreakableHeart extends CustomRelic
 {
     public static final String ID = BcBalanceMod.makeID("UnbreakableHeart");
-    public static final int DamageCap = 35;
+    public static final int DamageCap = 25;
     
     private static final Texture IMG = TextureLoader.getTexture(makeRelicPath("unbreakableHeart.png"));
+    private static final Texture outline = TextureLoader.getTexture(makeRelicOutlinePath("unbreakableHeart.png"));
     
     public UnbreakableHeart()
     {
-        super(ID, IMG, RelicTier.RARE, LandingSound.FLAT);
+        super(ID, IMG, outline, RelicTier.RARE, LandingSound.FLAT);
     }
     
     public String getUpdatedDescription()
@@ -43,6 +44,6 @@ public class UnbreakableHeart extends CustomRelic
     public void atBattleStart()
     {
         AbstractPlayer player = AbstractDungeon.player;
-        addToBot(new ApplyPowerAction(player, player, new UnbreakableHeartPower(player, DamageCap), DamageCap));
+        addToBot(new BcApplyPowerAction(new UnbreakableHeartPower(player, DamageCap)));
     }
 }

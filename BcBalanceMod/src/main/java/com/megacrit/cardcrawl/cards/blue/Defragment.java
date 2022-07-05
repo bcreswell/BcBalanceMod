@@ -61,16 +61,14 @@ public class Defragment extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Remove all NL negative Focus. NL NL Gain !M! Focus.";
+        return "Remove all negative Focus. NL Gain !M! Focus.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         //remove negative focus first
-        int focus = BcUtility.getCurrentFocus();
-        
-        if (focus < 0)
+        if (BcUtility.getCurrentFocus() < 0)
         {
             addToBot(new RemoveSpecificPowerAction(player, player, FocusPower.POWER_ID));
         }

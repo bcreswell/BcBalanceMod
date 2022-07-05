@@ -5,7 +5,8 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
-import com.megacrit.cardcrawl.actions.defect.RedoAction;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.defect.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
@@ -17,38 +18,56 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class Recursion extends AbstractCard {
+public class Recursion extends BcSkillCardBase
+{
     public static final String ID = "Redo";
-    private static final CardStrings cardStrings;
-
-    public Recursion() {
-        super("Redo", cardStrings.NAME, "blue/skill/recursion", 0, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.BLUE, CardRarity.COMMON, CardTarget.SELF);
+    
+    //region card parameters
+    @Override
+    public String getImagePath()
+    {
+        return "blue/skill/recursion";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new RedoAction(this.upgraded));
+    
+    @Override
+    public String getId()
+    {
+        return ID;
     }
-
-    public void upgrade() {
-        if (!this.upgraded)
-        {
-            this.upgradeName();
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.COMMON;
     }
-
-    public AbstractCard makeCopy() {
-        return new Recursion();
+    
+    @Override
+    public int getCost()
+    {
+        return 0;
     }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Redo");
-        if (Settings.language == Settings.GameLanguage.ENG)
-        {
-            //todo: figure out best practice for how to do this.
-            cardStrings.DESCRIPTION = "Evoke your next Orb. NL Channel the Orb that was just Evoked.";
-            cardStrings.UPGRADE_DESCRIPTION = "Evoke your next Orb. NL Channel the Orb that was just Evoked and trigger its passive.";
-        }
+    
+    @Override
+    public int getNumberOfOrbsEvokedDirectly()
+    {
+        return 1;
+    }
+    
+    @Override
+    public boolean getRetain()
+    {
+        return upgraded;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Evoke your next Orb. NL Channel the Orb that was just Evoked.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new RecursionAction(false,true));
     }
 }

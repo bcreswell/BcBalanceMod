@@ -51,7 +51,6 @@ public class Setup extends AbstractCard {
         cardStrings = CardCrawlGame.languagePack.getCardStrings("Setup");
         if (Settings.language == Settings.GameLanguage.ENG)
         {
-            //todo: figure out best practice for how to do this.
             cardStrings.DESCRIPTION = "Put a card from your hand on top of your draw pile. NL It costs 0 until played. Exhaust.";
             cardStrings.UPGRADE_DESCRIPTION = "Put a card from your hand on top of your draw pile. NL It costs 0 until played.";
         }

@@ -71,9 +71,15 @@ public class SeverSoul extends BcAttackCardBase
     }
     
     @Override
+    public boolean getEthereal()
+    {
+        return true;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Exhaust all non-Attack cards. NL Deal !M! to a random target for each card exhausted.";
+        return "Deal !D! damage. NL Exhaust all non-Attack cards, then deal !M! damage to a random target for each card exhausted.";
     }
     //endregion
     

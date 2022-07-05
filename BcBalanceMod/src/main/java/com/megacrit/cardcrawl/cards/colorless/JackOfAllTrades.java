@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.cards.colorless;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.MakeTempCardInHandAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
@@ -18,56 +19,71 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class JackOfAllTrades extends AbstractCard
+public class JackOfAllTrades extends BcSkillCardBase
 {
     public static final String ID = "Jack Of All Trades";
-    private static final CardStrings cardStrings;
     
-    public JackOfAllTrades()
+    //region card parameters
+    @Override
+    public String getImagePath()
     {
-        super("Jack Of All Trades", cardStrings.NAME, "colorless/skill/jack_of_all_trades", 0, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.COLORLESS, CardRarity.UNCOMMON, CardTarget.NONE);
-        this.exhaust = true;
-        this.baseMagicNumber = 2;
-        this.magicNumber = this.baseMagicNumber;
+        return "colorless/skill/jack_of_all_trades";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.UNCOMMON;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 0;
+    }
+    
+    @Override
+    public boolean getExhaust()
+    {
+        return true;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return 2;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        if (!upgraded)
+        {
+            return "Create !M! random colorless cards.";
+        }
+        else
+        {
+            return "Create !M! random upgraded colorless cards.";
+        }
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
     {
         for (int i = 0; i < magicNumber; i++)
         {
-            AbstractCard c = AbstractDungeon.returnTrulyRandomColorlessCardInCombat(AbstractDungeon.cardRandomRng).makeCopy();
-            this.addToBot(new MakeTempCardInHandAction(c, 1));
-            if (this.upgraded)
+            AbstractCard card = AbstractDungeon.returnTrulyRandomColorlessCardInCombat(AbstractDungeon.cardRandomRng).makeCopy();
+            if (upgraded)
             {
-                c.upgrade();
+                card.upgrade();
             }
-        }
-    }
-    
-    public void upgrade()
-    {
-        if (!this.upgraded)
-        {
-            this.upgradeName();
-            //this.upgradeMagicNumber(1);
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
-    }
-    
-    public AbstractCard makeCopy()
-    {
-        return new JackOfAllTrades();
-    }
-    
-    static
-    {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Jack Of All Trades");
-        if (Settings.language == Settings.GameLanguage.ENG)
-        {
-            //todo: figure out best practice for how to do this.
-            cardStrings.DESCRIPTION = "Create !M! random colorless cards. NL Exhaust.";
-            cardStrings.UPGRADE_DESCRIPTION = "Create !M! random upgraded colorless cards. NL Exhaust.";
+            addToBot(new MakeTempCardInHandAction(card, 1));
         }
     }
 }

@@ -1,14 +1,13 @@
 package com.megacrit.cardcrawl.ui.campfire;
 
+import bcBalanceMod.*;
 import com.badlogic.gdx.graphics.*;
-import com.evacipated.cardcrawl.mod.stslib.patches.*;
 import com.megacrit.cardcrawl.cards.*;
 import com.megacrit.cardcrawl.core.*;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.relics.*;
 import com.megacrit.cardcrawl.vfx.campfire.*;
-import com.megacrit.cardcrawl.vfx.combat.*;
 
 public class RitualCampfireOption extends AbstractCampfireOption
 {
@@ -23,7 +22,7 @@ public class RitualCampfireOption extends AbstractCampfireOption
     {
         label = "Ritual";
         usable = active;
-        description = "Lose " + BcBalancingScales.RitualCurseRemovalHpCost + " HP to Remove a Curse.";
+        description = "Sacrifice " + BcUtility.getCurseRemovalSacrificeAmount() + " HP, Remove a Curse, Random Upgrade.";
         img = ritualTexture;
     }
     
@@ -33,7 +32,7 @@ public class RitualCampfireOption extends AbstractCampfireOption
         {
             //bc: had to put the HP loss here. it would crash if it was inside the ritual effect.
             CardCrawlGame.sound.play("BLOOD_SPLAT");
-            AbstractDungeon.player.damage(new DamageInfo(null, BcBalancingScales.RitualCurseRemovalHpCost, DamageInfo.DamageType.HP_LOSS));
+            AbstractDungeon.player.damage(new DamageInfo(null, BcUtility.getCurseRemovalSacrificeAmount(), DamageInfo.DamageType.HP_LOSS));
             
             AbstractDungeon.effectList.add(new CampfireRitualEffect());
         }

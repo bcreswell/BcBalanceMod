@@ -20,9 +20,9 @@ public class LoseStrengthPower extends BcPowerBase
         DESCRIPTIONS = powerStrings.DESCRIPTIONS;
     }
     
-    public LoseStrengthPower(AbstractCreature owner, int newAmount)
+    public LoseStrengthPower(AbstractCreature owner, int amount)
     {
-        super(owner,newAmount);
+        super(owner, amount);
     }
     
     //region card parameters
@@ -41,7 +41,7 @@ public class LoseStrengthPower extends BcPowerBase
     @Override
     public String getImagePath()
     {
-        return "flex";
+        return "strengthDown32x32.png";
     }
     
     @Override
@@ -54,6 +54,12 @@ public class LoseStrengthPower extends BcPowerBase
     public boolean getCanGoNegative()
     {
         return false;
+    }
+    
+    @Override
+    public boolean isAppliedQuietly()
+    {
+        return true;
     }
     
     @Override

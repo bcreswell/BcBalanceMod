@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.cards.red;
 
+import bcBalanceMod.baseCards.*;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
@@ -23,40 +24,62 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.vfx.combat.VerticalAuraEffect;
 
-public class Anger extends AbstractCard {
+public class Anger extends BcAttackCardBase
+{
     public static final String ID = "Anger";
-    private static final CardStrings cardStrings;
-
-    public Anger() {
-        super("Anger", cardStrings.NAME, "red/attack/anger", 0, cardStrings.DESCRIPTION, CardType.ATTACK, CardColor.RED, CardRarity.COMMON, CardTarget.ENEMY);
-        this.baseDamage = 5;
-        this.isEthereal = true;
+    
+    @Override
+    public String getImagePath()
+    {
+        return "red/attack/anger";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new DamageAction(m, new DamageInfo(p, this.damage, this.damageTypeForTurn), AttackEffect.BLUNT_HEAVY));
-        this.addToBot(new VFXAction(p, new VerticalAuraEffect(Color.FIREBRICK, p.hb.cX, p.hb.cY), 0.0F));
-        this.addToBot(new MakeTempCardInDiscardAction(this.makeStatEquivalentCopy(), 1));
+    
+    @Override
+    public String getId()
+    {
+        return ID;
     }
-
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeDamage(2);
-        }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.COMMON;
     }
-
-    public AbstractCard makeCopy() {
-        return new Anger();
+    
+    @Override
+    public int getCost()
+    {
+        return 0;
     }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Anger");
-        if (Settings.language == Settings.GameLanguage.ENG)
-        {
-            //todo: figure out best practice for how to do this.
-            cardStrings.DESCRIPTION = "Ethereal. NL Deal !D! damage. NL Add a copy of this card into your discard pile.";
-            cardStrings.UPGRADE_DESCRIPTION = "Ethereal. NL Deal !D! damage. NL Add a copy of this card into your discard pile.";
-        }
+    
+    @Override
+    public boolean getEthereal()
+    {
+        return true;
+    }
+    
+    @Override
+    public int getDamage()
+    {
+        return !upgraded ? 5 : 8;
+    }
+    
+    @Override
+    public boolean isAoeAttack()
+    {
+        return false;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage. NL Add a copy of this card into your discard pile.";
+    }
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AttackEffect.BLUNT_HEAVY));
+        addToBot(new VFXAction(player, new VerticalAuraEffect(Color.FIREBRICK, player.hb.cX, player.hb.cY), 0.0F));
+        addToBot(new MakeTempCardInDiscardAction(makeStatEquivalentCopy(), 1));
     }
 }

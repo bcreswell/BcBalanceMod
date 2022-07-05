@@ -41,7 +41,7 @@ public class SpikeSlime_M extends AbstractMonster {
         this(x, y, 0, 32);
         if (AbstractDungeon.ascensionLevel >= 7) {
             //this.setHp(29, 34);
-            this.setHp(32, 37);
+            this.setHp(34, 42);
         } else {
             this.setHp(28, 32);
         }

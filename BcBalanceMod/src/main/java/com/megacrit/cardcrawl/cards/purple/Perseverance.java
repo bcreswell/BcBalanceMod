@@ -46,24 +46,30 @@ public class Perseverance extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 5 : 7;
+        return !upgraded ? 3 : 5;
     }
     
     @Override
     public int getMagicNumber()
     {
         //block grown on retained
-        return !upgraded ? 2 : 3;
+        return !upgraded ? 3 : 4;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Gain !B! Block. NL When Retained, increase its Block by !M! this combat.";
     }
     //endregion
     
     public void onRetained()
     {
-        this.upgradeBlock(magicNumber);
+        upgradeBlock(magicNumber);
     }
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        this.addToBot(new GainBlockAction(player, player, block));
+        addToBot(new GainBlockAction(player, player, block));
     }
 }

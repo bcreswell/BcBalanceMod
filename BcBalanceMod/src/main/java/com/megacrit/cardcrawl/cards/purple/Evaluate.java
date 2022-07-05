@@ -50,6 +50,12 @@ public class Evaluate extends BcSkillCardBase
     {
         return CardRarity.COMMON;
     }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Gain !B! Block. NL Shuffle an *Insight into your draw pile.";
+    }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster m)

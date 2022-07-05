@@ -25,6 +25,12 @@ public class ImprovisedDamage extends BcAttackCardBase
     }
     
     @Override
+    public CardColor getCardColor()
+    {
+        return CardColor.COLORLESS;
+    }
+    
+    @Override
     public String getImagePath()
     {
         return "green/improvisedDamage.png";
@@ -57,7 +63,7 @@ public class ImprovisedDamage extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return JustImprovising.getImprovisedDamage(upgraded, null);
+        return !upgraded ? 6 : 10;
     }
     
     @Override

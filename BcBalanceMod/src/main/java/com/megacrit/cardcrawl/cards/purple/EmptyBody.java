@@ -43,13 +43,13 @@ public class EmptyBody extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
     public int getBlock()
     {
-        return !upgraded ? 5 : 10;
+        return !upgraded ? 7 : 11;
     }
     
     @Override
@@ -62,6 +62,7 @@ public class EmptyBody extends BcSkillCardBase
     public void use(AbstractPlayer player, AbstractMonster m)
     {
         addToBot(new GainBlockAction(player, player, block));
+        EmptyBlahAction.preActionDraw();
         addToBot(new EmptyBlahAction());
     }
 }

@@ -64,20 +64,12 @@ public class Exhume extends BcSkillCardBase
     {
         if (!upgraded)
         {
-            return "Put a card from your exhaust pile into your hand.";
+            return "Exhume a card of your choice.";
         }
         else
         {
-            return "Put a card from your exhaust pile into your hand. It costs 1 less.";
+            return "Exhume a card of your choice. It costs 1 less this combat.";
         }
-//        if (getMagicNumber() == 1)
-//        {
-//            return "Put a card from your exhaust pile into your hand.";
-//        }
-//        else
-//        {
-//            return "Put !M! cards from your exhaust pile into your hand.";
-//        }
     }
     //endregion
     

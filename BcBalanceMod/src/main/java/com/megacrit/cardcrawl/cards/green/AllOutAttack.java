@@ -49,7 +49,7 @@ public class AllOutAttack extends AbstractCard
         if (!this.upgraded)
         {
             this.upgradeName();
-            this.upgradeDamage(4);
+            this.upgradeDamage(3);
 
             this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
             this.initializeDescription();
@@ -65,7 +65,6 @@ public class AllOutAttack extends AbstractCard
         cardStrings = CardCrawlGame.languagePack.getCardStrings("All Out Attack");
         if (Settings.language == Settings.GameLanguage.ENG)
         {
-            //todo: figure out best practice for how to do this.
             cardStrings.DESCRIPTION = "Deal !D! damage to ALL enemies. NL Discard 1 card at random.";
             cardStrings.UPGRADE_DESCRIPTION = "Deal !D! damage to ALL enemies. NL Discard 1 card.";
         }

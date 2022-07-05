@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.cards.red;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.unique.WhirlwindAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
@@ -16,33 +17,62 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class Whirlwind extends AbstractCard {
+public class Whirlwind extends BcAttackCardBase
+{
     public static final String ID = "Whirlwind";
-    private static final CardStrings cardStrings;
     
-    public Whirlwind() {
-        super("Whirlwind", cardStrings.NAME, "red/attack/whirlwind", -1, cardStrings.DESCRIPTION, CardType.ATTACK, CardColor.RED, CardRarity.UNCOMMON, CardTarget.ALL_ENEMY);
-        this.baseDamage = 6;
-        this.isMultiDamage = true;
+    //region card parameters
+    @Override
+    public String getDisplayName()
+    {
+        return "Whirlwind";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new WhirlwindAction(p, this.multiDamage, this.damageTypeForTurn, this.freeToPlayOnce, this.energyOnUse));
+    @Override
+    public String getImagePath()
+    {
+        return "red/attack/whirlwind";
     }
     
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeDamage(2);
-        }
-        
+    @Override
+    public int getCost()
+    {
+        return -1;
     }
     
-    public AbstractCard makeCopy() {
-        return new Whirlwind();
+    @Override
+    public String getId()
+    {
+        return ID;
     }
     
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Whirlwind");
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.UNCOMMON;
+    }
+    
+    @Override
+    public boolean isAoeAttack()
+    {
+        return true;
+    }
+    
+    @Override
+    public int getDamage()
+    {
+        return !upgraded ? 6 : 9;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage to ALL enemies X times.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new WhirlwindAction(player, multiDamage, damageTypeForTurn, freeToPlayOnce, energyOnUse));
     }
 }

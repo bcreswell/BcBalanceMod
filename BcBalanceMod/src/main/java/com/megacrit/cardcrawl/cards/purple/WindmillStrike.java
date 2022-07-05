@@ -13,7 +13,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 public class WindmillStrike extends BcAttackCardBase
 {
     public static final String ID = "WindmillStrike";
-    int retainCount = 0;
+    protected int retainCount = 0;
     
     //region card parameters
     @Override
@@ -61,7 +61,7 @@ public class WindmillStrike extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 4 : 5;
+        return !upgraded ? 3 : 4;
     }
     
     public int getAttackCount()
@@ -73,9 +73,18 @@ public class WindmillStrike extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage " + getAttackCount() + " times. NL When Retained, increase the number of attacks by 1.";
+        return "Deal !D! damage " + getAttackCount() + " times. NL When Retained: NL Increase the number of attacks by 1.";
     }
     //endregion
+    
+    @Override
+    public AbstractCard makeStatEquivalentCopy()
+    {
+        WindmillStrike card = (WindmillStrike)super.makeStatEquivalentCopy();
+        card.retainCount = retainCount;
+        
+        return card;
+    }
     
     public void onRetained()
     {

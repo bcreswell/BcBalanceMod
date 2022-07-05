@@ -27,10 +27,11 @@ public class EmptyVessel extends CustomRelic
     public static final String ID = BcBalanceMod.makeID("EmptyVessel");
     
     private static final Texture IMG = TextureLoader.getTexture(makeRelicPath("emptyVessel.png"));
+    private static final Texture outline = TextureLoader.getTexture(makeRelicOutlinePath("emptyVessel.png"));
     
     public EmptyVessel()
     {
-        super(ID, IMG, RelicTier.BOSS, LandingSound.SOLID);
+        super(ID, IMG, outline, RelicTier.BOSS, LandingSound.SOLID);
     }
     
     public String getUpdatedDescription()

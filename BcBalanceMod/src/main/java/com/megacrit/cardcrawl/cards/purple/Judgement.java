@@ -95,31 +95,31 @@ public class Judgement extends BcSkillCardBase
         
         return false;
     }
-    
-    public boolean canUse(AbstractPlayer player, AbstractMonster monster)
-    {
-        if (!super.canUse(player, monster))
-        {
-            return false;
-        }
-        else if ((monster != null) && (monster.currentHealth > getMagicNumber()))
-        {
-            this.cantUseMessage = "Enemy has too much HP.";
-            return false;
-        }
-        
-        return true;
-    }
+//
+//    public boolean canUse(AbstractPlayer player, AbstractMonster monster)
+//    {
+//        if (!super.canUse(player, monster))
+//        {
+//            return false;
+//        }
+//        else if ((monster != null) && (monster.currentHealth > getMagicNumber()))
+//        {
+//            this.cantUseMessage = "Enemy has too much HP.";
+//            return false;
+//        }
+//
+//        return true;
+//    }
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        if (monster != null)
+        if ((monster != null) && (monster.currentHealth <= magicNumber))
         {
             addToBot(new VFXAction(new WeightyImpactEffect(monster.hb.cX, monster.hb.cY, Color.GOLD.cpy())));
             addToBot(new WaitAction(0.8F));
             addToBot(new VFXAction(new GiantTextEffect(monster.hb.cX, monster.hb.cY)));
+            
+            addToBot(new JudgementAction(monster, magicNumber));
         }
-        
-        addToBot(new JudgementAction(monster, magicNumber));
     }
 }

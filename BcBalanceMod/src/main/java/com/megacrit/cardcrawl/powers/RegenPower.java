@@ -39,11 +39,6 @@ public class RegenPower extends AbstractPower
         addToTop(regenAction);
     }
     
-    public void stackPower(int stackAmount)
-    {
-        super.stackPower(stackAmount);
-    }
-    
     static
     {
         powerStrings = CardCrawlGame.languagePack.getPowerStrings("Regeneration");

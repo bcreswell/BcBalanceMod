@@ -26,9 +26,9 @@ public class ColdSnap extends BcAttackCardBase
     }
     
     @Override
-    public void onInitialized()
+    public int getChanneledOrbCount()
     {
-        this.showEvokeOrbCount = 1;
+        return 1;
     }
     
     @Override
@@ -51,6 +51,12 @@ public class ColdSnap extends BcAttackCardBase
     }
     
     @Override
+    public boolean isAoeAttack()
+    {
+        return false;
+    }
+    
+    @Override
     public int getMagicNumber()
     {
         return 1;
@@ -70,20 +76,19 @@ public class ColdSnap extends BcAttackCardBase
     }
     
     @Override
-    public boolean isAoeAttack()
+    public String getBaseDescription()
     {
-        return false;
+        return "Deal !D! damage. Channel !M! Frost.";
     }
     //endregion
     
     public void use(AbstractPlayer p, AbstractMonster m)
     {
-        this.addToBot(new DamageAction(m, new DamageInfo(p, this.damage, this.damageTypeForTurn), AbstractGameAction.AttackEffect.SLASH_HEAVY));
+        addToBot(new DamageAction(m, new DamageInfo(p, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.SLASH_HEAVY));
         
-        for (int i = 0; i < this.magicNumber; ++i)
+        for (int i = 0; i < magicNumber; ++i)
         {
-            this.addToBot(new ChannelAction(new Frost()));
-        }
-        
+            addToBot(new ChannelAction(new Frost()));
+        }        
     }
 }

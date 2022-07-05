@@ -72,6 +72,11 @@ public class PoisonPower extends AbstractPower
             {
                 extraCataDmg = Math.min(amount, catalysingEnzyme.amount);
             }
+            boolean isIntangible = owner.hasPower(IntangiblePower.POWER_ID);
+            if (isIntangible)
+            {
+                extraCataDmg = Math.min(1, extraCataDmg);
+            }
             
             this.flashWithoutSound();
             this.addToBot(new PoisonLoseHpAction(this.owner, this.source, this.amount, AbstractGameAction.AttackEffect.POISON));

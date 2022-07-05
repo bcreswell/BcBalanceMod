@@ -1,12 +1,15 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.*;
-import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
+import com.megacrit.cardcrawl.actions.utility.*;
+import com.megacrit.cardcrawl.actions.watcher.*;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.stances.*;
 
 public class Tantrum extends BcAttackCardBase
 {
@@ -59,22 +62,27 @@ public class Tantrum extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage !M! times. NL Enter Wrath. NL Shuffle this back into your draw pile.";
+        return "Enter Wrath. NL Deal !D! damage !M! times. NL Shuffle this back into your draw pile.";
+//        if (!upgraded)
+//        {
+//            return "Enter Wrath. NL Deal !D! damage !M! times.";
+//        }
+//        else
+//        {
+//            return "Enter Wrath. NL Deal !D! damage !M! times. NL Shuffle this back into your draw pile.";
+//        }
     }
     //endregion
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        for (int i = 0; i < this.magicNumber; ++i)
-        {
-            addToBot(new DamageAction(m, new DamageInfo(p, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_LIGHT));
-        }
+        addToBot(new ChangeStanceAction(WrathStance.STANCE_ID));
+        addToBot(new TantrumAction(this, player, monster, getDamage(), getMagicNumber()));
     
         shuffleBackIntoDrawPile = true;
-        addToBot(new ChangeStanceAction("Wrath"));
-//        if (!BcUtility.getStanceId().equals("Wrath"))
+//        if (upgraded)
 //        {
-//            addToBot(new GainEnergyAction(1));
+//            shuffleBackIntoDrawPile = true;
 //        }
     }
 }

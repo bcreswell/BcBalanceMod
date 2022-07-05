@@ -5,7 +5,8 @@
 
 package com.megacrit.cardcrawl.cards.red;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -62,18 +63,36 @@ public class Ascension extends BcPowerCardBase
     public int getMagicNumber()
     {
         //str per card
-        return !upgraded ? 1 : 2;
+        return 1;
+    }
+    
+    int getInitialHeal()
+    {
+        return !upgraded ? 0 : 6;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "When you lose HP from a card, NL gain !M! Strength. NL When you play an Attack, heal for !M!.";
+        String desc = "When you lose HP from a card, gain !M! Strength. NL When you play an Attack, heal for !M!.";
+        
+        int initialHeal = getInitialHeal();
+        if (initialHeal > 0)
+        {
+            desc = "Heal for " + initialHeal + ". NL " + desc;
+        }
+        
+        return desc;
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster m)
     {
+        if (upgraded)
+        {
+            addToBot(new HealAction(player, player, getInitialHeal()));
+        }
+        
         addToBot(new BcApplyPowerAction(new AscensionPower(player, magicNumber)));
     }
 }

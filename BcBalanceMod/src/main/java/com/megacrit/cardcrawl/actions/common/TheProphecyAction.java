@@ -21,8 +21,9 @@ public class TheProphecyAction extends AbstractGameAction
     
     public TheProphecyAction()
     {
-        this.actionType = ActionType.CARD_MANIPULATION;
-        this.duration = Settings.ACTION_DUR_FAST;
+        actionType = ActionType.CARD_MANIPULATION;
+        duration = Settings.ACTION_DUR_FAST;
+        startDuration = duration;
     }
     
     public void update()
@@ -31,19 +32,28 @@ public class TheProphecyAction extends AbstractGameAction
         
         if (AbstractDungeon.getMonsters().areMonstersBasicallyDead())
         {
-            this.isDone = true;
+            isDone = true;
         }
-        else if (this.duration == Settings.ACTION_DUR_FAST)
+        else if (duration == startDuration) //first update
         {
             allCards.group.addAll(player.hand.group);
             allCards.group.addAll(player.drawPile.group);
             allCards.group.addAll(player.discardPile.group);
-            allCards.shuffle();
+            allCards.sortAlphabetically(true);
+            
+            for (AbstractCard card : allCards.group)
+            {
+                card.isGlowing = false;
+                card.unhover();
+                card.setAngle(0.0F, true);
+                card.lighten(false);
+            }
             
             if (allCards.size() > 0)
             {
-                AbstractDungeon.gridSelectScreen.open(allCards, 1, "Marked by Fate", false);
-            }else
+                AbstractDungeon.gridSelectScreen.open(allCards, 1, "Fates Entangled", false);
+            }
+            else
             {
                 isDone = true;
             }
@@ -52,33 +62,33 @@ public class TheProphecyAction extends AbstractGameAction
         {
             AbstractCard chosenCard = AbstractDungeon.gridSelectScreen.selectedCards.get(0);
             AbstractDungeon.gridSelectScreen.selectedCards.clear();
-    
+            
             TheProphecyPower theProphecyPower = new TheProphecyPower(player, 1);
             theProphecyPower.TheChosenCard = chosenCard;
             theProphecyPower.updateDescription();
-            addToBot(new ApplyPowerAction(player,player,theProphecyPower));
-    
-            if (player.discardPile.size() + player.hand.size() > 0)
-            {
-                for (AbstractRelic r : AbstractDungeon.player.relics)
-                {
-                    r.onShuffle();
-                }
-    
-                while (!player.hand.isEmpty())
-                {
-                    AbstractCard c = player.hand.getRandomCard(true);
-                    player.hand.moveToDeck(c, true);
-                }
-                
-                while (!player.discardPile.isEmpty())
-                {
-                    AbstractCard c = player.discardPile.getRandomCard(true);
-                    player.discardPile.moveToDeck(c, true);
-                }
-            }
+            addToBot(new BcApplyPowerAction(theProphecyPower));
+            
+//            if (player.discardPile.size() + player.hand.size() > 0)
+//            {
+//                for (AbstractRelic r : AbstractDungeon.player.relics)
+//                {
+//                    r.onShuffle();
+//                }
+//
+//                while (!player.hand.isEmpty())
+//                {
+//                    AbstractCard c = player.hand.getRandomCard(true);
+//                    player.hand.moveToDeck(c, true);
+//                }
+//
+//                while (!player.discardPile.isEmpty())
+//                {
+//                    AbstractCard c = player.discardPile.getRandomCard(true);
+//                    player.discardPile.moveToDeck(c, true);
+//                }
+//            }
         }
         
-        this.tickDuration();
+        tickDuration();
     }
 }

@@ -1,6 +1,7 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.watcher.CollectAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.tempCards.Miracle;
@@ -51,21 +52,20 @@ public class Collect extends BcSkillCardBase
     }
     
     @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 1 : 2;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Put a *Miracle into your hand at the start of your next X+1 turns.";
-        }
-        else
-        {
-            return "Put a *Miracle+ into your hand at the start of your next X+1 turns. NL (Master Reality: X+2)";
-        }
+        return "Put a *Miracle into your hand at the start of your next X+" + magicNumber + " turns.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new CollectAction(player, freeToPlayOnce, energyOnUse, upgraded));
+        addToBot(new CollectAction(magicNumber));
     }
 }

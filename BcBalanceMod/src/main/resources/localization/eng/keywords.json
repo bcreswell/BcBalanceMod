@@ -4,7 +4,7 @@
       "NAMES": [
         "artifact"
       ],
-      "DESCRIPTION": "Negates the next debuff."
+      "DESCRIPTION": "Negates the next debuff inflicted by enemies. NL NL (Doesn't negate self inflicted debuffs.)"
     },
     "BLOCK": {
       "NAMES": [
@@ -98,13 +98,6 @@
       ],
       "DESCRIPTION": "Orb: Gains #yBlock."
     },
-    "HIDDEN_SHIV": {
-      "NAMES": [
-        "hidden shiv",
-        "hidden shivs"
-      ],
-      "DESCRIPTION": "Hidden Shivs are stored as a buff. When you deal attack damage, you launch one at the same target. NL Their damage is effected by all the same things as a normal shiv, but they don't count as playing a card."
-    },
     "INNATE": {
       "NAMES": [
         "innate"
@@ -134,7 +127,7 @@
       "NAMES": [
         "lock-on"
       ],
-      "DESCRIPTION": "Lock-On targets receive #b50% more damage from Orbs."
+      "DESCRIPTION": "Increases Lightning Orb damage by 50%. NL Attracts Dark Orbs and increases their damage by 25%."
     },
     "OPENER": {
       "NAMES": [
@@ -162,14 +155,14 @@
 		"retains",
 		"retained"
       ],
-      "DESCRIPTION": "Retained cards are not discarded at the end of turn."
+      "DESCRIPTION": "Retained cards are not discarded at the end of turn. NL Retained #yBlock doesn't expire at the start of your next turn."
     },
     "SHIV": {
       "NAMES": [
         "shiv",
         "shivs"
       ],
-      "DESCRIPTION": "Shivs are #b0 cost Attack cards which Exhaust."
+      "DESCRIPTION": "Shivs are #b0 cost Attack cards which Exhaust. NL NL #yHidden #yShiv is a Buff effect that is consumed like ammo. When you deal attack damage, a Shiv is automatically launched at your target."
     },
     "STATUS": {
       "NAMES": [
@@ -291,7 +284,7 @@
       "NAMES": [
         "divinity"
       ],
-      "DESCRIPTION": "Upon entering this stance, gain [W] [W] [W] . Attacks deal triple damage. Exit this #yStance at the start of your next turn."
+      "DESCRIPTION": "Upon triggering this stance, gain [W] [W] [W] . Attacks deal triple damage. Exit this #yStance at the start of your next turn. Conserve any leftover energy for next turn."
     },
     "PRAYER": {
       "NAMES": [

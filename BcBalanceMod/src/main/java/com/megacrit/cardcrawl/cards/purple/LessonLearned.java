@@ -23,7 +23,7 @@ public class LessonLearned extends BcAttackCardBase
     @Override
     public void onInitialized()
     {
-        this.tags.add(AbstractCard.CardTags.HEALING);
+        tags.add(AbstractCard.CardTags.HEALING);
     }
     
     @Override
@@ -51,9 +51,15 @@ public class LessonLearned extends BcAttackCardBase
     }
     
     @Override
+    public boolean getRetain()
+    {
+        return upgraded;
+    }
+    
+    @Override
     public int getDamage()
     {
-        return !upgraded ? 10 : 13;
+        return 9;
     }
     
     @Override

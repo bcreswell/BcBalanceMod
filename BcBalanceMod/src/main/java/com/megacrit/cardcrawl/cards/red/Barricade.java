@@ -89,9 +89,9 @@ public class Barricade extends BcPowerCardBase
     {
         if (magicNumber > 0)
         {
-            this.addToBot(new GainBlockAction(player, player, magicNumber));
+            addToBot(new GainBlockAction(player, player, magicNumber));
         }
         
-        this.addToBot(new ApplyPowerAction(player, player, new BarricadePower(player)));
+        addToBot(new ApplyPowerAction(player, player, new BarricadePower(player)));
     }
 }

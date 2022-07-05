@@ -58,41 +58,11 @@ public class BcCombustPower extends BcPowerBase
     }
     //endregion
     
-    public void atStartOfTurnPostDraw()
-    {
-        if (!AbstractDungeon.getMonsters().areMonstersBasicallyDead())
-        {
-            //look at the various hellfire stacks and pick the biggest one
-            AbstractPower biggestHellfire = null;
-            for (AbstractPower power : player.powers)
-            {
-                if (power.ID.startsWith(HellfirePower.POWER_ID))
-                {
-                    if ((biggestHellfire == null) || (power.amount > biggestHellfire.amount))
-                    {
-                        biggestHellfire = power;
-                    }
-                }
-            }
-            
-            if ((biggestHellfire != null) && (biggestHellfire.amount >= Combust.CombustThreshold))
-            {
-                biggestHellfire.flash();
-                addToBot(new RemoveSpecificPowerAction(owner, owner, biggestHellfire.ID)); //not POWER_ID, we need the idOffset instance instead
-                addToBot(new DamageAllEnemiesAction(null, DamageInfo.createDamageMatrix(biggestHellfire.amount, true), DamageInfo.DamageType.THORNS, AbstractGameAction.AttackEffect.FIRE));
-            }
-        }
-    }
-    
     public void wasHPLost(DamageInfo info, int damageAmount)
     {
         if (damageAmount > 0)
         {
-            flash();
-            for (int i = 0; i < amount; i++)
-            {
-                addToBot(new BcApplyPowerAction(new HellfirePower(Integer.toString(i), damageAmount)));
-            }
+            addToTop(new BcApplyPowerAction(new HellfirePower(owner, damageAmount * amount)));
         }
     }
 }

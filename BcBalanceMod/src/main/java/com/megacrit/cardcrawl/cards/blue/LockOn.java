@@ -5,11 +5,12 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
-import com.megacrit.cardcrawl.actions.utility.WaitAction;
+import com.megacrit.cardcrawl.actions.utility.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
@@ -26,60 +27,87 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.FocusPower;
 import com.megacrit.cardcrawl.powers.LockOnPower;
 
-public class LockOn extends AbstractCard {
+public class LockOn extends BcAttackCardBase
+{
     public static final String ID = "Lockon";
-    private static final CardStrings cardStrings;
-
-    public LockOn() {
-        super("Lockon", cardStrings.NAME, "blue/attack/lock_on", 1, cardStrings.DESCRIPTION, CardType.ATTACK, CardColor.BLUE, CardRarity.COMMON, CardTarget.ENEMY);
-        this.baseDamage = 7;
-        this.baseMagicNumber = 2;
-        this.magicNumber = this.baseMagicNumber;
+    
+    //region card parameters
+    @Override
+    public String getDisplayName()
+    {
+        return "Bullseye";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new DamageAction(m, new DamageInfo(p, this.damage, this.damageTypeForTurn), AttackEffect.BLUNT_LIGHT));
-        this.addToBot(new ApplyPowerAction(m, p, new LockOnPower(m, this.magicNumber), this.magicNumber));
-
+    
+    @Override
+    public String getImagePath()
+    {
+        return "blue/attack/lock_on";
+    }
+    
+    @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 1;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.UNCOMMON;
+    }
+    
+    @Override
+    public boolean isAoeAttack()
+    {
+        return false;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 2 : 3;
+    }
+    
+    @Override
+    public int getDamage()
+    {
+        return !upgraded ? 7 : 11;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage. NL Inflict !M! Lock-On. NL If you have zero focus, Inflict !M! more.";
+    }
+    
+    @Override
+    public String getFootnote()
+    {
+        return "Attracts #yDark Orbs.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AttackEffect.BLUNT_LIGHT));
+        addToBot(new ApplyPowerAction(monster, player, new LockOnPower(monster, magicNumber), magicNumber));
+        
         if (BcUtility.getCurrentFocus() == 0)
         {
-            this.addToBot(new WaitAction(1F));
-            this.addToBot(new ApplyPowerAction(m, p, new LockOnPower(m, this.magicNumber), this.magicNumber));
+            addToBot(new TrueWaitAction(.3F));
+            addToBot(new ApplyPowerAction(monster, player, new LockOnPower(monster, magicNumber), magicNumber));
         }
     }
-
-    public AbstractCard makeCopy() {
-        return new LockOn();
-    }
-
-    public void triggerOnGlowCheck()
+    
+    @Override
+    public boolean isGlowingGold()
     {
-        this.glowColor = AbstractCard.BLUE_BORDER_GLOW_COLOR.cpy();
-        if (BcUtility.getCurrentFocus() == 0)
-        {
-            this.glowColor = AbstractCard.GOLD_BORDER_GLOW_COLOR.cpy();
-        }
-    }
-
-    public void upgrade()
-    {
-        if (!this.upgraded)
-        {
-            this.upgradeName();
-            this.upgradeDamage(2);
-            this.upgradeMagicNumber(1);
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
-    }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Lockon");
-        if (Settings.language == Settings.GameLanguage.ENG)
-        {
-            //todo: figure out best practice for how to do this.
-            cardStrings.DESCRIPTION = "Deal !D! damage. NL Inflict !M! Lock-On. NL If you have zero Focus, inflict !M! more.";
-            cardStrings.UPGRADE_DESCRIPTION = "Deal !D! damage. NL Inflict !M! Lock-On. NL If you have zero Focus, inflict !M! more.";;
-        }
+        return BcUtility.getCurrentFocus() == 0;
     }
 }

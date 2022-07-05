@@ -1,15 +1,14 @@
 package com.megacrit.cardcrawl.actions.defect;
 
+import bcBalanceMod.*;
 import com.megacrit.cardcrawl.actions.*;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.unique.*;
-import com.megacrit.cardcrawl.actions.utility.SFXAction;
-import com.megacrit.cardcrawl.actions.utility.WaitAction;
-import com.megacrit.cardcrawl.cards.*;
+import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.core.*;
 import com.megacrit.cardcrawl.dungeons.*;
-import com.megacrit.cardcrawl.monsters.*;
+import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.vfx.combat.*;
 
 public class RandomHiddenShivAction extends AbstractGameAction
@@ -22,12 +21,12 @@ public class RandomHiddenShivAction extends AbstractGameAction
     
     public void update()
     {
+        AbstractPlayer player = AbstractDungeon.player;
         target = AbstractDungeon.getMonsters().getRandomMonster(null, true, AbstractDungeon.cardRandomRng);
         
-        if (this.target != null)
+        if (target != null)
         {
-            addToTop(new HiddenShivDamageAction(target, AbstractDungeon.player));
-            addToTop(new VFXAction(new HiddenShivEffect(source, target), HiddenShivEffect.DelayBetweenShivs));
+            addToTop(new HiddenShivFlingAction(target, player));
         }
         
         isDone = true;

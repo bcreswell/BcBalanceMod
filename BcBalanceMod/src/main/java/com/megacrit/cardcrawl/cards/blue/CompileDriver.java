@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.defect.CompileDriverAction;
@@ -10,35 +11,63 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class CompileDriver extends AbstractCard {
+public class CompileDriver extends BcAttackCardBase
+{
     public static final String ID = "Compile Driver";
-    private static final CardStrings cardStrings;
     
-    public CompileDriver() {
-        super("Compile Driver", cardStrings.NAME, "blue/attack/compile_driver", 1, cardStrings.DESCRIPTION, AbstractCard.CardType.ATTACK, AbstractCard.CardColor.BLUE, AbstractCard.CardRarity.UNCOMMON, AbstractCard.CardTarget.ENEMY);
-        this.baseDamage = 7;
-        this.baseMagicNumber = 1;
-        this.magicNumber = this.baseMagicNumber;
+    //region card parameters
+    @Override
+    public String getDisplayName()
+    {
+        return "Compile Driver";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new DamageAction(m, new DamageInfo(p, this.damage, this.damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_LIGHT));
-        this.addToBot(new CompileDriverAction(p, this.magicNumber));
+    @Override
+    public String getImagePath()
+    {
+        return "blue/attack/compile_driver";
     }
     
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeDamage(3);
-        }
-        
+    @Override
+    public int getCost()
+    {
+        return 1;
     }
     
-    public AbstractCard makeCopy() {
-        return new CompileDriver();
+    @Override
+    public String getId()
+    {
+        return ID;
     }
     
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Compile Driver");
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.COMMON;
+    }
+    
+    @Override
+    public boolean isAoeAttack()
+    {
+        return false;
+    }
+    
+    @Override
+    public int getDamage()
+    {
+        return !upgraded ? 7 : 11;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage. NL Draw 1 card for each unique Orb you have.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_LIGHT));
+        addToBot(new CompileDriverAction(player, 1));
     }
 }

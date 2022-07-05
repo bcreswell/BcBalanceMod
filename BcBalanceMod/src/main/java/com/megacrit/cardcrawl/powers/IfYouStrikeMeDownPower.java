@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.powers;
 
+import bcBalanceMod.baseCards.*;
 import bcBalanceMod.util.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -26,28 +27,52 @@ import com.megacrit.cardcrawl.stances.*;
 import com.megacrit.cardcrawl.vfx.*;
 import com.megacrit.cardcrawl.vfx.combat.*;
 
-public class IfYouStrikeMeDownPower extends AbstractPower
+public class IfYouStrikeMeDownPower extends BcPowerBase
 {
     public static final String POWER_ID = "IfYouStrikeMeDownPower";
     
-    private static final Texture smallIcon = TextureLoader.getTexture("bcBalanceModResources/images/powers/ifYouStrikeMeDown35x35.png");
-    private static final Texture largeIcon = TextureLoader.getTexture("bcBalanceModResources/images/powers/ifYouStrikeMeDown84x84.png");
-    
     public IfYouStrikeMeDownPower(AbstractCreature owner, int amount)
     {
-        name = "If You Strike Me Down";
-        ID = POWER_ID;
-        this.owner = owner;
-        this.amount = amount;
-        updateDescription();
-        this.region48 = new TextureAtlas.AtlasRegion(smallIcon, 0, 0, smallIcon.getWidth(), smallIcon.getHeight());
-        this.region128 = new TextureAtlas.AtlasRegion(largeIcon, 0, 0, largeIcon.getWidth(), largeIcon.getHeight());
+        super(owner, amount);
     }
     
-    public void updateDescription()
+    //region parameters
+    @Override
+    public String getDisplayName()
     {
-        description = "If you die: NL Return with " + IfYouStrikeMeDown.getHpToReviveWith() + " HP, NL Gain 1 Intangible, NL and on the next turn, Enter Divinity.";
+        return "If You Strike Me Down";
     }
+    
+    @Override
+    public String getId()
+    {
+        return POWER_ID;
+    }
+    
+    @Override
+    public String getImagePath()
+    {
+        return "ifYouStrikeMeDown32x32.png";
+    }
+    
+    @Override
+    public PowerType getPowerType()
+    {
+        return PowerType.BUFF;
+    }
+    
+    @Override
+    public boolean getCanGoNegative()
+    {
+        return false;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "If you die: NL Return with " + IfYouStrikeMeDown.getHpToReviveWith() + " HP, NL Gain 1 Intangible, NL and on the next turn, Enter Divinity.";
+    }
+    //endregion
     
     public int onAttacked(DamageInfo info, int damageAmount)
     {
@@ -58,13 +83,9 @@ public class IfYouStrikeMeDownPower extends AbstractPower
             player.currentHealth = 0;
             player.heal(IfYouStrikeMeDown.getHpToReviveWith(), true);
             
-            addToTop(new ApplyPowerAction(player, player, new IntangiblePlayerPower(player, 1), 1));
-            addToTop(new ApplyPowerAction(player, player, new DivinityNextTurnPower(player, 1), 1));
+            addToTop(new BcApplyPowerAction(new IntangiblePlayerPower(player, 1)));
+            addToTop(new BcApplyPowerAction(new DivinityNextTurnPower(player, 1)));
             addToTop(new VFXAction(player, new BorderLongFlashEffect(Color.RED), 0.0F, true));
-            
-//            addToBot(new VFXAction(new ThirdEyeEffect(player.hb.cX, player.hb.cY)));
-//            addToBot(new NotStanceCheckAction(NeutralStance.STANCE_ID, new VFXAction(new EmptyStanceEffect(player.hb.cX, player.hb.cY), 0.1F)));
-//            addToBot(new ChangeStanceAction(NeutralStance.STANCE_ID));
             
             if (amount <= 0)
             {

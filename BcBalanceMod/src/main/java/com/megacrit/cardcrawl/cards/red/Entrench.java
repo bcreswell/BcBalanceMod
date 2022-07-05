@@ -5,19 +5,12 @@
 
 package com.megacrit.cardcrawl.cards.red;
 
+import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.unique.DoubleYourBlockAction;
-import com.megacrit.cardcrawl.actions.utility.ExhaustAllEtherealAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardTarget;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardType;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.*;
 
 public class Entrench extends BcSkillCardBase
 {
@@ -33,7 +26,7 @@ public class Entrench extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -57,7 +50,7 @@ public class Entrench extends BcSkillCardBase
     @Override
     public boolean getRetain()
     {
-        return upgraded;
+        return true;
     }
     
     @Override
@@ -65,10 +58,33 @@ public class Entrench extends BcSkillCardBase
     {
         return "Double your Block.";
     }
+    
+    @Override
+    public String getFootnote()
+    {
+        return "Doesn't trigger Juggernaut damage.";
+    }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new DoubleYourBlockAction(player));
+        if (!player.hasPower(NoBlockPower.POWER_ID))
+        {
+            AbstractPower juggernautPower = player.getPower(JuggernautPower.POWER_ID);
+            if (juggernautPower != null)
+            {
+                //the block gain from entrench is just too much w/ juggernaut.
+                ((JuggernautPower)juggernautPower).SkipNextBlockGain = true;
+            }
+            //addBlock instead of GainBlockAction to bypass frail
+            player.addBlock(player.currentBlock);
+            
+            int ghostlyBlock = BcUtility.getPowerAmount(GhostlyBlockPower.POWER_ID);
+            if (ghostlyBlock > 0)
+            {
+                //double ghostly block too
+                addToBot(new BcApplyPowerAction(new GhostlyBlockPower(player, ghostlyBlock)));
+            }
+        }
     }
 }

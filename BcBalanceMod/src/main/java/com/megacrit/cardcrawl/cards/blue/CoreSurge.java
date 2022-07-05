@@ -5,9 +5,9 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
-import com.megacrit.cardcrawl.actions.common.DamageAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
@@ -20,37 +20,75 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.ArtifactPower;
 
-public class CoreSurge extends AbstractCard {
+public class CoreSurge extends BcAttackCardBase
+{
     public static final String ID = "Core Surge";
-    private static final CardStrings cardStrings;
-
-    public CoreSurge() {
-        super("Core Surge", cardStrings.NAME, "blue/attack/core_surge", 1, cardStrings.DESCRIPTION, CardType.ATTACK, CardColor.BLUE, CardRarity.UNCOMMON, CardTarget.ENEMY);
-        this.exhaust = true;
-        this.baseDamage = 9;
-        this.baseMagicNumber = 1;
-        this.magicNumber = this.baseMagicNumber;
+    
+    //region card parameters
+    @Override
+    public String getImagePath()
+    {
+        return "blue/attack/core_surge";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new DamageAction(m, new DamageInfo(p, this.damage, this.damageTypeForTurn), AttackEffect.BLUNT_HEAVY));
-        this.addToBot(new ApplyPowerAction(p, p, new ArtifactPower(p, this.magicNumber), this.magicNumber));
+    
+    @Override
+    public String getId()
+    {
+        return ID;
     }
-
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeDamage(3);
-            this.upgradeMagicNumber(1);
-        }
-
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.UNCOMMON;
     }
-
-    public AbstractCard makeCopy() {
-        return new CoreSurge();
+    
+    @Override
+    public int getCost()
+    {
+        return 1;
     }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Core Surge");
+    
+    @Override
+    public boolean getExhaust()
+    {
+        return true;
+    }
+    
+    @Override
+    public int getDamage()
+    {
+        return !upgraded ? 10 : 15;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 1 : 2;
+    }
+    
+    @Override
+    public boolean isAoeAttack()
+    {
+        return false;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage. NL Gain !M! Artifact.";
+    }
+    
+    @Override
+    public String getFootnote()
+    {
+        return ArtifactPower.CaveatString;
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AttackEffect.BLUNT_HEAVY));
+        addToBot(new BcApplyPowerAction(new ArtifactPower(player, magicNumber)));
     }
 }

@@ -13,13 +13,12 @@ import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.common.DarkOrbEvokeAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.cards.DamageInfo.DamageType;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.core.*;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.localization.OrbStrings;
-import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.vfx.combat.DarkOrbActivateEffect;
 import com.megacrit.cardcrawl.vfx.combat.DarkOrbPassiveEffect;
 import com.megacrit.cardcrawl.vfx.combat.OrbFlareEffect;
@@ -33,6 +32,7 @@ public class Dark extends AbstractOrb
     private static final float ORB_BORDER_SCALE = 1.2F;
     private float vfxTimer = 0.5F;
     private static final float VFX_INTERVAL_TIME = 0.25F;
+    public static final float LockOnMultiplier = 1.25f;
     
     public Dark()
     {
@@ -45,25 +45,27 @@ public class Dark extends AbstractOrb
         this.passiveAmount = this.basePassiveAmount;
         this.updateDescription();
         this.channelAnimTimer = 0.5F;
+        showEvokeInsteadOfPassive = true;
+        evokeColor = new Color(1F, .7F, 1F, c.a);
     }
     
     public void updateDescription()
     {
-        this.applyFocus();
+        applyFocus();
         
         if (Settings.language == Settings.GameLanguage.ENG)
         {
-            this.description = "#yPassive: At the end of turn, increase this Orb's mass by #b" + this.passiveAmount + ". (minimum: "+this.basePassiveAmount+") NL #yEvoke: Deal this orb's mass, #b" + this.evokeAmount + ", as damage to the weakest enemy.";
+            description = "#yMass: " + evokeAmount + " NL #yPassive: At the end of turn, increase this Orb's mass by #b" + passiveAmount + ". (minimum: " + basePassiveAmount + ") NL #yEvoke: Deal this orb's mass as damage to the weakest enemy.";
         }
         else
         {
-            this.description = DESC[0] + this.passiveAmount + DESC[1] + this.evokeAmount + DESC[2] + basePassiveAmount + ".";
+            description = DESC[0] + passiveAmount + DESC[1] + evokeAmount + DESC[2] + basePassiveAmount + ".";
         }
     }
     
     public void onEvoke()
     {
-        AbstractDungeon.actionManager.addToTop(new DarkOrbEvokeAction(new DamageInfo(AbstractDungeon.player, this.evokeAmount, DamageType.THORNS), AttackEffect.FIRE));
+        AbstractDungeon.actionManager.addToTop(new DarkOrbEvokeAction(new DamageInfo(AbstractDungeon.player, this.evokeAmount, DamageType.THORNS), AttackEffect.DARK));
     }
     
     public void onEndOfTurn()
@@ -98,6 +100,16 @@ public class Dark extends AbstractOrb
         }
     }
     
+    public static int applyLockOn(AbstractCreature target, int baseDamage)
+    {
+        if (target.hasPower(LockOnPower.POWER_ID))
+        {
+            return (int) ((float) baseDamage * LockOnMultiplier);
+        }
+        
+        return baseDamage;
+    }
+    
     public void updateAnimation()
     {
         super.updateAnimation();
@@ -122,11 +134,6 @@ public class Dark extends AbstractOrb
         sb.setBlendFunction(770, 771);
         this.renderText(sb);
         this.hb.render(sb);
-    }
-    
-    protected void renderText(SpriteBatch sb)
-    {
-        FontHelper.renderFontCentered(sb, FontHelper.cardEnergyFont_L, Integer.toString(this.evokeAmount), this.cX + NUM_X_OFFSET, this.cY + this.bobEffect.y / 2.0F + NUM_Y_OFFSET, new Color(0.2F, 1.0F, 1.0F, this.c.a), this.fontScale);
     }
     
     public void playChannelSFX()

@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.actions.defect.ChannelAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -9,43 +10,67 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.Frost;
 
-public class Glacier extends AbstractCard {
+public class Glacier extends BcSkillCardBase
+{
     public static final String ID = "Glacier";
-    private static final CardStrings cardStrings;
     
-    public Glacier() {
-        super("Glacier", cardStrings.NAME, "blue/skill/glacier", 2, cardStrings.DESCRIPTION, AbstractCard.CardType.SKILL, AbstractCard.CardColor.BLUE, AbstractCard.CardRarity.COMMON, AbstractCard.CardTarget.SELF);
-        this.showEvokeValue = true;
-        this.showEvokeOrbCount = 2;
-        this.baseMagicNumber = 2;
-        this.magicNumber = this.baseMagicNumber;
-        this.baseBlock = 7;
+    //region card parameters
+    @Override
+    public String getImagePath()
+    {
+        return "blue/skill/glacier";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new GainBlockAction(p, p, this.block));
+    @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
+    public int getChanneledOrbCount()
+    {
+        return getMagicNumber();
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.COMMON;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 2;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return 2;
+    }
+    
+    @Override
+    public int getBlock()
+    {
+        return !upgraded ? 5 : 10;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Gain !B! Block. NL Channel !M! Frost.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new GainBlockAction(player, player, block));
         
-        for(int i = 0; i < this.magicNumber; ++i) {
-            this.addToBot(new ChannelAction(new Frost()));
-        }
-        
-    }
-    
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeBlock(3);
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
-        
-    }
-    
-    public AbstractCard makeCopy() {
-        return new Glacier();
-    }
-    
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Glacier");
+        for (int i = 0; i < magicNumber; i++)
+        {
+            addToBot(new ChannelAction(new Frost()));
+        }        
     }
 }

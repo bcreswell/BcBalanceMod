@@ -1,6 +1,7 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.actions.utility.ScryAction;
@@ -55,21 +56,14 @@ public class ThirdEye extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        int scryAmount = BcUtility.getActualScryAmount(getMagicNumber());
-        return "Gain !B! Block. NL Scry " + scryAmount + ".";
+        return "Gain !B! Block. NL Scry " + BcUtility.getScryString(getMagicNumber()) + ".";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        if (player != null)
-        {
-            addToBot(new VFXAction(new ThirdEyeEffect(player.hb.cX, player.hb.cY)));
-        }
-        
-        int scryAmount = BcUtility.getActualScryAmount(magicNumber);
-        
+        addToBot(new VFXAction(new ThirdEyeEffect(player.hb.cX, player.hb.cY)));
         addToBot(new GainBlockAction(player, player, block));
-        addToBot(new ScryAction(scryAmount));
+        addToBot(new ScryAction(magicNumber));
     }
 }

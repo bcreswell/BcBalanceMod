@@ -40,7 +40,7 @@ public class CrushJoints extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
     }
     
     @Override
@@ -52,13 +52,13 @@ public class CrushJoints extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 7 : 11;
+        return !upgraded ? 6 : 12;
     }
     
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 1 : 2;
+        return 2;
     }
     
     @Override

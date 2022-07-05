@@ -1,6 +1,7 @@
 package com.megacrit.cardcrawl.powers.watcher;
 
 import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -11,33 +12,58 @@ import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.stances.*;
 
-public class VigorPower extends AbstractPower
+public class VigorPower extends BcPowerBase
 {
     public static final String POWER_ID = "Vigor";
-    private static final PowerStrings powerStrings;
     
     public VigorPower(AbstractCreature owner, int amount)
     {
-        this.name = powerStrings.NAME;
-        this.ID = "Vigor";
-        this.owner = owner;
-        this.amount = amount;
-        this.updateDescription();
-        this.loadRegion("vigor");
-        this.type = AbstractPower.PowerType.BUFF;
-        this.isTurnBased = false;
+        super(owner, amount);
     }
     
-    public void updateDescription()
+    //region parameters
+    @Override
+    public String getDisplayName()
     {
-        description = "Your next Attack deals #b" + amount + " additional damage.";
+        return "Akabeko";
     }
+    
+    @Override
+    public String getId()
+    {
+        return POWER_ID;
+    }
+    
+    @Override
+    public String getImagePath()
+    {
+        return "akabeko32x32.png";
+    }
+    
+    @Override
+    public PowerType getPowerType()
+    {
+        return PowerType.BUFF;
+    }
+    
+    @Override
+    public boolean getCanGoNegative()
+    {
+        return false;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Your next Attack deals #b" + amount + " additional damage.";
+    }
+    //endregion
     
     public float atDamageGive(float damage, DamageInfo.DamageType type)
     {
         if (type == DamageInfo.DamageType.NORMAL)
         {
-            return damage + (float) this.amount;
+            return damage + (float)amount;
         }
         
         return damage;
@@ -47,13 +73,8 @@ public class VigorPower extends AbstractPower
     {
         if (card.type == AbstractCard.CardType.ATTACK)
         {
-            this.flash();
-            this.addToBot(new RemoveSpecificPowerAction(this.owner, this.owner, POWER_ID));
+            flash();
+            addToBot(new RemoveSpecificPowerAction(owner, owner, POWER_ID));
         }
-    }
-    
-    static
-    {
-        powerStrings = CardCrawlGame.languagePack.getPowerStrings("Vigor");
     }
 }

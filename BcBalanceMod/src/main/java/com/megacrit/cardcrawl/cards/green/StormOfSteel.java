@@ -21,9 +21,9 @@ public class StormOfSteel extends BcAttackCardBase
     
     //region card parameters
     @Override
-    public void onInitialized()
+    protected void onInitialized()
     {
-        this.cardsToPreview = new Shiv();
+        cardsToPreview = new Shiv();
     }
     
     @Override
@@ -53,20 +53,20 @@ public class StormOfSteel extends BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 3 : 5;
+        return !upgraded ? 5 : 8;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Create !M! *Hidden *Shivs. NL Launch ALL remaining NL *Hidden *Shivs at random targets.";
+        return "Create !M! *Hidden Shivs. NL Launch ALL remaining NL *Hidden Shivs at random targets.";
     }
     
     @Override
-    public String getTemporaryExtraDescription()
+    public String getTemporaryExtraDescription(AbstractMonster monster)
     {
         int shivCount = BcUtility.getPowerAmount(HiddenShivPower.POWER_ID) + getMagicNumber();
-        return "(total: " + shivCount + " shivs)";
+        return "total: " + shivCount + " shivs";
     }
     
     @Override
@@ -90,7 +90,7 @@ public class StormOfSteel extends BcAttackCardBase
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new ApplyPowerAction(player, player, new HiddenShivPower(player, magicNumber), magicNumber));
+        addToBot(new BcApplyPowerAction(new HiddenShivPower(player, magicNumber)));
         addToBot(new StormOfSteelAction(player));
     }
 }

@@ -5,7 +5,9 @@
 
 package com.megacrit.cardcrawl.orbs;
 
+import bcBalanceMod.*;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
@@ -21,17 +23,17 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.ImageMaster;
+import com.megacrit.cardcrawl.helpers.*;
 import com.megacrit.cardcrawl.localization.OrbStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.vfx.combat.LightningEffect;
 import com.megacrit.cardcrawl.vfx.combat.LightningOrbActivateEffect;
 import com.megacrit.cardcrawl.vfx.combat.LightningOrbPassiveEffect;
 import com.megacrit.cardcrawl.vfx.combat.OrbFlareEffect;
 import com.megacrit.cardcrawl.vfx.combat.OrbFlareEffect.OrbFlareColor;
 
-import java.util.Iterator;
+import java.util.*;
 
 public class Lightning extends AbstractOrb
 {
@@ -42,6 +44,7 @@ public class Lightning extends AbstractOrb
     private static final float ORB_WAVY_DIST = 0.05F;
     private static final float PI_4 = 12.566371F;
     private static final float ORB_BORDER_SCALE = 1.2F;
+    public static final float LockOnMultiplier = 1.5f;
     
     public Lightning()
     {
@@ -55,6 +58,7 @@ public class Lightning extends AbstractOrb
         this.updateDescription();
         this.angle = MathUtils.random(360.0F);
         this.channelAnimTimer = 0.5F;
+        evokeColor = new Color(1F, 1F, .6F, c.a);
     }
     
     public void updateDescription()
@@ -108,9 +112,9 @@ public class Lightning extends AbstractOrb
                 speedTime = 0.0F;
             }
             
-            AbstractDungeon.actionManager.addToBottom(new VFXAction(new OrbFlareEffect(this, OrbFlareColor.LIGHTNING), speedTime));
             if (this.passiveAmount > 0)
             {
+                AbstractDungeon.actionManager.addToBottom(new VFXAction(new OrbFlareEffect(this, OrbFlareColor.LIGHTNING), speedTime));
                 AbstractDungeon.actionManager.addToBottom(new LightningOrbEvokeAction(new DamageInfo(AbstractDungeon.player, this.passiveAmount, DamageType.THORNS), true));
             }
         }
@@ -214,6 +218,32 @@ public class Lightning extends AbstractOrb
     public AbstractOrb makeCopy()
     {
         return new Lightning();
+    }
+    
+    public static int applyLockOn(AbstractCreature target, int baseDamage)
+    {
+        if (target.hasPower(LockOnPower.POWER_ID))
+        {
+            return (int) ((float) baseDamage * LockOnMultiplier);
+        }
+        
+        return baseDamage;
+    }
+    
+    public static int[] createDamageMatrix(int baseDamage)
+    {
+        ArrayList<AbstractMonster> monsters = AbstractDungeon.getMonsters().monsters;
+        int[] retVal = new int[monsters.size()];
+        
+        for (int i = 0; i < retVal.length; ++i)
+        {
+            DamageInfo info = new DamageInfo(AbstractDungeon.player, baseDamage);
+            info.output = applyLockOn(monsters.get(i), baseDamage);
+            
+            retVal[i] = info.output;
+        }
+        
+        return retVal;
     }
     
     static

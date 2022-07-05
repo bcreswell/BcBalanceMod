@@ -33,7 +33,7 @@ public class AngerPower extends AbstractPower
     
     public void updateDescription()
     {
-        description = "When the player gains " + EnrageThreshold + " or more Block, NL Gain #b" + amount + " Strength.";
+        description = "When your opponent gains " + EnrageThreshold + " or more Block, Gain #b" + amount + " Strength.";
     }
     
     public int onPlayerGainedBlock(float blockAmount)

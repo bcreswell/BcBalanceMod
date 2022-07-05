@@ -15,19 +15,23 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.PowerTip;
 import com.megacrit.cardcrawl.relics.AbstractRelic.LandingSound;
 import com.megacrit.cardcrawl.relics.AbstractRelic.RelicTier;
+import com.megacrit.cardcrawl.rooms.*;
 
 import static bcBalanceMod.BcBalanceMod.makeRelicPath;
 
 public class BcEctoplasm extends CustomRelic
 {
     public static final String ID = BcBalanceMod.makeID("BcEctoplasm");
-    private static final Texture IMG = TextureLoader.getTexture(makeRelicPath("ectoplasm.png"));
-    
     int previousGold = 0;
     
     public BcEctoplasm()
     {
         super(ID, "ectoplasm.png", RelicTier.BOSS, LandingSound.FLAT);
+        
+        if (AbstractDungeon.player != null)
+        {
+            previousGold = AbstractDungeon.player.gold;
+        }
     }
     
     public String getUpdatedDescription()
@@ -37,7 +41,7 @@ public class BcEctoplasm extends CustomRelic
     
     private String setDescription(PlayerClass c)
     {
-        return "Gain [E] at the start of your turn. NL When you try to pick up a #ygold reward, half of that reward disappears.";
+        return "Gain [E] at the start of your turn. NL When you try to pick up a #ygold reward, half of it disappears.";
     }
     
     public void updateDescription(PlayerClass c)
@@ -47,8 +51,21 @@ public class BcEctoplasm extends CustomRelic
         tips.add(new PowerTip(name, description));
         initializeTips();
     }
+    
     public void onLoseGold()
     {
+        previousGold = AbstractDungeon.player.gold;
+    }
+    
+    public void onEnterRoom(AbstractRoom room)
+    {
+        previousGold = AbstractDungeon.player.gold;
+    }
+    
+    @Override
+    public void onVictory()
+    {
+        super.onVictory();
         previousGold = AbstractDungeon.player.gold;
     }
     

@@ -27,7 +27,7 @@ public class Rage extends AbstractCard {
     private static final CardStrings cardStrings;
 
     public Rage() {
-        super("Rage", cardStrings.NAME, "red/skill/rage", 0, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.RED, CardRarity.UNCOMMON, CardTarget.SELF);
+        super("Rage", cardStrings.NAME, "red/skill/rage", 0, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.RED, CardRarity.COMMON, CardTarget.SELF);
         this.baseMagicNumber = 4;
         this.magicNumber = this.baseMagicNumber;
     }

@@ -10,6 +10,7 @@ import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.animations.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.unique.LimitBreakAction;
+import com.megacrit.cardcrawl.actions.utility.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
@@ -18,10 +19,12 @@ import com.megacrit.cardcrawl.cards.AbstractCard.CardType;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.*;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.vfx.combat.*;
+import com.megacrit.cardcrawl.vfx.stance.*;
 
 public class LimitBreak extends BcSkillCardBase
 {
@@ -53,22 +56,32 @@ public class LimitBreak extends BcSkillCardBase
     }
     
     @Override
-    public boolean getExhaust()
-    {
-        return false;
-    }
-    
-    @Override
     public String getBaseDescription()
     {
         if (!upgraded)
         {
-            return "Double your Strength temporarily.";
+            return "Triple your Strength temporarily.";
         }
         else
         {
-            return "Triple your Strength temporarily.";
+            return "Quadruple your Strength temporarily.";
         }
+    }
+    
+    @Override
+    public String getTemporaryExtraDescription(AbstractMonster monster)
+    {
+        int strengthAmount = BcUtility.getPowerAmount(StrengthPower.POWER_ID);
+        if (!upgraded)
+        {
+            strengthAmount *= 2;
+        }
+        else
+        {
+            strengthAmount *= 3;
+        }
+        
+        return "+"+strengthAmount+" strength";
     }
     //endregion
     
@@ -76,14 +89,31 @@ public class LimitBreak extends BcSkillCardBase
     {
         int strengthAmount = BcUtility.getPowerAmount(StrengthPower.POWER_ID);
         
-        if (upgraded)
+        if (!upgraded)
         {
             strengthAmount *= 2;
         }
-    
+        else
+        {
+            strengthAmount *= 3;
+        }
+        
         if (strengthAmount > 0)
         {
-            addToBot(new VFXAction(player, new InflameEffect(player), 1.0F));
+            addToBot(new SFXAction("ATTACK_PIERCING_WAIL"));
+            for (int i = 0; i < 70; i++)
+            {
+                AbstractDungeon.effectsQueue.add(new LimitBreakParticleEffect(i * .01f, 70, false));
+            }
+            
+            if (upgraded)
+            {
+                for (int i = 0; i < 70; i++)
+                {
+                    AbstractDungeon.effectsQueue.add(new LimitBreakParticleEffect(i * .01f, 200, true));
+                }
+            }
+            
             addToBot(new BcApplyPowerAction(new StrengthPower(player, strengthAmount)));
             addToBot(new BcApplyPowerAction(new LoseStrengthPower(player, strengthAmount)));
         }

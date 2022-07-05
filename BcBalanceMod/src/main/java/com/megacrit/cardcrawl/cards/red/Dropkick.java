@@ -51,7 +51,7 @@ public class Dropkick extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 5 : 8;
+        return !upgraded ? 6 : 10;
     }
     
     @Override

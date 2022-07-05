@@ -6,23 +6,11 @@
 package com.megacrit.cardcrawl.cards.blue;
 
 import bcBalanceMod.BcUtility;
-import bcBalanceMod.*;  import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.defect.ChannelAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardTarget;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardType;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
-import com.megacrit.cardcrawl.orbs.Lightning;
-import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.powers.FocusPower;
 
 public class Chaos extends BcSkillCardBase
 {
@@ -35,15 +23,17 @@ public class Chaos extends BcSkillCardBase
         return "blue/skill/chaos";
     }
     
-    protected void onInitialized()
+    @Override
+    public int getChanneledOrbCount()
     {
-        showEvokeValue = true;
-        showEvokeOrbCount = getMagicNumber();
-    }
-    
-    protected void onUpgraded()
-    {
-        showEvokeOrbCount = magicNumber;
+        if (BcUtility.getCurrentFocus() == 0)
+        {
+            return getMagicNumber() + 1;
+        }
+        else
+        {
+            return getMagicNumber();
+        }
     }
     
     @Override
@@ -83,22 +73,18 @@ public class Chaos extends BcSkillCardBase
             return 2;
         }
     }
-        
+    
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster m)
     {
-        for (int i = 0; i < magicNumber; i++)
-        {
-            addToBot(new ChannelAction(AbstractOrb.getRandomOrb(true)));
-        }
-        
-        if (BcUtility.getCurrentFocus() == 0)
+        int orbsToChannel = getChanneledOrbCount();
+        for (int i = 0; i < orbsToChannel; i++)
         {
             addToBot(new ChannelAction(AbstractOrb.getRandomOrb(true)));
         }

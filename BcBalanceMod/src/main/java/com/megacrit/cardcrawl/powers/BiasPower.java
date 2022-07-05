@@ -66,6 +66,7 @@ public class BiasPower extends BcPowerBase
         {
             amount--;
             addToBot(new BcApplyPowerAction(new FocusPower(owner, -1)));
+            updateDescription();
         }
         
         if (amount == 0)

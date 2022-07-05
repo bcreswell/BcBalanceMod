@@ -7,10 +7,10 @@ import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.*;
 import com.megacrit.cardcrawl.relics.*;
 import com.megacrit.cardcrawl.screens.select.*;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
-import com.megacrit.cardcrawl.vfx.cardManip.PurgeCardEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndObtainEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardBrieflyEffect;
 
@@ -46,15 +46,15 @@ public class BcNeowReward
         String characterName = BcUtility.getCharacterName();
         AbstractCard potentialCurse = BcUtility.getRandomCard(
                 AbstractCard.CardRarity.CURSE,
-                null,
+                AbstractCard.CardType.CURSE,
                 false,
-                BcNeowEvent.rng);
+                false,
+                false);
         
+        ArrayList<String> extraRelicOptions = new ArrayList<>();
         switch (rewardType)
         {
-            case Transform2:
-                rewardDescription = "[ #gTransform 2 #gCards ]";
-                break;
+            //category 1 - Visible, Boring & Modest
             case Upgrade1:
                 rewardDescription = "[ #gUpgrade 1 #gCard ]";
                 break;
@@ -63,63 +63,90 @@ public class BcNeowReward
                 defendsToUpgrade = 1;
                 rewardDescription = "[ #gUpgrade 1 #gStrike #gand 1 #gDefend ]";
                 break;
-            case Pick1Of3UncommonColorlessCards:
-                rewardCardChoices = BcUtility.getRandomCardChoices(
-                        AbstractCard.CardRarity.UNCOMMON,
-                        null,
-                        true,
-                        3,
-                        BcNeowEvent.rng);
-                rewardDescription = "[ #gPick 1 #gof 3 #gUncommon #gColorless #gCards ]";
-                break;
-            case PickAnyColorfulUncommon:
-                rewardDescription = "[ #gPick #gany #g" + characterName + " #gUncommon #gCard ]";
-                break;
-            case ObtainRareColorfulCard:
-                AbstractCard rareCard = BcUtility.getRandomCard(
-                        AbstractCard.CardRarity.RARE,
-                        null,
-                        false,
-                        BcNeowEvent.rng);
-                rewardCards.add(rareCard);
-                rewardDescription = "[ #gObtain #ga #gRare #gCard #g( " + rareCard.name + " #g) ]";
-                break;
             case Obtain100Gold:
                 goldToObtain = 100;
                 rewardDescription = "[ #gObtain 100 #gGold ]";
                 break;
-            case ObtainCommonRelic:
-                rewardRelic = BcUtility.getRandomRelic(AbstractRelic.RelicTier.COMMON);
-                rewardDescription = "[ #gObtain #ga #gCommon #gRelic #g( " + rewardRelic.name + " #g) ]";
+            case PickAnyCharacterCommonOrUncommon:
+                rewardDescription = "[ #gPick #gany #g" + characterName + " Common #gor Uncommon #gCard ]";
                 break;
-            case PrismaticShard:
-                rewardRelic = BcUtility.getRelicCopyFromLibrary(PrismaticShard.ID);
+            
+            //category 2 - Visible & Modest
+            case VisibleCommonRelic:
+                extraRelicOptions.add(PrismaticShard.ID);
+                rewardRelic = BcUtility.getRandomRelic(AbstractRelic.RelicTier.COMMON, extraRelicOptions);
                 rewardDescription = "[ #gObtain #g( " + rewardRelic.name + " #g) ]";
                 break;
-            case CursedPick1Of3RareColorfulCards:
-                rewardCardChoices = BcUtility.getRandomCardChoices(
-                        AbstractCard.CardRarity.RARE,
+            
+            //category 3 - Hidden & Potent
+            case Pick1Of3ColorlessCards:
+                rewardCardChoices = BcUtility.getRandomCards(
                         null,
+                        null,
+                        true,
                         false,
-                        4,
-                        BcNeowEvent.rng);
-                rewardCurse = potentialCurse;
-                rewardDescription = "[ #gPick 1 #gof 4 #gRare #g" + characterName + " #gCards #rand #rbe #rCursed! #r( #l" + rewardCurse.name + " #r) ]";
-                break;
-            case CursedPick1Of3RareColorlessCards:
-                rewardCardChoices = BcUtility.getRandomCardChoices(
-                        AbstractCard.CardRarity.RARE,
-                        null,
                         false,
                         3,
-                        BcNeowEvent.rng);
-                rewardCurse = potentialCurse;
-                rewardDescription = "[ #gPick 1 #gof 3 #gRare #gColorless #gCards #rand #rbe #rCursed! #r( #l" + rewardCurse.name + " #r) ]";
+                        null);
+                rewardDescription = "[ #gPick 1 #gof 3 #gColorless #gCards ]";
                 break;
-            case CursedObtainRareRelic:
-                rewardRelic = BcUtility.getRandomRelic(AbstractRelic.RelicTier.RARE);
+            case Pick1Of3RareNativeCards:
+                rewardCardChoices = BcUtility.getRandomCards(
+                        AbstractCard.CardRarity.RARE,
+                        null,
+                        false,
+                        true,
+                        false,
+                        3,
+                        null);
+                rewardDescription = "[ #gPick 1 #gof 3 #gRare #g" + characterName + " #gCards ]";
+                break;
+            case Pick1Of5ForeignCards:
+                rewardCardChoices = BcUtility.getRandomCards(
+                        AbstractCard.CardRarity.UNCOMMON,
+                        null,
+                        false,
+                        false,
+                        true,
+                        5,
+                        null);
+                rewardDescription = "[ #gPick 1 #gof 5 #gUncommon #gForeign #gCards ]";
+                break;
+            case Transform2:
+                rewardDescription = "[ #gTransform 2 #gCards ]";
+                break;
+            
+            //category 4 - Visible & Potent & Cursed
+            case CursedVisibleRareRelic:
+                extraRelicOptions.add(Orrery.ID);
+                extraRelicOptions.add(ClockworkSouvenir.ID);
+                extraRelicOptions.add(MedicalKit.ID);
+                extraRelicOptions.add(Toolbox.ID);
+                rewardRelic = BcUtility.getRandomRelic(AbstractRelic.RelicTier.RARE, extraRelicOptions);
                 rewardCurse = potentialCurse;
-                rewardDescription = "[ #gObtain #ga #gRare #gRelic ( " + rewardRelic.name + " ) #rand #rbe #rCursed! #r( #l" + rewardCurse.name + " #r) ]";
+                rewardDescription = "[ #gObtain ( " + rewardRelic.name + " ) #rand #rbe #rCursed! #r( #l" + rewardCurse.name + " #r) ]";
+                break;
+            case CursedVisibleRareNativeCard:
+                AbstractCard rareCard = BcUtility.getRandomCard(
+                        AbstractCard.CardRarity.RARE,
+                        null,
+                        false,
+                        true,
+                        false);
+                rewardCards.add(rareCard);
+                rewardCurse = potentialCurse;
+                rewardDescription = "[ #gObtain #g( " + rareCard.name + " #g) #rand #rbe #rCursed! #r( #l" + rewardCurse.name + " #r) ]";
+                break;
+            case CursedVisibleRareColorlessCard:
+                AbstractCard rareColorlessCard = BcUtility.getRandomCard(
+                        AbstractCard.CardRarity.RARE,
+                        null,
+                        true,
+                        false,
+                        false);
+                rewardCards.add(rareColorlessCard);
+                rewardCurse = potentialCurse;
+                rewardDescription = "[ #gObtain #g( " + rareColorlessCard.name + " #g) #rand #rbe #rCursed! #r( #l" + rewardCurse.name + " #r) ]";
                 break;
             case CursedUpgrade2Strikes2Defends:
                 strikesToUpgrade = 2;
@@ -127,27 +154,54 @@ public class BcNeowReward
                 rewardCurse = potentialCurse;
                 rewardDescription = "[ #gUpgrade 2 #gStrikes #gand 2 #gDefends #rand #rbe #rCursed! #r( #l" + rewardCurse.name + " #r) ]";
                 break;
+            
+            //category 5 - Boss Swap
             case NeowsLament:
                 rewardRelic = new NeowsLament();
                 rewardDescription = "[ #gEnemies #gin #gyour #gnext #gthree #gcombats #ghave #g1 #gHP ]";
                 break;
             case BossSwap:
                 relicToLose = AbstractDungeon.player.relics.get(0);
-                rewardRelic = BcUtility.getRandomBossRelic(true);
-                rewardDescription = "[ #rTrade #r( " + relicToLose.name + " #r) #rfor #ga #gBoss #gRelic #g( " + rewardRelic.name + " #g) ]";
+                //extra bias towards pandora's and astrolabe
+                if (BcBalanceMod.alwaysPandoras || (BcNeowEvent.rng.random(0, 10) == 0))
+                {
+                    rewardRelic = RelicLibrary.getRelic(PandorasBox.ID).makeCopy();
+                }
+                else if (BcNeowEvent.rng.random(0, 12) == 0)
+                {
+                    rewardRelic = RelicLibrary.getRelic(Astrolabe.ID).makeCopy();
+                }
+                else
+                {
+                    rewardRelic = BcUtility.getRandomBossRelic(true);
+                }
+                rewardDescription = "[ #gObtain #g( " + rewardRelic.name + " #g) #rand #rLose #r( " + relicToLose.name + " #r) ]";
+                //rewardDescription = "[ #rTrade #r( " + relicToLose.name + " #r) #rfor #ga #gBoss #gRelic #g( " + rewardRelic.name + " #g) ]";
                 break;
         }
     }
     
     public AbstractCard getPreviewCard()
     {
-        if (rewardCurse != null)
+        if (rewardCards.size() == 1)
+        {
+            return rewardCards.get(0);
+        }
+        else if (rewardCurse != null)
         {
             return rewardCurse;
         }
-        else if (rewardCards.size() == 1)
+        else
         {
-            return rewardCards.get(0);
+            return null;
+        }
+    }
+    
+    public AbstractCard getSecondaryPreviewCard()
+    {
+        if ((rewardCards.size() == 1) && (rewardCurse != null))
+        {
+            return rewardCurse;
         }
         else
         {
@@ -162,43 +216,44 @@ public class BcNeowReward
     
     private ArrayList<BcNeowRewardType> getRewardTypesByCategory(int category)
     {
-        
         ArrayList<BcNeowRewardType> neowRewardTypes = new ArrayList<BcNeowRewardType>();
         switch (category)
         {
-            case 0:
-                neowRewardTypes.add(BcNeowRewardType.Transform2);
+            case 0: // Visible, Boring & Modest
                 neowRewardTypes.add(BcNeowRewardType.Upgrade1);
                 neowRewardTypes.add(BcNeowRewardType.Upgrade1Strike1Defend);
-                neowRewardTypes.add(BcNeowRewardType.Pick1Of3UncommonColorlessCards);
-                neowRewardTypes.add(BcNeowRewardType.PickAnyColorfulUncommon);
-                neowRewardTypes.add(BcNeowRewardType.ObtainRareColorfulCard);
                 neowRewardTypes.add(BcNeowRewardType.Obtain100Gold);
+                neowRewardTypes.add(BcNeowRewardType.PickAnyCharacterCommonOrUncommon);
                 break;
-            case 1:
-                neowRewardTypes.add(BcNeowRewardType.ObtainCommonRelic);
-                if (MathUtils.random(0, 10) == 0)
-                {
-                    neowRewardTypes.add(BcNeowRewardType.PrismaticShard);
-                }
+            case 1: // Visible & Modest
+                neowRewardTypes.add(BcNeowRewardType.VisibleCommonRelic);
                 break;
-            case 2:
-                neowRewardTypes.add(BcNeowRewardType.CursedPick1Of3RareColorfulCards);
-                neowRewardTypes.add(BcNeowRewardType.CursedPick1Of3RareColorlessCards);
-                neowRewardTypes.add(BcNeowRewardType.CursedObtainRareRelic);
+            case 2: // Hidden & Potent
+                neowRewardTypes.add(BcNeowRewardType.Pick1Of3ColorlessCards);
+                neowRewardTypes.add(BcNeowRewardType.Pick1Of3RareNativeCards);
+                neowRewardTypes.add(BcNeowRewardType.Pick1Of5ForeignCards);
+                neowRewardTypes.add(BcNeowRewardType.Transform2);
+                break;
+            case 3: // Visible & Potent & Cursed
+                neowRewardTypes.add(BcNeowRewardType.CursedVisibleRareRelic);
+                neowRewardTypes.add(BcNeowRewardType.CursedVisibleRareNativeCard);
+                neowRewardTypes.add(BcNeowRewardType.CursedVisibleRareColorlessCard);
                 neowRewardTypes.add(BcNeowRewardType.CursedUpgrade2Strikes2Defends);
                 break;
-            case 3:
-                //if you didn't make it to the act1 boss: neow's lament, otherwise: boss swap.
-                if ((Settings.isStandardRun() || (Settings.isEndless && AbstractDungeon.floorNum <= 1)) &&
-                            (CardCrawlGame.playerPref.getInteger(AbstractDungeon.player.chosenClass.name() + "_SPIRITS", 0) == 0))
-                {
-                    neowRewardTypes.add(BcNeowRewardType.NeowsLament);
-                }
-                else
-                {
-                    neowRewardTypes.add(BcNeowRewardType.BossSwap);
-                }
+            case 4: // Boss Swap
+                neowRewardTypes.add(BcNeowRewardType.BossSwap);
+                
+//                //if you didn't make it to the act1 boss: neow's lament, otherwise: boss swap.
+//                if ((Settings.isStandardRun() || (Settings.isEndless && AbstractDungeon.floorNum <= 1)) &&
+//                            (CardCrawlGame.playerPref.getInteger(AbstractDungeon.player.chosenClass.name() + "_SPIRITS", 0) == 0))
+//                {
+//                    //neowRewardTypes.add(BcNeowRewardType.BossSwap);
+//                    neowRewardTypes.add(BcNeowRewardType.NeowsLament);
+//                }
+//                else
+//                {
+//                    neowRewardTypes.add(BcNeowRewardType.BossSwap);
+//                }
                 break;
         }
         
@@ -237,10 +292,29 @@ public class BcNeowReward
                             false,
                             false);
                     break;
-                case PickAnyColorfulUncommon:
+                case PickAnyCharacterCommonOrUncommon:
                     rewardState = BcNeowRewardState.ChoosingCards;
                     CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-                    group.group.addAll(BcUtility.getAllCardsByRarity(AbstractCard.CardRarity.UNCOMMON));
+                    group.group.addAll(
+                            BcUtility.getAllPossibleCards(
+                                    AbstractCard.CardRarity.COMMON,
+                                    null,
+                                    null,
+                                    false,
+                                    true,
+                                    false,
+                                    null).group);
+                    group.group.addAll(
+                            BcUtility.getAllPossibleCards(
+                                    AbstractCard.CardRarity.UNCOMMON,
+                                    null,
+                                    null,
+                                    false,
+                                    true,
+                                    false,
+                                    null).group);
+                    group.sortAlphabetically(true);
+                    
                     selectScreen.open(
                             group,
                             1,
@@ -275,7 +349,7 @@ public class BcNeowReward
                             AbstractDungeon.topLevelEffects.add(new ShowCardBrieflyEffect(card.makeStatEquivalentCopy()));
                             AbstractDungeon.topLevelEffects.add(new UpgradeShineEffect((float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F));
                             break;
-                        case PickAnyColorfulUncommon:
+                        case PickAnyCharacterCommonOrUncommon:
                             rewardCards.add(card);
                             break;
                     }
@@ -388,7 +462,19 @@ public class BcNeowReward
         }
         else if (rewardState == BcNeowRewardState.RewardComplete)
         {
-            //nada
+            if ((AbstractDungeon.player.chosenClass != AbstractPlayer.PlayerClass.DEFECT) &&
+                        (AbstractDungeon.player.masterMaxOrbs == 0))
+            {
+                for (AbstractCard cardToAdd : rewardCards)
+                {
+                    if (cardToAdd.color == AbstractCard.CardColor.BLUE)
+                    {
+                        //give player an orb slot just in case
+                        AbstractDungeon.player.masterMaxOrbs = 1;
+                        break;
+                    }
+                }
+            }
         }
     }
     
@@ -402,19 +488,23 @@ public class BcNeowReward
     
     public static enum BcNeowRewardType
     {
-        Transform2,
+        //category 1 - Visible & Modest
         Upgrade1,
         Upgrade1Strike1Defend,
-        Pick1Of3UncommonColorlessCards,
-        PickAnyColorfulUncommon,
-        ObtainRareColorfulCard,
         Obtain100Gold,
-        ObtainCommonRelic,
-        PrismaticShard, //1 in 40 chance
-        CursedPick1Of3RareColorfulCards,
-        CursedPick1Of3RareColorlessCards,
-        CursedObtainRareRelic,
+        VisibleCommonRelic,
+        PickAnyCharacterCommonOrUncommon,
+        //category 2 - Hidden & Potent
+        Pick1Of3ColorlessCards, //any rarity
+        Pick1Of3RareNativeCards,
+        Pick1Of5ForeignCards,
+        Transform2,
+        //category 3 - Curse & Visible & Potent
+        CursedVisibleRareRelic,
+        CursedVisibleRareNativeCard,
+        CursedVisibleRareColorlessCard,
         CursedUpgrade2Strikes2Defends,
+        //category 4 - Boss Swap
         NeowsLament,
         BossSwap
     }

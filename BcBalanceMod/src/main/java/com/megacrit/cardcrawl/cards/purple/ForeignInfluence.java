@@ -8,7 +8,8 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class ForeignInfluence extends BcSkillCardBase
+public class
+ForeignInfluence extends BcSkillCardBase
 {
     public static final String ID = "ForeignInfluence";
     
@@ -44,15 +45,20 @@ public class ForeignInfluence extends BcSkillCardBase
     }
     
     @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 3 : 4;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
-        return "Choose 1 of 3 Attacks of a different color to create. NL It costs zero this turn.";
+        return "Choose 1 of !M! Foreign Attacks cards to create. NL It costs zero this turn.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        //intentionally not passing upgraded in
-        addToBot(new ForeignInfluenceAction(false));
+        addToBot(new ForeignInfluenceAction(magicNumber));
     }
 }

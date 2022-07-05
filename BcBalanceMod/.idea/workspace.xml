@@ -26,14 +26,18 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/powers/AbstractPower.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/cards/CardGroup.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/cards/blue/Fission.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/powers/AbstractPower.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/cards/purple/PressurePoints.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../../../Program Files (x86)/Steam/steamapps/common/SlayTheSpire/desktop-1.0.jar!/localization/eng/powers.json" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/actions/watcher/TriggerMarksAction.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../../../Program Files (x86)/Steam/steamapps/common/SlayTheSpire/desktop-1.0.jar!/localization/eng/relics.json" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/actions/defect/FissionAction.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$PROJECT_DIR$/../../../Program Files/AdoptOpenJDK/jdk-8.0.282.8-hotspot/src.zip!/java/util/ArrayList.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$PROJECT_DIR$/../../../Program Files/AdoptOpenJDK/jdk-8.0.282.8-hotspot/src.zip!/java/util/UUID.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$PROJECT_DIR$/../../../Program Files (x86)/Steam/steamapps/common/SlayTheSpire/desktop-1.0.jar!/localization/eng/cards.json" root0="SKIP_INSPECTION" />
     <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/cards/AbstractCard.java" root0="SKIP_INSPECTION" />
-    <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/cards/purple/PressurePoints.java" root0="SKIP_INSPECTION" />
-    <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/actions/watcher/TriggerMarksAction.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -54,11 +58,12 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="advanced.settings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\SourceCode\BcBalanceMod (spire)\BcBalanceMod\src\main\resources\localization\eng" />
+      <recent name="C:\SourceCode\BcBalanceMod (spire)\BcBalanceMod\src\main\resources\bcBalanceModResources\localization\eng" />
       <recent name="C:\SourceCode\BcBalanceMod (spire)\BcBalanceMod\src\main\resources\bcBalanceModResources\images\cards" />
     </key>
   </component>
@@ -104,22 +109,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/potions/Elixir.java</url>
-          <line>42</line>
+          <line>41</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/powers/HelloWorldPower.java</url>
-          <line>53</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/actions/defect/RecycleAction.java</url>
-          <line>37</line>
+          <line>32</line>
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/powers/DecryptionDancePower.java</url>
-          <line>66</line>
+          <line>69</line>
           <option name="timeStamp" value="52" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -129,13 +129,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/bcBalanceMod/BcBalanceMod.java</url>
-          <line>392</line>
+          <line>415</line>
           <option name="timeStamp" value="68" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/cards/blue/Turbo.java</url>
-          <line>29</line>
-          <option name="timeStamp" value="78" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/cards/colorless/Mayhem.java</url>
@@ -143,19 +138,14 @@
           <option name="timeStamp" value="79" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/actions/common/DrawFromDiscardAction.java</url>
-          <line>17</line>
+          <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/actions/common/RetrieveRandomCardsAction.java</url>
+          <line>21</line>
           <option name="timeStamp" value="80" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/neow/BcNeowReward.java</url>
-          <line>422</line>
+          <line>510</line>
           <option name="timeStamp" value="98" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/cards/blue/Supermassive.java</url>
-          <line>79</line>
-          <option name="timeStamp" value="125" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/cards/red/TheHunger.java</url>
@@ -163,29 +153,34 @@
           <option name="timeStamp" value="141" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/actions/common/EmptyDeckShuffleAction.java</url>
-          <line>23</line>
-          <option name="timeStamp" value="171" />
+          <url>jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/potions/AbstractPotion.java</url>
+          <line>561</line>
+          <option name="timeStamp" value="213" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/screens/select/GridCardSelectScreen.java</url>
+          <line>529</line>
+          <option name="timeStamp" value="218" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/localization/LocalizedStrings.java</url>
-          <line>316</line>
-          <option name="timeStamp" value="173" />
+          <line>331</line>
+          <option name="timeStamp" value="225" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/screens/select/GridCardSelectScreen.java</url>
-          <line>110</line>
-          <option name="timeStamp" value="193" />
+          <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/actions/common/DrawCardAction.java</url>
+          <line>166</line>
+          <option name="timeStamp" value="232" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/actions/common/BcApplyPowerAction.java</url>
-          <line>366</line>
-          <option name="timeStamp" value="199" />
+          <url>jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/badlogic/gdx/graphics/g2d/BitmapFont.java</url>
+          <line>632</line>
+          <option name="timeStamp" value="243" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/actions/common/HauntedWhispersAction.java</url>
-          <line>84</line>
-          <option name="timeStamp" value="202" />
+          <url>jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/badlogic/gdx/graphics/g2d/BitmapFont.java</url>
+          <line>625</line>
+          <option name="timeStamp" value="244" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>jar://$PROJECT_DIR$/../../../Program Files (x86)/Steam/steamapps/common/SlayTheSpire/desktop-1.0.jar!/com/megacrit/cardcrawl/monsters/AbstractMonster.class</url>
@@ -201,6 +196,7 @@
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="com.megacrit.cardcrawl.actions.common.DamageAction" memberName="info" />
+        <PinnedItemInfo parentTag="com.megacrit.cardcrawl.localization.KeywordStrings" memberName="TEXT" />
       </pinned-members>
     </pin-to-top-manager>
     <watches-manager>

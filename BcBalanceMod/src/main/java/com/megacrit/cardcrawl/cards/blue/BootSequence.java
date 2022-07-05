@@ -1,7 +1,7 @@
 package com.megacrit.cardcrawl.cards.blue;
 
 import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.GainBlockAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -40,7 +40,7 @@ public class BootSequence extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
     }
     
     @Override
@@ -58,18 +58,30 @@ public class BootSequence extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 9 : 13;
+        return !upgraded ? 10 : 12;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Gain !B! Block.";
+        if (!upgraded)
+        {
+            return "Gain !B! Block.";
+        }
+        else
+        {
+            return "Gain !B! Block. NL Draw a card.";
+        }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new GainBlockAction(player, player, block));
+        
+        if (upgraded)
+        {
+            addToBot(new DrawCardAction(1));
+        }
     }
 }

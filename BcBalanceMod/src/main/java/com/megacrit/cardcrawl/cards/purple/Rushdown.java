@@ -1,7 +1,8 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -23,7 +24,7 @@ public class Rushdown extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return 0;
     }
     
     @Override
@@ -41,18 +42,25 @@ public class Rushdown extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return 1;
+        return !upgraded ? 1 : 2;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Whenever you enter Wrath or Divinity, draw a card.";
+        if (magicNumber == 1)
+        {
+            return "Whenever you enter *Wrath or *Divinity, draw a card.";
+        }
+        else
+        {
+            return "Whenever you enter *Wrath or *Divinity, draw !M! cards.";
+        }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new ApplyPowerAction(player, player, new RushdownPower(player, magicNumber), magicNumber));
+        addToBot(new BcApplyPowerAction(new RushdownPower(player, magicNumber)));
     }
 }

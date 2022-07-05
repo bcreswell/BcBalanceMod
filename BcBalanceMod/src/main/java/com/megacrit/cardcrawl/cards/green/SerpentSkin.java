@@ -6,10 +6,9 @@
 package com.megacrit.cardcrawl.cards.green;
 
 import basemod.abstracts.CustomCard;
-import bcBalanceMod.BcBalanceMod;
-import com.megacrit.cardcrawl.actions.common.ChooseOneCard;
-import com.megacrit.cardcrawl.actions.common.DrawCardAction;
-import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.watcher.ChooseOneAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
@@ -38,71 +37,111 @@ import java.util.Iterator;
 
 import static bcBalanceMod.BcBalanceMod.makeCardPath;
 
-public class SerpentSkin extends CustomCard
+public class SerpentSkin extends BcSkillCardBase
 {
     public static final String ID = BcBalanceMod.makeID("SerpentSkin");
-    private static final CardStrings cardStrings;
     
-    public SerpentSkin()
+    //region card parameters
+    @Override
+    public String getDisplayName()
     {
-        super(
-                ID,
-                cardStrings.NAME,
-                makeCardPath("green/serpentSkin.png"),
-                1,
-                cardStrings.DESCRIPTION,
-                CardType.SKILL,
-                CardColor.GREEN,
-                CardRarity.UNCOMMON,
-                CardTarget.SELF);
-        
-        this.selfRetain = true;
-        this.exhaust = true;
-    }
-    public void use(AbstractPlayer p, AbstractMonster m)
-    {
-        AbstractPower weak = AbstractDungeon.player.getPower(WeakPower.POWER_ID);
-        if (weak != null)
-        {
-            this.addToBot(new RemoveSpecificPowerAction(p, p, WeakPower.POWER_ID));
-        }
-        
-        AbstractPower frail = AbstractDungeon.player.getPower(FrailPower.POWER_ID);
-        if (frail != null)
-        {
-            this.addToBot(new RemoveSpecificPowerAction(p, p, FrailPower.POWER_ID));
-        }
+        return "Serpent Skin";
     }
     
-    public void triggerOnGlowCheck()
+    @Override
+    public String getImagePath()
     {
-        this.glowColor = AbstractCard.BLUE_BORDER_GLOW_COLOR.cpy();
-        
-        AbstractPower weak = AbstractDungeon.player.getPower(WeakPower.POWER_ID);
-        AbstractPower frail = AbstractDungeon.player.getPower(FrailPower.POWER_ID);
-        
-        if ((weak != null) || (frail != null))
-        {
-            this.glowColor = AbstractCard.GOLD_BORDER_GLOW_COLOR.cpy();
-        }
+        return "green/serpentSkin.png";
     }
     
-    public void upgrade()
+    @Override
+    public String getId()
     {
-        if (!this.upgraded)
-        {
-            this.upgradeName();
-            this.upgradeBaseCost(0);
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
+        return ID;
     }
     
-    static
+    @Override
+    public CardRarity getCardRarity()
     {
-        cardStrings = new CardStrings();
-        cardStrings.NAME = " Serpent Skin";
-        cardStrings.DESCRIPTION = "Retain. NL Shed ALL NL Weak and Frail. NL Exhaust.";
-        cardStrings.UPGRADE_DESCRIPTION = "Retain. NL Shed ALL NL Weak and Frail. NL Exhaust.";
+        return CardRarity.UNCOMMON;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 0;
+    }
+    
+    @Override
+    public boolean getRetain()
+    {
+        return true;
+    }
+    
+    @Override
+    public boolean getExhaust()
+    {
+        return true;
+    }
+    
+    @Override
+    public boolean getInnate()
+    {
+        return upgraded;
+    }
+    
+    //    @Override
+//    public int getMagicNumber()
+//    {
+//        return !upgraded ? 0 : 2;
+//    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        if (!upgraded)
+        {
+            return "Shed ALL Weak and Frail.";
+        }
+        else
+        {
+            return "Shed ALL Weak and Frail. NL Draw a card.";
+        }
+    }
+    //endregion
+    
+    @Override
+    public boolean isGlowingGold()
+    {
+        AbstractPlayer player = AbstractDungeon.player;
+        
+        return player.hasPower(WeakPower.POWER_ID) || player.hasPower(FrailPower.POWER_ID);
+    }
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        int weakAmount = BcUtility.getPowerAmount(WeakPower.POWER_ID);
+        int frailAmount = BcUtility.getPowerAmount(FrailPower.POWER_ID);
+        int blockToGain = (weakAmount + frailAmount) * magicNumber;
+        
+        if (weakAmount > 0)
+        {
+            addToBot(new RemoveSpecificPowerAction(player, player, WeakPower.POWER_ID));
+        }
+        
+        if (frailAmount > 0)
+        {
+            addToBot(new RemoveSpecificPowerAction(player, player, FrailPower.POWER_ID));
+        }
+
+        if (upgraded)
+        {
+            addToBot(new DrawCardAction(1));
+        }
+        
+//        if (blockToGain > 0)
+//        {
+//            addToBot(new GainBlockAction(player, player, blockToGain));
+//        }
     }
 }

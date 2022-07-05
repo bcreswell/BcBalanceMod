@@ -33,19 +33,8 @@ public class BladeOfLegendAction extends AbstractGameAction
         if (target != null)
         {
             card.calculateCardDamage((AbstractMonster) target);
-            
-            if (AbstractGameAction.AttackEffect.LIGHTNING == effect)
-            {
-                addToTop(new DamageAction(target, new DamageInfo(AbstractDungeon.player, card.damage, card.damageTypeForTurn), AbstractGameAction.AttackEffect.NONE));
-                addToTop(new SFXAction("ORB_LIGHTNING_EVOKE", 0.1F));
-                addToTop(new VFXAction(new LightningEffect(target.hb.cX, target.hb.cY)));
-            }
-            else
-            {
-//                addToTop(new BcApplyPowerAction(target, new VulnerablePower(target, 1, false)));
-//                addToTop(new BcApplyPowerAction(target, new WeakPower(target, 1, false)));
-                addToTop(new DamageAction(target, new DamageInfo(AbstractDungeon.player, card.damage, card.damageTypeForTurn), effect));
-            }
+    
+            addToTop(new DamageAction(target, new DamageInfo(AbstractDungeon.player, card.damage, card.damageTypeForTurn), effect));
         }
         
         isDone = true;

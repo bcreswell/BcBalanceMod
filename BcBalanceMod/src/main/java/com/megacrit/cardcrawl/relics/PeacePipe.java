@@ -20,7 +20,7 @@ public class PeacePipe extends AbstractRelic
     
     public String getUpdatedDescription()
     {
-        return "You can now remove cards from your deck at Rest Sites. NL You can also remove curses without losing HP.";
+        return "You can now remove cards or curses from your deck at Rest Sites to gain 5 HP.";
     }
     
     public boolean canSpawn()

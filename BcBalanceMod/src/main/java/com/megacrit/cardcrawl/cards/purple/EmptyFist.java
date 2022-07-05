@@ -49,13 +49,13 @@ public class EmptyFist extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
     public int getDamage()
     {
-        return !upgraded ? 6 : 12;
+        return !upgraded ? 9 : 13;
     }
     
     @Override
@@ -74,6 +74,7 @@ public class EmptyFist extends BcAttackCardBase
     public void use(AbstractPlayer player, AbstractMonster m)
     {
         addToBot(new DamageAction(m, new DamageInfo(player, damage, damageTypeForTurn), AttackEffect.BLUNT_LIGHT));
+        EmptyBlahAction.preActionDraw();
         addToBot(new EmptyBlahAction());
     }
 }

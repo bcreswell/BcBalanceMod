@@ -1,9 +1,6 @@
 package bcBalanceMod;
 
 import basemod.*;
-import basemod.abstracts.CustomCard;
-import basemod.abstracts.CustomRelic;
-import basemod.eventUtil.AddEventParams;
 import basemod.helpers.RelicType;
 import basemod.interfaces.*;
 import com.badlogic.gdx.Gdx;
@@ -15,17 +12,12 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.blue.DecryptionDance;
-import com.megacrit.cardcrawl.cards.blue.DependencyInversion;
-import com.megacrit.cardcrawl.cards.blue.UpgradeProtocol;
-import com.megacrit.cardcrawl.cards.green.SerpentSkin;
-import com.megacrit.cardcrawl.cards.green.SurvivalKit;
+import com.megacrit.cardcrawl.cards.blue.*;
+import com.megacrit.cardcrawl.cards.green.*;
+import com.megacrit.cardcrawl.cards.purple.*;
+import com.megacrit.cardcrawl.cards.red.*;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.TheCity;
-import com.megacrit.cardcrawl.helpers.CardHelper;
-import com.megacrit.cardcrawl.helpers.FontHelper;
-import com.megacrit.cardcrawl.helpers.RelicLibrary;
-import com.megacrit.cardcrawl.helpers.input.*;
+import com.megacrit.cardcrawl.helpers.*;
 import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.potions.*;
 import com.megacrit.cardcrawl.relics.*;
@@ -33,15 +25,13 @@ import com.megacrit.cardcrawl.relics.MonkeyPaw;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import bcBalanceMod.potions.PlaceholderPotion;
 import bcBalanceMod.util.IDCheckDontTouchPls;
 import bcBalanceMod.util.TextureLoader;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 
 //TODO: DON'T MASS RENAME/REFACTOR
 //TODO: DON'T MASS RENAME/REFACTOR
@@ -79,32 +69,21 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
     private static String modID;
     
     // Mod-settings settings. This is if you want an on/off savable button
-    public static Properties theDefaultDefaultSettings = new Properties();
-    public static final String ENABLE_PLACEHOLDER_SETTINGS = "enablePlaceholder";
-    public static boolean enablePlaceholder = true; // The boolean we'll be setting on/off (true/false)
+    public static Properties bcBalanceModSettings = new Properties();
+    static final String settingsFile = "bcBalanceModSettings";
+    static final String alwaysPandorasSetting = "alwaysPandoras";
+    public static boolean alwaysPandoras = false; // The boolean we'll be setting on/off (true/false)
     
     //This is for the in-game mod settings panel.
     private static final String MODNAME = "BC Balance Mod";
     private static final String AUTHOR = "BC";
-    private static final String DESCRIPTION = "Lots of small balance changes to existing cards and relics. A few new cards for the original 4 characters too.";
+    private static final String DESCRIPTION = "Lots of small changes to existing cards and relics. New cards for the original 4 characters, new relics, new potions.";
     
     // =============== INPUT TEXTURE LOCATION =================
     
-    // Colors (RGB)
-    // Character Color
-    public static final Color DEFAULT_GRAY = CardHelper.getColor(64.0f, 70.0f, 70.0f);
-    
-    // Potion Colors in RGB
-    public static final Color PLACEHOLDER_POTION_LIQUID = CardHelper.getColor(209.0f, 53.0f, 18.0f); // Orange-ish Red
-    public static final Color PLACEHOLDER_POTION_HYBRID = CardHelper.getColor(255.0f, 230.0f, 230.0f); // Near White
-    public static final Color PLACEHOLDER_POTION_SPOTS = CardHelper.getColor(100.0f, 25.0f, 10.0f); // Super Dark Red/Brown
     
     //Mod Badge - A small icon that appears in the mod settings menu next to your mod.
     public static final String BADGE_IMAGE = "bcBalanceModResources/images/Badge.png";
-    
-    // Atlas and JSON files for the Animations
-    public static final String THE_DEFAULT_SKELETON_ATLAS = "bcBalanceModResources/images/char/defaultCharacter/skeleton.atlas";
-    public static final String THE_DEFAULT_SKELETON_JSON = "bcBalanceModResources/images/char/defaultCharacter/skeleton.json";
     
     public BcBalanceMod()
     {
@@ -119,13 +98,13 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
         logger.info("Adding mod settings");
         // This loads the mod settings.
         // The actual mod Button is added below in receivePostInitialize()
-        theDefaultDefaultSettings.setProperty(ENABLE_PLACEHOLDER_SETTINGS, "FALSE"); // This is the default setting. It's actually set...
+        bcBalanceModSettings.setProperty(alwaysPandorasSetting, "FALSE"); // This is the default setting. It's actually set...
         try
         {
-            SpireConfig config = new SpireConfig("bcBalanceMod", "theDefaultConfig", theDefaultDefaultSettings); // ...right here
+            SpireConfig config = new SpireConfig("bcBalanceMod", settingsFile, bcBalanceModSettings); // ...right here
             // the "fileName" parameter is the name of the file MTS will create where it will save our setting.
             config.load(); // Load the setting and set the boolean to equal it
-            enablePlaceholder = config.getBool(ENABLE_PLACEHOLDER_SETTINGS);
+            alwaysPandoras = config.getBool(alwaysPandorasSetting);
         }
         catch (Exception e)
         {
@@ -254,8 +233,8 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
         ModPanel settingsPanel = new ModPanel();
         
         // Create the on/off button:
-        ModLabeledToggleButton enableNormalsButton = new ModLabeledToggleButton("This is the text which goes next to the checkbox.", 350.0f, 700.0f, Settings.CREAM_COLOR, FontHelper.charDescFont, // Position (trial and error it), color, font
-                enablePlaceholder, // Boolean it uses
+        ModLabeledToggleButton enableNormalsButton = new ModLabeledToggleButton("Neow's Boss Relic Swap is always Pandora's Box.", 350.0f, 700.0f, Settings.CREAM_COLOR, FontHelper.charDescFont, // Position (trial and error it), color, font
+                alwaysPandoras, // Boolean it uses
                 settingsPanel, // The mod panel in which this button will be in
                 (label) ->
                 {
@@ -263,12 +242,12 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
                 (button) ->
                 { // The actual button:
                     
-                    enablePlaceholder = button.enabled; // The boolean true/false will be whether the button is enabled or not
+                    alwaysPandoras = button.enabled; // The boolean true/false will be whether the button is enabled or not
                     try
                     {
                         // And based on that boolean, set the settings and save them
-                        SpireConfig config = new SpireConfig("bcBalanceMod", "theDefaultConfig", theDefaultDefaultSettings);
-                        config.setBool(ENABLE_PLACEHOLDER_SETTINGS, enablePlaceholder);
+                        SpireConfig config = new SpireConfig("bcBalanceMod", settingsFile, bcBalanceModSettings);
+                        config.setBool(alwaysPandorasSetting, alwaysPandoras);
                         config.save();
                     }
                     catch (Exception e)
@@ -282,24 +261,45 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
         BaseMod.registerModBadge(badgeTexture, MODNAME, AUTHOR, DESCRIPTION, settingsPanel);
         
         BcUtility.popuplateLocalizationPlaceholders();
-       
+        
         //region removing relics
         //replacing these relics with new versions so it's not necessary to patch all the places where they hardcoded it into the system
         AbstractRelic oldEctoplasm = RelicLibrary.getRelic(Ectoplasm.ID);
         BaseMod.removeRelic(oldEctoplasm);
-    
+        
         AbstractRelic oldSozu = RelicLibrary.getRelic(Sozu.ID);
         BaseMod.removeRelic(oldSozu);
         
-        AbstractRelic oldGoldenEye = RelicLibrary.getRelic(GoldenEye.ID);
-        BaseMod.removeRelic(oldGoldenEye);
+        AbstractRelic oldHoveringKite = RelicLibrary.getRelic(HoveringKite.ID);
+        BaseMod.removeRelic(oldHoveringKite);
+        
+        AbstractRelic oldMelange = RelicLibrary.getRelic(Melange.ID);
+        BaseMod.removeRelic(oldMelange);
         
         AbstractRelic oldDreamCatcher = RelicLibrary.getRelic(DreamCatcher.ID);
         BaseMod.removeRelic(oldDreamCatcher);
         
         AbstractRelic oldSundial = RelicLibrary.getRelic(Sundial.ID);
         BaseMod.removeRelic(oldSundial);
+        
+        AbstractRelic oldAbacus = RelicLibrary.getRelic(Abacus.ID);
+        BaseMod.removeRelic(oldAbacus);
         //endregion
+        
+        BcUtility.removeCardFromMasterLibrary(Worship.ID);
+        BcUtility.removeCardFromMasterLibrary(Pray.ID);
+        BcUtility.removeCardFromMasterLibrary(Indignation.ID);
+        BcUtility.removeCardFromMasterLibrary(Intimidate.ID);
+        BcUtility.removeCardFromMasterLibrary(Rupture.ID);
+        BcUtility.removeCardFromMasterLibrary(Foresight.ID);
+        BcUtility.removeCardFromMasterLibrary(WaveOfTheHand.ID);
+        BcUtility.removeCardFromMasterLibrary(DoubleEnergy.ID);
+        BcUtility.removeCardFromMasterLibrary(Finisher.ID);
+        
+        for (String character : UnlockTracker.lockedCharacters)
+        {
+            UnlockTracker.hardUnlockOverride(character);
+        }
         
         // =============== EVENTS =================
         // https://github.com/daviscook477/BaseMod/wiki/Custom-Events
@@ -324,6 +324,8 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
 //        BaseMod.addEvent(eventParams);
         
         // =============== /EVENTS/ =================
+        
+        BcUtility.logAllCards();
         logger.info("Done loading badge Image and mod options");
     }
     
@@ -339,6 +341,9 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
         // just remove the player class at the end (in this case the "TheDefaultEnum.THE_DEFAULT".
         // Remember, you can press ctrl+P inside parentheses like addPotions)
         BaseMod.addPotion(RetainPotion.class, RetainPotion.LiquidColor, RetainPotion.HybridColor, RetainPotion.SpotsColor, RetainPotion.POTION_ID);
+        BaseMod.addPotion(FelixFelicisPotion.class, FelixFelicisPotion.LiquidColor, FelixFelicisPotion.HybridColor, null, FelixFelicisPotion.POTION_ID);
+        BaseMod.addPotion(BufferPotion.class, BufferPotion.LiquidColor, BufferPotion.HybridColor, null, BufferPotion.POTION_ID);
+        BaseMod.addPotion(MultiBlockPotion.class, MultiBlockPotion.LiquidColor, MultiBlockPotion.HybridColor, null, MultiBlockPotion.POTION_ID);
         
         logger.info("Done editing potions");
     }
@@ -360,32 +365,50 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
         
         BaseMod.addRelic(new BcBalancingScales(), RelicType.SHARED);
         UnlockTracker.markRelicAsSeen(BcBalancingScales.ID);
-    
+        
+        BaseMod.addRelic(new RotaryMechanism(), RelicType.BLUE);
+        UnlockTracker.markRelicAsSeen(RotaryMechanism.ID);
+        
+        BaseMod.addRelic(new PersonalDigitalAssistant(), RelicType.BLUE);
+        UnlockTracker.markRelicAsSeen(PersonalDigitalAssistant.ID);
+        
+        BaseMod.addRelic(new GoldenFeather(), RelicType.PURPLE);
+        UnlockTracker.markRelicAsSeen(GoldenFeather.ID);
+        
         BaseMod.addRelic(new EmptyVessel(), RelicType.PURPLE);
         UnlockTracker.markRelicAsSeen(EmptyVessel.ID);
-    
+        
         BaseMod.addRelic(new UnbreakableHeart(), RelicType.SHARED);
         UnlockTracker.markRelicAsSeen(UnbreakableHeart.ID);
-    
+        
         BaseMod.addRelic(new MonkeyPaw(), RelicType.SHARED);
         UnlockTracker.markRelicAsSeen(MonkeyPaw.ID);
+        
+        BaseMod.addRelic(new PowerGlove(), RelicType.SHARED);
+        UnlockTracker.markRelicAsSeen(PowerGlove.ID);
         
         //the following relics replace base game versions to work around them being hardcoded into the system
         BaseMod.addRelic(new BcEctoplasm(), RelicType.SHARED);
         UnlockTracker.markRelicAsSeen(BcEctoplasm.ID);
         
+        BaseMod.addRelic(new BcHoveringKite(), RelicType.GREEN);
+        UnlockTracker.markRelicAsSeen(BcHoveringKite.ID);
+        
         BaseMod.addRelic(new BcSozu(), RelicType.SHARED);
         UnlockTracker.markRelicAsSeen(BcSozu.ID);
         
-        BaseMod.addRelic(new BcGoldenEye(), RelicType.PURPLE);
-        UnlockTracker.markRelicAsSeen(BcGoldenEye.ID);
+        BaseMod.addRelic(new BcMelange(), RelicType.PURPLE);
+        UnlockTracker.markRelicAsSeen(BcMelange.ID);
         
         BaseMod.addRelic(new BcDreamCatcher(), RelicType.SHARED);
         UnlockTracker.markRelicAsSeen(BcDreamCatcher.ID);
         
         BaseMod.addRelic(new BcSundial(), RelicType.SHARED);
         UnlockTracker.markRelicAsSeen(BcSundial.ID);
-    
+        
+        BaseMod.addRelic(new BcAbacus(), RelicType.SHARED);
+        UnlockTracker.markRelicAsSeen(BcAbacus.ID);
+        
         logger.info("Done adding relics!");
     }
     /*
@@ -500,11 +523,10 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
     @Override
     public void receiveEditStrings()
     {
-        logger.info("You seeing this?");
         logger.info("Beginning to edit strings for mod with ID: " + getModID());
         
         // CardStrings
-        //BaseMod.loadCustomStringsFile(CardStrings.class, getModID() + "Resources/localization/eng/BcBalanceMod-Card-Strings.json");
+        BaseMod.loadCustomStringsFile(CardStrings.class, getModID() + "Resources/localization/eng/BcBalanceMod-Card-Strings.json");
         
         // PowerStrings
         BaseMod.loadCustomStringsFile(PowerStrings.class, getModID() + "Resources/localization/eng/BcBalanceMod-Power-Strings.json");
@@ -524,7 +546,7 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
         // OrbStrings
         BaseMod.loadCustomStringsFile(OrbStrings.class, getModID() + "Resources/localization/eng/BcBalanceMod-Orb-Strings.json");
         
-        logger.info("Done edittting strings");
+        logger.info("Done editing strings");
     }
     
     @Override

@@ -1,6 +1,7 @@
 package com.megacrit.cardcrawl.cards.colorless;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.unique.DiscoveryImprovedAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -62,6 +63,6 @@ public class Discovery extends BcSkillCardBase
     
     public void use(AbstractPlayer p, AbstractMonster m)
     {
-        this.addToBot(new DiscoveryImprovedAction(upgraded?4:3,true,false,null,null));
+        addToBot(new DiscoveryImprovedAction(upgraded ? 4 : 3, true, false, null, null));
     }
 }

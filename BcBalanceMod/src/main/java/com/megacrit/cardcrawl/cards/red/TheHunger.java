@@ -118,7 +118,7 @@ public class TheHunger extends BcAttackCardBase
             
             if (monster.getIntentBaseDmg() >= 0)
             {
-                this.cantUseMessage = "Enemy is attacking.";
+                cantUseMessage = "Enemy is attacking.";
                 return false;
             }
             else
@@ -140,10 +140,10 @@ public class TheHunger extends BcAttackCardBase
     {
         if (monster != null)
         {
-            this.addToBot(new VFXAction(new BiteEffect(monster.hb.cX, monster.hb.cY - 40.0F * Settings.scale, Color.SCARLET.cpy()), 0.3F));
+            addToBot(new VFXAction(new BiteEffect(monster.hb.cX, monster.hb.cY - 40.0F * Settings.scale, Color.SCARLET.cpy()), 0.3F));
         }
         
-        this.addToBot(new DamageAction(monster, new DamageInfo(player, this.damage, this.damageTypeForTurn), AbstractGameAction.AttackEffect.NONE));
-        this.addToBot(new HealAction(player, player, this.magicNumber));
+        addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.NONE));
+        addToBot(new HealAction(player, player, magicNumber));
     }
 }

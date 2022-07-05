@@ -19,6 +19,7 @@ import com.megacrit.cardcrawl.relics.AbstractRelic.LandingSound;
 import com.megacrit.cardcrawl.relics.AbstractRelic.RelicTier;
 import com.megacrit.cardcrawl.rooms.*;
 import com.megacrit.cardcrawl.unlock.*;
+import com.megacrit.cardcrawl.vfx.cardManip.*;
 
 import java.util.*;
 
@@ -28,6 +29,7 @@ public class BcDreamCatcher extends CustomRelic
 {
     public static final String ID = BcBalanceMod.makeID("BcDreamCatcher");
     public static final int ChoiceCount = 10;
+    boolean waitingOnSelection;
     
     public BcDreamCatcher()
     {
@@ -42,13 +44,7 @@ public class BcDreamCatcher extends CustomRelic
     @Override
     public void onEnterRoom(AbstractRoom room)
     {
-        //there could be a card remaining in the gridSelection screen.
-        // If its there when you arrive at a shop,
-        // the merchant will think that's a card you want to remove.
-        if (AbstractDungeon.gridSelectScreen.selectedCards.size() > 0)
-        {
-            AbstractDungeon.gridSelectScreen.selectedCards.clear();
-        }
+        waitingOnSelection = false;
     }
     
     public void onRest()
@@ -61,7 +57,7 @@ public class BcDreamCatcher extends CustomRelic
         {
             AbstractCard card = AbstractDungeon.getCard(AbstractDungeon.rollRarity()).makeCopy();
             
-            for(AbstractCard existingCard : group.group)
+            for (AbstractCard existingCard : group.group)
             {
                 if (existingCard.cardID.equals(card.cardID))
                 {
@@ -78,22 +74,42 @@ public class BcDreamCatcher extends CustomRelic
             
             if (card != null)
             {
-                for(AbstractRelic relic : AbstractDungeon.player.relics)
-                {
-                    relic.onPreviewObtainCard(card);
-                }
-                
                 UnlockTracker.markCardAsSeen(card.cardID);
                 group.addToBottom(card);
             }
         }
         
-        AbstractDungeon.gridSelectScreen.open(group, 1, "Choose one", false);
+        waitingOnSelection = true;
+        AbstractDungeon.gridSelectScreen.open(
+                group,
+                1,
+                "Choose one to add to your deck.",
+                false,
+                false,
+                true,
+                false);
     }
     
-    public AbstractRelic makeCopy()
+    public void update()
     {
-        return new BcDreamCatcher();
+        if (waitingOnSelection &&
+                    (AbstractDungeon.gridSelectScreen.selectedCards.size() > 0))
+        {
+            waitingOnSelection = false;
+            
+            for(AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards)
+            {
+                AbstractDungeon.topLevelEffects.add(
+                        new ShowCardAndObtainEffect(
+                                card,
+                                (float) Settings.WIDTH / 2.0F,
+                                (float) Settings.HEIGHT / 2.0F));
+            }
+            
+            AbstractDungeon.gridSelectScreen.selectedCards.clear();
+        }
+        
+        super.update();
     }
     
     public boolean canSpawn()

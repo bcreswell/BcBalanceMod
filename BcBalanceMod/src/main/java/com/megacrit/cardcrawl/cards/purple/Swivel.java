@@ -1,8 +1,8 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
-import com.megacrit.cardcrawl.actions.common.GainBlockAction;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -42,19 +42,19 @@ public class Swivel extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 8 : 12;
+        return !upgraded ? 10 : 14;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Gain !B! Block. NL Your next Attack that costs 2 or more will refund its energy.";
+        return "Gain !B! Block. NL Your next Attack that would cost 2 or more will instead cost 0.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new GainBlockAction(player, player, block));
-        addToBot(new ApplyPowerAction(player, player, new SwivelPower(player, 1), 1));
+        addToBot(new BcApplyPowerAction(new SwivelPower(player, 1)));
     }
 }

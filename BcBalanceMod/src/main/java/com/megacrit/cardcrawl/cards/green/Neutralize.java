@@ -59,7 +59,7 @@ public class Neutralize extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 5 : 7;
+        return !upgraded ? 4 : 6;
     }
     
     @Override

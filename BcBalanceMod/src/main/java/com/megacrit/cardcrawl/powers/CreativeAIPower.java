@@ -60,14 +60,7 @@ public class CreativeAIPower extends AbstractPower {
     {
         if (Settings.language == Settings.GameLanguage.ENG)
         {
-            if (isUpgraded)
-            {
-                this.description = "Start of turn: Choose 1 of 4 Powers to create.";
-            }
-            else
-            {
-                this.description = "Start of turn: Choose 1 of 3 Powers to create.";
-            }
+            this.description = "Start of turn: Choose 1 of 2 Powers to create.";
         }
         else
         {

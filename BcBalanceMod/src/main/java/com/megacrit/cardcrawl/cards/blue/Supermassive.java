@@ -17,8 +17,7 @@ import com.megacrit.cardcrawl.orbs.Dark;
 import com.megacrit.cardcrawl.orbs.EmptyOrbSlot;
 import com.megacrit.cardcrawl.powers.DeepDarknessPower;
 
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.*;
 
 import static bcBalanceMod.BcBalanceMod.makeCardPath;
 
@@ -54,7 +53,23 @@ public class Supermassive extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 6 : 12;
+        return !upgraded ? 3 : 8;
+    }
+    
+    @Override
+    public int getChanneledOrbCount()
+    {
+        int newMass = getTotalDarkOrbMass();
+        if (newMass > getMagicNumber())
+        {
+            //there was already at least 1 dark orb present.
+            //this means the mass will be added to it and no new orb will be channeled.
+            return 0;
+        }
+        else
+        {
+            return 1;
+        }
     }
     
     @Override
@@ -66,46 +81,113 @@ public class Supermassive extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Remove all orbs. NL Channel a Dark orb with the mass from all removed Dark orbs + !M!.";
+        return "Collapse all Dark orbs into a supermassive one with their combined mass + !M!.";
     }
     //endregion
-    
-    @Override
-    public void onInitialized()
-    {
-        showEvokeValue = true;
-    }
     
     public void use(AbstractPlayer player, AbstractMonster m)
     {
         int totalMass = getTotalDarkOrbMass();
         
-        addToTop(new RemoveAllOrbsAction());
-        
-        if (totalMass > 0)
+        ArrayList<AbstractOrb> orbs = AbstractDungeon.player.orbs;
+        AbstractOrb supermassiveDarkOrb = null;
+        int removedOrbCount = 0;
+        for (int i = 0; i < orbs.size(); i++)
         {
-            AbstractOrb supermassiveDarkOrb = new Dark();
+            AbstractOrb currentOrb = orbs.get(i);
+            if (currentOrb instanceof Dark)
+            {
+                if (supermassiveDarkOrb == null)
+                {
+                    supermassiveDarkOrb = currentOrb;
+                    supermassiveDarkOrb.evokeAmount = totalMass;
+                    supermassiveDarkOrb.updateDescription();
+                }
+                else //remove it
+                {
+                    removedOrbCount++;
+                    removeSpecificOrbAndShiftOthersForward(i);
+                    i--;
+                }
+            }
+        }
+        
+        if (supermassiveDarkOrb == null)
+        {
+            supermassiveDarkOrb = new Dark();
             supermassiveDarkOrb.evokeAmount = totalMass;
+            supermassiveDarkOrb.updateDescription();
             addToBot(new ChannelAction(supermassiveDarkOrb));
-            addToBot(new AnimateSpecificOrbAction(supermassiveDarkOrb));
+        }
+        else
+        {
+            for (int i = 0; i < removedOrbCount + 1; i++)
+            {
+                addToBot(new TrueWaitAction(.1f));
+                addToBot(new AnimateSpecificOrbAction(supermassiveDarkOrb));
+            }
         }
     }
     
-    public String getTemporaryExtraDescription()
+    void removeSpecificOrbAndShiftOthersForward(int orbIndex)
+    {
+        AbstractOrb currentOrb = getOrb(orbIndex);
+        AbstractOrb nextOrb = getOrb(orbIndex + 1);
+        
+        if (currentOrb == null)
+        {
+            return;
+        }
+        
+        if (nextOrb == null)
+        {
+            setOrb(orbIndex, null);
+        }
+        else
+        {
+            setOrb(orbIndex, nextOrb);
+            removeSpecificOrbAndShiftOthersForward(orbIndex + 1);
+        }
+    }
+    
+    AbstractOrb getOrb(int orbIndex)
+    {
+        ArrayList<AbstractOrb> orbs = AbstractDungeon.player.orbs;
+        if (orbIndex < orbs.size())
+        {
+            AbstractOrb orb = orbs.get(orbIndex);
+            if (!(orb instanceof EmptyOrbSlot))
+            {
+                return orb;
+            }
+        }
+        
+        return null;
+    }
+    
+    void setOrb(int orbIndex, AbstractOrb newOrb)
+    {
+        ArrayList<AbstractOrb> orbs = AbstractDungeon.player.orbs;
+        
+        if (orbIndex < orbs.size())
+        {
+            AbstractOrb currentOrb = orbs.get(orbIndex);
+            
+            if (newOrb == null)
+            {
+                newOrb = new EmptyOrbSlot(0, 0);
+            }
+            
+            newOrb.setSlot(orbIndex, AbstractDungeon.player.maxOrbs);
+            orbs.set(orbIndex, newOrb);
+        }
+    }
+    
+    public String getTemporaryExtraDescription(AbstractMonster monster)
     {
         int newMass = getTotalDarkOrbMass();
-        return "(new dark mass: " + newMass + ")";
+        return "new dark mass: " + newMass;
     }
-
-//    public void applyPowers()
-//    {
-//        super.applyPowers();
-//
-//        int totalMass = getTotalDarkOrbMass();
-//
-//        rawDescription = getFullDescription() + " NL (total dark mass: " + totalMass + ")";
-//        initializeDescription();
-//    }
     
     int getTotalDarkOrbMass()
     {

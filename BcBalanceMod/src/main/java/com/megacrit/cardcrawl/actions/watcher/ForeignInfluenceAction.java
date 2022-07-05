@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.actions.watcher;
 
+import bcBalanceMod.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
@@ -16,12 +17,21 @@ public class ForeignInfluenceAction extends AbstractGameAction
 {
     private boolean retrieveCard = false;
     private boolean upgraded;
+    int choiceCount;
     
     public ForeignInfluenceAction(boolean upgraded)
     {
         actionType = AbstractGameAction.ActionType.CARD_MANIPULATION;
         duration = Settings.ACTION_DUR_FAST;
         this.upgraded = upgraded;
+        this.choiceCount= 3;
+    }
+    public ForeignInfluenceAction(int choiceCount)
+    {
+        actionType = AbstractGameAction.ActionType.CARD_MANIPULATION;
+        duration = Settings.ACTION_DUR_FAST;
+        this.upgraded = false;
+        this.choiceCount = choiceCount;
     }
     
     public void update()
@@ -74,24 +84,25 @@ public class ForeignInfluenceAction extends AbstractGameAction
     {
         ArrayList<AbstractCard> cardChoices = new ArrayList<>();
         
-        while (cardChoices.size() < 3)
+        while (cardChoices.size() < choiceCount)
         {
-            int roll = AbstractDungeon.cardRandomRng.random(99);
-            AbstractCard.CardRarity cardRarity;
-            if (roll < 55)
-            {
-                cardRarity = AbstractCard.CardRarity.COMMON;
-            }
-            else if (roll < 85)
-            {
-                cardRarity = AbstractCard.CardRarity.UNCOMMON;
-            }
-            else
-            {
-                cardRarity = AbstractCard.CardRarity.RARE;
-            }
+//            int roll = AbstractDungeon.cardRandomRng.random(99);
+//            AbstractCard.CardRarity cardRarity;
+//            if (roll < 55)
+//            {
+//                cardRarity = AbstractCard.CardRarity.COMMON;
+//            }
+//            else if (roll < 85)
+//            {
+//                cardRarity = AbstractCard.CardRarity.UNCOMMON;
+//            }
+//            else
+//            {
+//                cardRarity = AbstractCard.CardRarity.RARE;
+//            }
             
-            AbstractCard potentialCard = CardLibrary.getAnyColorCard(AbstractCard.CardType.ATTACK, cardRarity);
+            AbstractCard potentialCard = BcUtility.getRandomCard(null, AbstractCard.CardType.ATTACK, true, false, true);
+//            AbstractCard potentialCard = CardLibrary.getAnyColorCard(AbstractCard.CardType.ATTACK, cardRarity);
             
             if (potentialCard.color == AbstractCard.CardColor.PURPLE)
             {

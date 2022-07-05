@@ -46,7 +46,7 @@ public class SashWhip extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 6 : 12;
+        return !upgraded ? 8 : 12;
     }
     
     @Override
@@ -58,7 +58,7 @@ public class SashWhip extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
     }
     
     @Override

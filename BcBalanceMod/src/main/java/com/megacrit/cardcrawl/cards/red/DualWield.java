@@ -61,15 +61,9 @@ public class DualWield extends BcSkillCardBase
     }
     
     @Override
-    public boolean getInnate()
-    {
-        return upgraded;
-    }
-    
-    @Override
     public String getBaseDescription()
     {
-        return "Choose an Attack Card in your hand. NL Create a copy of it.";
+        return "Choose an Attack Card in your hand. NL Create a copy of it that costs 0 until played.";
     }
     //endregion
     

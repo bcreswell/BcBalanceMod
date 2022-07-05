@@ -63,7 +63,7 @@ public class Hyperbeam extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 26 : 34;
+        return !upgraded ? 22 : 30;
     }
     
     @Override

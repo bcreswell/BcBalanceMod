@@ -1,6 +1,7 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -66,17 +67,17 @@ public class AllInGoodTime extends BcSkillCardBase
     
     public void use(AbstractPlayer player, AbstractMonster m)
     {
-        this.addToBot(new ApplyPowerAction(player, player, new MantraPower(player, magicNumber), magicNumber));
+        addToBot(new BcApplyPowerAction(new MantraPower(player, magicNumber)));
     }
     
     public void onRetained()
     {
-        this.addToBot(new ReduceCostAction(this));
+        addToBot(new ReduceCostAction(this));
     }
 
 //    public void initializeDescription()
 //    {
 //        super.initializeDescription();
-//        this.keywords.add(GameDictionary.ENLIGHTENMENT.NAMES[0].toLowerCase());
+//        keywords.add(GameDictionary.ENLIGHTENMENT.NAMES[0].toLowerCase());
 //    }
 }

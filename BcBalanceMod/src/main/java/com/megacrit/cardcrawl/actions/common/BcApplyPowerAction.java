@@ -23,9 +23,8 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.powers.NoDrawPower;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.powers.*;
+import com.megacrit.cardcrawl.relics.*;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import com.megacrit.cardcrawl.vfx.combat.FlashAtkImgEffect;
 import com.megacrit.cardcrawl.vfx.combat.PowerBuffEffect;
@@ -66,9 +65,14 @@ public class BcApplyPowerAction extends AbstractGameAction
     
     public BcApplyPowerAction(AbstractCreature target, AbstractCreature source, AbstractPower powerToApply)
     {
+        this(target, source, powerToApply, AttackEffect.NONE);
+    }
+    
+    public BcApplyPowerAction(AbstractCreature target, AbstractCreature source, AbstractPower powerToApply, AttackEffect attackEffect)
+    {
         if (Settings.FAST_MODE)
         {
-            duration = 0.1F;
+            duration = 0F;
         }
         else
         {
@@ -78,15 +82,25 @@ public class BcApplyPowerAction extends AbstractGameAction
         setValues(target, source, powerToApply.amount);
         this.powerToApply = powerToApply;
         
-        if (AbstractDungeon.player.hasRelic("Snake Skull") && source != null && source.isPlayer && target != source && powerToApply.ID.equals("Poison"))
+        if (AbstractDungeon.player.hasRelic(SneckoSkull.ID) &&
+                    (source != null) &&
+                    (source.isPlayer) &&
+                    (target != source) &&
+                    powerToApply.ID.equals(PoisonPower.POWER_ID))
         {
-            AbstractDungeon.player.getRelic("Snake Skull").flash();
-            ++powerToApply.amount;
-            ++amount;
+            AbstractDungeon.player.getRelic(SneckoSkull.ID).flash();
+            powerToApply.amount++;
+            amount++;
+        }
+        
+        if ((powerToApply instanceof BcPowerBase) &&
+                    ((BcPowerBase) powerToApply).isAppliedQuietly())
+        {
+            isQuiet = true;
         }
         
         actionType = ActionType.POWER;
-        attackEffect = AttackEffect.NONE;
+        this.attackEffect = attackEffect;
         if (AbstractDungeon.getMonsters().areMonstersBasicallyDead())
         {
             duration = 0.0F;
@@ -95,11 +109,10 @@ public class BcApplyPowerAction extends AbstractGameAction
     }
     //endregion
     
-    
-    public void makeQuiet()
-    {
-        isQuiet = true;
-    }
+//    public void makeQuiet()
+//    {
+//        isQuiet = true;
+//    }
     
     void firstUpdate()
     {
@@ -319,7 +332,7 @@ public class BcApplyPowerAction extends AbstractGameAction
         if (existingPower == null)
         {
             //region do initial power application
-            if (powerToApply.type == AbstractPower.PowerType.DEBUFF)
+            if ((powerToApply.type == AbstractPower.PowerType.DEBUFF) && !isQuiet)
             {
                 target.useFastShakeAnimation(0.5F);
             }
@@ -373,7 +386,7 @@ public class BcApplyPowerAction extends AbstractGameAction
         power.flash();
         
         String msg = "";
-        if (initialApplication && (amount == 1) && !power.canGoNegative)
+        if (initialApplication && (amount <= 1) && !power.canGoNegative)
         {
             msg = power.name;
         }
@@ -405,7 +418,7 @@ public class BcApplyPowerAction extends AbstractGameAction
     
     public void update()
     {
-        if (target == null || target.isDeadOrEscaped() || (amount == 0))
+        if ((target == null) || target.isDeadOrEscaped() || (amount == 0))
         {
             isDone = true;
         }
@@ -417,7 +430,14 @@ public class BcApplyPowerAction extends AbstractGameAction
                 isFirstUpdate = false;
             }
             
-            tickDuration();
+            if (duration == 0)
+            {
+                isDone = true;
+            }
+            else
+            {
+                tickDuration();
+            }
         }
     }
 }

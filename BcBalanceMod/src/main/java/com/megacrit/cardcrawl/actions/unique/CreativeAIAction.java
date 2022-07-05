@@ -71,7 +71,7 @@ public class CreativeAIAction extends AbstractGameAction
     {
         ArrayList choices = new ArrayList();
         
-        int choiceCount = isUpgraded ? 4 : 3;
+        int choiceCount = 2;
         
         while (choices.size() < choiceCount)
         {

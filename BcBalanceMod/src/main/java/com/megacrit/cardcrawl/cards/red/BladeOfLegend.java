@@ -18,7 +18,7 @@ public class BladeOfLegend extends BcAttackCardBase
     @Override
     public String getDisplayName()
     {
-        return "  Blade of Legend";
+        return "Blade of Legend";
     }
     
     @Override

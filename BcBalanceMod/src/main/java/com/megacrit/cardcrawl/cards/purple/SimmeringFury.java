@@ -1,7 +1,8 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -9,12 +10,19 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.DrawCardNextTurnPower;
 import com.megacrit.cardcrawl.powers.watcher.WrathNextTurnPower;
+import com.megacrit.cardcrawl.stances.*;
 
 public class SimmeringFury extends BcSkillCardBase
 {
-    public static final String ID = "Vengeance";
+    public static final String ID = "SimmeringFury";
     
     //region card parameters
+    @Override
+    public String getDisplayName()
+    {
+        return "Simmering Fury";
+    }
+    
     @Override
     public String getImagePath()
     {
@@ -24,7 +32,7 @@ public class SimmeringFury extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -36,25 +44,32 @@ public class SimmeringFury extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 2 : 3;
+        return 2;
     }
     
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "At the start of your next turn, enter Wrath and draw !M! cards.";
+        return "Wrath: Draw !M! cards. NL Otherwise: Next turn, enter Wrath and draw !M! cards.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new ApplyPowerAction(player, player, new WrathNextTurnPower(player)));
-        addToBot(new ApplyPowerAction(player, player, new DrawCardNextTurnPower(player, magicNumber), magicNumber));
+        if (BcUtility.isPlayerInStance(WrathStance.STANCE_ID))
+        {
+            addToBot(new DrawCardAction(magicNumber));
+        }
+        else
+        {
+            addToBot(new BcApplyPowerAction(new WrathNextTurnPower(player)));
+            addToBot(new BcApplyPowerAction(new DrawCardNextTurnPower(player, magicNumber)));
+        }
     }
 }

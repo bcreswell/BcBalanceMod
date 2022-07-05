@@ -56,7 +56,7 @@ public class QuickSlash extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 7 : 12;
+        return !upgraded ? 9 : 13;
     }
     
     @Override

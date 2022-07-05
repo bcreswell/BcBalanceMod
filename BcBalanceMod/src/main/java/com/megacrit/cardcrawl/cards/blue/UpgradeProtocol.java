@@ -8,7 +8,7 @@ package com.megacrit.cardcrawl.cards.blue;
 import basemod.abstracts.CustomCard;
 import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
 import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
@@ -45,13 +45,19 @@ public class UpgradeProtocol extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 2 : 1;
+        return 1;
     }
     
     @Override
     public String getId()
     {
         return ID;
+    }
+    
+    @Override
+    public boolean getInnate()
+    {
+        return upgraded;
     }
     
     @Override
@@ -69,6 +75,6 @@ public class UpgradeProtocol extends BcPowerCardBase
     
     public void use(AbstractPlayer player, AbstractMonster m)
     {
-        addToBot(new ApplyPowerAction(player, player, new UpgradeProtocolPower(player, 1), 1));
+        addToBot(new BcApplyPowerAction(new UpgradeProtocolPower(player, 1)));
     }
 }

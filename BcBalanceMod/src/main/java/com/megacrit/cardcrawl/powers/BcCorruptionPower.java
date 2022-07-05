@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.powers;
 
+import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
 import com.badlogic.gdx.graphics.*;
 import com.megacrit.cardcrawl.actions.common.*;
@@ -12,7 +13,6 @@ import java.util.*;
 public class BcCorruptionPower extends BcPowerBase
 {
     public static final String POWER_ID = "BcCorruptionPower";
-    static Color corruptedGlow = new Color(1f, 0, 1f, 1);
     ArrayList<AbstractCard> corruptedCards = new ArrayList<>();
     
     public BcCorruptionPower(boolean isUpgraded)
@@ -62,11 +62,11 @@ public class BcCorruptionPower extends BcPowerBase
     {
         if (!upgraded)
         {
-            return "ALL Skills are now Ethereal, Exhaust, and cost 1 less.";
+            return "ALL Skills cost 1 less and Exhaust when played. NL End of turn: NL Exhaust all remaining Skills in your hand.";
         }
         else
         {
-            return "ALL Skills are now Ethereal, Exhaust, and are free.";
+            return "ALL Skills cost 0 and Exhaust when played. NL End of turn: NL Exhaust all remaining Skills in your hand.";
         }
     }
     //endregion
@@ -75,20 +75,30 @@ public class BcCorruptionPower extends BcPowerBase
     public void update(int slot)
     {
         super.update(slot);
-        
-        //dont know of another way to detect the cards added to hand w/o being drawn
+
+        //putting this in update() to win the war against snecko oil.
         for (AbstractCard card : AbstractDungeon.player.hand.group)
         {
             applyCorruptionToCard(card);
         }
     }
     
+//    @Override
+//    public void onCardCreated(AbstractCard card)
+//    {
+//        applyCorruptionToCard(card);
+//    }
+//
+//    @Override
+//    public void onCardDraw(AbstractCard card)
+//    {
+//        applyCorruptionToCard(card);
+//    }
+    
     void applyCorruptionToCard(AbstractCard card)
     {
-        if ((card.type == AbstractCard.CardType.SKILL) && !corruptedCards.contains(card))
+        if (card.type == AbstractCard.CardType.SKILL)
         {
-            corruptedCards.add(card);
-            
             if (upgraded)
             {
                 card.setCostForTurn(0);
@@ -98,7 +108,7 @@ public class BcCorruptionPower extends BcPowerBase
                 card.modifyCostForCombat(-1);
             }
             
-            //card.glowColor = corruptedGlow;
+            //BcUtility.setGlowColor(card, BcUtility.corruptedGlow);
         }
     }
     

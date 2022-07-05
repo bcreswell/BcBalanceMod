@@ -58,7 +58,7 @@ public class Clash extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 12 : 18;
+        return !upgraded ? 12 : 16;
     }
     
     @Override

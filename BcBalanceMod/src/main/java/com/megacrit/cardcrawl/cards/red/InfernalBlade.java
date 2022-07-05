@@ -70,7 +70,7 @@ public class InfernalBlade extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Gain 1 Strength. NL Lose !M! HP. NL Create a random upgraded Attack that costs 0 this combat.";
+        return "Gain 1 Strength. NL Sacrifice !M! HP. NL Create a random upgraded Attack that costs 0 this combat.";
     }
     //endregion
     
@@ -90,7 +90,7 @@ public class InfernalBlade extends BcSkillCardBase
             if ((card.exhaust) || (card.cost <= 0)) //-1 == x-cost
             {
                 //this is supposed to be a special blade. don't want
-                // to make a pommel strike or something that will
+                // to make a pummel or something that will
                 // disappear after only one use.
                 //
                 // Also X-cost cards and 0 cost cards defeat the purpose

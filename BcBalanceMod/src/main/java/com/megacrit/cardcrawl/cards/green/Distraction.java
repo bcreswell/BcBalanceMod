@@ -71,15 +71,18 @@ public class Distraction extends BcSkillCardBase
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         AbstractCard cardToCreate = AbstractDungeon.returnTrulyRandomCardInCombat(CardType.SKILL).makeCopy();
-        if (upgraded)
+        if (cardToCreate.cost > 0)
         {
-            cardToCreate.cost = 0;
-            cardToCreate.costForTurn = 0;
-            cardToCreate.isCostModified = true;
-        }
-        else
-        {
-            cardToCreate.setCostForTurn(0);
+            if (upgraded)
+            {
+                cardToCreate.cost = 0;
+                cardToCreate.costForTurn = 0;
+                cardToCreate.isCostModified = true;
+            }
+            else
+            {
+                cardToCreate.setCostForTurn(0);
+            }
         }
         
         addToBot(new MakeTempCardInHandAction(cardToCreate, true));

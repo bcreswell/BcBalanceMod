@@ -57,8 +57,8 @@ public class SideStep extends BcSkillCardBase
     }
     //endregion
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        this.addToBot(new DrawCardAction(1, new EscapePlanAction(this.block)));
+        addToBot(new DrawCardAction(1, new EscapePlanAction(block)));
     }
 }

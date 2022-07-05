@@ -5,7 +5,8 @@
 
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
@@ -54,7 +55,7 @@ public class Eruption extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 7 : 11;
+        return !upgraded ? 8 : 12;
     }
     
     @Override

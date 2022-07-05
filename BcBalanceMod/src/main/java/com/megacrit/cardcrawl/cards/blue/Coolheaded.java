@@ -5,7 +5,8 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.actions.defect.ChannelAction;
@@ -24,59 +25,83 @@ import com.megacrit.cardcrawl.orbs.Frost;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.FocusPower;
 
-public class Coolheaded extends AbstractCard {
+public class Coolheaded extends BcSkillCardBase
+{
     public static final String ID = "Coolheaded";
-    private static final CardStrings cardStrings;
-
-    public Coolheaded() {
-        super("Coolheaded", cardStrings.NAME, "blue/skill/coolheaded", 1, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.BLUE, CardRarity.UNCOMMON, CardTarget.SELF);
-        this.showEvokeValue = true;
-        this.showEvokeOrbCount = 1;
-        this.baseMagicNumber = 1;
-        this.magicNumber = this.baseMagicNumber;
+    
+    //region card parameters
+    @Override
+    public String getDisplayName()
+    {
+        return "Coolheaded";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new ChannelAction(new Frost()));
-        this.addToBot(new DrawCardAction(p, this.magicNumber));
-
+    
+    @Override
+    public int getChanneledOrbCount()
+    {
+        return 1;
+    }
+    
+    @Override
+    public String getImagePath()
+    {
+        return "blue/skill/coolheaded";
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 1;
+    }
+    
+    @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.COMMON;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 1 : 2;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        if (magicNumber == 1)
+        {
+            return "Channel 1 Frost. NL Draw !M! card. NL If you have zero Focus, NL Draw 1 more.";
+        }
+        else
+        {
+            return "Channel 1 Frost. NL Draw !M! cards. NL If you have zero Focus, NL Draw 1 more.";
+        }
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new ChannelAction(new Frost()));
+        
+        int drawCount = magicNumber;
         if (BcUtility.getCurrentFocus() == 0)
         {
-            this.addToBot(new DrawCardAction(p, 1));
+            drawCount++;
         }
+        
+        addToBot(new DrawCardAction(player, drawCount));
     }
-
-    public void upgrade()
+    
+    @Override
+    public boolean isGlowingGold()
     {
-        if (!this.upgraded)
-        {
-            this.upgradeName();
-            this.upgradeMagicNumber(1);
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
-    }
-
-    public void triggerOnGlowCheck()
-    {
-        this.glowColor = AbstractCard.BLUE_BORDER_GLOW_COLOR.cpy();
-        if (BcUtility.getCurrentFocus() == 0)
-        {
-            this.glowColor = AbstractCard.GOLD_BORDER_GLOW_COLOR.cpy();
-        }
-    }
-
-    public AbstractCard makeCopy() {
-        return new Coolheaded();
-    }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Coolheaded");
-        if (Settings.language == Settings.GameLanguage.ENG)
-        {
-            //todo: figure out best practice for how to do this.
-            cardStrings.DESCRIPTION = "Channel 1 Frost. NL Draw !M! card. NL If you have zero Focus, NL draw 1 more.";
-            cardStrings.UPGRADE_DESCRIPTION = "Channel 1 Frost. NL Draw !M! cards. NL If you have zero Focus, NL draw 1 more.";
-        }
+        return BcUtility.getCurrentFocus() == 0;
     }
 }
