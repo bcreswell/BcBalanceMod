@@ -18,11 +18,10 @@ The goal of this mod is not to balance around win rate or character performance,
 
 # Latest Release
 To install, put this jar in your mods folder. For windows, your mods folder might be here:
+
 C:\Program Files (x86)\Steam\steamapps\common\SlayTheSpire\mods
 
-Works with several quality of life mods (minty spire, map marks etc), but will not work with all mods due to the extensive changes it makes. If you're having trouble running it, try disabling other mods (especially content focused mods). Let me know if you find QoL mod compatibility issues or any other issues and I'll try to address them.
-
-Eng is the only supported localization.
+Works with several quality of life mods (minty spire, map marks etc), but will not work with all mods due to the extensive changes it makes. If you're having trouble running it, try disabling other mods (especially content focused mods). Let me know if you find QoL mod compatibility issues or any other issues and I'll try to address them. Eng is the only supported localization.
 
 https://github.com/bcreswell/BcBalanceMod/releases/tag/version_1.0.2
 
