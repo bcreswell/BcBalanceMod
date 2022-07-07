@@ -569,10 +569,10 @@ public class BcUtility
     
     public static void logAllCards()
     {
-        logCardsForCharacter("Ironclad", AbstractCard.CardColor.RED);
-        logCardsForCharacter("Silent", AbstractCard.CardColor.GREEN);
-        logCardsForCharacter("Defect", AbstractCard.CardColor.BLUE);
-        logCardsForCharacter("Watcher", AbstractCard.CardColor.PURPLE);
+//        logCardsForCharacter("Ironclad", AbstractCard.CardColor.RED);
+//        logCardsForCharacter("Silent", AbstractCard.CardColor.GREEN);
+//        logCardsForCharacter("Defect", AbstractCard.CardColor.BLUE);
+//        logCardsForCharacter("Watcher", AbstractCard.CardColor.PURPLE);
     }
     
     static CardGroup getCardGroup(AbstractCard.CardColor color, AbstractCard.CardRarity rarity, AbstractCard.CardType type)

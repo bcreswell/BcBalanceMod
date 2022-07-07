@@ -1860,7 +1860,7 @@
   },
   "Expunger": {
     "NAME": "Expunger",
-    "DESCRIPTION": "Retain. NL Deal !D! damage X times.",
+    "DESCRIPTION": "Retain. NL Deal !D! damage X+1 times.",
     "UPGRADE_DESCRIPTION": "",
     "EXTENDED_DESCRIPTION": [
       "Retain. NL Deal !D! damage !M! times.",

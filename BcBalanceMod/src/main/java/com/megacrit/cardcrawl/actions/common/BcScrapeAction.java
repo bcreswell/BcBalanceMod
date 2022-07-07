@@ -65,7 +65,7 @@ public class BcScrapeAction extends AbstractGameAction
                 AbstractCard topCard = zeroCostCards.getTopCard();
                 zeroCostCards.removeTopCard();
                 
-                addToBot(new MoveCardToHandAction(topCard));
+                addToBot(new MoveCardToHandAction(topCard, false));
             }
             
             isDone = true;

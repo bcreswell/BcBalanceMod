@@ -14,18 +14,20 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.powers.*;
 
-public class PremeditationAction extends AbstractGameAction
+public class PremeditatedAction extends AbstractGameAction
 {
     private static final UIStrings uiStrings;
     public static final String[] TEXT;
     public static int numExhausted;
-    public int shivsPerDiscard;
-    public int maxDiscards;
+    int shivsPerDiscard;
+    int maxDiscards;
+    int blockPerDiscard;
     
-    public PremeditationAction(int shivsPerDiscard, int maxDiscards)
+    public PremeditatedAction(int shivsPerDiscard, int maxDiscards, int blockPerDiscard)
     {
         this.shivsPerDiscard = shivsPerDiscard;
         this.maxDiscards = maxDiscards;
+        this.blockPerDiscard = blockPerDiscard;
         duration = this.startDuration = Settings.ACTION_DUR_FAST;
         actionType = ActionType.DISCARD;
     }
@@ -51,13 +53,14 @@ public class PremeditationAction extends AbstractGameAction
             if (discardCount > 0)
             {
                 int shivCount = discardCount * shivsPerDiscard;
-                addToBot(new ApplyPowerAction(player, player, new HiddenShivPower(player, shivCount), shivCount));
+    
+                addToBot(new BcApplyPowerAction(new HiddenShivPower(player, shivCount)));
 
-//                if (blockPerDiscard > 0)
-//                {
-//                    int blockToGain = blockPerDiscard * discardCount;
-//                    addToBot(new GainBlockAction(AbstractDungeon.player, AbstractDungeon.player, blockToGain));
-//                }
+                if (blockPerDiscard > 0)
+                {
+                    int blockToGain = blockPerDiscard * discardCount;
+                    addToBot(new GainBlockAction(AbstractDungeon.player, AbstractDungeon.player, blockToGain));
+                }
                 
                 for (AbstractCard card : AbstractDungeon.handCardSelectScreen.selectedCards.group)
                 {

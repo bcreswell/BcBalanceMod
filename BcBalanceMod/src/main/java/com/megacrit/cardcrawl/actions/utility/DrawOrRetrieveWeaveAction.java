@@ -27,7 +27,7 @@ public class DrawOrRetrieveWeaveAction extends AbstractGameAction
             AbstractPlayer player = AbstractDungeon.player;
             if (player.drawPile.contains(card) || player.discardPile.contains(card))
             {
-                addToBot(new MoveCardToHandAction(card));
+                addToBot(new MoveCardToHandAction(card,true));
             }
         }
         

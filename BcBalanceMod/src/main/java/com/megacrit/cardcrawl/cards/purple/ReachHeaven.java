@@ -77,7 +77,7 @@ public class ReachHeaven extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return 9;
+        return 10;
     }
     
     @Override

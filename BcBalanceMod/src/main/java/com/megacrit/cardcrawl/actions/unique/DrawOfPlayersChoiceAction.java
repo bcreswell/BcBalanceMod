@@ -103,7 +103,7 @@ public class DrawOfPlayersChoiceAction extends AbstractGameAction
             else if (possibleCardsToDraw.size() == 1)
             {
                 AbstractCard card = possibleCardsToDraw.getTopCard();
-                addToBot(new MoveCardToHandAction(card));
+                addToBot(new MoveCardToHandAction(card,false));
                 
                 isDone = true;
             }
@@ -121,7 +121,7 @@ public class DrawOfPlayersChoiceAction extends AbstractGameAction
         {
             for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards)
             {
-                addToBot(new MoveCardToHandAction(card));
+                addToBot(new MoveCardToHandAction(card, false));
             }
             
             AbstractDungeon.gridSelectScreen.selectedCards.clear();

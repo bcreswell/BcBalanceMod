@@ -241,19 +241,17 @@ public class BcNeowReward
                 neowRewardTypes.add(BcNeowRewardType.CursedUpgrade2Strikes2Defends);
                 break;
             case 4: // Boss Swap
-                neowRewardTypes.add(BcNeowRewardType.BossSwap);
-                
-//                //if you didn't make it to the act1 boss: neow's lament, otherwise: boss swap.
-//                if ((Settings.isStandardRun() || (Settings.isEndless && AbstractDungeon.floorNum <= 1)) &&
-//                            (CardCrawlGame.playerPref.getInteger(AbstractDungeon.player.chosenClass.name() + "_SPIRITS", 0) == 0))
-//                {
-//                    //neowRewardTypes.add(BcNeowRewardType.BossSwap);
-//                    neowRewardTypes.add(BcNeowRewardType.NeowsLament);
-//                }
-//                else
-//                {
-//                    neowRewardTypes.add(BcNeowRewardType.BossSwap);
-//                }
+                //if you didn't make it to the act1 boss: neow's lament, otherwise: boss swap.
+                if ((Settings.isStandardRun() || (Settings.isEndless && AbstractDungeon.floorNum <= 1)) &&
+                            (CardCrawlGame.playerPref.getInteger(AbstractDungeon.player.chosenClass.name() + "_SPIRITS", 0) == 0))
+                {
+                    //neowRewardTypes.add(BcNeowRewardType.BossSwap);
+                    neowRewardTypes.add(BcNeowRewardType.NeowsLament);
+                }
+                else
+                {
+                    neowRewardTypes.add(BcNeowRewardType.BossSwap);
+                }
                 break;
         }
         

@@ -41,7 +41,7 @@ public class DecryptionDancePower extends AbstractPower implements OnReceivePowe
         int currentFocus = BcUtility.getCurrentFocus();
         if (currentFocus < 0)
         {
-            addToBot(new RemoveSpecificPowerAction(owner, owner, FocusPower.POWER_ID));
+            addToBot(new RemovePowerIfEmptyAction(owner, FocusPower.POWER_ID));
         }
     }
     

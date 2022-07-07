@@ -109,13 +109,14 @@ public class BcApplyPowerAction extends AbstractGameAction
     }
     //endregion
     
-//    public void makeQuiet()
-//    {
-//        isQuiet = true;
-//    }
-    
     void firstUpdate()
     {
+        if (target instanceof AbstractMonster && target.isDeadOrEscaped())
+        {
+            isDone = true;
+            return;
+        }
+        
         if ((powerToApply instanceof NoDrawPower) && target.hasPower(powerToApply.ID))
         {
             isDone = true;
@@ -270,42 +271,33 @@ public class BcApplyPowerAction extends AbstractGameAction
         }
         //endregion
         
-        //region hard coded relic garbage
-        if (AbstractDungeon.player.hasRelic("Champion Belt") && source != null && source.isPlayer && target != source && powerToApply.ID.equals("Vulnerable"))
+        //region hard coded relic stuff
+        if (AbstractDungeon.player.hasRelic(ChampionsBelt.ID) && source != null && source.isPlayer && target != source && powerToApply.ID.equals(VulnerablePower.POWER_ID))
         {
-            AbstractDungeon.player.getRelic("Champion Belt").onTrigger(target);
+            AbstractDungeon.player.getRelic(ChampionsBelt.ID).onTrigger(target);
         }
         
-        if (target instanceof AbstractMonster && target.isDeadOrEscaped())
+        if (AbstractDungeon.player.hasRelic(Ginger.ID) && target.isPlayer && powerToApply.ID.equals(WeakPower.POWER_ID))
         {
-            duration = 0.0F;
-            isDone = true;
-            return;
-        }
-        
-        if (AbstractDungeon.player.hasRelic("Ginger") && target.isPlayer && powerToApply.ID.equals("Weakened"))
-        {
-            AbstractDungeon.player.getRelic("Ginger").flash();
+            AbstractDungeon.player.getRelic(Ginger.ID).flash();
             addToTop(new TextAboveCreatureAction(target, txt1Immune));
             duration -= Gdx.graphics.getDeltaTime();
             return;
         }
         
-        if (AbstractDungeon.player.hasRelic("Turnip") && target.isPlayer && powerToApply.ID.equals("Frail"))
+        if (AbstractDungeon.player.hasRelic(Turnip.ID) && target.isPlayer && powerToApply.ID.equals(FrailPower.POWER_ID))
         {
-            AbstractDungeon.player.getRelic("Turnip").flash();
+            AbstractDungeon.player.getRelic(Turnip.ID).flash();
             addToTop(new TextAboveCreatureAction(target, txt1Immune));
             duration -= Gdx.graphics.getDeltaTime();
             return;
         }
         //endregion
         
-        if (target.hasPower("Artifact") && (powerToApply.type == AbstractPower.PowerType.DEBUFF))
+        if (target.hasPower(ArtifactPower.POWER_ID) && (powerToApply.type == AbstractPower.PowerType.DEBUFF))
         {
             //can't block debuffs if you apply them to yourself
-            boolean blockTheDebuff = target != source;
-            
-            if (blockTheDebuff)
+            if (target != source)
             {
                 addToTop(new TextAboveCreatureAction(target, txt0Negated));
                 duration -= Gdx.graphics.getDeltaTime();
@@ -340,10 +332,11 @@ public class BcApplyPowerAction extends AbstractGameAction
             target.powers.add(powerToApply);
             Collections.sort(target.powers);
             powerToApply.onInitialApplication();
-            
+    
             createBuffEffect(powerToApply, true);
-            
+    
             AbstractDungeon.onModifyPower();
+            powerToApply.updateDescription();
             
             if (target.isPlayer)
             {
@@ -352,10 +345,10 @@ public class BcApplyPowerAction extends AbstractGameAction
                 {
                     if (targetPower.type == AbstractPower.PowerType.BUFF)
                     {
-                        ++buffCount;
+                        buffCount++;
                     }
                 }
-                
+        
                 if (buffCount >= 10)
                 {
                     UnlockTracker.unlockAchievement("POWERFUL");
@@ -365,14 +358,13 @@ public class BcApplyPowerAction extends AbstractGameAction
         }
         else
         {
-            //region stack the power
             existingPower.stackPower(amount);
-            
-            createBuffEffect(existingPower, false);
-            
+    
+            //using powerToApply here instead of existingPower because we want to show the delta
+            createBuffEffect(powerToApply, false);
+    
             AbstractDungeon.onModifyPower();
             existingPower.updateDescription();
-            //endregion
         }
     }
     

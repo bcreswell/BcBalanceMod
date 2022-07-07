@@ -99,7 +99,7 @@ public class ThroughViolence extends BcAttackCardBase
         {
             if (AbstractDungeon.player.drawPile.contains(this))
             {
-                addToBot(new MoveCardToHandAction(this));
+                addToBot(new MoveCardToHandAction(this, true));
             }
         }
     }

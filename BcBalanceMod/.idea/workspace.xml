@@ -182,6 +182,11 @@
           <line>625</line>
           <option name="timeStamp" value="244" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/powers/WraithFormPower.java</url>
+          <line>88</line>
+          <option name="timeStamp" value="248" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>jar://$PROJECT_DIR$/../../../Program Files (x86)/Steam/steamapps/common/SlayTheSpire/desktop-1.0.jar!/com/megacrit/cardcrawl/monsters/AbstractMonster.class</url>
           <line>1326</line>

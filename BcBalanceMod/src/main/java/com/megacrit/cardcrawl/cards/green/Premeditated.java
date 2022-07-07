@@ -65,10 +65,9 @@ public class Premeditated extends BcSkillCardBase
         return 10;
     }
     
-    @Override
-    public boolean getExhaust()
+    public int getBlockPerDiscard()
     {
-        return !upgraded;
+        return !upgraded ? 0 : 2;
     }
     
     @Override
@@ -81,13 +80,20 @@ public class Premeditated extends BcSkillCardBase
             discardLimitString = "up to " + discardLimit + " cards";
         }
         
+        int blockPerDiscard = getBlockPerDiscard();
+        String blockPerDiscardString = "";
+        if (blockPerDiscard > 0)
+        {
+            blockPerDiscardString = "and gain " + blockPerDiscard + " Block ";
+        }
+        
         if (getMagicNumber() >= 9)
         {
-            return "Discard " + discardLimitString + " from your hand. NL Create !M! *Hidden Shiv for each discard.";
+            return "Discard " + discardLimitString + " from your hand. NL Create !M! *Hidden Shiv " + blockPerDiscardString + "for each discard.";
         }
         else
         {
-            return "Discard " + discardLimitString + " from your hand. NL Create !M! *Hidden Shivs for each discard.";
+            return "Discard " + discardLimitString + " from your hand. NL Create !M! *Hidden Shivs " + blockPerDiscardString + "for each discard.";
         }
     }
     
@@ -106,8 +112,8 @@ public class Premeditated extends BcSkillCardBase
     }
     //endregion
     
-    public void use(AbstractPlayer player, AbstractMonster m)
+    public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToTop(new PremeditationAction(magicNumber, getDiscardLimit()));
+        addToTop(new PremeditatedAction(magicNumber, getDiscardLimit(), getBlockPerDiscard()));
     }
 }

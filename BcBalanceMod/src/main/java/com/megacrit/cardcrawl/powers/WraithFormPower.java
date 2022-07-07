@@ -63,13 +63,6 @@ public class WraithFormPower extends BcPowerBase
     }
     
     @Override
-    public void onInitialApplication()
-    {
-        amount = 3;
-        addToBot(new BcApplyPowerAction(new IntangiblePlayerPower(player, 1)));
-    }
-    
-    @Override
     public void atStartOfTurn()
     {
         amount = (amount % IntangibleFrequency) + 1;
@@ -80,6 +73,13 @@ public class WraithFormPower extends BcPowerBase
         }
         
         updateDescription();
+    }
+    
+    @Override
+    public void onInitialApplication()
+    {
+        amount = IntangibleFrequency;
+        addToBot(new BcApplyPowerAction(new IntangiblePlayerPower(player, 1)));
     }
     
     @Override

@@ -1,13 +1,14 @@
 package com.megacrit.cardcrawl.powers.watcher;
 
 import com.megacrit.cardcrawl.actions.GameActionManager;
-import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.stances.*;
 
 public class MantraPower extends AbstractPower
 {
@@ -38,22 +39,23 @@ public class MantraPower extends AbstractPower
         description = powerStrings.DESCRIPTIONS[0] + 10 + powerStrings.DESCRIPTIONS[1];
     }
     
+    @Override
+    public void onInitialApplication()
+    {
+        tryEnterDivinity();
+    }
+    
     void tryEnterDivinity()
     {
         while (amount >= 10)
         {
-            addToTop(new ChangeStanceAction("Divinity"));
+            addToTop(new ChangeStanceAction(DivinityStance.STANCE_ID));
             amount -= 10;
             if (amount <= 0)
             {
-                addToTop(new RemoveSpecificPowerAction(owner, owner, "Mantra"));
+                addToTop(new RemovePowerIfEmptyAction(owner, MantraPower.POWER_ID));
             }
         }
-    }
-    
-    public void onInitialApplication()
-    {
-        tryEnterDivinity();
     }
     
     public void stackPower(int stackAmount)

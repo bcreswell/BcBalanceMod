@@ -56,14 +56,14 @@ public class BookOfStabbing extends AbstractMonster
             setHp(160, 164);
         }
         
-        stabDmg = 5;
-        bigStabDmg = 15;
+        stabDmg = 6;
+        bigStabDmg = 21;
         strOnBigStab = 0;
         
         if (AbstractDungeon.ascensionLevel >= 3)
         {
-            stabDmg = 6;
-            bigStabDmg = 20;
+            stabDmg = 7;
+            bigStabDmg = 24;
         }
         
         if (AbstractDungeon.ascensionLevel >= 18)

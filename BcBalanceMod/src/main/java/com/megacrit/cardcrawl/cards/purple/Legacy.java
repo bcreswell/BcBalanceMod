@@ -1,6 +1,7 @@
 package com.megacrit.cardcrawl.cards.purple;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.monsters.*;
@@ -26,7 +27,7 @@ public class Legacy extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return 1;
     }
     
     @Override
@@ -44,19 +45,32 @@ public class Legacy extends BcPowerCardBase
     @Override
     public boolean getInnate()
     {
-        return true;
+        return upgraded;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return 2;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Whenever you gain Mantra, Draw a card.";
+        if (magicNumber == 1)
+        {
+            return "Whenever you gain Mantra, Draw a card.";
+        }
+        else
+        {
+            return "Whenever you gain !M! or more Mantra, NL Draw a card.";
+        }
     }
     //endregion
     
     @Override
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new BcApplyPowerAction(new LegacyPower(player, 1)));
+        addToBot(new BcApplyPowerAction(new LegacyPower(player, 1, magicNumber)));
     }
 }

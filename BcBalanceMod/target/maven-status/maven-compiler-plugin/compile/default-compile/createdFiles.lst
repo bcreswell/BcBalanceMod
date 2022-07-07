@@ -445,6 +445,7 @@ com\megacrit\cardcrawl\cards\curses\Clumsy.class
 com\megacrit\cardcrawl\actions\utility\TrueWaitAction.class
 com\megacrit\cardcrawl\cards\blue\Heatsinks.class
 com\megacrit\cardcrawl\cards\tempCards\ThroughViolence.class
+com\megacrit\cardcrawl\actions\common\PremeditatedAction.class
 com\megacrit\cardcrawl\cards\green\Concentrate.class
 com\megacrit\cardcrawl\relics\Akabeko.class
 com\megacrit\cardcrawl\actions\utility\FlashBuffAction.class
@@ -596,7 +597,6 @@ com\megacrit\cardcrawl\events\city\CursedTome$1.class
 com\megacrit\cardcrawl\monsters\beyond\Reptomancer.class
 com\megacrit\cardcrawl\cards\blue\Aggregate.class
 com\megacrit\cardcrawl\cards\red\Abomination.class
-com\megacrit\cardcrawl\actions\common\PremeditationAction.class
 com\megacrit\cardcrawl\cards\red\Barricade.class
 com\megacrit\cardcrawl\powers\LoseDexterityPower.class
 com\megacrit\cardcrawl\vfx\cardManip\ShowCardBrieflyEffect.class

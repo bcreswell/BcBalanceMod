@@ -53,7 +53,7 @@ public class Instruction extends BcSkillCardBase
     
     public int getMantra()
     {
-        return !upgraded ? 2 : 3;
+        return 2;
     }
     
     @Override
