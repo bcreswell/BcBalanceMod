@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.actions.common;
 
+import bcBalanceMod.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
@@ -22,6 +23,7 @@ import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToHandEffect;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.*;
 
 public class RefactorAction extends AbstractGameAction
 {
@@ -75,7 +77,7 @@ public class RefactorAction extends AbstractGameAction
                 {
                     //create a new card of the same color and type
                     cardToCreate = possibleCardsToCreate.getRandomCard(true).makeCopy();
-    
+                    
                     if (possibleCardsToCreate.size() >= cardsToExhaust.size() * 2)
                     {
                         //ensure the new cards aren't part of the original set
@@ -84,6 +86,7 @@ public class RefactorAction extends AbstractGameAction
                             if (cardToCreate.cardID.equals(existingCard.cardID))
                             {
                                 cardToCreate = null;
+                                break;
                             }
                         }
                     }

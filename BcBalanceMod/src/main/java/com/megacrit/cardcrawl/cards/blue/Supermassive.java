@@ -39,6 +39,12 @@ public class Supermassive extends BcSkillCardBase
     }
     
     @Override
+    public String getBetaImagePath()
+    {
+        return "blue/beta/supermassive.png";
+    }
+    
+    @Override
     public int getCost()
     {
         return 1;

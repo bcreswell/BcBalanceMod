@@ -6,7 +6,7 @@
     <groupId>bcBalanceMod</groupId>
     <artifactId>BcBalanceMod</artifactId> <!--Keep a note of this one: this is the ID used in the "auto add cards" method-->
     <name>BC Balance Mod</name>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <description>Lots of small changes to existing cards and relics. New cards for the original 4 characters, new relics, new potions.</description>
 
     <properties>

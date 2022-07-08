@@ -4,7 +4,7 @@
   "author_list": ["BC"],
   "credits": "Basemod, ModTheSpire, #modding",
   "description": "Lots of small changes to existing cards and relics. New cards for the original 4 characters, new relics, new potions.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "sts_version": "01-23-2019",
   "mts_version": "3.8.0",
   "dependencies": ["basemod", "stslib"],

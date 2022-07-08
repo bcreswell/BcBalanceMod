@@ -176,7 +176,18 @@ public class SingleCardViewPopup
         
         if (portraitImg == null)
         {
-            portraitImg = card.portraitTexture;
+            if (!Settings.PLAYTESTER_ART_MODE && !UnlockTracker.betaCardPref.getBoolean(this.card.cardID, false))
+            {
+                portraitImg = card.portraitTexture;
+                if (portraitImg == null)
+                {
+                    portraitImg = card.betaPortraitTexture;
+                }
+            }
+            else
+            {
+                portraitImg = card.betaPortraitTexture;
+            }
         }
     }
     

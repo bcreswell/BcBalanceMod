@@ -59,7 +59,6 @@ public class ForceField extends AbstractCard
             upgradeName();
             upgradeBlock(5);
         }
-        
     }
     
     public AbstractCard makeCopy()

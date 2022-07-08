@@ -114,13 +114,6 @@ public class CorruptHeart extends AbstractMonster
         type = AbstractMonster.EnemyType.BOSS;
         player = AbstractDungeon.player;
         
-        initialBeatOfDeath = 1;
-        damageCap = 350;
-        multiAttackBase = 2;
-        multiAttackCount = 15;
-        bigAttackBase = 20;
-        blockAfterNotAttacking = 20;
-        bigAttackIncrement = 10;
         
         if (AbstractDungeon.ascensionLevel >= 20)
         {
@@ -135,19 +128,27 @@ public class CorruptHeart extends AbstractMonster
         {
             setHp(750);
         }
+    
+        initialBeatOfDeath = 1;
+        damageCap = 350;
+        blockAfterNotAttacking = 20;
+        
+        multiAttackBase = 2;
+        multiAttackCount = 15;
+        
+        bigAttackBase = 20;
+        bigAttackIncrement = 10;
         
         if (AbstractDungeon.ascensionLevel >= 4)
         {
-            bigAttackBase = 30;
-            multiAttackBase = 3;
-            bigAttackIncrement = 15;
+            bigAttackBase = 25;
         }
         
         if (AbstractDungeon.ascensionLevel >= 19)
         {
             initialBeatOfDeath = 2;
             blockAfterNotAttacking = 30;
-            bigAttackIncrement = 20;
+            bigAttackIncrement = 15;
         }
         
         multiAttackInfo = new DamageInfo(this, multiAttackBase);
@@ -223,10 +224,17 @@ public class CorruptHeart extends AbstractMonster
             addToBot(new VFXAction(new BorderFlashEffect(new Color(0.8F, 0.5F, 1.0F, 1.0F))));
             addToBot(new VFXAction(new HeartBuffEffect(hb.cX, hb.cY)));
             
-            addToBot(new ApplyPowerAction(this, this, new StrengthPower(this, 2), 2));
+            if (cycleNumber <= 4)
+            {
+                addToBot(new ApplyPowerAction(this, this, new StrengthPower(this, 2), 1));
+            }
+            else
+            {
+                addToBot(new ApplyPowerAction(this, this, new StrengthPower(this, 2), 2));
+            }
             addToBot(new GainBlockAction(this, this, blockAfterNotAttacking));
             
-            if (cycleNumber <= 3)
+            if (cycleNumber == 3)
             {
                 addToBot(new ApplyPowerAction(this, this, new ArtifactPower(this, 2), 2));
             }
@@ -320,8 +328,6 @@ public class CorruptHeart extends AbstractMonster
     {
         //starts at 1
         turnNumber++;
-        
-        //starts at 1
         cycleNumber = ((turnNumber - 1) / 3) + 1;
         
         //either 1, 2, or 3. wraps around.
@@ -337,11 +343,7 @@ public class CorruptHeart extends AbstractMonster
             {
                 doDebuffMove(true);
             }
-            else if (cycleNumber == 3)
-            {
-                doBuffMove(true);
-            }
-            else if (cycleNumber >= 4)
+            else if (cycleNumber >= 3)
             {
                 doBuffMove(true);
             }

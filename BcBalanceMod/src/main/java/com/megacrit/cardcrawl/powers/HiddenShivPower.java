@@ -15,9 +15,9 @@ import com.megacrit.cardcrawl.vfx.combat.*;
 public class HiddenShivPower extends BcPowerBase
 {
     public static final String POWER_ID = "Hidden Shivs";
-    static int previousAmount = 0;
     static Sfx shivGainedSound;
-    static int soundCd = 0;
+    int previousAmount = 0;
+    int soundCd = 0;
     
     static
     {

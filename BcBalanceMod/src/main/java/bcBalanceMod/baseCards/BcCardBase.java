@@ -74,6 +74,7 @@ public abstract class BcCardBase extends AbstractCard
         isMultiDamage = isAoeAttack();
         
         String imgPath = getImagePath();
+        String betaImgPath = getBetaImagePath();
         
         //base game paths refer to a name in an atlas while custom paths refer to a path to a .png file
         if (!imgPath.endsWith(".png"))
@@ -112,6 +113,24 @@ public abstract class BcCardBase extends AbstractCard
             String largePortraitPath = fullImagePath.substring(0, endingIndex) + "_p" + fullImagePath.substring(endingIndex);
             
             portraitTexture = BcUtility.getTexture(largePortraitPath);
+    
+            if (betaImgPath != null)
+            {
+                fullImagePath = makeCardPath(betaImgPath);
+                cardTexture = BcUtility.getTexture(fullImagePath);
+    
+                jokePortrait = new TextureAtlas.AtlasRegion(
+                        cardTexture,
+                        0,
+                        0,
+                        cardTexture.getWidth(),
+                        cardTexture.getHeight());
+    
+                endingIndex = fullImagePath.lastIndexOf(".");
+                largePortraitPath = fullImagePath.substring(0, endingIndex) + "_p" + fullImagePath.substring(endingIndex);
+    
+                betaPortraitTexture = BcUtility.getTexture(largePortraitPath);
+            }
         }
         
         onInitialized();
@@ -235,6 +254,11 @@ public abstract class BcCardBase extends AbstractCard
     }
     
     public abstract String getImagePath();
+    
+    public String getBetaImagePath()
+    {
+        return null;
+    }
     
     //this should be sealed and just get the ID based on the mod name + class name
     public abstract String getId();

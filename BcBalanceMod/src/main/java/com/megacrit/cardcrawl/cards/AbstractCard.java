@@ -272,6 +272,7 @@ public abstract class AbstractCard implements Comparable<AbstractCard>
     public String titleToRender;
     public float titleXOffset;
     public Texture portraitTexture;
+    public Texture betaPortraitTexture;
     public int tempUpgradeCount;
     
     public boolean isStarterStrike()

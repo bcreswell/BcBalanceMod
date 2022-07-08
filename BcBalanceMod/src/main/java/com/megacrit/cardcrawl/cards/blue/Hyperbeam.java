@@ -8,8 +8,7 @@ package com.megacrit.cardcrawl.cards.blue;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
-import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.utility.SFXAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -78,6 +77,6 @@ public class Hyperbeam extends BcAttackCardBase
         addToBot(new SFXAction("ATTACK_HEAVY"));
         addToBot(new VFXAction(player, new MindblastEffect(player.dialogX, player.dialogY, player.flipHorizontal), 0.1F));
         addToBot(new DamageAllEnemiesAction(player, multiDamage, damageTypeForTurn, AttackEffect.NONE));
-        addToBot(new ApplyPowerAction(player, player, new FocusPower(player, -magicNumber), -magicNumber));
+        addToBot(new BcApplyPowerAction(new FocusPower(player, -magicNumber)));
     }
 }

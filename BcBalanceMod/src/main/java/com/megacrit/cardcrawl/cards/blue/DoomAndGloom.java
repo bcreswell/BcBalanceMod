@@ -46,13 +46,13 @@ public class DoomAndGloom extends BcAttackCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 2 : 1;
+        return 2;
     }
     
     @Override
     public int getDamage()
     {
-        return 10;
+        return !upgraded ? 10 : 14;
     }
     
     @Override
