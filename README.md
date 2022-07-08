@@ -23,7 +23,7 @@ C:\Program Files (x86)\Steam\steamapps\common\SlayTheSpire\mods
 
 Works with several quality of life mods (minty spire, map marks etc), but will not work with all mods due to the extensive changes it makes. If you're having trouble running it, try disabling other mods (especially content focused mods). Let me know if you find QoL mod compatibility issues or any other issues and I'll try to address them. Eng is the only supported localization.
 
-https://github.com/bcreswell/BcBalanceMod/releases/tag/version_1.0.2
+https://github.com/bcreswell/BcBalanceMod/releases/tag/version_1.0.3
 
 # Steam Workshop
 To install from Steam, just click "Subscribe" and then when you run Slay the Spire, click "Play with Mods".
