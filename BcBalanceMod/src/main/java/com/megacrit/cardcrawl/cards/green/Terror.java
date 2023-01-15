@@ -48,7 +48,7 @@ public class Terror extends BcSkillCardBase
     @Override
     public boolean getInnate()
     {
-        return upgraded;
+        return false;
     }
     
     @Override

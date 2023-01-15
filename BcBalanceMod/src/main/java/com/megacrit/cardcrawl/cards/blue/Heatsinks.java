@@ -38,7 +38,7 @@ public class Heatsinks extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 0;
+        return 1;
     }
     
     @Override

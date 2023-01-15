@@ -43,7 +43,6 @@ public class ColdSnap extends BcAttackCardBase
         return ID;
     }
     
-    
     @Override
     public CardRarity getCardRarity()
     {
@@ -71,7 +70,7 @@ public class ColdSnap extends BcAttackCardBase
         }
         else
         {
-            return 7;
+            return 6;
         }
     }
     

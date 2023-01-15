@@ -58,7 +58,7 @@ public class Beta extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Shuffle a *Beta into your draw pile.";
+        return "Shuffle an *Omega into your draw pile.";
     }
     //endregion
     

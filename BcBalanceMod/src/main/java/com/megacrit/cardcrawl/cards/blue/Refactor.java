@@ -59,7 +59,7 @@ public class Refactor extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -72,12 +72,6 @@ public class Refactor extends BcSkillCardBase
     public boolean getExhaust()
     {
         return true;
-    }
-    
-    @Override
-    public boolean getRetain()
-    {
-        return upgraded;
     }
     
     @Override

@@ -24,7 +24,7 @@ public class Establishment extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return !upgraded ? 2 : 1;
     }
     
     @Override
@@ -43,12 +43,6 @@ public class Establishment extends BcPowerCardBase
     public int getMagicNumber()
     {
         return 1;
-    }
-    
-    @Override
-    public boolean getInnate()
-    {
-        return true;
     }
     
     @Override

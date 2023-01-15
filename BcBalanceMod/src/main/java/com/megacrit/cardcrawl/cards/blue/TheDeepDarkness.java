@@ -61,7 +61,7 @@ public class TheDeepDarkness extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "End of turn: NL Trigger the passive on ALL Dark orbs. NL If you have an empty orb slot, Channel a Dark orb.";
+        return "End of turn: NL Trigger the passive on ALL Dark orbs and, if you have an empty orb slot, Channel a Dark orb.";
     }
     //endregion
     

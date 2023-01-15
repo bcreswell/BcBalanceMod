@@ -31,7 +31,7 @@ public class BcUtility
     public static final Color corruptedGlow = new Color(1f, 0, 1f, 1);
     public static final Color etherealTextColor = new Color(1f, .7f, 1f, 1);
     public static final Color normalGlowColor = new Color(0.2F, 0.9F, 1.0F, 0.25F);
-    public static final Color retainGlowColor = new Color(0.9f, 0.75F, .6F, 0.4F);
+    public static final Color retainGlowColor = new Color(1f, 0.7F, .5F, .5F);
     public static final Color dimTextColor = new Color(0.3f, 0.3F, .3F, 1);
     public static final Color dimCardColor = new Color(0.3f, 0.3F, .3F, .1f);
     

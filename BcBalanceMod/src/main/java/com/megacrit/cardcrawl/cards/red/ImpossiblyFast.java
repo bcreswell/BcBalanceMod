@@ -3,8 +3,10 @@ package com.megacrit.cardcrawl.cards.red;
 import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.cards.*;
 import com.megacrit.cardcrawl.cards.status.*;
 import com.megacrit.cardcrawl.characters.*;
+import com.megacrit.cardcrawl.dungeons.*;
 import com.megacrit.cardcrawl.monsters.*;
 
 public class ImpossiblyFast extends BcSkillCardBase
@@ -54,6 +56,22 @@ public class ImpossiblyFast extends BcSkillCardBase
         return "Draw !M! zero cost cards. NL Add a Dazed to your draw pile.";
     }
     //endregion
+    
+    
+    @Override
+    public String getTemporaryExtraDescription(AbstractMonster monster)
+    {
+        int zeroCostCardCount = 0;
+        for (AbstractCard drawPileCard : AbstractDungeon.player.drawPile.group)
+        {
+            if (drawPileCard.costForTurn == 0)
+            {
+                zeroCostCardCount++;
+            }
+        }
+        
+        return "possible draws: " + zeroCostCardCount;
+    }
     
     @Override
     public void use(AbstractPlayer player, AbstractMonster monster)

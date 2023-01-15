@@ -50,7 +50,7 @@ public class Juggernaut extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "When you gain block, deal that much damage to a random enemy.";
+        return "When you gain block, deal that much as damage to a random enemy.";
     }
     //endregion
     

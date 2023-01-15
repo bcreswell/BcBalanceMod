@@ -59,16 +59,21 @@ public class Hologram extends BcSkillCardBase
     }
     
     @Override
+    public boolean getExhaust()
+    {
+        return !upgraded;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
+        String description = "Retrieve a card of your choice.";
+        if (upgraded)
         {
-            return "Retrieve a card of your choice.";
+            description = "Gain !B! Block. NL " + description;
         }
-        else
-        {
-            return "Gain !B! Block. NL Retrieve a card of your choice.";
-        }
+        
+        return description;
     }
     
     @Override
@@ -90,6 +95,7 @@ public class Hologram extends BcSkillCardBase
         {
             addToBot(new GainBlockAction(player, player, block));
         }
+        
         addToBot(new HologramAction());
     }
 }

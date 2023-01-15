@@ -48,7 +48,7 @@ public class MemoriesOfRuin extends BcSkillCardBase
     
     public int getVulnerableCount()
     {
-        return 1;
+        return 2;
     }
     
     public int getHpLoss()

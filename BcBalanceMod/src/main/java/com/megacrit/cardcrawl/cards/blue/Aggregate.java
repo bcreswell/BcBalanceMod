@@ -45,12 +45,6 @@ public class Aggregate extends BcSkillCardBase
     }
     
     @Override
-    public boolean getRetain()
-    {
-        return true;
-    }
-    
-    @Override
     public String getBaseDescription()
     {
         return "Gain [B] for every !M! cards in your draw pile.";

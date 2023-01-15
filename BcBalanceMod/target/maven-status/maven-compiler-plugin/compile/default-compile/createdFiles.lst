@@ -40,7 +40,6 @@ com\megacrit\cardcrawl\vfx\combat\PowerTextEffect.class
 com\megacrit\cardcrawl\actions\AbstractGameAction.class
 com\megacrit\cardcrawl\actions\common\NormalizeStrengthAction.class
 com\megacrit\cardcrawl\cards\green\ToolsOfTheTrade.class
-com\megacrit\cardcrawl\cards\purple\Prostrate.class
 com\megacrit\cardcrawl\cards\red\PerfectedStrike.class
 com\megacrit\cardcrawl\actions\unique\MulticastAction.class
 com\megacrit\cardcrawl\powers\LoseStrengthPower.class

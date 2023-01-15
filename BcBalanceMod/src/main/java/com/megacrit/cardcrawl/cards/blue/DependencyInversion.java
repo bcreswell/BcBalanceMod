@@ -56,13 +56,20 @@ public class DependencyInversion extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 2 : 3;
+        return !upgraded ? 1 : 2;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Lose 1 Focus. NL Draw !M! cards. NL If your Focus is negative, draw 1 more.";
+        if (magicNumber == 1)
+        {
+            return "Lose 1 Focus. NL Draw a card. NL If your Focus is negative, draw 1 more.";
+        }
+        else
+        {
+            return "Lose 1 Focus. NL Draw !M! cards. NL If your Focus is negative, draw 1 more.";
+        }
     }
     //endregion
     
@@ -71,7 +78,7 @@ public class DependencyInversion extends BcSkillCardBase
         //precalculating the draw value rather than letting a queued action resolve it because that can
         // lead to this drawing itself even if done from a single draw action.
         int drawAmount = magicNumber;
-        if ( BcUtility.getCurrentFocus() <= 0)
+        if (BcUtility.getCurrentFocus() <= 0)
         {
             //will be negative by the time we draw
             drawAmount++;

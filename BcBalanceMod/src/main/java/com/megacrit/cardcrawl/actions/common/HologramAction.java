@@ -66,6 +66,7 @@ public class HologramAction extends AbstractGameAction
         {
             if (!AbstractDungeon.gridSelectScreen.selectedCards.isEmpty())
             {
+                boolean wasZeroCost = false;
                 for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards)
                 {
                     player.hand.addToHand(card);

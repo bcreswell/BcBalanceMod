@@ -64,11 +64,9 @@ public class DizzyPower extends BcPowerBase
     @Override
     public String getBaseDescription()
     {
-        return "When your deck spins too fast, you get Dizzy. NL NL Shuffling adds #b" +
-                       DizzyPerShuffle +
-                       " Dizzy and drawing cards reduces Dizzy. NL NL If you would go over #b" +
-                       NauseousTheshold +
-                       " Dizzy, you'll get nauseous instead.";
+        return "Shuffling causes you to suffer #b" + DizzyPerShuffle +
+                       " Dizzy. Each card you draw reduces your Dizzy by 1. NL NL If you would go over #b" +
+                       NauseousTheshold + " Dizzy, you'll get nauseous instead.";
     }
     //endregion
     

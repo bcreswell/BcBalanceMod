@@ -44,7 +44,7 @@ public class Recursion extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 0;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -56,7 +56,7 @@ public class Recursion extends BcSkillCardBase
     @Override
     public boolean getRetain()
     {
-        return upgraded;
+        return true;
     }
     
     @Override

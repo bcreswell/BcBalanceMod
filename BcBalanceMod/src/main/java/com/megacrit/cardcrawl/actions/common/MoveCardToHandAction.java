@@ -28,32 +28,40 @@ public class MoveCardToHandAction extends AbstractGameAction
         
         if (player.drawPile.contains(cardToMove))
         {
-            if (skipIfNoRoom && (player.hand.size() >= 10))
+            AbstractPower noDrawPower = player.getPower(NoDrawPower.POWER_ID);
+            if (noDrawPower != null)
             {
-                //no room in hand, so skip this action
+                noDrawPower.flash();
             }
             else
             {
-                cardToMove.triggerWhenDrawn();
-                
-                if (player.hand.size() == 10)
+                if (skipIfNoRoom && (player.hand.size() >= 10))
                 {
-                    player.drawPile.moveToDiscardPile(cardToMove);
-                    player.createHandIsFullDialog();
+                    //no room in hand, so skip this action
                 }
                 else
                 {
-                    player.drawPile.moveToHand(cardToMove, player.drawPile);
-                }
-                
-                for (AbstractPower power : player.powers)
-                {
-                    power.onCardDraw(cardToMove);
-                }
-                
-                for (AbstractRelic relic : player.relics)
-                {
-                    relic.onCardDraw(cardToMove);
+                    cardToMove.triggerWhenDrawn();
+        
+                    if (player.hand.size() == 10)
+                    {
+                        player.drawPile.moveToDiscardPile(cardToMove);
+                        player.createHandIsFullDialog();
+                    }
+                    else
+                    {
+                        player.drawPile.moveToHand(cardToMove, player.drawPile);
+                    }
+        
+                    for (AbstractPower power : player.powers)
+                    {
+                        power.onCardDraw(cardToMove);
+                    }
+        
+                    for (AbstractRelic relic : player.relics)
+                    {
+                        relic.onCardDraw(cardToMove);
+                    }
                 }
             }
         }

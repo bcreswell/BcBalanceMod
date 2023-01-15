@@ -21,12 +21,6 @@ public class LightAsAFeather extends BcAttackCardBase
     }
     
     @Override
-    public void onInitialized()
-    {
-        cardsToPreview = new Insight();
-    }
-    
-    @Override
     public String getImagePath()
     {
         return "purple/lightAsAFeather.png";
@@ -65,7 +59,7 @@ public class LightAsAFeather extends BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 1 : 2;
+        return !upgraded ? 2 : 3;
     }
     
     @Override
@@ -73,11 +67,11 @@ public class LightAsAFeather extends BcAttackCardBase
     {
         if (getMagicNumber() == 0)
         {
-            return "Deal !D! damage. NL Shuffle an Insight into your draw pile.";
+            return "Deal !D! damage.";
         }
         else
         {
-            return "Deal !D! damage. NL Gain !M! Mantra. NL Shuffle an Insight into your draw pile.";
+            return "Deal !D! damage. NL Gain !M! Mantra.";
         }
     }
     //endregion
@@ -91,7 +85,5 @@ public class LightAsAFeather extends BcAttackCardBase
         {
             addToBot(new BcApplyPowerAction(new MantraPower(player, magicNumber)));
         }
-        
-        addToBot(new MakeTempCardInDrawPileAction(cardsToPreview.makeStatEquivalentCopy(), 1, true, true));
     }
 }

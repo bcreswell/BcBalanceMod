@@ -167,35 +167,56 @@ public class CorruptHeart extends AbstractMonster
         
         if (AbstractDungeon.ascensionLevel < 20)
         {
-            int summonVal = AbstractDungeon.aiRng.random(0, 2);
+            int summonVal = AbstractDungeon.aiRng.random(0, 3);
             if (summonVal == 0)
             {
+                //general beefiness
                 monstersToSummon.add(new JawWorm(x, y, false));
             }
             else if (summonVal == 1)
             {
+                //slimes
+                //inflicts weak
                 monstersToSummon.add(new AcidSlime_L(x, y));
             }
             else if (summonVal == 2)
             {
+                //dazes
                 monstersToSummon.add(new Sentry(x, y));
+            }
+            else if (summonVal == 3)
+            {
+                //str scaling
+                monstersToSummon.add(new Cultist(x, y));
             }
         }
         else //ascension 20
         {
-            int summonVal = AbstractDungeon.aiRng.random(0, 2);
+            int summonVal = AbstractDungeon.aiRng.random(0, 3);
             if (summonVal == 0)
             {
+                //big turn 1 hit + heart's attack is scary
+                //inflicts frail
                 monstersToSummon.add(new ShelledParasite(x, y));
             }
             else if (summonVal == 1)
             {
+                //burns
+                //fast str scaling
                 monstersToSummon.add(new OrbWalker(x, y));
             }
             else if (summonVal == 2)
             {
+                //spiker is pokey
+                //fungi inflicts vuln, but controlled by player as to when
                 monstersToSummon.add(new Spiker(x1, y1));
                 monstersToSummon.add(new FungiBeast(x2, y2));
+            }
+            else if (summonVal == 3)
+            {
+                //barricade means if you ignore him he's harder and harder to kill
+                //inflicts frail
+                monstersToSummon.add(new SphericGuardian(x, y));
             }
         }
     }
@@ -226,7 +247,7 @@ public class CorruptHeart extends AbstractMonster
             
             if (cycleNumber <= 4)
             {
-                addToBot(new ApplyPowerAction(this, this, new StrengthPower(this, 2), 1));
+                addToBot(new ApplyPowerAction(this, this, new StrengthPower(this, 1), 1));
             }
             else
             {
@@ -271,6 +292,8 @@ public class CorruptHeart extends AbstractMonster
             addToBot(new MakeTempCardInDrawPileAction(new Wound(), 1, true, false, false, (float) Settings.WIDTH * 0.5F, (float) Settings.HEIGHT / 2.0F));
             addToBot(new MakeTempCardInDrawPileAction(new Burn(), 1, true, false, false, (float) Settings.WIDTH * 0.65F, (float) Settings.HEIGHT / 2.0F));
             addToBot(new MakeTempCardInDrawPileAction(new VoidCard(), 1, true, false, false, (float) Settings.WIDTH * 0.8F, (float) Settings.HEIGHT / 2.0F));
+    
+            addToBot(new ApplyPowerAction(this, this, new StrengthPower(this, 1), 1));
         }
     }
     

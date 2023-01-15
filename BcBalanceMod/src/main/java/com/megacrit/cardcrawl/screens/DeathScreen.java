@@ -669,11 +669,11 @@ public class DeathScreen extends GameOverScreen {
     }
     
     private void updateAscensionProgress() {
-        if ((isVictory || AbstractDungeon.actNum >= 4) && AbstractDungeon.isAscensionMode && Settings.isStandardRun() && AbstractDungeon.ascensionLevel < 20 && StatsScreen.isPlayingHighestAscension(AbstractDungeon.player.getPrefs())) {
+        if (isVictory && AbstractDungeon.isAscensionMode && Settings.isStandardRun() && (AbstractDungeon.ascensionLevel < 20) && StatsScreen.isPlayingHighestAscension(AbstractDungeon.player.getPrefs())) {
             //bc: no more unlocking new ascensions when you die. worst feeling ever.
-            // not only did you just lose, but they took away your ability to win that particular medal in a future run by giving it to you now.
-            //StatsScreen.incrementAscension(AbstractDungeon.player.getCharStat());
-            //AbstractDungeon.topLevelEffects.add(new AscensionLevelUpTextEffect());
+            // not only did you just lose, but they took away your ability to earn that particular accomplishment in a future run by giving it to you now.
+            StatsScreen.incrementAscension(AbstractDungeon.player.getCharStat());
+            AbstractDungeon.topLevelEffects.add(new AscensionLevelUpTextEffect());
         } else if (!AbstractDungeon.ascensionCheck && UnlockTracker.isAscensionUnlocked(AbstractDungeon.player) && !Settings.seedSet) {
             AbstractDungeon.topLevelEffects.add(new AscensionUnlockedTextEffect());
         }

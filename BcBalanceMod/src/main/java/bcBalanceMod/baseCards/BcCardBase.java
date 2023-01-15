@@ -454,7 +454,7 @@ public abstract class BcCardBase extends AbstractCard
         }
         else
         {
-            return " NL (" + extra + ")";
+            return " NL ( " + extra + " )";
         }
     }
     

@@ -39,7 +39,13 @@ public class DrawOfPlayersChoiceAction extends AbstractGameAction
     
     public void update()
     {
-        if (AbstractDungeon.gridSelectScreen.selectedCards.isEmpty())
+        AbstractPower noDrawPower = player.getPower(NoDrawPower.POWER_ID);
+        if (noDrawPower != null)
+        {
+            noDrawPower.flash();
+            isDone = true;
+        }
+        else if (AbstractDungeon.gridSelectScreen.selectedCards.isEmpty())
         {
             CardGroup possibleCardsToDraw = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
             
@@ -74,7 +80,7 @@ public class DrawOfPlayersChoiceAction extends AbstractGameAction
                     {
                         continue;
                     }
-        
+                    
                     if (onlySkills && (exhaustPileCard.type != AbstractCard.CardType.SKILL))
                     {
                         continue;
@@ -85,7 +91,7 @@ public class DrawOfPlayersChoiceAction extends AbstractGameAction
                     {
                         continue;
                     }
-        
+                    
                     //exhaust pile cards glow to distinguish from draw pile cards
                     exhaustPileCard.glowColor = BcUtility.corruptedGlow;
                     exhaustPileCard.isGlowing = true;
@@ -103,7 +109,7 @@ public class DrawOfPlayersChoiceAction extends AbstractGameAction
             else if (possibleCardsToDraw.size() == 1)
             {
                 AbstractCard card = possibleCardsToDraw.getTopCard();
-                addToBot(new MoveCardToHandAction(card,false));
+                addToBot(new MoveCardToHandAction(card, false));
                 
                 isDone = true;
             }

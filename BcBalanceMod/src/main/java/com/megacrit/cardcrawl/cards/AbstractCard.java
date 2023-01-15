@@ -3653,7 +3653,7 @@ public abstract class AbstractCard implements Comparable<AbstractCard>
         {
             textColor = BcUtility.etherealTextColor;
         }
-        else if (retain && !selfRetain && !BcUtility.playerHasRelic(RunicPyramid.ID))
+        else if ((retain || selfRetain) && !BcUtility.playerHasRelic(RunicPyramid.ID))
         {
             textColor = BcUtility.retainGlowColor;
         }

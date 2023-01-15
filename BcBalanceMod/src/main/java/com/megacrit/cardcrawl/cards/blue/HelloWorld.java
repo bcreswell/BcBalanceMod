@@ -25,7 +25,7 @@ public class HelloWorld extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return 1;
     }
     
     @Override

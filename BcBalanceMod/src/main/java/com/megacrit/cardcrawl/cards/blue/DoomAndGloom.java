@@ -52,7 +52,7 @@ public class DoomAndGloom extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 10 : 14;
+        return !upgraded ? 11 : 17;
     }
     
     @Override

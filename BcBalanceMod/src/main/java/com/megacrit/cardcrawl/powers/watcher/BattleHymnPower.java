@@ -87,7 +87,6 @@ public class BattleHymnPower extends BcPowerBase
         if ((card.type == AbstractCard.CardType.ATTACK) &&
                     !card.cardID.equals(Smite.ID))
         {
-            flash();
             attacksThisTurn++;
             
             if (attacksThisTurn == BattleHymn.AttacksPerSmite)

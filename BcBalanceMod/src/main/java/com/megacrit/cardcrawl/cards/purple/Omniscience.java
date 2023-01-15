@@ -34,13 +34,7 @@ public class Omniscience extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 3;
-    }
-    
-    @Override
-    public boolean getRetain()
-    {
-        return upgraded;
+        return !upgraded ? 4 : 3;
     }
     
     @Override

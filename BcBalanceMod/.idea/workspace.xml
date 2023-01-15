@@ -26,18 +26,11 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/cards/CardGroup.java" root0="SKIP_INSPECTION" />
-    <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/cards/blue/Fission.java" root0="SKIP_INSPECTION" />
-    <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/powers/AbstractPower.java" root0="SKIP_INSPECTION" />
-    <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/cards/purple/PressurePoints.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$PROJECT_DIR$/../../../Program Files (x86)/Steam/steamapps/common/SlayTheSpire/desktop-1.0.jar!/localization/eng/powers.json" root0="SKIP_INSPECTION" />
-    <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/actions/watcher/TriggerMarksAction.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$PROJECT_DIR$/../../../Program Files (x86)/Steam/steamapps/common/SlayTheSpire/desktop-1.0.jar!/localization/eng/relics.json" root0="SKIP_INSPECTION" />
-    <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/actions/defect/FissionAction.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$PROJECT_DIR$/../../../Program Files/AdoptOpenJDK/jdk-8.0.282.8-hotspot/src.zip!/java/util/ArrayList.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$PROJECT_DIR$/../../../Program Files/AdoptOpenJDK/jdk-8.0.282.8-hotspot/src.zip!/java/util/UUID.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$PROJECT_DIR$/../../../Program Files (x86)/Steam/steamapps/common/SlayTheSpire/desktop-1.0.jar!/localization/eng/cards.json" root0="SKIP_INSPECTION" />
-    <setting file="jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/cards/AbstractCard.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -53,12 +46,13 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/localization/eng" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/shop.txt" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="advanced.settings" />
+    <property name="settings.editor.selected.configurable" value="nele.options" />
+    <property name="two.files.diff.last.used.file" value="$USER_HOME$/Desktop/shop.txt" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -186,6 +180,11 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/megacrit/cardcrawl/powers/WraithFormPower.java</url>
           <line>88</line>
           <option name="timeStamp" value="248" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$PROJECT_DIR$/../../decompile/desktop-1.0.jar!/com/megacrit/cardcrawl/powers/NoBlockPower.java</url>
+          <line>49</line>
+          <option name="timeStamp" value="250" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>jar://$PROJECT_DIR$/../../../Program Files (x86)/Steam/steamapps/common/SlayTheSpire/desktop-1.0.jar!/com/megacrit/cardcrawl/monsters/AbstractMonster.class</url>

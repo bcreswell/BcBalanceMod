@@ -62,7 +62,43 @@ public class Merchant implements Disposable {
         this.saidWelcome = false;
         this.shopScreen = 1;
         this.anim = new AnimatedNpc(DRAW_X + 256.0F * Settings.scale, AbstractDungeon.floorY + 30.0F * Settings.scale, "images/npcs/merchant/skeleton.atlas", "images/npcs/merchant/skeleton.json", "idle");
+        
+        AbstractCard c;
+        for(c = AbstractDungeon.getCardFromPool(AbstractDungeon.rollRarity(), CardType.ATTACK, true).makeCopy(); c.color == CardColor.COLORLESS; c = AbstractDungeon.getCardFromPool(AbstractDungeon.rollRarity(), CardType.ATTACK, true).makeCopy()) {
+        }
     
+        this.cards1.add(c);
+    
+        for(c = AbstractDungeon.getCardFromPool(AbstractDungeon.rollRarity(), CardType.ATTACK, true).makeCopy(); Objects.equals(c.cardID, ((AbstractCard)this.cards1.get(this.cards1.size() - 1)).cardID) || c.color == CardColor.COLORLESS; c = AbstractDungeon.getCardFromPool(AbstractDungeon.rollRarity(), CardType.ATTACK, true).makeCopy()) {
+        }
+    
+        this.cards1.add(c);
+    
+        for(c = AbstractDungeon.getCardFromPool(AbstractDungeon.rollRarity(), CardType.SKILL, true).makeCopy(); c.color == CardColor.COLORLESS; c = AbstractDungeon.getCardFromPool(AbstractDungeon.rollRarity(), CardType.SKILL, true).makeCopy()) {
+        }
+    
+        this.cards1.add(c);
+    
+        for(c = AbstractDungeon.getCardFromPool(AbstractDungeon.rollRarity(), CardType.SKILL, true).makeCopy(); Objects.equals(c.cardID, ((AbstractCard)this.cards1.get(this.cards1.size() - 1)).cardID) || c.color == CardColor.COLORLESS; c = AbstractDungeon.getCardFromPool(AbstractDungeon.rollRarity(), CardType.SKILL, true).makeCopy()) {
+        }
+    
+        this.cards1.add(c);
+    
+        for(c = AbstractDungeon.getCardFromPool(AbstractDungeon.rollRarity(), CardType.POWER, true).makeCopy(); c.color == CardColor.COLORLESS; c = AbstractDungeon.getCardFromPool(AbstractDungeon.rollRarity(), CardType.POWER, true).makeCopy()) {
+        }
+    
+        this.cards1.add(c);
+        
+        this.cards2.add(AbstractDungeon.getColorlessCardFromPool(CardRarity.UNCOMMON).makeCopy());
+        this.cards2.add(AbstractDungeon.getColorlessCardFromPool(CardRarity.RARE).makeCopy());
+        if (AbstractDungeon.id.equals("TheEnding")) {
+            Collections.addAll(this.idleMessages, ENDING_TEXT);
+        } else {
+            Collections.addAll(this.idleMessages, TEXT);
+        }
+        
+        //patches need the stuff above, so not deleting it. clearing it here to change the logic.
+        this.cards1.clear();
         AbstractCard firstAttack = null;
         while (firstAttack == null)
         {
@@ -74,7 +110,7 @@ public class Merchant implements Disposable {
             }
         }
         this.cards1.add(firstAttack.makeCopy());
-        
+    
         AbstractCard firstSkill = null;
         while (firstSkill == null)
         {
@@ -86,7 +122,7 @@ public class Merchant implements Disposable {
             }
         }
         this.cards1.add(firstSkill.makeCopy());
-        
+    
         AbstractCard secondSkill = null;
         while (secondSkill == null)
         {
@@ -98,7 +134,7 @@ public class Merchant implements Disposable {
             }
         }
         this.cards1.add(secondSkill.makeCopy());
-        
+    
         AbstractCard firstPower = null;
         while (firstPower == null)
         {
@@ -116,21 +152,13 @@ public class Merchant implements Disposable {
         while (secondPower == null)
         {
             secondPower = AbstractDungeon.getCardFromPool(AbstractDungeon.rollRarity(), CardType.POWER, true);
-            
+        
             if ((secondPower.color == CardColor.COLORLESS) || (secondPower.cardID == firstPower.cardID))
             {
                 secondPower = null;
             }
         }
         this.cards1.add(secondPower.makeCopy());
-        
-        this.cards2.add(AbstractDungeon.getColorlessCardFromPool(CardRarity.UNCOMMON).makeCopy());
-        this.cards2.add(AbstractDungeon.getColorlessCardFromPool(CardRarity.RARE).makeCopy());
-        if (AbstractDungeon.id.equals("TheEnding")) {
-            Collections.addAll(this.idleMessages, ENDING_TEXT);
-        } else {
-            Collections.addAll(this.idleMessages, TEXT);
-        }
         
         this.speechTimer = 1.5F;
         this.modX = x;

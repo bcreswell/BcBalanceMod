@@ -42,35 +42,30 @@ public class CalculatedGamble extends BcSkillCardBase
     @Override
     public boolean getExhaust()
     {
-        return true;
-    }
-    
-    @Override
-    public boolean getRetain()
-    {
-        return upgraded;
+        return !upgraded;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Choose any number of cards to discard, NL then draw that many cards.";
-        }
-        else
-        {
-            return "Choose any number of cards to discard, NL then draw that many cards + 1.";
-        }
+        return "Choose any number of cards to discard, NL then draw that many cards.";
+//        if (!upgraded)
+//        {
+//            return "Choose any number of cards to discard, NL then draw that many cards.";
+//        }
+//        else
+//        {
+//            return "Choose any number of cards to discard, NL then draw that many cards + 1.";
+//        }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new CalculatedGambleAction(true));
-        if (upgraded)
-        {
-            addToBot(new DrawCardAction(1));
-        }
+//        if (upgraded)
+//        {
+//            addToBot(new DrawCardAction(1));
+//        }
     }
 }
