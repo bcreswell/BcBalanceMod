@@ -2,7 +2,9 @@ package com.megacrit.cardcrawl.cards.red;
 
 import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.*;
 import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.monsters.*;
 import com.megacrit.cardcrawl.powers.*;
@@ -25,15 +27,15 @@ public class UnnaturalRegeneration extends BcPowerCardBase
     }
     
     @Override
-    public int getCost()
+    protected void onInitialized()
     {
-        return 2;
+        tags.add(AbstractCard.CardTags.HEALING);
     }
     
     @Override
-    public boolean getInnate()
+    public int getCost()
     {
-        return upgraded;
+        return 1;
     }
     
     @Override
@@ -47,17 +49,46 @@ public class UnnaturalRegeneration extends BcPowerCardBase
     {
         return CardRarity.RARE;
     }
+
+    @Override
+    public boolean getEthereal()
+    {
+        return true;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return 5;
+    }
     
     @Override
     public String getBaseDescription()
     {
-        return "When you lose HP from a card, heal back that amount at the end of combat.";
+        if (!upgraded)
+        {
+            return "Sacrifice !M! HP. NL When you lose HP from a card, heal back that amount at the end of combat.";
+        }
+        else
+        {
+            return "When you lose HP from a card, heal back that amount at the end of combat. NL Sacrifice !M! HP.";
+        }
     }
     //endregion
     
     @Override
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new BcApplyPowerAction(new UnnaturalRegenerationPower(player, 1)));
+        if (!upgraded)
+        {
+            //doesn't heal back when lose hp applied first.
+            addToBot(new LoseHPAction(player, player, magicNumber));
+            addToBot(new BcApplyPowerAction(new UnnaturalRegenerationPower(player, 1)));
+        }
+        else
+        {
+            addToBot(new BcApplyPowerAction(new UnnaturalRegenerationPower(player, 1)));
+            addToBot(new LoseHPAction(player, player, magicNumber));
+        }
     }
 }

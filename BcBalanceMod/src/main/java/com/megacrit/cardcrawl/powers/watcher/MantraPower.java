@@ -1,8 +1,10 @@
 package com.megacrit.cardcrawl.powers.watcher;
 
+import bcBalanceMod.BcUtility;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -36,7 +38,7 @@ public class MantraPower extends AbstractPower
     
     public void updateDescription()
     {
-        description = powerStrings.DESCRIPTIONS[0] + 10 + powerStrings.DESCRIPTIONS[1];
+        description = powerStrings.DESCRIPTIONS[0] + 10 + powerStrings.DESCRIPTIONS[1] + " Mantra gained while in Divinity stance heals you instead.";
     }
     
     @Override
@@ -47,13 +49,30 @@ public class MantraPower extends AbstractPower
     
     void tryEnterDivinity()
     {
-        while (amount >= 10)
+        AbstractPlayer player = AbstractDungeon.player;
+        if (!BcUtility.isPlayerInStance(DivinityStance.STANCE_ID))
         {
-            addToTop(new ChangeStanceAction(DivinityStance.STANCE_ID));
-            amount -= 10;
-            if (amount <= 0)
+            while (amount >= 10)
             {
-                addToTop(new RemovePowerIfEmptyAction(owner, MantraPower.POWER_ID));
+                addToTop(new ChangeStanceAction(DivinityStance.STANCE_ID));
+                amount -= 10;
+                //extra mantra is converted into healing
+                if (amount > 0)
+                {
+                    addToBot(new HealAction(player, player, amount));
+                    amount = 0;
+                    addToBot(new RemovePowerIfEmptyAction(owner, MantraPower.POWER_ID));
+                }
+            }
+        }
+        else
+        {
+            //extra mantra is converted into healing
+            if (amount > 0)
+            {
+                addToBot(new HealAction(player, player, amount));
+                amount = 0;
+                addToBot(new RemovePowerIfEmptyAction(owner, MantraPower.POWER_ID));
             }
         }
     }

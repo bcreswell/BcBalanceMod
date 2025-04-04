@@ -17,14 +17,14 @@ public class EstablishmentPowerAction extends AbstractGameAction
     
     public void update()
     {
-        //prefer cards that aren't temporarily zero already
         CardGroup retainCards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+
+        //prefer cards that aren't temporarily zero already
         for (AbstractCard c : AbstractDungeon.player.hand.group)
         {
             if ((c.costForTurn > 0) && (c.cost != -1) &&
-                        (c.rarity != AbstractCard.CardRarity.RARE) &&
-                        (c.selfRetain || c.retain) &&
-                        !c.isEthereal)
+                (c.selfRetain || c.retain) &&
+                !c.isEthereal)
             {
                 retainCards.group.add(c);
             }
@@ -36,9 +36,8 @@ public class EstablishmentPowerAction extends AbstractGameAction
             for (AbstractCard c : AbstractDungeon.player.hand.group)
             {
                 if ((c.cost > 0) && (c.cost != -1) &&
-                            (c.rarity != AbstractCard.CardRarity.RARE) &&
-                            (c.selfRetain || c.retain) &&
-                            !c.isEthereal)
+                    (c.selfRetain || c.retain) &&
+                    !c.isEthereal)
                 {
                     retainCards.group.add(c);
                 }
@@ -47,12 +46,11 @@ public class EstablishmentPowerAction extends AbstractGameAction
         
         if (retainCards.isEmpty())
         {
-            //try again with actual cost
+            //try again with ethereal
             for (AbstractCard c : AbstractDungeon.player.hand.group)
             {
                 if ((c.cost != -1) &&
-                            (c.rarity != AbstractCard.CardRarity.RARE) &&
-                            (c.selfRetain || c.retain))
+                    (c.selfRetain || c.retain))
                 {
                     retainCards.group.add(c);
                 }
@@ -61,10 +59,22 @@ public class EstablishmentPowerAction extends AbstractGameAction
         
         if (!retainCards.isEmpty())
         {
+            CardGroup reducedCards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
             for (int i = 0; i < cardCountToReduce; i++)
             {
-                AbstractCard cardToReduce = retainCards.getRandomCard(true);
-                cardToReduce.modifyCostForCombat(-1);
+                if (!retainCards.isEmpty())
+                {
+                    AbstractCard cardToReduce = retainCards.getRandomCard(true);
+                    cardToReduce.modifyCostForCombat(-1);
+                    reducedCards.addToTop(cardToReduce);
+                    retainCards.removeCard(cardToReduce);
+                }
+//                else
+//                {
+//                //shouldn't be able to hit the same card twice
+////                    AbstractCard cardToReduce = reducedCards.getRandomCard(true);
+////                    cardToReduce.modifyCostForCombat(-1);
+//                }
             }
         }
         

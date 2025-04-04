@@ -12,7 +12,7 @@ public class ArtifactPower extends AbstractPower
     private static final PowerStrings powerStrings;
     public static final String NAME;
     public static final String[] DESCRIPTIONS;
-    public static final String CaveatString = "Doesn't negate self inflicted debuffs.";
+    public static final String Footnote = "Artifact doesn't negate self inflicted debuffs.";
     
     public ArtifactPower(AbstractCreature owner, int amount)
     {
@@ -45,7 +45,7 @@ public class ArtifactPower extends AbstractPower
             debuffString = "" + amount + " debuffs";
         }
         
-        description = "Negates the next " + debuffString + " inflicted by enemies. NL NL (" + CaveatString + ")";
+        description = "Negates the next " + debuffString + " inflicted by enemies. NL NL (" + Footnote + ")";
     }
     
     static

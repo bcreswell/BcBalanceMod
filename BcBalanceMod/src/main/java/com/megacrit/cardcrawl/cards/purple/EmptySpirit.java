@@ -35,12 +35,6 @@ public class EmptySpirit extends BcSkillCardBase
     }
     
     @Override
-    public int getCost()
-    {
-        return !upgraded ? 1 : 0;
-    }
-    
-    @Override
     public String getId()
     {
         return ID;
@@ -53,15 +47,29 @@ public class EmptySpirit extends BcSkillCardBase
     }
     
     @Override
-    public boolean getRetain()
+    public int getCost()
     {
-        return true;
+        return 0;
     }
     
     @Override
+    public boolean getRetain()
+    {
+        return upgraded;
+    }
+
+    @Override
     public String getBaseDescription()
     {
-        return EmptyBlahAction.EmptyDescription;
+        if (!upgraded)
+        {
+            return EmptyBlahAction.GetEmptyDescription();
+        }
+        else
+        {
+            //newline after "Retain"
+            return " NL "+EmptyBlahAction.GetEmptyDescription();
+        }
     }
     //endregion
     

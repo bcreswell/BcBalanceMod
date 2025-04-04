@@ -15,7 +15,7 @@ public class ClockworkSouvenir extends AbstractRelic
     
     public String getUpdatedDescription()
     {
-        return "Start each combat with #b1 #yArtifact. NL NL (" + ArtifactPower.CaveatString + ")";
+        return "Start each combat with #b1 #yArtifact. NL NL (" + ArtifactPower.Footnote + ")";
     }
     
     public void atBattleStart()

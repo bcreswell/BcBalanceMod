@@ -43,7 +43,7 @@ public class BattleHymn extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 2 : 1;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -55,7 +55,7 @@ public class BattleHymn extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Once per turn: NL If you play !M! Attacks in a single turn NL (not counting Smites), NL Create a zero cost Smite.";
+        return "Once per turn: NL After you play !M! Attacks in a turn, create a zero cost Smite.";
     }
     //endregion
     

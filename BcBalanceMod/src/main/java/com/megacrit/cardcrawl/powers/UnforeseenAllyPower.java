@@ -7,6 +7,7 @@ package com.megacrit.cardcrawl.powers;
 
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.unique.*;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 
@@ -55,11 +56,11 @@ public class UnforeseenAllyPower extends BcPowerBase
     {
         if (amount == 1)
         {
-            return "Start of turn: NL Create a random upgraded foreign Skill. It will become Ethereal.";
+            return "Start of turn: NL Create a random upgraded foreign Skill. It's temporary.";
         }
         else
         {
-            return "Start of turn: NL Create #b" + amount + " random upgraded foreign Skills. They will become Ethereal.";
+            return "Start of turn: NL Create #b" + amount + " random upgraded foreign Skills. They're temporary.";
         }
     }
     //endregion
@@ -73,7 +74,18 @@ public class UnforeseenAllyPower extends BcPowerBase
             
             for (int i = 0; i < amount; i++)
             {
-                addToBot(new UnforseenAllyAction());
+                addToBot(
+                    new CreateRandomCardAction(
+                        false,
+                        false,
+                        true,
+                        false,
+                        AbstractCard.CardType.SKILL,
+                        null,
+                        false,
+                        false,
+                        true,
+                        null));
             }
         }
     }

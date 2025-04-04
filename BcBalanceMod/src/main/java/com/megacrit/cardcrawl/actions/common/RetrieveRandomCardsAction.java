@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.actions.common;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -9,11 +10,8 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 
 public class RetrieveRandomCardsAction extends AbstractGameAction
 {
-    boolean allowRetrievingRetrieveCards;
-    
-    public RetrieveRandomCardsAction(boolean allowRetrievingRetrieveCards, int amount)
+    public RetrieveRandomCardsAction(int amount)
     {
-        this.allowRetrievingRetrieveCards = allowRetrievingRetrieveCards;
         this.amount = amount;
     }
     
@@ -24,7 +22,7 @@ public class RetrieveRandomCardsAction extends AbstractGameAction
         CardGroup possibleRetrieves = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         for (AbstractCard discardPileCard : player.discardPile.group)
         {
-            if (allowRetrievingRetrieveCards || !BcCardBase.isARetrieveCard(discardPileCard))
+            if (BcUtility.canBeRetrieved(discardPileCard))
             {
                 possibleRetrieves.addToBottom(discardPileCard);
             }

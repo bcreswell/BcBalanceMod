@@ -43,7 +43,7 @@ public class HauntedWhispers extends BcSkillCardBase
     {
         return CardRarity.UNCOMMON;
     }
-    
+
     @Override
     public int getMagicNumber()
     {
@@ -64,45 +64,23 @@ public class HauntedWhispers extends BcSkillCardBase
     }
     
     @Override
-    public String getFootnote()
-    {
-        if (!upgraded)
-        {
-            return null;
-        }
-        else
-        {
-            return "Can't Exhume cards that also \"Exhaust.\"";
-        }
-    }
-    
-    @Override
     public String getTemporaryExtraDescription(AbstractMonster monster)
     {
-        if (upgraded)
-        {
-            return null;
-        }
-        
         AbstractPlayer player = AbstractDungeon.player;
         
         int etherealCount = 0;
-        for (AbstractCard card : player.drawPile.group)
+        
+        if ((player != null) && (player.drawPile != null))
         {
-            if (card.isEthereal)
+            for (AbstractCard card : player.drawPile.group)
             {
-                etherealCount++;
+                if (card.isEthereal)
+                {
+                    etherealCount++;
+                }
             }
         }
-    
-        if (etherealCount == 1)
-        {
-            return "" + etherealCount + " ethereal in draw pile";
-        }
-        else
-        {
-            return "" + etherealCount + " ethereals in draw pile";
-        }
+        return "" + etherealCount + " in draw pile";
     }
     //endregion
     

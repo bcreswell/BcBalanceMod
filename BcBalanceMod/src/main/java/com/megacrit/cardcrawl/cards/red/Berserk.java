@@ -30,7 +30,7 @@ public class Berserk extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return 0;
     }
     
     @Override
@@ -48,7 +48,7 @@ public class Berserk extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return 1;
+        return !upgraded ? 2 : 1;
     }
     
     @Override

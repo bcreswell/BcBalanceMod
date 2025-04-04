@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.cards.red;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.animations.*;
 import com.megacrit.cardcrawl.actions.common.*;
@@ -56,14 +57,16 @@ public class Bloodletting extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Sacrifice " + getHealthLost() + " HP. NL Gain [R] [R]. NL Conserve any leftover energy for next turn.";
-        }
-        else
-        {
-            return "Sacrifice " + getHealthLost() + " HP. NL Gain [R] [R] [R]. NL Conserve any leftover energy for next turn.";
-        }
+        return "Sacrifice " + getHealthLost() + " HP. NL Gain " + BcUtility.getEnergyString(getEnergyGained(), this) + ". NL Retain any leftover energy for next turn.";
+        
+//        String description = "Sacrifice " + getHealthLost() + " HP. NL Gain " + BcUtility.getEnergyString(getEnergyGained(), this) + ".";
+//
+//        if (upgraded)
+//        {
+//            description += " NL Conserve any leftover energy for next turn.";
+//        }
+//
+//        return description;
     }
     //endregion
     
@@ -72,6 +75,9 @@ public class Bloodletting extends BcSkillCardBase
         addToBot(new VFXAction(new OfferingEffect(), 0.1F));
         addToBot(new LoseHPAction(player, player, getHealthLost()));
         addToBot(new GainEnergyAction(getEnergyGained()));
-        addToBot(new BcApplyPowerAction(new ConserveEnergyPower(player, 1)));
+//        if (upgraded)
+//        {
+            addToBot(new BcApplyPowerAction(new ConserveEnergyPower(player, 1)));
+        //}
     }
 }

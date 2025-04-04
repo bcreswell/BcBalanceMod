@@ -63,7 +63,7 @@ public class HiddenShivPower extends BcPowerBase
     @Override
     public String getBaseDescription()
     {
-        return "Whenever you deal attack damage, throw one of your #yHidden #yShivs at the same target. NL Its damage is the same as a normal Shiv.";
+        return "Whenever you deal attack damage, throw one of your #yHidden #yShivs at the same target. NL Damage is the same as a normal Shiv but it doesn't trigger attack effects.";
     }
     //endregion
     

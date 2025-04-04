@@ -32,13 +32,7 @@ public class Omega extends BcPowerCardBase
     {
         return ID;
     }
-    
-    @Override
-    public boolean getRetain()
-    {
-        return true;
-    }
-    
+        
     @Override
     public int getMagicNumber()
     {

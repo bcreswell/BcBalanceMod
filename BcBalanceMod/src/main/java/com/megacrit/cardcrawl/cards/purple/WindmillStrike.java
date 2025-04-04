@@ -43,7 +43,7 @@ public class WindmillStrike extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override
@@ -61,19 +61,18 @@ public class WindmillStrike extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 3 : 4;
+        return 5;
     }
     
     public int getAttackCount()
     {
-        return  retainCount + 2;
-        //return !upgraded ? retainCount + 2 : retainCount + 3;
+        return retainCount + (!upgraded ? 2 : 3);
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage " + getAttackCount() + " times. NL When Retained: NL Increase the number of attacks by 1.";
+        return "Deal !D! damage " + getAttackCount() + " times. NL When Retained: NL Increase the number of times by 1.";
     }
     //endregion
     

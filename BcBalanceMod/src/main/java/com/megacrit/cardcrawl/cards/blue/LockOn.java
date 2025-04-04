@@ -59,7 +59,7 @@ public class LockOn extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
@@ -77,13 +77,15 @@ public class LockOn extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 7 : 11;
+        return !upgraded ? 9 : 12;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Inflict !M! Lock-On. NL If you have zero focus, Inflict !M! more.";
+        return applyConditionalHighlight(
+            isFocusZero(),
+            "Deal !D! damage. NL Inflict !M! Lock-On. NL #g0 #gFocus: Inflict !M! more.");
     }
     
     @Override
@@ -92,6 +94,12 @@ public class LockOn extends BcAttackCardBase
         return "Attracts #yDark Orbs.";
     }
     //endregion
+    
+    @Override
+    public boolean isGlowingGold()
+    {
+        return BcUtility.getCurrentFocus() == 0;
+    }
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
@@ -103,11 +111,5 @@ public class LockOn extends BcAttackCardBase
             addToBot(new TrueWaitAction(.3F));
             addToBot(new ApplyPowerAction(monster, player, new LockOnPower(monster, magicNumber), magicNumber));
         }
-    }
-    
-    @Override
-    public boolean isGlowingGold()
-    {
-        return BcUtility.getCurrentFocus() == 0;
     }
 }

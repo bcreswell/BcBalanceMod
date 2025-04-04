@@ -32,13 +32,13 @@ public class Exhume extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 0;
+        return 1;
     }
     
     @Override
     public boolean getExhaust()
     {
-        return true;
+        return !upgraded;
     }
     
     @Override
@@ -56,25 +56,18 @@ public class Exhume extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 1 : 2;
+        return 1;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Exhume a card of your choice.";
-        }
-        else
-        {
-            return "Exhume a card of your choice. It costs 1 less this combat.";
-        }
+        return "Exhume a card of your choice.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new ExhumeAction(upgraded, 1));
+        addToBot(new ExhumeAction(false, magicNumber));
     }
 }

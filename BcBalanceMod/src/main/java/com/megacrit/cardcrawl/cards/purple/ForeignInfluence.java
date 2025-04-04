@@ -23,7 +23,7 @@ ForeignInfluence extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return 1;
     }
     
     @Override
@@ -39,21 +39,15 @@ ForeignInfluence extends BcSkillCardBase
     }
     
     @Override
-    public boolean getExhaust()
-    {
-        return true;
-    }
-    
-    @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 3 : 4;
+        return !upgraded ? 3 : 5;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Choose 1 of !M! Foreign Attacks cards to create. NL It costs zero this turn.";
+        return "Choose 1 of !M! Foreign Attacks. NL It costs zero and is temporary.";
     }
     //endregion
     

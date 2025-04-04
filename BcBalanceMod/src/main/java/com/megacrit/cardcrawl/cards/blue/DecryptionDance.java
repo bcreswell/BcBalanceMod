@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.megacrit.cardcrawl.cards.blue;
 
 import bcBalanceMod.BcBalanceMod;
@@ -10,6 +5,7 @@ import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.DecryptionDancePower;
 
 public class DecryptionDance extends BcPowerCardBase
@@ -48,20 +44,23 @@ public class DecryptionDance extends BcPowerCardBase
     }
     
     @Override
-    public boolean getEthereal()
-    {
-        return !upgraded;
-    }
-    
-    @Override
     public String getBaseDescription()
     {
-        return "After you play an Attack, channel a random orb and lose 1 Focus. NL Your Focus can no longer be negative.";
+        String description = "Attacks that cost 1 or more will Channel a random Orb and NL Lose 1 Focus.";
+        
+        if (upgraded)
+        {
+            description += " NL Your Focus can no longer be negative.";
+        }
+        
+        return description;
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new BcApplyPowerAction(new DecryptionDancePower(player, 1)));
+        DecryptionDancePower power = new DecryptionDancePower(player, 1, upgraded);
+        //power.upgraded = upgraded;
+        addToBot(new BcApplyPowerAction(power));
     }
 }

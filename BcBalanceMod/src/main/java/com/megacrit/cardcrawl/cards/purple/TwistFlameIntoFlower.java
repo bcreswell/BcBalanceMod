@@ -48,7 +48,7 @@ public class TwistFlameIntoFlower extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override
@@ -66,13 +66,15 @@ public class TwistFlameIntoFlower extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 9 : 13;
+        return !upgraded ? 8 : 10;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Wrath: Heal for !M!. NL End your turn.";
+        return applyConditionalHighlight(
+            isPlayerInStance(WrathStance.STANCE_ID),
+            "#gWrath: Heal for !M!. NL End your turn.");
     }
     //endregion
     
@@ -90,6 +92,7 @@ public class TwistFlameIntoFlower extends BcSkillCardBase
             addToBot(new VFXAction(player, new InflameEffect(player), 1.0F));
             addToBot(new HealAction(player, player, magicNumber));
         }
-        addToBot(new PressEndTurnButtonAction());
+
+        BcUtility.EndTurnEarly();
     }
 }

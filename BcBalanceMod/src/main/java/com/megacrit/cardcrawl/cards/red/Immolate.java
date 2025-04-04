@@ -4,6 +4,7 @@ import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
 import com.megacrit.cardcrawl.actions.common.MakeTempCardInDiscardAction;
+import com.megacrit.cardcrawl.actions.common.MakeTempCardInDrawPileAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.status.Burn;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -55,7 +56,7 @@ public class Immolate extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 22 : 30;
+        return !upgraded ? 22 : 29;
     }
     
     @Override
@@ -63,11 +64,11 @@ public class Immolate extends BcAttackCardBase
     {
         if (!upgraded)
         {
-            return "Deal !D! damage to ALL enemies. NL Add 2 *Burns into your discard pile.";
+            return "Deal !D! damage to ALL enemies. NL Shuffle 2 *Burns into your draw pile.";
         }
         else
         {
-            return "Deal !D! damage to ALL enemies. NL Add 2 *Burn+ into your discard pile.";
+            return "Deal !D! damage to ALL enemies. NL Shuffle 2 *Burn+ into your draw pile.";
         }
     }
     //endregion
@@ -80,6 +81,7 @@ public class Immolate extends BcAttackCardBase
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new DamageAllEnemiesAction(player, multiDamage, damageTypeForTurn, AbstractGameAction.AttackEffect.FIRE));
-        addToBot(new MakeTempCardInDiscardAction(cardsToPreview, 2));
+        //addToBot(new MakeTempCardInDiscardAction(cardsToPreview, 2));
+        addToBot(new MakeTempCardInDrawPileAction(cardsToPreview, 2, true, true));
     }
 }

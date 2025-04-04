@@ -40,13 +40,13 @@ public class SashWhip extends BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return 2;
+        return !upgraded ? 1 : 2;
     }
     
     @Override
     public int getDamage()
     {
-        return !upgraded ? 8 : 12;
+        return !upgraded ? 9 : 10;
     }
     
     @Override
@@ -58,13 +58,15 @@ public class SashWhip extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Wrath: Inflict !M! Weak.";
+        return applyConditionalHighlight(
+            isPlayerInStance(WrathStance.STANCE_ID),
+            "Deal !D! damage. NL NL Wrath: Inflict !M! Weak.");
     }
     //endregion
     

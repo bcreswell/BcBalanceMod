@@ -26,7 +26,7 @@ public class ColdSnap extends BcAttackCardBase
     }
     
     @Override
-    public int getChanneledOrbCount()
+    public int getOrbCountToChannel()
     {
         return 1;
     }
@@ -64,20 +64,13 @@ public class ColdSnap extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        if (upgraded)
-        {
-            return 11;
-        }
-        else
-        {
-            return 6;
-        }
+        return !upgraded ? 7 : 12;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. Channel !M! Frost.";
+        return "Deal !D! damage. NL Channel !M! Frost.";
     }
     //endregion
     

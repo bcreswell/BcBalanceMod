@@ -38,7 +38,7 @@ public class Survivor extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 9 : 13;
+        return !upgraded ? 10 : 15;
     }
     
     @Override

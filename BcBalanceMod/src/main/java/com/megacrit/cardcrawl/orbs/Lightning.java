@@ -63,26 +63,28 @@ public class Lightning extends AbstractOrb
     
     public void updateDescription()
     {
-        this.applyFocus();
-        if (Settings.language == Settings.GameLanguage.ENG)
-        {
-            this.description = "#yPassive: At the end of turn, deal #b" + this.passiveAmount + " damage to a random enemy. NL #yEvoke: Deal #b" + this.evokeAmount + " damage to a random enemy. (minimum: " + this.baseEvokeAmount + ").";
-        }
-        else
-        {
-            this.description = orbString.DESCRIPTION[0] + this.passiveAmount + orbString.DESCRIPTION[1] + this.evokeAmount + orbString.DESCRIPTION[2];
-        }
+        applyFocus();
+        //it's better to explain how the values are calculated in the tooltip. The final values are clearly visualized on the orb itself.
+        description = "#yEvoke: NL Deal ( #b" + baseEvokeAmount + " + #yFocus ) damage to a random enemy. NL ( minimum Evoke: #b" + baseEvokeAmount + " Damage ) NL NL #yEnd #yof #yTurn: NL Deal ( #b" + basePassiveAmount + " + #yFocus ) Damage to a random enemy.";
     }
     
     public void onEvoke()
     {
-        if (AbstractDungeon.player.hasPower("Electro"))
+        if (evokeAmount > 0)
         {
-            AbstractDungeon.actionManager.addToTop(new LightningOrbEvokeAction(new DamageInfo(AbstractDungeon.player, this.evokeAmount, DamageType.THORNS), true));
-        }
-        else
-        {
-            AbstractDungeon.actionManager.addToTop(new LightningOrbEvokeAction(new DamageInfo(AbstractDungeon.player, this.evokeAmount, DamageType.THORNS), false));
+            int evokeTimes = 1;
+            
+            for(int i =0; i < evokeTimes; i++)
+            {
+                if (AbstractDungeon.player.hasPower("Electro"))
+                {
+                    AbstractDungeon.actionManager.addToTop(new LightningOrbEvokeAction(new DamageInfo(AbstractDungeon.player, this.evokeAmount, DamageType.THORNS), true));
+                }
+                else
+                {
+                    AbstractDungeon.actionManager.addToTop(new LightningOrbEvokeAction(new DamageInfo(AbstractDungeon.player, this.evokeAmount, DamageType.THORNS), false));
+                }
+            }
         }
     }
     

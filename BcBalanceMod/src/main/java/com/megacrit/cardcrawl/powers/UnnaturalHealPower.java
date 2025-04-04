@@ -2,6 +2,7 @@ package com.megacrit.cardcrawl.powers;
 
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.actions.utility.TrueWaitAction;
 import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.core.*;
 import com.megacrit.cardcrawl.dungeons.*;

@@ -57,7 +57,7 @@ public class Premeditated extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return 2;
+        return !upgraded ? 3 : 4;
     }
     
     public int getDiscardLimit()
@@ -67,7 +67,7 @@ public class Premeditated extends BcSkillCardBase
     
     public int getBlockPerDiscard()
     {
-        return !upgraded ? 0 : 2;
+        return 0;
     }
     
     @Override

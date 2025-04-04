@@ -37,7 +37,7 @@ public class Defragment extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return !upgraded ? 2 : 1;
     }
     
     @Override
@@ -55,7 +55,7 @@ public class Defragment extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 1 : 2;
+        return 2;
     }
     
     @Override

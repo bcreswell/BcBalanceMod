@@ -60,7 +60,7 @@ public class Catalyst extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 50 : 75;
+        return !upgraded ? 100 : 200;
     }
     
     @Override
@@ -72,7 +72,7 @@ public class Catalyst extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Inflict !M! Catalysing Enzyme. NL When your Poison deals damage, an equal amount of Catalysing Enzyme is consumed for extra damage.";
+        return "Inflict !M! Catalysing Enzyme. NL When your Poison deals damage, an equal amount of this is consumed for extra damage.";
     }
     //endregion
     

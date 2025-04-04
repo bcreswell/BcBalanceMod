@@ -1,11 +1,7 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.megacrit.cardcrawl.cards.blue;
 
 import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.actions.defect.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
@@ -44,7 +40,19 @@ public class Recursion extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return 0;
+    }
+
+    @Override
+    public int getBlock()
+    {
+        return 0;
+    }
+    
+    @Override
+    public boolean getRetain()
+    {
+        return upgraded;
     }
     
     @Override
@@ -52,22 +60,27 @@ public class Recursion extends BcSkillCardBase
     {
         return 1;
     }
-    
-    @Override
-    public boolean getRetain()
-    {
-        return true;
-    }
-    
+
     @Override
     public String getBaseDescription()
     {
-        return "Evoke your next Orb. NL Channel the Orb that was just Evoked.";
+        String description = "Evoke your next orb. Channel it again.";
+        if (getBlock() > 0)
+        {
+            description += " NL Gain !B! Block.";
+        }
+
+        return description;
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new RecursionAction(false,true));
+        addToBot(new RecursionAction(1, 0,true));
+
+        if (block > 0)
+        {
+            addToBot(new GainBlockAction(player, player, block));
+        }
     }
 }

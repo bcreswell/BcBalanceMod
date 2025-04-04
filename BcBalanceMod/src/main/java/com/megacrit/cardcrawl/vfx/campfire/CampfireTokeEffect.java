@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.vfx.campfire;
 
+import bcBalanceMod.BcUtility;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,7 +17,9 @@ import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.CampfireUI;
 import com.megacrit.cardcrawl.rooms.RestRoom;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
+import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.PurgeCardEffect;
+import com.megacrit.cardcrawl.vfx.cardManip.ShowCardBrieflyEffect;
 
 public class CampfireTokeEffect extends AbstractGameEffect {
     private static final UIStrings uiStrings;
@@ -46,7 +49,21 @@ public class CampfireTokeEffect extends AbstractGameEffect {
             AbstractDungeon.player.masterDeck.removeCard(card);
             AbstractDungeon.gridSelectScreen.selectedCards.clear();
     
-            AbstractDungeon.player.heal(BcBalancingScales.TokeHealAmount, true);
+            //AbstractDungeon.player.heal(BcUtility.TokeHealAmount, true);
+            CardGroup upgradeableCards = AbstractDungeon.player.masterDeck.getUpgradableCards();
+            if (!upgradeableCards.isEmpty())
+            {
+                AbstractCard c = upgradeableCards.getRandomCard(true);
+                
+                AbstractDungeon.effectsQueue.add(
+                        new UpgradeShineEffect(
+                                (float) Settings.WIDTH / 2.0F,
+                                (float) Settings.HEIGHT / 2.0F));
+                
+                c.upgrade();
+                AbstractDungeon.player.bottledCardUpgradeCheck(c);
+                AbstractDungeon.effectsQueue.add(new ShowCardBrieflyEffect(c.makeStatEquivalentCopy()));
+            }
         }
         
         if (this.duration < 1.0F && !this.openedScreen) {

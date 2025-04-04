@@ -23,7 +23,7 @@ public class DoubleTap extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 0;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -37,29 +37,18 @@ public class DoubleTap extends BcSkillCardBase
     {
         return CardRarity.RARE;
     }
-    
-    @Override
-    public int getMagicNumber()
-    {
-        return !upgraded ? 1 : 2;
-    }
-    
+
     @Override
     public String getBaseDescription()
     {
-        if (magicNumber == 1)
-        {
-            return "This turn, your next Attack is played twice.";
-        }
-        else
-        {
-            return "This turn, your next !M! Attacks are played twice.";
-        }
+        return "Your next Attack is played twice.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new BcApplyPowerAction(new DoubleTapPower(player, magicNumber)));
+        DoubleTapPower dtp = new DoubleTapPower(player,1);
+        //dtp.upgraded = upgraded;
+        addToBot(new BcApplyPowerAction(dtp));
     }
 }

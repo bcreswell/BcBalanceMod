@@ -31,15 +31,15 @@ public class Concentrate extends BcSkillCardBase
     }
     
     @Override
-    public int getCost()
-    {
-        return 0;
-    }
-    
-    @Override
     public String getId()
     {
         return ID;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 0;
     }
     
     @Override
@@ -57,14 +57,7 @@ public class Concentrate extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Discard 2 cards. NL Gain [G].";
-        }
-        else
-        {
-            return "Discard 2 cards. NL Gain [G] [G].";
-        }
+        return "Discard 2 cards. NL Gain "+BcUtility.getEnergyString(magicNumber, this)+".";
     }
     //endregion
     

@@ -49,7 +49,7 @@ public class SeverSoul extends BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 4 : 7;
+        return !upgraded ? 7 : 12;
     }
     
     @Override
@@ -61,7 +61,7 @@ public class SeverSoul extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 11 : 13;
+        return 15;
     }
     
     @Override
@@ -79,7 +79,7 @@ public class SeverSoul extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Exhaust all non-Attack cards, then deal !M! damage to a random target for each card exhausted.";
+        return "Deal !D! damage. NL Exhaust all non-Attack cards in hand. For each one, a random enemy is struck for !M! damage.";
     }
     //endregion
     

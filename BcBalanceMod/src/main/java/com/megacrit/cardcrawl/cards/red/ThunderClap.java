@@ -43,19 +43,19 @@ public class ThunderClap extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override
     public int getDamage()
     {
-        return 5;
+        return !upgraded ? 8 : 10;
     }
     
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 1 : 2;
+        return !upgraded ? 2 : 3;
     }
     
     @Override
@@ -67,7 +67,7 @@ public class ThunderClap extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return  "Deal !D! damage and apply !M! Vulnerable to ALL enemies.";
+        return  "Deal !D! damage and Inflict !M! Vulnerable to ALL enemies.";
     }
     //endregion
     

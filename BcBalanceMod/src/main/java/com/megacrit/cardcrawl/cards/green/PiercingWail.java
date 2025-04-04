@@ -73,7 +73,7 @@ public class PiercingWail extends BcSkillCardBase
     @Override
     public boolean getRetain()
     {
-        return true;
+        return false;
     }
     
     @Override
@@ -90,7 +90,7 @@ public class PiercingWail extends BcSkillCardBase
         
         for (int i = 0; i < this.magicNumber; i++)
         {
-            addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.GREEN_TEXT_COLOR, ShockWaveType.CHAOTIC), 0.1F));
+            addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.GREEN_TEXT_COLOR, ShockWaveType.CHAOTIC), 0.07F));
             
             for (AbstractMonster monster : AbstractDungeon.getCurrRoom().monsters.monsters)
             {
@@ -98,6 +98,7 @@ public class PiercingWail extends BcSkillCardBase
             }
         }
         
+        //reduce the strength rebound by enemy's artifact amount so that you dont end up buffing them
         for (AbstractMonster monster : AbstractDungeon.getCurrRoom().monsters.monsters)
         {
             int strReboundAmount = this.magicNumber;
@@ -110,7 +111,7 @@ public class PiercingWail extends BcSkillCardBase
             
             if (strReboundAmount > 0)
             {
-                this.addToBot(new ApplyPowerAction(monster, player, new GainStrengthPower(monster, strReboundAmount), strReboundAmount, true, AttackEffect.NONE));
+                addToBot(new ApplyPowerAction(monster, player, new GainStrengthPower(monster, strReboundAmount), strReboundAmount, true, AttackEffect.NONE));
             }
         }
     }

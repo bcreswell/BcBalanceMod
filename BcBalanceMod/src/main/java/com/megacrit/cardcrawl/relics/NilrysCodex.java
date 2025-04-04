@@ -1,40 +1,45 @@
 package com.megacrit.cardcrawl.relics;
 
-import basemod.abstracts.*;
-import bcBalanceMod.*;
-import com.evacipated.cardcrawl.mod.stslib.relics.*;
+import basemod.abstracts.CustomRelic;
+import bcBalanceMod.BcUtility;
+import com.evacipated.cardcrawl.mod.stslib.relics.ClickableRelic;
 import com.megacrit.cardcrawl.actions.common.RelicAboveCreatureAction;
-import com.megacrit.cardcrawl.actions.unique.*;
+import com.megacrit.cardcrawl.actions.unique.CodexAction;
+import com.megacrit.cardcrawl.actions.unique.DiscoveryImprovedAction;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.relics.AbstractRelic.LandingSound;
+import com.megacrit.cardcrawl.relics.AbstractRelic.RelicTier;
 
 public class NilrysCodex extends CustomRelic implements ClickableRelic
 {
     public static final String ID = "Nilry's Codex";
-    public static final int CardsPerCombat = 3;
-    public static final int CardsChoices = 4;
+    public static final int UsesPerCombat = 3;
+    public static final int Choices = 3;
     boolean isEnabled;
     
     public NilrysCodex()
     {
-        super("Nilry's Codex", "codex.png", AbstractRelic.RelicTier.SPECIAL, AbstractRelic.LandingSound.MAGICAL);
+        super(ID, "codex.png", RelicTier.SPECIAL, LandingSound.MAGICAL);
     }
     
     public String getUpdatedDescription()
     {
-        return "Up to #b" + CardsPerCombat + " times per combat: NL Right click to create 1 of " + CardsChoices + " random cards.";
+        return "Right Click: Choose 1 of 3 cards to Create. NL NL Can be used once per turn, and up to #b" + UsesPerCombat + " times per combat.";
     }
     
-    public void onVictory()
+    public void atBattleStart()
     {
-        //just to clarify that charges don't persist between combats.
-        setCounter(0);
-        grayscale = false;
-        usedUp = false;
+        setCounter(UsesPerCombat);
     }
     
     public void atTurnStartPostDraw()
     {
-        isEnabled = true;
+        if (counter > 0)
+        {
+            isEnabled = true;
+            grayscale = false;
+            flash(); //flash to remind player this is available
+        }
     }
     
     public void onPlayerEndTurn()
@@ -42,27 +47,27 @@ public class NilrysCodex extends CustomRelic implements ClickableRelic
         isEnabled = false;
     }
     
-    public AbstractRelic makeCopy()
+    public void onVictory()
     {
-        return new NilrysCodex();
-    }
-    
-    public void atBattleStart()
-    {
-        setCounter(CardsPerCombat);
+        //setting it to zero to clarify that charges don't persist between combats.
+        setCounter(0);
+        grayscale = false;
+        usedUp = false;
     }
     
     @Override
     public void onRightClick()
     {
         if (BcUtility.isPlayerInCombat() &&
-                    isEnabled &&
-                    (counter > 0))
+            isEnabled &&
+            (counter > 0))
         {
             addToBot(new RelicAboveCreatureAction(AbstractDungeon.player, this));
-            addToBot(new DiscoveryImprovedAction(CardsChoices, false, false, null, null));
+            addToBot(new DiscoveryImprovedAction(Choices, false, false, null, null, true));
             setCounter(counter - 1);
             flash();
+            grayscale = true;
+            isEnabled = false;
         }
     }
     

@@ -63,7 +63,7 @@ public class ImprovisedDamage extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 6 : 10;
+        return !upgraded ? 5 : 9;
     }
     
     @Override

@@ -46,7 +46,7 @@ public class Retaliate extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 20 : 30;
+        return !upgraded ? 22 : 30;
     }
     
     @Override
@@ -65,7 +65,7 @@ public class Retaliate extends BcSkillCardBase
             retaliateDmgString = "#r" + retaliateDmgString;
         }
         
-        return "Until next turn, NL Retaliate for " + retaliateDmgString + " damage the first time each enemy attacks. NL (modified by Strength)";
+        return "Until next turn, NL Retaliate for " + retaliateDmgString + " damage when an enemy attacks. NL (modified by Strength)";
     }
     //endregion
     

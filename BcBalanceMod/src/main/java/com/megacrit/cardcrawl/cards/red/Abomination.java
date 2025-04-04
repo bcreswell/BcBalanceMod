@@ -43,7 +43,7 @@ public class Abomination extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.RARE;
+        return CardRarity.UNCOMMON;
     }
     
     @Override
@@ -55,25 +55,25 @@ public class Abomination extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 9 : 13;
+        return !upgraded ? 7 : 9;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Random enemies are struck for !M! damage for each time you've played an Ethereal card this combat.";
+        return "Enemies are randomly struck for !M! damage for each time you've played an Ethereal card this combat.";
     }
     
     @Override
     public String getTemporaryExtraDescription(AbstractMonster monster)
     {
-        if (BcBalancingScales.EtherealPlayedCount == 1)
+        if (BcUtility.EtherealPlayedCount == 1)
         {
-            return "" + BcBalancingScales.EtherealPlayedCount + " ethereal card";
+            return "" + BcUtility.EtherealPlayedCount + " ethereal card";
         }
         else
         {
-            return "" + BcBalancingScales.EtherealPlayedCount + " ethereal cards";
+            return "" + BcUtility.EtherealPlayedCount + " ethereal cards";
         }
     }
     //endregion
@@ -81,7 +81,7 @@ public class Abomination extends BcSkillCardBase
     @Override
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        for (int i = 0; i < BcBalancingScales.EtherealPlayedCount; i++)
+        for (int i = 0; i < BcUtility.EtherealPlayedCount; i++)
         {
             addToBot(new AbominationAction(this));
         }

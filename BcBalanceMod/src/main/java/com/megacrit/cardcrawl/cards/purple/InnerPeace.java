@@ -1,12 +1,11 @@
 package com.megacrit.cardcrawl.cards.purple;
 
 import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.actions.watcher.InnerPeaceAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.stances.CalmStance;
 
 public class InnerPeace extends BcSkillCardBase
 {
@@ -40,13 +39,22 @@ public class InnerPeace extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
+        //calm card draw
         return !upgraded ? 3 : 4;
+    }
+    
+    int getNotCalmCardDraw()
+    {
+        return 1;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Calm: Draw !M! cards. NL Otherwise: Enter Calm.";
+        return applyConditionalHighlight(
+            isPlayerInStance(CalmStance.STANCE_ID),
+            "#gCalm: Draw "+getCardCountString(magicNumber)+".",
+            "#gElse: Enter Calm.");
     }
     //endregion
     

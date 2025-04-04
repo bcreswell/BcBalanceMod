@@ -29,7 +29,7 @@ public class BcCreativeAiAction2 extends AbstractGameAction
         else if (duration == startDuration)
         {
             AbstractCard powerCard = createRandomPowerCard();
-            BcUtility.makeCardManuallyEthereal(powerCard);
+            BcUtility.makeCardEthereal(powerCard);
             BcUtility.addNewCardToHandOrDiscard(powerCard);
         }
         

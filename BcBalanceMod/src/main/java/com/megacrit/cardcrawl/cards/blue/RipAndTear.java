@@ -74,7 +74,7 @@ public class RipAndTear extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage to a random enemy !M! times.";
+        return "Deal !D! damage to random enemies !M! times.";
     }
     //endregion
     

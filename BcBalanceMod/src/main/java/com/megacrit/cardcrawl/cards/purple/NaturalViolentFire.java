@@ -20,7 +20,7 @@ public class NaturalViolentFire extends BcPowerCardBase
     @Override
     public String getDisplayName()
     {
-        return "Natural, Violent Fire";
+        return "Natural Violent Fire";
     }
     
     @Override
@@ -50,7 +50,7 @@ public class NaturalViolentFire extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "If you're in Wrath at the start of your turn, NL gain [W] and NL draw a card.";
+        return "Start Turn in Wrath: NL Gain [W] and Draw a card. NL NL End Turn in Wrath: NL Retain your Block.";
     }
     //endregion
     

@@ -5,16 +5,10 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardTarget;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardType;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 public class Hologram extends BcSkillCardBase
@@ -47,15 +41,15 @@ public class Hologram extends BcSkillCardBase
     }
     
     @Override
-    public int getBlock()
-    {
-        return !upgraded ? 0 : 3;
-    }
-    
-    @Override
     public CardRarity getCardRarity()
     {
         return CardRarity.COMMON;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return 0;
     }
     
     @Override
@@ -67,35 +61,26 @@ public class Hologram extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        String description = "Retrieve a card of your choice.";
-        if (upgraded)
+        if (getMagicNumber() > 0)
         {
-            description = "Gain !B! Block. NL " + description;
+            return "Pick a card to Retrieve that costs !M! or more.";
         }
-        
-        return description;
-    }
-    
-    @Override
-    public boolean isARetrieveCard()
-    {
-        return true;
+        else
+        {
+            return "Pick a card to Retrieve.";
+        }
     }
     
     @Override
     public String getFootnote()
     {
-        return "Can't target cards that have \"Retrieve\" in their description.";
+        return "Can't Retrieve Hologram.";
     }
+    
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        if (upgraded)
-        {
-            addToBot(new GainBlockAction(player, player, block));
-        }
-        
-        addToBot(new HologramAction());
+        addToBot(new RetrieveAction(1, false, magicNumber, Hologram.ID));
     }
 }

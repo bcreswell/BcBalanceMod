@@ -49,7 +49,7 @@ public class CorpseExplosion extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 7 : 11;
+        return !upgraded ? 6 : 11;
     }
     
     @Override
@@ -67,7 +67,7 @@ public class CorpseExplosion extends BcSkillCardBase
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new BcApplyPowerAction(monster, player, new PoisonPower(monster, player, magicNumber), AbstractGameAction.AttackEffect.POISON));
-        addToBot(new BcApplyPowerAction(monster, player, new CorpseExplosionPower(monster), AbstractGameAction.AttackEffect.POISON));
+        addToBot(new BcApplyPowerAction(monster, player, new PoisonPower(monster, player, magicNumber), AbstractGameAction.AttackEffect.POISON, false));
+        addToBot(new BcApplyPowerAction(monster, player, new CorpseExplosionPower(monster), AbstractGameAction.AttackEffect.POISON, false));
     }
 }

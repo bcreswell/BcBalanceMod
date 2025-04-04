@@ -5,8 +5,10 @@ import com.megacrit.cardcrawl.actions.unique.EnlightenmentAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.vfx.SpotlightPlayerEffect;
 
 public class Enlightenment extends BcSkillCardBase
 {
@@ -16,13 +18,13 @@ public class Enlightenment extends BcSkillCardBase
     @Override
     public String getImagePath()
     {
-        return "colorless/skill/enlightenment";
+        return "purple/enlightenment.png";
     }
     
     @Override
-    public int getCost()
+    public CardRarity getCardRarity()
     {
-        return 0;
+        return CardRarity.RARE;
     }
     
     @Override
@@ -32,33 +34,27 @@ public class Enlightenment extends BcSkillCardBase
     }
     
     @Override
-    public CardRarity getCardRarity()
+    public int getCost()
     {
-        return CardRarity.UNCOMMON;
+        return 2;
+    }
+    
+    @Override
+    public boolean getRetain()
+    {
+        return upgraded;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Reduce the cost of all cards in your hand to 1 this turn.";
-        }
-        else
-        {
-            return "Reduce the cost of all cards in your hand to 1 this combat.";
-        }
-    }
-    
-    @Override
-    public boolean getEthereal()
-    {
-        return true;
+        return "Reduce the cost of all cards in your hand by 1 this turn.";
     }
     //endregion
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        this.addToBot(new EnlightenmentAction(this.upgraded));
+        AbstractDungeon.effectsQueue.add(new SpotlightPlayerEffect());
+        addToBot(new EnlightenmentAction(false));
     }
 }

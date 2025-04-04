@@ -58,7 +58,7 @@ public class InfiniteBlades extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 1 : 2;
+        return !upgraded ? 2 : 3;
     }
     
     @Override

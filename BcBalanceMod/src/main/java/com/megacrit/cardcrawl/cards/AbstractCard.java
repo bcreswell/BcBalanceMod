@@ -29,7 +29,12 @@ import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.orbs.AbstractOrb;
+import com.megacrit.cardcrawl.orbs.EmptyOrbSlot;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.powers.DecryptionDancePower;
+import com.megacrit.cardcrawl.powers.StaticDischargePower;
+import com.megacrit.cardcrawl.powers.StormPower;
 import com.megacrit.cardcrawl.powers.watcher.*;
 import com.megacrit.cardcrawl.relics.*;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
@@ -229,6 +234,7 @@ public abstract class AbstractCard implements Comparable<AbstractCard>
     private Color tintColor;
     private static final Color ENERGY_COST_RESTRICTED_COLOR;
     private static final Color ENERGY_COST_MODIFIED_COLOR;
+    private static final Color ENERGY_COST_INFLUENCED_COLOR;
     private static final Color FRAME_SHADOW_COLOR;
     private static final Color IMG_FRAME_COLOR_COMMON;
     private static final Color IMG_FRAME_COLOR_UNCOMMON;
@@ -1391,6 +1397,105 @@ public abstract class AbstractCard implements Comparable<AbstractCard>
         
         this.updateTransparency();
         this.updateColor();
+        updateChannelCount();
+    }
+    
+    protected void updateChannelCount()
+    {
+        //doing this manually below instead of using these fields
+        showEvokeValue = false;
+        showEvokeOrbCount = 0;
+        
+        AbstractPlayer player = AbstractDungeon.player;
+        if (BcUtility.isPlayerInCombat() &&
+            (this == player.hoveredCard) &&
+            player.isHoveringDropZone &&
+            (player.orbs != null))
+        {
+            int channeledOrbCount = getOrbCountToChannel();
+            channeledOrbCount += getExtraOrbChannelCount();
+            
+            int filledOrbCount = player.filledOrbCount();
+            int currentOrbCount = player.orbs.size();
+            int maxOrbCount = player.maxOrbs;
+            
+            int createdOrbSlots = getNumberOfOrbsSlotsCreated();
+            createdOrbSlots = BcUtility.clamp(maxOrbCount - currentOrbCount, createdOrbSlots, 10);
+            
+            int evokedOrbsCount = (channeledOrbCount + filledOrbCount) - (currentOrbCount + createdOrbSlots);
+            evokedOrbsCount = BcUtility.clamp(0, evokedOrbsCount, 10);
+            evokedOrbsCount += getNumberOfOrbsEvokedDirectly();
+            evokedOrbsCount = BcUtility.clamp(0, evokedOrbsCount, 10);
+            
+            int evokeTimes = getEvokeIterations();
+            if ((evokeTimes < 1) && (evokedOrbsCount > 0))
+            {
+                evokeTimes = 1;
+            }
+            
+            showWhichOrbsWillEvoke(evokedOrbsCount, evokeTimes);
+        }
+    }
+    
+    public void showWhichOrbsWillEvoke(int evokedOrbsCount, int evokeTimes)
+    {
+        int i = 0;
+        for (AbstractOrb orb : AbstractDungeon.player.orbs)
+        {
+            if ((i < evokedOrbsCount) &&
+                !(orb instanceof EmptyOrbSlot))
+            {
+                orb.showEvokeValue();
+                orb.evokeTimes = evokeTimes;
+            }
+
+            i++;
+        }
+    }
+    
+    public int getOrbCountToChannel()
+    {
+        return 0;
+    }
+    
+    public int getNumberOfOrbsSlotsCreated()
+    {
+        return 0;
+    }
+    
+    public int getNumberOfOrbsEvokedDirectly()
+    {
+        return 0;
+    }
+    
+    //dualcast is 2 for example
+    public int getEvokeIterations()
+    {
+        //this is just a reasonable default value. it is overriden in dualcast/multicast
+        return (getNumberOfOrbsEvokedDirectly() > 0) ? 1 : 0;
+    }
+    
+    public int getExtraOrbChannelCount()
+    {
+        int extraCount = 0;
+        if (BcUtility.isPlayerInCombat())
+        {
+            if (type == CardType.POWER)
+            {
+                extraCount += BcUtility.getPowerAmount(StormPower.POWER_ID);
+            }
+            else if (type == CardType.ATTACK)
+            {
+                //just assuming here that the static discharge will deal unblocked attack to whichever target.
+                extraCount += BcUtility.getPowerAmount(StaticDischargePower.POWER_ID);
+                if (costForTurn > 0)
+                {
+                    extraCount += BcUtility.getPowerAmount(DecryptionDancePower.POWER_ID);
+                }
+            }
+        }
+        
+        return extraCount;
     }
     
     private void updateFlashVfx()
@@ -2624,6 +2729,10 @@ public abstract class AbstractCard implements Comparable<AbstractCard>
             {
                 costColor = ENERGY_COST_RESTRICTED_COLOR;
             }
+            else if (this.freeToPlay() && !this.freeToPlayOnce)
+            {
+                costColor = ENERGY_COST_INFLUENCED_COLOR;
+            }
             else if (this.isCostModified || this.isCostModifiedForTurn || this.freeToPlay())
             {
                 costColor = ENERGY_COST_MODIFIED_COLOR;
@@ -2691,7 +2800,6 @@ public abstract class AbstractCard implements Comparable<AbstractCard>
                 this.isCostModifiedForTurn = true;
             }
         }
-        
     }
     
     public void modifyCostForCombat(int amt)
@@ -2952,16 +3060,7 @@ public abstract class AbstractCard implements Comparable<AbstractCard>
     public void triggerWhenCopied()
     {
     }
-    
-    public void triggerOnEndOfPlayerTurn()
-    {
-        if (this.isEthereal)
-        {
-            this.addToTop(new ExhaustSpecificCardAction(this, AbstractDungeon.player.hand));
-        }
-        
-    }
-    
+
     public void triggerOnEndOfTurnForPlayingCard()
     {
     }
@@ -3171,11 +3270,6 @@ public abstract class AbstractCard implements Comparable<AbstractCard>
         }
         
         this.block = MathUtils.floor(tmp);
-    }
-    
-    public void calculateDamageDisplay(AbstractMonster mo)
-    {
-        this.calculateCardDamage(mo);
     }
     
     public void calculateCardDamage(AbstractMonster mo)
@@ -3653,7 +3747,9 @@ public abstract class AbstractCard implements Comparable<AbstractCard>
         {
             textColor = BcUtility.etherealTextColor;
         }
-        else if ((retain || selfRetain) && !BcUtility.playerHasRelic(RunicPyramid.ID))
+        else if (retain || selfRetain)
+        // still need to see which are retained for the sake of stuff like Establishment
+        // && !BcUtility.playerHasRelic(RunicPyramid.ID))
         {
             textColor = BcUtility.retainGlowColor;
         }
@@ -3694,6 +3790,7 @@ public abstract class AbstractCard implements Comparable<AbstractCard>
         UNKNOWN_STRING = cardRenderStrings.TEXT[1];
         ENERGY_COST_RESTRICTED_COLOR = new Color(1.0F, 0.3F, 0.3F, 1.0F);
         ENERGY_COST_MODIFIED_COLOR = new Color(0.4F, 1.0F, 0.4F, 1.0F);
+        ENERGY_COST_INFLUENCED_COLOR = new Color(0.4F, 0.4F, 1F, 1.0F);
         FRAME_SHADOW_COLOR = new Color(0.0F, 0.0F, 0.0F, 0.25F);
         IMG_FRAME_COLOR_COMMON = CardHelper.getColor(53, 58, 64);
         IMG_FRAME_COLOR_UNCOMMON = CardHelper.getColor(119, 152, 161);

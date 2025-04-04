@@ -145,6 +145,7 @@ public abstract class BcPowerBase extends AbstractPower
     
     public final void updateDescription()
     {
+        name = getDisplayName();
         description = getFullDescription();
     }
     
@@ -188,6 +189,10 @@ public abstract class BcPowerBase extends AbstractPower
     {
         stackPower(-reduceAmount);
         updateDescription();
+    }
+    
+    public void onUpgraded()
+    {
     }
     
     public void onPowerStacked()

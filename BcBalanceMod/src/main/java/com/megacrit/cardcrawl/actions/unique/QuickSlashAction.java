@@ -23,8 +23,8 @@ public class QuickSlashAction extends AbstractGameAction
         for (AbstractCard card : DrawCardAction.drawnCards)
         {
             if ((card.costForTurn == 0) ||
-                        card.freeToPlayOnce ||
-                        ((card.cost == -2) && (card.type == AbstractCard.CardType.SKILL)))
+                card.freeToPlayOnce ||
+                (card.cost < 0)) // && (card.type == AbstractCard.CardType.SKILL)))
             {
                 if ((player.drawPile.size() == 0) && (player.discardPile.size() == 1))
                 {

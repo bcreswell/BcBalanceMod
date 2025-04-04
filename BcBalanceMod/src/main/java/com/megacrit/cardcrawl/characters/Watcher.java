@@ -120,10 +120,12 @@ public class Watcher extends AbstractPlayer {
         retVal.add("Strike_P");
         retVal.add("Strike_P");
         retVal.add("Strike_P");
+        
         retVal.add("Defend_P");
         retVal.add("Defend_P");
         retVal.add("Defend_P");
         retVal.add("Defend_P");
+        
         retVal.add("Eruption");
         retVal.add("Vigilance");
         retVal.add("Insight");

@@ -9,8 +9,5 @@
         <module name="BcBalanceMod" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="BcBalanceMod" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

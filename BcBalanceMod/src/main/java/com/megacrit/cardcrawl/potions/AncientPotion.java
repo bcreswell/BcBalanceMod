@@ -25,7 +25,7 @@ public class AncientPotion extends AbstractPotion
     public void initializeData()
     {
         potency = getPotency();
-        description = potionStrings.DESCRIPTIONS[0] + potency + potionStrings.DESCRIPTIONS[1] + " NL NL (" + ArtifactPower.CaveatString + ")";
+        description = potionStrings.DESCRIPTIONS[0] + potency + potionStrings.DESCRIPTIONS[1] + " NL NL (" + ArtifactPower.Footnote + ")";
         tips.clear();
         tips.add(new PowerTip(name, description));
         tips.add(new PowerTip(TipHelper.capitalize(GameDictionary.ARTIFACT.NAMES[0]), (String) GameDictionary.keywords.get(GameDictionary.ARTIFACT.NAMES[0])));

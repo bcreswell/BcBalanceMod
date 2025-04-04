@@ -56,35 +56,39 @@ public class Entrench extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Double your Block.";
+        return "Double your Block. NL Retain your Block this turn.";
     }
     
-    @Override
-    public String getFootnote()
-    {
-        return "Doesn't trigger Juggernaut damage.";
-    }
+//    @Override
+//    public String getFootnote()
+//    {
+//        return "Doesn't trigger Juggernaut damage.";
+//    }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         if (!player.hasPower(NoBlockPower.POWER_ID))
         {
-            AbstractPower juggernautPower = player.getPower(JuggernautPower.POWER_ID);
-            if (juggernautPower != null)
-            {
-                //the block gain from entrench is just too much w/ juggernaut.
-                ((JuggernautPower)juggernautPower).SkipNextBlockGain = true;
-            }
+//            AbstractPower juggernautPower = player.getPower(JuggernautPower.POWER_ID);
+//            if (juggernautPower != null)
+//            {
+//                //the block gain from entrench is just too much w/ juggernaut.
+//                ((JuggernautPower)juggernautPower).SkipNextBlockGain = true;
+//            }
+            
             //addBlock instead of GainBlockAction to bypass frail
             player.addBlock(player.currentBlock);
             
             int ghostlyBlock = BcUtility.getPowerAmount(GhostlyBlockPower.POWER_ID);
             if (ghostlyBlock > 0)
             {
-                //double ghostly block too
-                addToBot(new BcApplyPowerAction(new GhostlyBlockPower(player, ghostlyBlock)));
+                //double ghostly block too.
+                player.addBlock(ghostlyBlock);
+                //addToBot(new BcApplyPowerAction(new GhostlyBlockPower(player, ghostlyBlock)));
             }
+            
+            addToBot(new BcApplyPowerAction(new BlurPower(player, 1)));
         }
     }
 }

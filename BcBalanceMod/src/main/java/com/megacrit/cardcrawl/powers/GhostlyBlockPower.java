@@ -1,8 +1,10 @@
 package com.megacrit.cardcrawl.powers;
 
+import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.relics.*;
 
 public class GhostlyBlockPower extends BcPowerBase
@@ -49,37 +51,15 @@ public class GhostlyBlockPower extends BcPowerBase
     @Override
     public String getBaseDescription()
     {
-        return "Your block doesn't protect you while you're Intangible.";
+        return "When you Gain Block while intangible, it becomes Ghostly Block instead. Ghostly Block doesn't protect you but Body Slam, Entrench, Juggernaut, Barricade, etc. still work by using this Ghostly Block instead of the normal kind.";
     }
     //endregion
     
     public void atStartOfTurn()
     {
-        //region reduce block if applicable
-        if (!owner.hasPower(BarricadePower.POWER_ID) && !owner.hasPower(BlurPower.POWER_ID))
-        {
-            int blockToRetain = 0;
-            if ((owner == player) && player.hasRelic(Calipers.ID))
-            {
-                blockToRetain = Calipers.BLOCK_LOSS;
-            }
-            
-            if (blockToRetain == 0)
-            {
-                amount = 0;
-            }
-            else
-            {
-                amount -= blockToRetain;
-                if (amount <= 0)
-                {
-                    amount = 0;
-                }
-            }
-        }
-        //endregion
+        amount -= BcUtility.getBlockToLose(amount);
         
-        if (amount == 0)
+        if (amount <= 0)
         {
             addToBot(new RemoveSpecificPowerAction(owner, owner, POWER_ID));
         }

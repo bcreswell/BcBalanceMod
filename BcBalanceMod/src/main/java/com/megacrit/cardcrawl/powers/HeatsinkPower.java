@@ -61,11 +61,11 @@ public class HeatsinkPower extends BcPowerBase
     {
         if (amount == 1)
         {
-            return "Whenever you play a Power, draw #b1 card. NL Conserve up to #b1 left over #yEnergy each turn.";
+            return "Whenever you play a Power, draw #b1 card. NL Retain up to #b1 left over #yEnergy each turn.";
         }
         else
         {
-            return "Whenever you play a Power, draw #b" + amount + " cards. NL Conserve up to #b" + amount + " left over #yenergy each turn.";
+            return "Whenever you play a Power, draw #b" + amount + " cards. NL Retain up to #b" + amount + " left over #yenergy each turn.";
         }
     }
     //endregion

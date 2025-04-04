@@ -47,7 +47,7 @@ public class LegSweep extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 11 : 14;
+        return !upgraded ? 12 : 15;
     }
     
     @Override
@@ -59,7 +59,7 @@ public class LegSweep extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Apply !M! Weak. NL Gain !B! Block.";
+        return "Inflict !M! Weak. NL Gain !B! Block.";
     }
     //endregion
     

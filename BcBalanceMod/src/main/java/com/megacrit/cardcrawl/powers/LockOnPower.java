@@ -43,14 +43,7 @@ public class LockOnPower extends AbstractPower
     {
         if (owner != null)
         {
-            if (amount == 1)
-            {
-                description = DESCRIPTIONS[0] + 50 + DESCRIPTIONS[1] + amount + DESCRIPTIONS[2];
-            }
-            else
-            {
-                description = DESCRIPTIONS[0] + 50 + DESCRIPTIONS[1] + amount + DESCRIPTIONS[3];
-            }
+            description = "Increases Lightning Orb damage by 50%. NL Attracts Dark Orbs.";
         }
     }
     

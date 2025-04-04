@@ -55,7 +55,7 @@ public class SecretWeapon extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Draw an Attack card of your choice.";
+        return "Pick an Attack card to Draw.";
     }
     
     @Override

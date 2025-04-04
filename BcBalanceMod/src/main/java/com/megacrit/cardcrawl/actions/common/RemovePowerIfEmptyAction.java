@@ -59,9 +59,12 @@ public class RemovePowerIfEmptyAction extends AbstractGameAction
             target.powers.remove(powerToRemove);
             AbstractDungeon.onModifyPower();
             
-            for (AbstractOrb orb : AbstractDungeon.player.orbs)
+            if (AbstractDungeon.player.orbs != null)
             {
-                orb.updateDescription();
+                for (AbstractOrb orb : AbstractDungeon.player.orbs)
+                {
+                    orb.updateDescription();
+                }
             }
         }
         

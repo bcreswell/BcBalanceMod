@@ -46,13 +46,13 @@ public class Perseverance extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 3 : 5;
+        return !upgraded ? 4 : 6;
     }
     
     @Override
     public int getMagicNumber()
     {
-        //block grown on retained
+        //block growth when retained
         return !upgraded ? 3 : 4;
     }
     

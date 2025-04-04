@@ -2,8 +2,10 @@ package com.megacrit.cardcrawl.cards.red;
 
 import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.*;
 import com.megacrit.cardcrawl.actions.animations.*;
 import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.dungeons.*;
 import com.megacrit.cardcrawl.monsters.*;
@@ -29,6 +31,12 @@ public class MemoriesOfRuin extends BcSkillCardBase
     }
     
     @Override
+    protected void onInitialized()
+    {
+        tags.add(AbstractCard.CardTags.HEALING);
+    }
+    
+    @Override
     public String getId()
     {
         return ID;
@@ -45,15 +53,15 @@ public class MemoriesOfRuin extends BcSkillCardBase
     {
         return !upgraded ? 1 : 0;
     }
-    
+
     public int getVulnerableCount()
     {
-        return 2;
+        return 1;
     }
     
     public int getHpLoss()
     {
-        return 8;
+        return 5;
     }
     
     @Override
@@ -64,8 +72,8 @@ public class MemoriesOfRuin extends BcSkillCardBase
         //  6 regen -> 21
         //  7 regen -> 28
         //  8 regen -> 36
-        
-        return 6;
+       
+        return 7;
     }
     
     @Override
@@ -77,7 +85,20 @@ public class MemoriesOfRuin extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Sacrifice " + getHpLoss() + " HP. NL Suffer " + getVulnerableCount() + " Vulnerable. NL Gain !M! Regen.";
+        String description = "";
+        if (getHpLoss() > 0)
+        {
+            description += "Sacrifice " + getHpLoss() + " HP. NL ";
+        }
+
+        if (getVulnerableCount() > 0)
+        {
+            description += "Suffer " + getVulnerableCount() + " Vulnerable. NL ";
+        }
+
+        description += "Gain !M! Regen.";
+
+        return description;
     }
     
     @Override
@@ -92,7 +113,10 @@ public class MemoriesOfRuin extends BcSkillCardBase
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new VFXAction(new OfferingEffect(), 0.5F));
-        addToBot(new LoseHPAction(player, player, getHpLoss()));
+        if (getHpLoss() > 0)
+        {
+            addToBot(new LoseHPAction(player, player, getHpLoss()));
+        }
         
         addToBot(new BcApplyPowerAction(new VulnerablePower(player, getVulnerableCount(), false)));
         addToBot(new BcApplyPowerAction(new RegenPower(player, magicNumber)));

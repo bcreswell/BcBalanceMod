@@ -28,7 +28,7 @@ import static bcBalanceMod.BcBalanceMod.makeRelicPath;
 public class RotaryMechanism extends CustomRelic implements ClickableRelic
 {
     public static final String ID = BcBalanceMod.makeID("RotaryMechanism");
-    public static final int RotationsPerCombat = 3;
+    public static final int RotationsPerCombat = 5;
     static final Texture IMG = TextureLoader.getTexture(makeRelicPath("rotaryMechanism.png"));
     static final Texture outline = TextureLoader.getTexture(makeRelicOutlinePath("rotaryMechanism.png"));
     boolean isEnabled;
@@ -40,7 +40,7 @@ public class RotaryMechanism extends CustomRelic implements ClickableRelic
     
     public String getUpdatedDescription()
     {
-        return "Up to #b" + RotationsPerCombat + " times per combat: NL Right click to rotate your orbs clockwise without evoking them.";
+        return "Up to #b" + RotationsPerCombat + " times per combat: NL Right click this relic to rotate your Orbs clockwise without evoking them.";
     }
     
     public void atTurnStartPostDraw()
@@ -55,12 +55,12 @@ public class RotaryMechanism extends CustomRelic implements ClickableRelic
     
     public void atBattleStart()
     {
-        setCounter(3);
+        setCounter(RotationsPerCombat);
     }
     
     public void onVictory()
     {
-        //just to clarify that charges don't persist between combats.
+        //setting it to zero to clarify that charges don't persist between combats.
         // Also the counter gets in the way of the notch -> hurts visual clarity.
         setCounter(0);
         grayscale = false;
@@ -73,7 +73,7 @@ public class RotaryMechanism extends CustomRelic implements ClickableRelic
         if (BcUtility.isPlayerInCombat() && isEnabled && (counter > 0))
         {
             addToBot(new RelicAboveCreatureAction(AbstractDungeon.player, this));
-            addToBot(new RecursionAction(false, false));
+            addToBot(new RecursionAction(1, 0, false));
             setCounter(counter - 1);
             flash();
         }

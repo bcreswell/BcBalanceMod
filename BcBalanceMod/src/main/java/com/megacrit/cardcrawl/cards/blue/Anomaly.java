@@ -41,7 +41,7 @@ public class Anomaly extends BcSkillCardBase
     }
     
     @Override
-    public int getChanneledOrbCount()
+    public int getOrbCountToChannel()
     {
         return 1;
     }
@@ -61,7 +61,7 @@ public class Anomaly extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override

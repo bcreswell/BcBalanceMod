@@ -24,8 +24,7 @@ import com.megacrit.cardcrawl.vfx.combat.*;
 
 import java.util.*;
 
-import static bcBalanceMod.BcBalanceMod.makeRelicOutlinePath;
-import static bcBalanceMod.BcBalanceMod.makeRelicPath;
+import static bcBalanceMod.BcBalanceMod.*;
 
 public class BcBalancingScales extends CustomRelic
 {
@@ -33,12 +32,6 @@ public class BcBalancingScales extends CustomRelic
     
     private static final Texture IMG = TextureLoader.getTexture(makeRelicPath("bcBalancingScales.png"));
     static final Texture OUTLINE = TextureLoader.getTexture(makeRelicOutlinePath("bcBalancingScales.png"));
-    public static final int InitialRemovalCost = 50;
-    public static final int InitialRemovalCostA16 = 75;
-    public static final int RemovalCostIncrement = 25;
-    public static final int RemovalCostIncrementA16 = 25;
-    public static final int TokeHealAmount = 5;
-    public static int EtherealPlayedCount = 0;
     
     int removalCountForThisShop;
     boolean isPlayerInAShop;
@@ -52,7 +45,8 @@ public class BcBalancingScales extends CustomRelic
     @Override
     public String getUpdatedDescription()
     {
-        return "Adds #b1 extra choice to card rewards. NL NL Note: Many of the BC Balance Mod mechanics are implemented through this relic.";
+        //return "Adds #b1 extra choice to card rewards. NL NL Note: Many of the BC Balance Mod mechanics are implemented through this relic.";
+        return "Note: Many of the BC Balance Mod mechanics are implemented through this relic.";
     }
     
     @Override
@@ -66,8 +60,9 @@ public class BcBalancingScales extends CustomRelic
             {
                 //dont change it
             }
+           // else if (card.isEthereal)
             else if (card.isEthereal ||
-                             (isCorrupted && (card.type == AbstractCard.CardType.SKILL)))
+                 (isCorrupted && (card.type == AbstractCard.CardType.SKILL)))
             {
                 BcUtility.setGlowColor(card, BcUtility.corruptedGlow);
             }
@@ -83,9 +78,17 @@ public class BcBalancingScales extends CustomRelic
     }
     
     @Override
+    public void onEquip()
+    {
+        super.onEquip();
+        
+        BcUtility.resetFreeYourMind();
+    }
+    
+    @Override
     public void onEnterRoom(AbstractRoom room)
     {
-        EtherealPlayedCount = 0;
+        BcUtility.EtherealPlayedCount = 0;
         removalCountForThisShop = 0;
         previousDeckSize = AbstractDungeon.player.masterDeck.size();
         
@@ -134,9 +137,9 @@ public class BcBalancingScales extends CustomRelic
     @Override
     public void onPlayCard(AbstractCard card, AbstractMonster monster)
     {
-        if (card.isEthereal)
+        if (card.isEthereal && (card.cost != -2))
         {
-            EtherealPlayedCount++;
+            BcUtility.EtherealPlayedCount++;
         }
     }
     
@@ -155,16 +158,17 @@ public class BcBalancingScales extends CustomRelic
         {
             int dizzyToApply = DizzyPower.DizzyPerShuffle;
             //here's the magic: it's reduced by the current draw pile size.
-            dizzyToApply -= player.drawPile.size();
+            //dizzyToApply -= player.drawPile.size();
             
             applyDizzy(dizzyToApply);
         }
     }
     
-    void applyDizzy(int dizzyAmountToApply)
+    public void applyDizzy(int dizzyAmountToApply)
     {
         if ((dizzyAmountToApply <= 0) ||
-                    (AbstractDungeon.ascensionLevel < 13))
+            !BcUtility.isPlayerInCombat() ||
+            (AbstractDungeon.ascensionLevel < 12))
         {
             return;
         }
@@ -196,14 +200,32 @@ public class BcBalancingScales extends CustomRelic
     @Override
     public int changeNumberOfCardsInReward(int numberOfCards)
     {
-        return numberOfCards + 1;
+        if (AbstractDungeon.ascensionLevel >= 13)
+        {
+            return numberOfCards;
+        }
+        else
+        {
+            return numberOfCards + 1;
+        }
+//        AbstractRoom room = AbstractDungeon.getCurrRoom();
+//        if ((room != null) &&
+//            ((room.getClass() == TreasureRoomBoss.class) || (room.getClass() == MonsterRoomBoss.class)))
+//        {
+//            return numberOfCards;
+//        }
+//        else
+//        {
+//            return numberOfCards + 1;
+//        }
     }
     
     public void addCampfireOption(ArrayList<AbstractCampfireOption> options)
     {
         int removableCursesCount = CardGroup.getGroupWithoutBottledCards(AbstractDungeon.player.masterDeck.getPurgeableCurses()).size();
         
-        if (removableCursesCount > 0) // && !BcUtility.playerHasRelic(PeacePipe.ID))
+        if ((removableCursesCount > 0) &&
+            !BcUtility.playerHasRelic(PeacePipe.ID))
         {
             options.add(new RitualCampfireOption(true));
         }
@@ -214,33 +236,9 @@ public class BcBalancingScales extends CustomRelic
         return false;
     }
     
-    int getInitialRemovalCost()
-    {
-        if (AbstractDungeon.ascensionLevel >= 16)
-        {
-            return InitialRemovalCostA16;
-        }
-        else
-        {
-            return InitialRemovalCost;
-        }
-    }
-    
-    int getRemovalCostIncrement()
-    {
-        if (AbstractDungeon.ascensionLevel >= 16)
-        {
-            return RemovalCostIncrementA16;
-        }
-        else
-        {
-            return RemovalCostIncrement;
-        }
-    }
-    
     int getCurrentRemovalCost()
     {
-        int currentRemovalPrice = getInitialRemovalCost() + removalCountForThisShop * getRemovalCostIncrement();
+        int currentRemovalPrice = BcUtility.getInitialCardRemovalCost() + removalCountForThisShop * BcUtility.getCardRemovalCostIncrement();
         
         if (BcUtility.playerHasRelic(SmilingMask.ID))
         {

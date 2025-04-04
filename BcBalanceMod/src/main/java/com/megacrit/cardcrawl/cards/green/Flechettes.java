@@ -72,18 +72,6 @@ public class Flechettes extends BcAttackCardBase
     //endregion
     
     @Override
-    public void calculateCardDamage(AbstractMonster mo)
-    {
-        super.calculateCardDamage(mo);
-    }
-    
-    @Override
-    public void calculateDamageDisplay(AbstractMonster mo)
-    {
-        super.calculateDamageDisplay(mo);
-    }
-    
-    @Override
     public String getTemporaryExtraDescription(AbstractMonster monster)
     {
         int skillCount = 0;
@@ -107,8 +95,9 @@ public class Flechettes extends BcAttackCardBase
         
         //bc: other stuff can impact this calculation. doesn't need to be perfect. ex: akabeko, hidden shiv, etc.
         int totalBaseDamage = skillCount * damage;
-        
-        return "!D! x #b" + skillCount + " = " + colorPrefix + totalBaseDamage + " damage";
+
+        return "#b"+skillCount+ " skills in hand";
+        //return "!D! x #b" + skillCount + " = " + colorPrefix + totalBaseDamage + " damage";
     }
     
     public void use(AbstractPlayer player, AbstractMonster monster)

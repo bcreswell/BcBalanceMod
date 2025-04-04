@@ -25,7 +25,7 @@ public class HelloWorld extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return 0;
     }
     
     @Override
@@ -55,13 +55,13 @@ public class HelloWorld extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Create 1 of !M! upgraded common cards.";
+        return "Pick 1 of !M! upgraded common cards to create.";
     }
     
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     //endregion
     

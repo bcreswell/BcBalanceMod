@@ -7,15 +7,11 @@ import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.characters.*;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.powers.watcher.*;
 import com.megacrit.cardcrawl.relics.*;
-
-import java.util.Iterator;
 
 public class ScryAction extends AbstractGameAction
 {
@@ -23,6 +19,8 @@ public class ScryAction extends AbstractGameAction
     private float startingDuration;
     boolean scryFinished;
     boolean firstUpdate;
+    int dizzyToApply = 0;
+    public static int LatestScryAmount = 0;
     
     public ScryAction(int numCards)
     {
@@ -32,6 +30,7 @@ public class ScryAction extends AbstractGameAction
             AbstractDungeon.player.getRelic("GoldenEye").flash();
             amount += 2;
         }
+        LatestScryAmount = amount;
         
         actionType = AbstractGameAction.ActionType.CARD_MANIPULATION;
         startingDuration = Settings.ACTION_DUR_FAST;
@@ -52,16 +51,22 @@ public class ScryAction extends AbstractGameAction
             if (firstUpdate)
             {
                 firstUpdate = false;
+                dizzyToApply = 0;
                 
                 //region first update
                 //scry can shuffle discard pile into draw pile if needed.
                 if (amount > player.drawPile.size())
                 {
-                    BcBalancingScales scales = (BcBalancingScales) player.getRelic(BcBalancingScales.ID);
-                    if (scales != null)
+                    dizzyToApply = DizzyPower.DizzyPerShuffle - player.drawPile.size();
+                    if (dizzyToApply < 0)
                     {
-                        scales.onSpecialScryShuffle();
+                        dizzyToApply = 0;
                     }
+//                  BcBalancingScales scales = (BcBalancingScales) player.getRelic(BcBalancingScales.ID);
+//                  if (scales != null)
+//                  {
+//                      scales.onSpecialScryShuffle();
+//
                     
                     //this is a weird shuffle algorithm. Wanted to shuffle only the discard pile part and leave the draw pile in it's current order
                     //the reason: if you can see that 1 card in your draw pile is an important one, dont want to lose track of it because you scryed
@@ -103,6 +108,33 @@ public class ScryAction extends AbstractGameAction
                     
                     if (!AbstractDungeon.gridSelectScreen.selectedCards.isEmpty())
                     {
+                        //discarding cards with scry should be treated as if they hit the hand momentarily before being discarded.
+                        //this is to prevent scry heavy builds from always instantly getting nauseous from dizzy.
+                        dizzyToApply -= AbstractDungeon.gridSelectScreen.selectedCards.size();
+
+                        if (dizzyToApply > 0)
+                        {
+                            BcBalancingScales scales = (BcBalancingScales) player.getRelic(BcBalancingScales.ID);
+                            if (scales != null) {
+                                scales.applyDizzy(dizzyToApply);
+                            }
+                        }
+                        else if (dizzyToApply < 0)
+                        {
+                            AbstractPower pow = player.getPower(DizzyPower.POWER_ID);
+                            if (pow != null)
+                            {
+                                DizzyPower dizzy = (DizzyPower)pow;
+
+                                dizzy.reducePower(dizzyToApply * -1);
+                                if (dizzy.amount == 0)
+                                {
+                                    addToBot(new RemoveSpecificPowerAction(player, player, DizzyPower.POWER_ID));
+                                }
+                            }
+                        }
+                        dizzyToApply = 0;
+
                         //region after player has made scry selections
                         for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards)
                         {

@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.cards.colorless;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.RetrieveRandomCardsAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -43,24 +44,18 @@ public class DeepBreath extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Retrieve !M! cards randomly.";
+        return "Retrieve !M! cards at random.";
     }
     
     @Override
-    public boolean isARetrieveCard()
+    public boolean canBeRetrieved()
     {
-        return true;
-    }
-    
-    @Override
-    public String getFootnote()
-    {
-        return "Can't target cards that have \"Retrieve\" in their description.";
+        return false;
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new RetrieveRandomCardsAction(false, magicNumber));
+        addToBot(new RetrieveRandomCardsAction(magicNumber));
     }
 }

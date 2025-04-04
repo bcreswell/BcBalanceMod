@@ -34,7 +34,7 @@ public class SpotWeakness extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
     }
     
     @Override
@@ -46,19 +46,13 @@ public class SpotWeakness extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 5 : 7;
-    }
-    
-    @Override
-    public boolean getRetain()
-    {
-        return true;
+        return !upgraded ? 3 : 4;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "If the enemy intends to attack, gain !M! temporary Strength.";
+        return "If the enemy intends to attack, gain !M! Strength.";
     }
     //endregion
     
@@ -86,7 +80,7 @@ public class SpotWeakness extends BcSkillCardBase
         if (!monster.isDeadOrEscaped() && (monster.getIntentBaseDmg() >= 0))
         {
             addToBot(new BcApplyPowerAction(new StrengthPower(player, magicNumber)));
-            addToBot(new BcApplyPowerAction(new LoseStrengthPower(player, magicNumber)));
+            //addToBot(new BcApplyPowerAction(new LoseStrengthPower(player, magicNumber)));
         }
     }
 }

@@ -196,7 +196,7 @@
   "Shop Tip": {
     "TEXT": [
       "Remove a non-curse card from your deck. NL The cost increases by #y",
-      "g for each removal, but for this shop only. NL The next shop will reset to the original cost."
+      "g for each removal, but the next shop will reset to the original cost."
     ],
     "LABEL": [
       "Card Removal Service"

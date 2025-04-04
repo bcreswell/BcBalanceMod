@@ -3,6 +3,7 @@ package com.megacrit.cardcrawl.cards.blue;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
+import com.megacrit.cardcrawl.actions.common.BcApplyPowerAction;
 import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
 import com.megacrit.cardcrawl.actions.defect.ChannelAction;
 import com.megacrit.cardcrawl.actions.utility.SFXAction;
@@ -10,9 +11,13 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.Dark;
+import com.megacrit.cardcrawl.powers.WeakPower;
 import com.megacrit.cardcrawl.vfx.combat.CleaveEffect;
+
+import java.util.Iterator;
 
 public class DoomAndGloom extends BcAttackCardBase
 {
@@ -38,7 +43,7 @@ public class DoomAndGloom extends BcAttackCardBase
     }
     
     @Override
-    public int getChanneledOrbCount()
+    public int getOrbCountToChannel()
     {
         return 1;
     }
@@ -52,7 +57,13 @@ public class DoomAndGloom extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 11 : 17;
+        return !upgraded ? 9 : 14;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 1 : 2;
     }
     
     @Override
@@ -64,12 +75,27 @@ public class DoomAndGloom extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage to ALL enemies. NL Channel 1 Dark.";
+        return "Inflict !M! Weak and NL Deal !D! damage to ALL enemies. NL Channel 1 Dark.";
     }
     //endregion
     
-    public void use(AbstractPlayer player, AbstractMonster monster)
+    public void use(AbstractPlayer player, AbstractMonster m)
     {
+        if (!AbstractDungeon.getMonsters().areMonstersBasicallyDead())
+        {
+            flash();
+            Iterator var3 = AbstractDungeon.getMonsters().monsters.iterator();
+            
+            while (var3.hasNext())
+            {
+                AbstractMonster monster = (AbstractMonster) var3.next();
+                if (!monster.isDead && !monster.isDying)
+                {
+                    addToBot(new BcApplyPowerAction(monster, new WeakPower(monster, magicNumber, false)));
+                }
+            }
+        }
+        
         addToBot(new SFXAction("ATTACK_HEAVY"));
         addToBot(new VFXAction(player, new CleaveEffect(), 0.1F));
         

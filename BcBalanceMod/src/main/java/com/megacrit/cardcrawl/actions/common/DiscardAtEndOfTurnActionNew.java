@@ -1,10 +1,12 @@
 package com.megacrit.cardcrawl.actions.common;
 
+import bcBalanceMod.baseCards.BcPowerBase;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.unique.RestoreRetainedCardsAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.powers.BcCorruptionPower;
 import com.megacrit.cardcrawl.relics.*;
 
 import java.util.ArrayList;
@@ -26,36 +28,38 @@ public class DiscardAtEndOfTurnActionNew extends AbstractGameAction
         if (!AbstractDungeon.getMonsters().areMonstersBasicallyDead() && !player.isDead)
         {
             boolean hasRunicPyramid = player.hasRelic(RunicPyramid.ID);
-            
+            BcPowerBase corruptionPower = (BcPowerBase)player.getPower(BcCorruptionPower.POWER_ID);
+
             for (AbstractCard card : player.hand.group)
             {
                 if (card.isEthereal)
                 {
                     addToBot(new ExhaustSpecificCardAction(card, AbstractDungeon.player.hand));
                 }
-                else
+                else if ((corruptionPower != null) && !corruptionPower.upgraded && (card.type == AbstractCard.CardType.SKILL))
                 {
-                    if (card.retain || card.selfRetain)
+                    //corruption exhaust implemented here so that dark embrace doesn't exhaust more ethereals.
+                    addToBot(new ExhaustSpecificCardAction(card, AbstractDungeon.player.hand));
+                }
+                else if (card.retain || card.selfRetain)
+                {
+                    card.onRetained();
+                    card.retain = false;
+                }
+                else if (hasRunicPyramid)
+                {
+                    if ((card.type == AbstractCard.CardType.STATUS) || (card.type == AbstractCard.CardType.CURSE))
                     {
-                        card.onRetained();
-                        card.retain = false;
-                        
-                    }
-                    else if (hasRunicPyramid)
-                    {
-                        if ((card.type == AbstractCard.CardType.STATUS) || (card.type == AbstractCard.CardType.CURSE))
+                        //runic pyramid now discards unplayable status and curse cards
+                        if (card.cost == -2)
                         {
-                            //runic pyramid now discards unplayable status and curse cards
-                            if (card.cost == -2)
-                            {
-                                addToBot(new DiscardSpecificCardAction(card, null, true, true));
-                            }
+                            addToBot(new DiscardSpecificCardAction(card, null, true, true));
                         }
                     }
-                    else
-                    {
-                        addToBot(new DiscardSpecificCardAction(card, null, true, true));
-                    }
+                }
+                else
+                {
+                    addToBot(new DiscardSpecificCardAction(card, null, true, true));
                 }
             }
         }

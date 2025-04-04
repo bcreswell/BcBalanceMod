@@ -50,7 +50,7 @@ public class FeelNoPain extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 2 : 4;
+        return !upgraded ? 3 : 4;
     }
     
     @Override

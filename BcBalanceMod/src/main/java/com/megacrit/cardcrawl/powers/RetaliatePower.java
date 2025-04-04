@@ -49,10 +49,10 @@ public class RetaliatePower extends AbstractPower
         AbstractMonster attackingMonster = (AbstractMonster)info.owner;
         
         if ((attackingMonster != null) &&
-                    !alreadyRetaliatedList.contains(attackingMonster) &&
-                    (info.type != DamageInfo.DamageType.THORNS) &&
-                    (info.type != DamageInfo.DamageType.HP_LOSS) &&
-                    (attackingMonster != owner))
+            !alreadyRetaliatedList.contains(attackingMonster) &&
+            (info.type != DamageInfo.DamageType.THORNS) &&
+            (info.type != DamageInfo.DamageType.HP_LOSS) &&
+            (attackingMonster != owner))
         
         {
             alreadyRetaliatedList.add(attackingMonster);

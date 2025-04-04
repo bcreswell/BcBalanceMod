@@ -46,7 +46,7 @@ public class LiveForever extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 5 : 6;
+        return !upgraded ? 6 : 7;
     }
     
     @Override

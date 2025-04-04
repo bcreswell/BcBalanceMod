@@ -49,7 +49,7 @@ public class ForceOfWill extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 7 : 11;
+        return !upgraded ? 8 : 12;
     }
     
     @Override
@@ -97,12 +97,13 @@ public class ForceOfWill extends BcSkillCardBase
     @Override
     public void use(AbstractPlayer player, AbstractMonster m)
     {
+        int attackingMonstersCount = getAttackingMonstersCount();
+        
         for (AbstractMonster monster : AbstractDungeon.getCurrRoom().monsters.monsters)
         {
-            addToBot(new ApplyPowerAction(monster, player, new WeakPower(monster, 1, false), 1, true, AbstractGameAction.AttackEffect.NONE));
+            addToBot(new BcApplyPowerAction(monster, new WeakPower(monster, magicNumber, false)));
         }
         
-        int attackingMonstersCount = getAttackingMonstersCount();
         for (int i = 0; i < attackingMonstersCount; i++)
         {
             addToBot(new GainBlockAction(AbstractDungeon.player, AbstractDungeon.player, block));

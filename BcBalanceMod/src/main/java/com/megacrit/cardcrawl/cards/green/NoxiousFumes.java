@@ -35,19 +35,19 @@ public class NoxiousFumes extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 2;
+        return 1;
     }
     
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 3 : 5;
+        return !upgraded ? 3 : 4;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "At the start of your turn, apply !M! Poison to ALL enemies.";
+        return "Start of your turn: NL Inflict !M! Poison on ALL enemies.";
     }
     //endregion
     

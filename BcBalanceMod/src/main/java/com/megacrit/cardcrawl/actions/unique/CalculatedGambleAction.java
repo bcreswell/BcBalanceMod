@@ -7,21 +7,22 @@ import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.core.*;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.*;
-import com.megacrit.cardcrawl.powers.*;
 
 public class CalculatedGambleAction extends AbstractGameAction
 {
     private static final UIStrings uiStrings;
     public static final String[] TEXT;
-    private boolean isUpgraded;
+    private boolean chooseDiscards;
     boolean firstUpdate = true;
+    int extraDraw;
     
-    public CalculatedGambleAction(boolean upgraded)
+    public CalculatedGambleAction(boolean chooseDiscards, int extraDraw)
     {
         this.target = AbstractDungeon.player;
         this.actionType = ActionType.DISCARD;
         this.duration = Settings.ACTION_DUR_FAST;
-        this.isUpgraded = upgraded;
+        this.chooseDiscards = chooseDiscards;
+        this.extraDraw = extraDraw;
     }
     
     public void update()
@@ -32,18 +33,16 @@ public class CalculatedGambleAction extends AbstractGameAction
         {
             firstUpdate = false;
             
-            if (player.hand.size() == 0)
-            {
-                isDone = true;
-                return;
-            }
+            int handSize = player.hand.size();
             
-            int count = AbstractDungeon.player.hand.size();
-            
-            if (!isUpgraded)
+            if (!chooseDiscards)
             {
-                addToTop(new DrawCardAction(target, count));
-                addToTop(new DiscardAction(target, target, count, true));
+                addToTop(new DrawCardAction(target, handSize + extraDraw));
+                
+                if (handSize > 0)
+                {
+                    addToTop(new DiscardAction(target, target, handSize, true));
+                }
             }
             else
             {
@@ -51,12 +50,12 @@ public class CalculatedGambleAction extends AbstractGameAction
                 tickDuration();
             }
         }
-        else if (isUpgraded && !AbstractDungeon.handCardSelectScreen.wereCardsRetrieved)
+        else if (chooseDiscards && !AbstractDungeon.handCardSelectScreen.wereCardsRetrieved)
         {
             int discardCount = AbstractDungeon.handCardSelectScreen.selectedCards.size();
             if (discardCount > 0)
             {
-                addToBot(new DrawCardAction(player, discardCount));
+                addToBot(new DrawCardAction(player, discardCount+extraDraw));
                 
                 for (AbstractCard card : AbstractDungeon.handCardSelectScreen.selectedCards.group)
                 {

@@ -35,7 +35,7 @@ public class GhostlyArmor extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
@@ -47,7 +47,7 @@ public class GhostlyArmor extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 17 : 25;
+        return !upgraded ? 16 : 22;
     }
     
     @Override

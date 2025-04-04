@@ -40,7 +40,7 @@ public class Weave extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 3 : 5;
+        return !upgraded ? 5 : 7;
     }
     
     @Override
@@ -52,13 +52,7 @@ public class Weave extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Whenever you Scry, Draw or Retrieve this card.";
-    }
-    
-    @Override
-    public boolean isARetrieveCard()
-    {
-        return true;
+        return "Deal !D! damage. NL Whenever you Scry, Retrieve this card.";
     }
     //endregion
     
@@ -69,6 +63,6 @@ public class Weave extends BcAttackCardBase
     
     public void triggerOnScry()
     {
-        addToBot(new DrawOrRetrieveWeaveAction(this));
+        addToBot(new RetrieveWeaveAction(this));
     }
 }

@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.cards.green;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
@@ -72,20 +73,13 @@ public class DaggerThrow extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 9 : 12;
+        return !upgraded ? 9 : 11;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (magicNumber == 1)
-        {
-            return "Deal !D! damage. NL Draw !M! card. NL Discard 1 card.";
-        }
-        else
-        {
-            return "Deal !D! damage. NL Draw !M! cards. NL Discard 1 card.";
-        }
+        return "Deal !D! damage. NL Draw "+ BcUtility.getCardCountString(magicNumber) +". NL Discard 1 card.";
     }
     //endregion
     

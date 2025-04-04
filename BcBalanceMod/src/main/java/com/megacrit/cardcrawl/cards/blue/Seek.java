@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.BetterDrawPileToHandAction;
 import com.megacrit.cardcrawl.actions.unique.*;
@@ -39,31 +40,24 @@ public class Seek extends BcSkillCardBase
     }
     
     @Override
-    public boolean getExhaust()
+    public int getMagicNumber()
     {
-        return true;
+        return 1;
     }
     
     @Override
-    public int getMagicNumber()
+    public boolean canBeRetrieved()
     {
-        return !upgraded ? 1 : 2;
+        return upgraded;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (magicNumber == 1)
-        {
-            return "Draw a card of your choice.";
-        }
-        else
-        {
-            return "Draw !M! cards of your choice.";
-        }
+        return "Pick "+ BcUtility.getCardCountString(magicNumber) +" to Draw.";
     }
     //endregion
-    
+
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new DrawOfPlayersChoiceAction(magicNumber, false, false, false, false));

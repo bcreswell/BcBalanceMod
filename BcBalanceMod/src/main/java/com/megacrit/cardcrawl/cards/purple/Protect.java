@@ -13,7 +13,7 @@ public class Protect extends AbstractCard {
     
     public Protect() {
         super("Protect", cardStrings.NAME, "purple/skill/protect", 2, cardStrings.DESCRIPTION, AbstractCard.CardType.SKILL, AbstractCard.CardColor.PURPLE, AbstractCard.CardRarity.COMMON, AbstractCard.CardTarget.SELF);
-        this.baseBlock = 12;
+        this.baseBlock = 14;
         this.selfRetain = true;
     }
     
@@ -28,7 +28,7 @@ public class Protect extends AbstractCard {
     public void upgrade() {
         if (!this.upgraded) {
             this.upgradeName();
-            this.upgradeBlock(6);
+            this.upgradeBlock(4);
         }
         
     }

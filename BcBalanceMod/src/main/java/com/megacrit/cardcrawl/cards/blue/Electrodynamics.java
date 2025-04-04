@@ -42,7 +42,7 @@ public class Electrodynamics extends BcPowerCardBase
     }
     
     @Override
-    public int getChanneledOrbCount()
+    public int getOrbCountToChannel()
     {
         return getMagicNumber();
     }

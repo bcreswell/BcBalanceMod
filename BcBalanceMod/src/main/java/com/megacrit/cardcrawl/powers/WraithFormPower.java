@@ -82,17 +82,17 @@ public class WraithFormPower extends BcPowerBase
         addToBot(new BcApplyPowerAction(new IntangiblePlayerPower(player, 1)));
     }
     
-    @Override
-    public void stackPower(int stackAmount)
-    {
-        amount = IntangibleFrequency;
-        addToBot(new BcApplyPowerAction(new IntangiblePlayerPower(player, 1)));
-        
-        if (amount != 0)
-        {
-            fontScale = 8.0F;
-        }
-        
-        updateDescription();
-    }
+//    @Override
+//    public void stackPower(int stackAmount)
+//    {
+//        amount = IntangibleFrequency;
+//        addToBot(new BcApplyPowerAction(new IntangiblePlayerPower(player, 1)));
+//
+//        if (amount != 0)
+//        {
+//            fontScale = 8.0F;
+//        }
+//
+//        updateDescription();
+//    }
 }

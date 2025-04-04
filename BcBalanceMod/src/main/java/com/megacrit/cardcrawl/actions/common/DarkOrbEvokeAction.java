@@ -22,49 +22,68 @@ public class DarkOrbEvokeAction extends AbstractGameAction
     
     public DarkOrbEvokeAction(DamageInfo info, AbstractGameAction.AttackEffect effect)
     {
-        AbstractMonster targetMonster = null;
+        this.info = info;
+        actionType = AbstractGameAction.ActionType.DAMAGE;
+        attackEffect = effect;
+        duration = DURATION;
+    }
+    
+    void updateTargeting()
+    {
+        AbstractMonster bestTarget = null;
+        boolean bestTargetHasLockon = false;
         
-        //dark orbs are attracted to lockon first and weakest enemy second.
+        //dark orbs are attracted to lockOn first and weakest enemy second.
         for (AbstractMonster monster : AbstractDungeon.getMonsters().monsters)
         {
             if (!monster.isDeadOrEscaped())
             {
-                if (targetMonster == null)
+                if (bestTarget == null)
                 {
-                    targetMonster = monster;
+                    bestTarget = monster;
+                    bestTargetHasLockon = bestTarget.hasPower(LockOnPower.POWER_ID);
                 }
                 else
                 {
-                    boolean monsterLockon = monster.hasPower(LockOnPower.POWER_ID);
-                    boolean targetLockon = targetMonster.hasPower(LockOnPower.POWER_ID);
+                    boolean monsterHasLockOn = monster.hasPower(LockOnPower.POWER_ID);
                     
-                    if (monsterLockon == targetLockon)
+                    if (monsterHasLockOn == bestTargetHasLockon)
                     {
-                        if (monster.currentHealth < targetMonster.currentHealth)
+                        if (monster.currentHealth < bestTarget.currentHealth)
                         {
-                            targetMonster = monster;
+                            bestTarget = monster;
+                            bestTargetHasLockon = monsterHasLockOn;
                         }
                     }
-                    else if (monsterLockon && !targetLockon)
+                    else if (monsterHasLockOn && !bestTargetHasLockon)
                     {
-                        targetMonster = monster;
+                        bestTarget = monster;
+                        bestTargetHasLockon = monsterHasLockOn;
                     }
                 }
             }
         }
         
-        this.info = info;
-        setValues(targetMonster, info);
-        actionType = AbstractGameAction.ActionType.DAMAGE;
-        attackEffect = effect;
-        duration = 0.1F;
+        this.target = bestTarget;
+        this.source = info.owner;
+        this.amount = info.output;
     }
     
     public void update()
     {
+        if (isDone)
+        {
+            return;
+        }
+        
+        if (duration == DURATION) //first update
+        {
+            updateTargeting();
+        }
+        
         if ((!shouldCancelAction() || info.type == DamageInfo.DamageType.THORNS) && target != null)
         {
-            if (duration == 0.1F)
+            if (duration == DURATION)
             {
                 info.output = Dark.applyLockOn(target, info.base);
                 if (info.type != DamageInfo.DamageType.THORNS && (info.owner.isDying || info.owner.halfDead))
@@ -77,6 +96,7 @@ public class DarkOrbEvokeAction extends AbstractGameAction
             }
             
             tickDuration();
+            
             if (isDone)
             {
                 if (attackEffect == AbstractGameAction.AttackEffect.POISON)
@@ -103,7 +123,7 @@ public class DarkOrbEvokeAction extends AbstractGameAction
                 
                 if (!Settings.FAST_MODE)
                 {
-                    addToTop(new WaitAction(0.1F));
+                    addToTop(new WaitAction(POST_ATTACK_WAIT_DUR));
                 }
             }
         }

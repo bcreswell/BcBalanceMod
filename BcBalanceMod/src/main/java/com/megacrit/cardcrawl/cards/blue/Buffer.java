@@ -29,7 +29,7 @@ public class Buffer extends BcPowerCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override
@@ -44,25 +44,24 @@ public class Buffer extends BcPowerCardBase
         return !upgraded ? 1 : 2;
     }
     
+    public static int getDamagePreventionThreshold()
+    {
+        return 5;
+    }
+    
     @Override
     public String getBaseDescription()
     {
+        int dmgThreshold = getDamagePreventionThreshold();
         if (magicNumber == 1)
         {
-            return "Prevent the next time you would lose HP.";
+            return "Prevent the next time an enemy's attack would deal "+dmgThreshold+" or more damage.";
         }
         else
         {
-            return "Prevent the next !M! times you would lose HP.";
+            return "Prevent the next !M! times an enemy's attack would deal "+dmgThreshold+" or more damage.";
         }
     }
-    
-    @Override
-    public String getFootnote()
-    {
-        return "Disabled while #yIntangible.";
-    }
-    
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)

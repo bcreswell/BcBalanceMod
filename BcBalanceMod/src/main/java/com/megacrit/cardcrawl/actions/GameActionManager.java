@@ -1,12 +1,9 @@
 package com.megacrit.cardcrawl.actions;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.badlogic.gdx.math.MathUtils;
-import com.megacrit.cardcrawl.actions.common.DrawCardAction;
-import com.megacrit.cardcrawl.actions.common.EnableEndTurnButtonAction;
-import com.megacrit.cardcrawl.actions.common.GainBlockAction;
-import com.megacrit.cardcrawl.actions.common.HealAction;
-import com.megacrit.cardcrawl.actions.common.ShowMoveNameAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.defect.TriggerEndOfTurnOrbsAction;
 import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.actions.utility.WaitAction;
@@ -26,9 +23,13 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.MonsterQueueItem;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.powers.BlurPower;
+import com.megacrit.cardcrawl.powers.watcher.NaturalViolentFirePower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.relics.Calipers;
 import com.megacrit.cardcrawl.relics.UnceasingTop;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
+import com.megacrit.cardcrawl.stances.WrathStance;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import com.megacrit.cardcrawl.vfx.ThoughtBubble;
 import com.megacrit.cardcrawl.vfx.cardManip.ExhaustCardEffect;
@@ -245,7 +246,8 @@ public class GameActionManager {
             } else {
                 canPlayCard = true;
                 if (c.freeToPlay()) {
-                    c.freeToPlayOnce = true;
+                    //commenting this out fixed issue between forethought and swivel
+                    //c.freeToPlayOnce = true;
                 }
                 
                 ((CardQueueItem)this.cardQueue.get(0)).card.energyOnUse = ((CardQueueItem)this.cardQueue.get(0)).energyOnUse;
@@ -427,11 +429,15 @@ public class GameActionManager {
             totalDiscardedThisTurn = 0;
             this.cardsPlayedThisTurn.clear();
             damageReceivedThisTurn = 0;
-            if (!AbstractDungeon.player.hasPower("Barricade") && !AbstractDungeon.player.hasPower("Blur")) {
+
+            if (!AbstractDungeon.player.hasPower("Barricade") &&
+                !AbstractDungeon.player.hasPower("Blur") &&
+                (!BcUtility.isPlayerInStance(WrathStance.STANCE_ID) || !AbstractDungeon.player.hasPower(NaturalViolentFirePower.POWER_ID)))
+            {
                 if (!AbstractDungeon.player.hasRelic("Calipers")) {
                     AbstractDungeon.player.loseBlock();
                 } else {
-                    AbstractDungeon.player.loseBlock(15);
+                    AbstractDungeon.player.loseBlock(Calipers.BLOCK_LOSS);
                 }
             }
             

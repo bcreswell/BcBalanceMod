@@ -5,13 +5,11 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.screens.CardRewardScreen;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToDiscardEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToHandEffect;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class ForeignInfluenceAction extends AbstractGameAction
 {
@@ -47,27 +45,16 @@ public class ForeignInfluenceAction extends AbstractGameAction
             {
                 if (AbstractDungeon.cardRewardScreen.discoveryCard != null)
                 {
-                    AbstractCard disCard = AbstractDungeon.cardRewardScreen.discoveryCard.makeStatEquivalentCopy();
-                    if (!upgraded)
-                    {
-                        disCard.setCostForTurn(0);
-                    }
-                    else
-                    {
-                        //zero for the rest of combat
-                        disCard.cost = 0;
-                        disCard.costForTurn = 0;
-                        disCard.isCostModified = true;
-                    }
-                    
-                    disCard.current_x = -1000.0F * Settings.xScale;
                     if (AbstractDungeon.player.hand.size() < 10)
                     {
-                        AbstractDungeon.effectList.add(new ShowCardAndAddToHandEffect(disCard, (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F));
-                    }
-                    else
-                    {
-                        AbstractDungeon.effectList.add(new ShowCardAndAddToDiscardEffect(disCard, (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F));
+                        AbstractCard foreignCard = AbstractDungeon.cardRewardScreen.discoveryCard.makeStatEquivalentCopy();
+                        
+                        foreignCard.setCostForTurn(0);
+                        foreignCard.current_x = -1000.0F * Settings.xScale;
+                        
+                        BcUtility.makeCardTemporary(foreignCard);
+                        
+                        AbstractDungeon.effectList.add(new ShowCardAndAddToHandEffect(foreignCard, (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F));
                     }
                     
                     AbstractDungeon.cardRewardScreen.discoveryCard = null;
@@ -101,8 +88,13 @@ public class ForeignInfluenceAction extends AbstractGameAction
 //                cardRarity = AbstractCard.CardRarity.RARE;
 //            }
             
-            AbstractCard potentialCard = BcUtility.getRandomCard(null, AbstractCard.CardType.ATTACK, true, false, true);
-//            AbstractCard potentialCard = CardLibrary.getAnyColorCard(AbstractCard.CardType.ATTACK, cardRarity);
+            AbstractCard potentialCard = BcUtility.getRandomCard(
+                null,
+                AbstractCard.CardType.ATTACK,
+                true,
+                false,
+                true,
+                false);
             
             if (potentialCard.color == AbstractCard.CardColor.PURPLE)
             {

@@ -47,7 +47,7 @@ public class MultiCast extends BcSkillCardBase
     @Override
     public int getNumberOfOrbsEvokedDirectly()
     {
-        return 1;
+        return (getEvokeIterations() > 0) ? 1 : 0;
     }
     
     @Override
@@ -75,7 +75,8 @@ public class MultiCast extends BcSkillCardBase
             }
             
             AbstractOrb orbToEvoke = AbstractDungeon.player.orbs.get(0);
-            if ((orbToEvoke instanceof Frost) || (orbToEvoke instanceof Lightning))
+            if ((orbToEvoke instanceof Frost) ||
+                (orbToEvoke instanceof Lightning))
             {
                 evokeCount++;
             }
@@ -89,11 +90,11 @@ public class MultiCast extends BcSkillCardBase
     {
         if (!upgraded)
         {
-            return "Evoke your next orb multiple times. NL Lightning or Frost: NL X+1 times. NL Dark or Plasma: NL X times.";
+            return "If your next Orb is Dark or Plasma, Evoke it X times. NL NL If your next Orb is Lightning or Frost, NL Evoke it X+1 times.";
         }
         else
         {
-            return "Evoke your next orb multiple times. NL Lightning or Frost: NL X+2 times. NL Dark or Plasma: NL X+1 times.";
+            return "If your next Orb is Dark or Plasma, Evoke it X+1 times. NL NL If your next Orb is Lightning or Frost, NL Evoke it X+2 times.";
         }
     }
     //endregion

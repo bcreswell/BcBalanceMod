@@ -21,7 +21,7 @@ public class Darkness extends BcSkillCardBase
     }
     
     @Override
-    public int getChanneledOrbCount()
+    public int getOrbCountToChannel()
     {
         return 1;
     }

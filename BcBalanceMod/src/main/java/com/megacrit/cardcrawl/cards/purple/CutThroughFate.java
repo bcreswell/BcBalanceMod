@@ -67,7 +67,6 @@ public class CutThroughFate extends BcAttackCardBase
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.SLASH_DIAGONAL));
-        
         addToBot(new ScryAction(magicNumber));
         addToBot(new DrawCardAction(player, 1));
     }

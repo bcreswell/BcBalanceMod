@@ -82,6 +82,15 @@ public abstract class AbstractOrb
         return useCardRng ? (AbstractOrb) orbs.get(AbstractDungeon.cardRandomRng.random(orbs.size() - 1)) : (AbstractOrb) orbs.get(MathUtils.random(orbs.size() - 1));
     }
     
+    public static AbstractOrb getRandomNonPlasmaOrb(boolean useCardRng)
+    {
+        ArrayList<AbstractOrb> orbs = new ArrayList();
+        orbs.add(new Dark());
+        orbs.add(new Frost());
+        orbs.add(new Lightning());
+        return useCardRng ? (AbstractOrb) orbs.get(AbstractDungeon.cardRandomRng.random(orbs.size() - 1)) : (AbstractOrb) orbs.get(MathUtils.random(orbs.size() - 1));
+    }
+    
     public void onStartOfTurn()
     {
     }
@@ -111,7 +120,7 @@ public abstract class AbstractOrb
         int retVal = dmg;
         if (target.hasPower("Lockon"))
         {
-            retVal = (int) ((float) dmg * 1.5F);
+            retVal = (int) Math.ceil((float) dmg * 1.5F);
         }
         
         return retVal;
@@ -177,9 +186,10 @@ public abstract class AbstractOrb
         float scale = 1;
         
         boolean showEvokeText = false;
-        if ((evokeAmount > 0) &&
-                    (evokeTimes > 0) &&
-                    (showEvokeValue || !hideEvokeUnlessShown))
+        if ((evokeAmount >= 0) &&
+            (evokeTimes > 0) &&
+            !(this instanceof EmptyOrbSlot) &&
+            (showEvokeValue || !hideEvokeUnlessShown))
         {
             showEvokeText = true;
         }
@@ -190,9 +200,10 @@ public abstract class AbstractOrb
         }
         
         boolean showMainValueText = true;
-        if ((mainValue <= 0) ||
-                    showEvokeValue ||
-                    hidePassiveValue )
+        if ((mainValue < 0) ||
+            (this instanceof EmptyOrbSlot) ||
+            showEvokeValue ||
+            hidePassiveValue )
         {
             showMainValueText = false;
         }
@@ -200,13 +211,13 @@ public abstract class AbstractOrb
         if (showMainValueText)
         {
             FontHelper.renderFontCentered(
-                    sb,
-                    FontHelper.cardEnergyFont_L,
-                    Integer.toString(mainValue),
-                    cX + NUM_X_OFFSET + xOffset,
-                    cY + bobEffect.y / 2.0F + NUM_Y_OFFSET + yOffset,
-                    c,
-                    fontScale * scale);
+                sb,
+                FontHelper.cardEnergyFont_L,
+                Integer.toString(mainValue),
+                cX + NUM_X_OFFSET + xOffset,
+                cY + bobEffect.y / 2.0F + NUM_Y_OFFSET + yOffset,
+                c,
+                fontScale * scale);
         }
         
         scale = .8f;
@@ -226,22 +237,24 @@ public abstract class AbstractOrb
             String evokeString = Integer.toString(evokeAmount);
             if (evokeTimes > 1)
             {
-                //int evokeFinalAmount = evokeAmount * evokeTimes;
-                //evokeString += " x " + evokeTimes + " = " + evokeFinalAmount;
-                //evokeString =  Integer.toString(evokeFinalAmount);
                 scale = 1.4f;
-                evokeString += " x" + evokeTimes;
-                xOffset += 25.0F * Settings.scale;
+
+                //evokeString += " x" + evokeTimes ;
+                //xOffset += 25.0F * Settings.scale;
+
+                int evokeFinalAmount = evokeAmount * evokeTimes;
+                evokeString += " x" + evokeTimes + " = " + evokeFinalAmount;
+                xOffset += 75.0F * Settings.scale;
             }
             
             FontHelper.renderFontCentered(
-                    sb,
-                    FontHelper.cardEnergyFont_L,
-                    evokeString,
-                    cX + NUM_X_OFFSET + xOffset,
-                    cY + bobEffect.y / 2.0F + NUM_Y_OFFSET + yOffset,
-                    evokeColor,
-                    fontScale * scale);
+                sb,
+                FontHelper.cardEnergyFont_L,
+                evokeString,
+                cX + NUM_X_OFFSET + xOffset,
+                cY + bobEffect.y / 2.0F + NUM_Y_OFFSET + yOffset,
+                evokeColor,
+                fontScale * scale);
         }
     }
     

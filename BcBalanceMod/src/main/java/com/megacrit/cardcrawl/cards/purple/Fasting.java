@@ -29,7 +29,7 @@ public class Fasting extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return 2;
     }
     
     @Override
@@ -47,7 +47,7 @@ public class Fasting extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 3 : 4;
+        return !upgraded ? 4 : 5;
     }
     
     @Override

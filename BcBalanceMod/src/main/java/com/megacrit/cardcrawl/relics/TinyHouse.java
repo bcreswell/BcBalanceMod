@@ -17,7 +17,7 @@ public class TinyHouse extends AbstractRelic {
     private static final int HP_AMT = 5;
     
     public TinyHouse() {
-        super("Tiny House", "tinyHouse.png", AbstractRelic.RelicTier.BOSS, AbstractRelic.LandingSound.FLAT);
+        super("Tiny House", "tinyHouse.png", RelicTier.BOSS, AbstractRelic.LandingSound.FLAT);
     }
     
     public String getUpdatedDescription() {

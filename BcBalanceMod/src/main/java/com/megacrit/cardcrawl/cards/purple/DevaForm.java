@@ -2,12 +2,15 @@ package com.megacrit.cardcrawl.cards.purple;
 
 import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.BcApplyPowerAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.watcher.BcDevaPower;
 import com.megacrit.cardcrawl.powers.watcher.DevaPower;
+import com.megacrit.cardcrawl.actions.common.*;
 
 public class DevaForm extends BcPowerCardBase
 {
@@ -23,7 +26,7 @@ public class DevaForm extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 3;
+        return !upgraded ? 5 : 4;
     }
     
     @Override
@@ -39,32 +42,31 @@ public class DevaForm extends BcPowerCardBase
     }
     
     @Override
-    public boolean getEthereal()
-    {
-        return !upgraded;
-    }
-    
-    @Override
     public boolean getRetain()
     {
-        return upgraded;
+        return true;
     }
     
     @Override
     public int getMagicNumber()
     {
-        return 1;
+        return 3;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "At the start of your turn, gain [W] and increase this gain by !M!.";
+        return "When Retained, reduce this card's cost by 1. NL Start of Turn: NL Gain "+BcUtility.getEnergyString(getMagicNumber(), this)+".";
     }
     //endregion
     
-    public void use(AbstractPlayer player, AbstractMonster m)
+    public void onRetained()
     {
-        this.addToBot(new ApplyPowerAction(player, player, new DevaPower(player), 1));
+        addToBot(new ReduceCostAction(this));
+    }
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new BcApplyPowerAction(new BcDevaPower(player, magicNumber)));
     }
 }

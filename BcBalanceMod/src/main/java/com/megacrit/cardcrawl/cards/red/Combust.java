@@ -32,7 +32,7 @@ public class Combust extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 2 : 1;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -44,7 +44,7 @@ public class Combust extends BcPowerCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override

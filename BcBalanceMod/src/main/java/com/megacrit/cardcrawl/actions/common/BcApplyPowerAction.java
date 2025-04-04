@@ -65,10 +65,10 @@ public class BcApplyPowerAction extends AbstractGameAction
     
     public BcApplyPowerAction(AbstractCreature target, AbstractCreature source, AbstractPower powerToApply)
     {
-        this(target, source, powerToApply, AttackEffect.NONE);
+        this(target, source, powerToApply, AttackEffect.NONE, false);
     }
     
-    public BcApplyPowerAction(AbstractCreature target, AbstractCreature source, AbstractPower powerToApply, AttackEffect attackEffect)
+    public BcApplyPowerAction(AbstractCreature target, AbstractCreature source, AbstractPower powerToApply, AttackEffect attackEffect, Boolean quietly)
     {
         if (Settings.FAST_MODE)
         {
@@ -83,10 +83,10 @@ public class BcApplyPowerAction extends AbstractGameAction
         this.powerToApply = powerToApply;
         
         if (AbstractDungeon.player.hasRelic(SneckoSkull.ID) &&
-                    (source != null) &&
-                    (source.isPlayer) &&
-                    (target != source) &&
-                    powerToApply.ID.equals(PoisonPower.POWER_ID))
+            (source != null) &&
+            (source.isPlayer) &&
+            (target != source) &&
+            powerToApply.ID.equals(PoisonPower.POWER_ID))
         {
             AbstractDungeon.player.getRelic(SneckoSkull.ID).flash();
             powerToApply.amount++;
@@ -94,11 +94,16 @@ public class BcApplyPowerAction extends AbstractGameAction
         }
         
         if ((powerToApply instanceof BcPowerBase) &&
-                    ((BcPowerBase) powerToApply).isAppliedQuietly())
+            ((BcPowerBase) powerToApply).isAppliedQuietly())
         {
             isQuiet = true;
         }
         
+        if (quietly)
+        {
+            isQuiet = true;
+        }
+
         actionType = ActionType.POWER;
         this.attackEffect = attackEffect;
         if (AbstractDungeon.getMonsters().areMonstersBasicallyDead())
@@ -297,7 +302,7 @@ public class BcApplyPowerAction extends AbstractGameAction
         if (target.hasPower(ArtifactPower.POWER_ID) && (powerToApply.type == AbstractPower.PowerType.DEBUFF))
         {
             //can't block debuffs if you apply them to yourself
-            if (target != source)
+            if ((target != source) && (powerToApply.ID != FocusPower.POWER_ID))
             {
                 addToTop(new TextAboveCreatureAction(target, txt0Negated));
                 duration -= Gdx.graphics.getDeltaTime();
@@ -307,9 +312,7 @@ public class BcApplyPowerAction extends AbstractGameAction
                 return;
             }
         }
-        
-        AbstractDungeon.effectList.add(new FlashAtkImgEffect(target.hb.cX, target.hb.cY, attackEffect));
-        
+
         //find an existing power to stack it with
         AbstractPower existingPower = null;
         for (AbstractPower targetPower : target.powers)
@@ -326,7 +329,12 @@ public class BcApplyPowerAction extends AbstractGameAction
             //region do initial power application
             if ((powerToApply.type == AbstractPower.PowerType.DEBUFF) && !isQuiet)
             {
+                AbstractDungeon.effectList.add(new FlashAtkImgEffect(target.hb.cX, target.hb.cY, attackEffect));
                 target.useFastShakeAnimation(0.5F);
+            }
+            else if (powerToApply.type == AbstractPower.PowerType.BUFF)
+            {
+                AbstractDungeon.effectList.add(new FlashAtkImgEffect(target.hb.cX, target.hb.cY, attackEffect));
             }
             
             target.powers.add(powerToApply);
@@ -358,8 +366,27 @@ public class BcApplyPowerAction extends AbstractGameAction
         }
         else
         {
-            existingPower.stackPower(amount);
-    
+            if ((existingPower instanceof BcPowerBase) &&
+                (powerToApply instanceof  BcPowerBase))
+            {
+                BcPowerBase bcExistingPower = (BcPowerBase)existingPower;
+                BcPowerBase bcNewPower = (BcPowerBase)powerToApply;
+                if (!bcExistingPower.upgraded && bcNewPower.upgraded)
+                {
+                    bcExistingPower.upgraded = true;
+                    bcExistingPower.onUpgraded();
+                }
+                
+                if (bcExistingPower.getApplicationType() != BcPowerBase.BuffDebuffApplicationType.Unique)
+                {
+                    existingPower.stackPower(amount, powerToApply);
+                }
+            }
+            else
+            {
+                existingPower.stackPower(amount, powerToApply);
+            }
+            
             //using powerToApply here instead of existingPower because we want to show the delta
             createBuffEffect(powerToApply, false);
     
@@ -378,7 +405,8 @@ public class BcApplyPowerAction extends AbstractGameAction
         power.flash();
         
         String msg = "";
-        if (initialApplication && (amount <= 1) && !power.canGoNegative)
+        //if (initialApplication && (amount <= 1) && !power.canGoNegative)
+        if ((amount <= 1) && !power.canGoNegative)
         {
             msg = power.name;
         }

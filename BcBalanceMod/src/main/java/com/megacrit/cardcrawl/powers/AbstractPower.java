@@ -159,6 +159,10 @@ public abstract class AbstractPower implements Comparable<AbstractPower> {
             this.amount += stackAmount;
         }
     }
+    public void stackPower(int stackAmount, AbstractPower newPower)
+    {
+        stackPower(stackAmount);
+    }
     
     public void reducePower(int reduceAmount) {
         if (this.amount - reduceAmount <= 0) {

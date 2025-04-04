@@ -60,7 +60,7 @@ public class BallLightning extends BcAttackCardBase
     }
     
     @Override
-    public int getChanneledOrbCount()
+    public int getOrbCountToChannel()
     {
         return 1;
     }

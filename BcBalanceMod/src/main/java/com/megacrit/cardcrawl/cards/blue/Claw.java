@@ -29,7 +29,7 @@ public class Claw extends AbstractCard {
 
     public Claw() {
         super("Gash", cardStrings.NAME, "blue/attack/claw", 0, cardStrings.DESCRIPTION, CardType.ATTACK, CardColor.BLUE, CardRarity.COMMON, CardTarget.ENEMY);
-        this.baseDamage = 3;
+        this.baseDamage = 5;
         this.baseMagicNumber = 2;
         this.magicNumber = this.baseMagicNumber;
     }

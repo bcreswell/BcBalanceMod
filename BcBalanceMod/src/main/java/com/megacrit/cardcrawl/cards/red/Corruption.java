@@ -73,11 +73,12 @@ public class Corruption extends BcPowerCardBase
     {
         if (!upgraded)
         {
-            return "ALL Skills cost 1 less and Exhaust when played. NL End of turn: NL Exhaust all remaining Skills in your hand.";
+            return "Skills cost 0 and Exhaust when played. NL End of turn: NL Exhaust all remaining Skills in your hand.";
+            //return "ALL Skills cost 1 less and Exhaust when played. NL End of turn: NL Exhaust all remaining Skills in your hand.";
         }
         else
         {
-            return "ALL Skills cost 0 and Exhaust when played. NL End of turn: NL Exhaust all remaining Skills in your hand.";
+            return "Skills cost 0 and Exhaust when played.";
         }
     }
     //endregion

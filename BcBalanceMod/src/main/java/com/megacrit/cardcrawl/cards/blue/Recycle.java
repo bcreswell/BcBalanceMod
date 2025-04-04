@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.defect.RecycleAction;
@@ -50,29 +51,29 @@ public class Recycle extends BcSkillCardBase
     }
     
     @Override
-    public int getMagicNumber()
+    public int getBlock()
     {
-        return !upgraded ? 0 : 1;
+        return !upgraded ? 0 : 3;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
+        if (block > 0)
         {
-            return "Exhaust a card. NL Gain its cost as [B].";
+            return "Exhaust a card to Gain its cost as [B] NL and Gain !B! Block.";
         }
         else
         {
-            return "Exhaust a card. NL Gain its cost as [B]. NL Draw a card.";
+            return "Exhaust a card to NL Gain its cost as [B].";
         }
     }
     
-    @Override
-    public String getFootnote()
-    {
-        return TrueGrit.NothingFootnote;
-    }
+//    @Override
+//    public String getFootnote()
+//    {
+//        return BcUtility.ExhaustTargetFootnote;
+//    }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
@@ -82,9 +83,9 @@ public class Recycle extends BcSkillCardBase
         {
             addToBot(new RecycleAction());
     
-            if (magicNumber > 0)
+            if (block > 0)
             {
-                addToBot(new DrawCardAction(magicNumber));
+                addToBot(new GainBlockAction(player, block));
             }
         }
     }

@@ -2,11 +2,9 @@ package com.megacrit.cardcrawl.cards.blue;
 
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.ArtifactPower;
 
 public class BootSequence extends BcSkillCardBase
 {
@@ -54,34 +52,54 @@ public class BootSequence extends BcSkillCardBase
     {
         return true;
     }
-    
+
     @Override
     public int getBlock()
     {
-        return !upgraded ? 10 : 12;
+        return 10;
     }
-    
+
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 0 : 1;
+    }
+
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
+        int artifactCount = getMagicNumber();
+        if (artifactCount > 0)
         {
-            return "Gain !B! Block.";
+            return "Gain !B! Block. NL Gain "+artifactCount+" Artifact.";
         }
         else
         {
-            return "Gain !B! Block. NL Draw a card.";
+            return "Gain !B! Block.";
         }
     }
+    
+    @Override
+    public String getFootnote()
+    {
+        if (upgraded)
+        {
+            return ArtifactPower.Footnote;
+        }
+        
+        return null;
+    }
+    
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new GainBlockAction(player, player, block));
-        
-        if (upgraded)
+
+        int artifactCount = getMagicNumber();
+        if (artifactCount > 0)
         {
-            addToBot(new DrawCardAction(1));
+            addToBot(new BcApplyPowerAction(new ArtifactPower(player, artifactCount)));
         }
     }
 }

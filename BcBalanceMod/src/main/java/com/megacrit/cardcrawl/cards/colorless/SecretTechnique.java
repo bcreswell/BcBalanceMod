@@ -55,7 +55,7 @@ public class SecretTechnique extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Draw a Skill card of your choice.";
+        return "Pick a Skill card to Draw.";
     }
     
     @Override

@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.cards.colorless;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -63,17 +64,35 @@ public class Purity extends BcSkillCardBase
     {
         return !upgraded ? 3 : 5;
     }
-    
+
+    public int getCardDraw()
+    {
+        return 0;
+    }
+
     @Override
     public String getBaseDescription()
     {
-        return "Exhaust up to !M! cards in your hand. NL Draw a card.";
+        return "Exhaust up to !M! cards in your hand and then draw a card for each.";
+//        int cardDraw = getCardDraw();
+//        if (cardDraw >= 1)
+//        {
+//            return "Draw "+ BcUtility.getCardCountString(cardDraw) +". NL Exhaust up to !M! cards in your hand.";
+//        }
+//        else
+//        {
+//            return "Exhaust up to !M! cards in your hand.";
+//        }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new ExhaustAction(magicNumber, false, true, true));
-        addToBot(new DrawCardAction(1));
+        int cardDraw = getCardDraw();
+        if (cardDraw > 0)
+        {
+            addToBot(new DrawCardAction(cardDraw));
+        }
+        addToBot(new PurityAction(magicNumber, false, true, true));
     }
 }

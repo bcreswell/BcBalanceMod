@@ -65,28 +65,28 @@ public class Blizzard extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 3 : 4;
+        return !upgraded ? 4 : 6;
     }
     
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 3 : 4;
+        return !upgraded ? 2 : 3;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage to ALL enemies. NL When Frost is Channeled, increase this card's damage by !M! this combat.";
+        return "Deal !D! damage to ALL enemies. NL +!M! Damage for each Frost Channeled this combat.";
     }
     
-//    @Override
-//    public String getTemporaryExtraDescription(AbstractMonster monster)
-//    {
-//        int frostCount = getFrostChanneledThisCombat();
-//
-//        return ""+frostCount+" frost channeled";
-//    }
+    @Override
+    public String getTemporaryExtraDescription(AbstractMonster monster)
+    {
+        int frostCount = getFrostChanneledThisCombat();
+
+        return "Frost Count: "+frostCount;
+    }
     //endregion
     
     int getFrostChanneledThisCombat()

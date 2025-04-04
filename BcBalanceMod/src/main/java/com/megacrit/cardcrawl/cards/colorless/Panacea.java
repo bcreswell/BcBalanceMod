@@ -1,13 +1,13 @@
 package com.megacrit.cardcrawl.cards.colorless;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.ArtifactPower;
+import com.megacrit.cardcrawl.powers.FrailPower;
+import com.megacrit.cardcrawl.powers.VulnerablePower;
 
 public class Panacea extends BcSkillCardBase
 {
@@ -43,13 +43,7 @@ public class Panacea extends BcSkillCardBase
     {
         return true;
     }
-    
-    @Override
-    public boolean getInnate()
-    {
-        return upgraded;
-    }
-    
+
     @Override
     public int getMagicNumber()
     {
@@ -59,18 +53,23 @@ public class Panacea extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Gain !M! Artifact.";
+        return "Cure ALL Vulnerable. NL Gain !M! Artifact.";
     }
     
     @Override
     public String getFootnote()
     {
-        return ArtifactPower.CaveatString;
+        return ArtifactPower.Footnote;
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
+        if (BcUtility.playerHasPower(VulnerablePower.POWER_ID))
+        {
+            addToBot(new RemoveSpecificPowerAction(player, player, VulnerablePower.POWER_ID));
+        }
+        
         addToBot(new BcApplyPowerAction(new ArtifactPower(player, magicNumber)));
     }
 }

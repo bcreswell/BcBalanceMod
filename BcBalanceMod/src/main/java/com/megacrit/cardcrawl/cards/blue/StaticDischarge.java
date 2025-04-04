@@ -57,7 +57,8 @@ public class StaticDischarge extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Whenever you take unblocked attack damage or play an Attack that deals unblocked damage, Channel !M! Lightning.";
+        //your multi attacks dont trigger this multiple times, but the enemy's multi attacks can.
+        return "Channel !M! Lightning when you play an Attack that deals unblocked damage or when you receive unblocked damage from an enemy.";
     }
     //endregion
     

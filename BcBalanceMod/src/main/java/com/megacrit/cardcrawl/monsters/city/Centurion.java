@@ -5,9 +5,11 @@
 
 package com.megacrit.cardcrawl.monsters.city;
 
+import bcBalanceMod.BcUtility;
 import com.badlogic.gdx.math.MathUtils;
 import com.esotericsoftware.spine.AnimationState.TrackEntry;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
+import com.megacrit.cardcrawl.actions.animations.ShoutAction;
 import com.megacrit.cardcrawl.actions.common.ChangeStateAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.RollMoveAction;
@@ -17,6 +19,7 @@ import com.megacrit.cardcrawl.actions.utility.WaitAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.cards.DamageInfo.DamageType;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.MonsterStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -50,6 +53,7 @@ public class Centurion extends AbstractMonster
     private static final byte SLASH = 1;
     private static final byte PROTECT = 2;
     private static final byte FURY = 3;
+    private int previousAllyCount;
     
     public Centurion(float x, float y)
     {
@@ -76,19 +80,19 @@ public class Centurion extends AbstractMonster
         if (AbstractDungeon.ascensionLevel >= 17)
         {
             slashDmg = 20;
-            furyDmg = 8;
+            furyDmg = 11;
             furyHits = 3;
         }
         else if (AbstractDungeon.ascensionLevel >= 2)
         {
             slashDmg = 18;
-            furyDmg = 7;
+            furyDmg = 9;
             furyHits = 3;
         }
         else
         {
             slashDmg = 12;
-            furyDmg = 6;
+            furyDmg = 7;
             furyHits = 3;
         }
         
@@ -102,23 +106,41 @@ public class Centurion extends AbstractMonster
         e.setTime(e.getEndTime() * MathUtils.random());
         stateData.setMix("Hit", "Idle", 0.2F);
         state.setTimeScale(0.8F);
+        previousAllyCount = 0;
+        dialogX = -80.0F * Settings.scale;
+        dialogY = 50.0F * Settings.scale;
+    }
+    
+    public void update()
+    {
+        super.update();
+        
+        int aliveCount = getAliveAllyCount();
+        if ((previousAllyCount > aliveCount) &&
+            !isDying &&
+            !isEscaping &&
+            BcUtility.isPlayerInCombat())
+        {
+            addToBot(new ShoutAction(this, "@NOOO!!!!@"));
+        }
+        previousAllyCount = aliveCount;
     }
     
     public void takeTurn()
     {
         switch (nextMove)
         {
-            case 1:
+            case SLASH:
                 playSfx();
                 AbstractDungeon.actionManager.addToBottom(new ChangeStateAction(this, "MACE_HIT"));
                 AbstractDungeon.actionManager.addToBottom(new WaitAction(0.3F));
                 AbstractDungeon.actionManager.addToBottom(new DamageAction(AbstractDungeon.player, (DamageInfo) damage.get(0), AttackEffect.BLUNT_LIGHT));
                 break;
-            case 2:
+            case PROTECT:
                 AbstractDungeon.actionManager.addToBottom(new WaitAction(0.25F));
                 AbstractDungeon.actionManager.addToBottom(new GainBlockRandomMonsterAction(this, blockAmount));
                 break;
-            case 3:
+            case FURY:
                 for (int i = 0; i < furyHits; ++i)
                 {
                     playSfx();
@@ -170,19 +192,30 @@ public class Centurion extends AbstractMonster
         }
     }
     
-    protected void getMove(int num)
+    int getAliveAllyCount()
     {
         int aliveCount = 0;
-        AbstractMonster m;
-        Iterator var3 = AbstractDungeon.getMonsters().monsters.iterator();
-        while (var3.hasNext())
+        
+        if (BcUtility.isPlayerInCombat())
         {
-            m = (AbstractMonster) var3.next();
-            if (!m.isDying && !m.isEscaping)
+            AbstractMonster m;
+            Iterator var3 = AbstractDungeon.getMonsters().monsters.iterator();
+            while (var3.hasNext())
             {
-                ++aliveCount;
+                m = (AbstractMonster) var3.next();
+                if (!m.isDying && !m.isEscaping)
+                {
+                    ++aliveCount;
+                }
             }
         }
+        
+        return aliveCount;
+    }
+    
+    protected void getMove(int num)
+    {
+        int aliveCount = getAliveAllyCount();
         
         //always does big attack when mystic is dead
         if (aliveCount == 1)

@@ -20,29 +20,32 @@ public class PeacePipe extends AbstractRelic
     
     public String getUpdatedDescription()
     {
-        return "You can now remove cards or curses from your deck at Rest Sites to gain 5 HP.";
+        return "Remove a card or curse from your deck at Rest Sites to gain a random upgrade.";
     }
     
     public boolean canSpawn()
     {
-        if (AbstractDungeon.floorNum >= 48 && !Settings.isEndless)
-        {
-            return false;
-        }
-        else
-        {
-            int campfireRelicCount = 0;
-            
-            for (AbstractRelic r : AbstractDungeon.player.relics)
-            {
-                if ((r instanceof PeacePipe) || (r instanceof Shovel) || (r instanceof Girya))
-                {
-                    campfireRelicCount++;
-                }
-            }
-            
-            return campfireRelicCount < 2;
-        }
+        //peace pipe replaces the dedicated ritual slot, so it doesn't need to worry about being exclusive with the other campfire relics.
+        return Settings.isEndless || (AbstractDungeon.floorNum < 48);
+        
+//        if (AbstractDungeon.floorNum >= 48 && !Settings.isEndless)
+//        {
+//            return false;
+//        }
+//        else
+//        {
+//            int campfireRelicCount = 0;
+//
+//            for (AbstractRelic r : AbstractDungeon.player.relics)
+//            {
+//                if ((r instanceof PeacePipe) || (r instanceof Shovel) || (r instanceof Girya))
+//                {
+//                    campfireRelicCount++;
+//                }
+//            }
+//
+//            return campfireRelicCount < 2;
+//        }
     }
     
     public void addCampfireOption(ArrayList<AbstractCampfireOption> options)

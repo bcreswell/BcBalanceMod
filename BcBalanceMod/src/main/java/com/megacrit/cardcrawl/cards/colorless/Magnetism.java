@@ -3,10 +3,7 @@ package com.megacrit.cardcrawl.cards.colorless;
 import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.MagnetismPower;
 
@@ -30,7 +27,7 @@ public class Magnetism extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return 0;
     }
     
     @Override
@@ -42,38 +39,26 @@ public class Magnetism extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return 1;
-    }
-    
-    @Override
-    public boolean getInnate()
-    {
-        return true;
-    }
-    
-    @Override
-    public boolean isARetrieveCard()
-    {
-        return true;
-    }
-    
-    @Override
-    public String getBaseDescription()
-    {
-        if (magicNumber == 1)
-        {
-            return "Start of turn: NL Retrieve a card randomly.";
-        }
-        else
-        {
-            return "Start of turn: NL Retrieve !M! cards randomly.";
-        }
+        return !upgraded ? 1 : 2;
     }
     
     @Override
     public CardRarity getCardRarity()
     {
         return CardRarity.RARE;
+    }
+
+    @Override
+    public String getBaseDescription()
+    {
+        if (magicNumber == 1)
+        {
+            return "Start of turn: NL Retrieve a card at random.";
+        }
+        else
+        {
+            return "Start of turn: NL Retrieve " + BcUtility.getCardCountString(magicNumber) + " randomly.";
+        }
     }
     //endregion
     

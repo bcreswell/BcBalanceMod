@@ -29,7 +29,7 @@ public class Crescendo extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 2 : 1;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -41,7 +41,7 @@ public class Crescendo extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override
@@ -51,45 +51,57 @@ public class Crescendo extends BcSkillCardBase
     }
     
     @Override
+    public boolean getRetain()
+    {
+        return true;
+    }
+    
+    @Override //vulnerable count
     public int getMagicNumber()
     {
-        return 1;
+        return !upgraded ? 1 : 2;
     }
     
     @Override
     public String getBaseDescription()
     {
+        String description = "Remove your Weak. NL Enter Wrath.";
+        
         if (magicNumber > 0)
         {
-            return "Inflict !M! Vulnerable NL on ALL Enemies. NL Enter Wrath.";
+            description = "Inflict !M! Vulnerable NL on ALL Enemies. NL " + description;
         }
-        else
-        {
-            return "Enter Wrath.";
-        }
+        
+        return description;
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster notUsed)
     {
+        addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.RED_TEXT_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.3F));
+        
         if (magicNumber > 0)
         {
-            addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.RED_TEXT_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.3F));
-            
             //inflict Vulnerable on all enemies
             for (AbstractMonster monster : AbstractDungeon.getCurrRoom().monsters.monsters)
             {
-                addToBot(new ApplyPowerAction(
+                addToBot(
+                    new ApplyPowerAction(
                         monster,
                         player,
                         new VulnerablePower(
-                                monster,
-                                magicNumber,
-                                false),
+                            monster,
+                            magicNumber,
+                            false),
                         magicNumber,
                         true,
                         AbstractGameAction.AttackEffect.NONE));
             }
+        }
+        
+        if (BcUtility.getPowerAmount(WeakPower.POWER_ID) > 0)
+        {
+            addToBot(new RemoveSpecificPowerAction(player, player, WeakPower.POWER_ID));
         }
         
         addToBot(new ChangeStanceAction("Wrath"));

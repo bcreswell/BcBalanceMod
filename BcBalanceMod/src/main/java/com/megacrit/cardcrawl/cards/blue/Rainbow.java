@@ -30,9 +30,10 @@ public class Rainbow extends BcSkillCardBase
     
     //region card parameters
     @Override
-    public int getChanneledOrbCount()
+    public int getOrbCountToChannel()
     {
-        return !upgraded ? 3 : 4;
+        //return !upgraded ? 3 : 4;
+        return 4;
     }
     
     @Override
@@ -56,26 +57,20 @@ public class Rainbow extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 1;
-    }
-    
-    @Override
-    public boolean getExhaust()
-    {
-        return true;
+        return !upgraded ? 3 : 2;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Channel 1 Lightning, NL 1 Frost and NL 1 Dark.";
-        }
-        else
-        {
-            return "Channel 1 Lightning, NL 1 Frost, NL 1 Dark and NL 1 Plasma.";
-        }
+        //if (!upgraded)
+        //{
+        //    return "Channel 1 Lightning, NL 1 Frost and NL 1 Dark.";
+        //}
+        //else
+        //{
+            return "Channel 1 Lightning, NL 1 Frost, 1 Dark, NL and 1 Plasma.";
+        //}
     }
     //endregion
     
@@ -86,10 +81,6 @@ public class Rainbow extends BcSkillCardBase
         addToBot(new ChannelAction(new Lightning()));
         addToBot(new ChannelAction(new Frost()));
         addToBot(new ChannelAction(new Dark()));
-        
-        if (upgraded)
-        {
-            addToBot(new ChannelAction(new Plasma()));
-        }
+        addToBot(new ChannelAction(new Plasma()));
     }
 }

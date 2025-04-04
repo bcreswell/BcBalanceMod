@@ -1,6 +1,8 @@
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.GainEnergyAction;
 import com.megacrit.cardcrawl.actions.defect.ChannelAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -36,15 +38,9 @@ public class Fusion extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return !upgraded ? 2 : 1;
     }
-    
-    @Override
-    public boolean getExhaust()
-    {
-        return !upgraded;
-    }
-    
+
     @Override
     public int getMagicNumber()
     {
@@ -52,9 +48,9 @@ public class Fusion extends BcSkillCardBase
     }
     
     @Override
-    public int getChanneledOrbCount()
+    public int getOrbCountToChannel()
     {
-        return 1;
+        return getMagicNumber();
     }
     
     @Override

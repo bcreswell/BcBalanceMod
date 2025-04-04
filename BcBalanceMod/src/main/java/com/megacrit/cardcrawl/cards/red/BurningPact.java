@@ -51,7 +51,7 @@ public class BurningPact extends BcSkillCardBase
     
     public int getHpLoss()
     {
-        return 1;
+        return 2;
     }
     
     @Override
@@ -63,7 +63,7 @@ public class BurningPact extends BcSkillCardBase
     @Override
     public String getFootnote()
     {
-        return TrueGrit.NothingFootnote;
+        return "Doesn't draw if it NL lacks a target card.";
     }
     //endregion
     

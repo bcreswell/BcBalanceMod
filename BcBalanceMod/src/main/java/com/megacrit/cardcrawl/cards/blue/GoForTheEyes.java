@@ -1,13 +1,9 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.megacrit.cardcrawl.cards.blue;
 
 import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
+import com.megacrit.cardcrawl.actions.common.BcApplyPowerAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.defect.ForTheEyesAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -21,6 +17,7 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.WeakPower;
 
 import java.util.Iterator;
 
@@ -50,20 +47,20 @@ public class GoForTheEyes extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
     }
     
     @Override
     public int getDamage()
     {
-        return !upgraded ? 3 : 4;
+        return !upgraded ? 3 : 5;
     }
     
     @Override
     public int getMagicNumber()
     {
         //weakness stacks
-        return !upgraded ? 1 : 2;
+        return 1;
     }
     
     @Override
@@ -75,15 +72,9 @@ public class GoForTheEyes extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL If the enemy intends to attack, inflict !M! Weak.";
+        return "Deal !D! damage. NL If the enemy intends to attack, Deal !D! more and Inflict !M! Weak.";
     }
     //endregion
-    
-    public void use(AbstractPlayer p, AbstractMonster m)
-    {
-        this.addToBot(new DamageAction(m, new DamageInfo(p, this.damage, this.damageTypeForTurn), AttackEffect.SLASH_DIAGONAL));
-        this.addToBot(new ForTheEyesAction(this.magicNumber, m));
-    }
     
     @Override
     public boolean isGlowingGold()
@@ -96,7 +87,18 @@ public class GoForTheEyes extends BcAttackCardBase
                 return true;
             }
         }
-    
+        
         return false;
+    }
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AttackEffect.SLASH_DIAGONAL));
+        
+        if (monster.getIntentBaseDmg() >= 0)
+        {
+            addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AttackEffect.SLASH_DIAGONAL));
+            addToBot(new BcApplyPowerAction(monster, new WeakPower(monster, magicNumber, false)));
+        }
     }
 }

@@ -17,7 +17,7 @@ import com.megacrit.cardcrawl.powers.DexterityPower;
 import com.megacrit.cardcrawl.powers.FocusPower;
 import com.megacrit.cardcrawl.powers.StrengthPower;
 
-public class Reprogram extends BcSkillCardBase
+public class Reprogram extends BcPowerCardBase
 {
     public static final String ID = "Reprogram";
     
@@ -31,7 +31,7 @@ public class Reprogram extends BcSkillCardBase
     @Override
     public String getImagePath()
     {
-        return "blue/skill/reprogram";
+        return "blue/reprogramPower.png";
     }
     
     @Override
@@ -55,25 +55,19 @@ public class Reprogram extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return 2;
-    }
-    
-    @Override
-    public boolean getExhaust()
-    {
-        return !upgraded;
+        return !upgraded ? 2 : 3;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Lose 1 Focus. NL Gain !M! Strength. NL Gain !M! Dexterity.";
+        return "Lose !M! Focus. NL Gain !M! Strength. NL Gain !M! Dexterity.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new BcApplyPowerAction(new FocusPower(player, -1)));
+        addToBot(new BcApplyPowerAction(new FocusPower(player, -magicNumber)));
         addToBot(new BcApplyPowerAction(new StrengthPower(player, magicNumber)));
         addToBot(new BcApplyPowerAction(new DexterityPower(player, magicNumber)));
     }

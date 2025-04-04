@@ -56,7 +56,7 @@ public class ThirdEye extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Gain !B! Block. NL Scry " + BcUtility.getScryString(getMagicNumber()) + ".";
+        return "Scry " + BcUtility.getScryString(getMagicNumber()) + ". NL Gain !B! Block.";
     }
     //endregion
     

@@ -40,15 +40,9 @@ public class FlurryOfBlows extends BcAttackCardBase
     }
     
     @Override
-    public boolean isARetrieveCard()
-    {
-        return true;
-    }
-    
-    @Override
     public int getDamage()
     {
-        return !upgraded ? 3 : 5;
+        return !upgraded ? 4 : 6;
     }
     
     @Override

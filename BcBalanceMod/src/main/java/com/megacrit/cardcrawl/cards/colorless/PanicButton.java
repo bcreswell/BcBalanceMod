@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.NoBlockNextTurnPower;
 import com.megacrit.cardcrawl.powers.NoBlockPower;
 
 public class PanicButton extends BcSkillCardBase
@@ -45,27 +46,21 @@ public class PanicButton extends BcSkillCardBase
     }
     
     @Override
-    public int getMagicNumber()
-    {
-        return 2;
-    }
-    
-    @Override
     public int getBlock()
     {
-        return !upgraded ? 30 : 40;
+        return !upgraded ? 35 : 50;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Gain !B! Block. NL You cannot gain Block from cards for !M! turns.";
+        return "Gain !B! Block. NL Next turn, you can't gain Block from cards.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new GainBlockAction(player, player, block));
-        addToBot(new BcApplyPowerAction(new NoBlockPower(player, magicNumber, false)));
+        addToBot(new BcApplyPowerAction(new NoBlockNextTurnPower(player, 1)));
     }
 }

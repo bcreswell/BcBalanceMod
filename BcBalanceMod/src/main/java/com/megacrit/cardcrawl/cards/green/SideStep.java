@@ -41,13 +41,13 @@ public class SideStep extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 3 : 5;
+        return !upgraded ? 3 : 6;
     }
     
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override

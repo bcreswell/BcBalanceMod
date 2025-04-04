@@ -36,19 +36,19 @@ public class Swivel extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
     public int getBlock()
     {
-        return !upgraded ? 10 : 14;
+        return !upgraded ? 8 : 12;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Gain !B! Block. NL Your next Attack that would cost 2 or more will instead cost 0.";
+        return "Gain !B! Block. NL Your next Attack that would cost 2 or more will be free.";
     }
     //endregion
     

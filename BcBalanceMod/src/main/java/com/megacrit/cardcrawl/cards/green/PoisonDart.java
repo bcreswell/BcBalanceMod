@@ -52,7 +52,7 @@ public class PoisonDart extends BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 3 : 4;
+        return !upgraded ? 4 : 5;
     }
     
     @Override

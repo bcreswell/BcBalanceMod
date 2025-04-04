@@ -41,7 +41,7 @@ public class PerfectedStrike extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
     }
     
     @Override
@@ -59,7 +59,7 @@ public class PerfectedStrike extends BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 3 : 4;
+        return !upgraded ? 4 : 5;
     }
     
     @Override
@@ -71,13 +71,18 @@ public class PerfectedStrike extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
+        int strikeCount = getStrikeCount();
         if (BcUtility.isCombatCard(this))
         {
             return "Deal !D! damage. NL Deals !M! damage for each of your cards containing \"Strike\".";
         }
+        else if (strikeCount > 0)
+        {
+            return "Deals damage equal to NL !M!x the number of your cards containing \"Strike\". NL ("+strikeCount+" strikes)";
+        }
         else
         {
-            return "Deals damage equal to NL !M! x the number of your cards containing \"Strike\".";
+            return "Deals damage equal to NL !M!x the number of your cards containing \"Strike\".";
         }
     }
     
@@ -97,8 +102,10 @@ public class PerfectedStrike extends BcAttackCardBase
     int getStrikeCount()
     {
         int count = 0;
+        
         if (BcUtility.isPlayerInCombat())
         {
+            //region in combat
             AbstractPlayer player = AbstractDungeon.player;
             for (AbstractCard c : player.hand.group)
             {
@@ -125,6 +132,17 @@ public class PerfectedStrike extends BcAttackCardBase
             }
             
             for (AbstractCard c : player.exhaustPile.group)
+            {
+                if (c.hasTag(CardTags.STRIKE))
+                {
+                    count++;
+                }
+            }
+            //endregion
+        }
+        else if ((AbstractDungeon.player != null) && (AbstractDungeon.player.masterDeck != null))
+        {
+            for (AbstractCard c : AbstractDungeon.player.masterDeck.group)
             {
                 if (c.hasTag(CardTags.STRIKE))
                 {

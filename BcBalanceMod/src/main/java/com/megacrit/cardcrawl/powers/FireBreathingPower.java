@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
+import com.megacrit.cardcrawl.cards.status.Burn;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.PowerStrings;
@@ -25,7 +26,7 @@ public class FireBreathingPower extends AbstractPower
     
     public void updateDescription()
     {
-        description = "Whenever you draw a #yStatus, deal #b" + amount + " damage to ALL enemies.";
+        description = "Whenever you draw a #yStatus, deal #b" + amount + " damage to ALL enemies. NL Burns trigger this twice.";
     }
     
     public void onCardDraw(AbstractCard card)
@@ -34,6 +35,11 @@ public class FireBreathingPower extends AbstractPower
         {
             flash();
             addToBot(new DamageAllEnemiesAction( null, DamageInfo.createDamageMatrix(amount, true), DamageInfo.DamageType.THORNS, AbstractGameAction.AttackEffect.FIRE, true));
+            
+            if (card instanceof Burn)
+            {
+                addToBot(new DamageAllEnemiesAction( null, DamageInfo.createDamageMatrix(amount, true), DamageInfo.DamageType.THORNS, AbstractGameAction.AttackEffect.FIRE, true));
+            }
         }
     }
     

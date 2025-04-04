@@ -44,18 +44,11 @@ public class Rushdown extends BcPowerCardBase
     {
         return !upgraded ? 1 : 2;
     }
-    
+
     @Override
     public String getBaseDescription()
     {
-        if (magicNumber == 1)
-        {
-            return "Whenever you enter *Wrath or *Divinity, draw a card.";
-        }
-        else
-        {
-            return "Whenever you enter *Wrath or *Divinity, draw !M! cards.";
-        }
+        return "Whenever you enter *Wrath or *Divinity, draw "+BcUtility.getCardCountString(magicNumber)+".";
     }
     //endregion
     

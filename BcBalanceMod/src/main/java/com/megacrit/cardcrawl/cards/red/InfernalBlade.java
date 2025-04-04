@@ -51,7 +51,7 @@ public class InfernalBlade extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override
@@ -67,33 +67,44 @@ public class InfernalBlade extends BcSkillCardBase
         return 3;
     }
     
+    int getStrengthIncrease()
+    {
+        return 2;
+    }
+    
     @Override
     public String getBaseDescription()
     {
-        return "Gain 1 Strength. NL Sacrifice !M! HP. NL Create a random upgraded Attack that costs 0 this combat.";
+        return "Sacrifice !M! HP. NL Gain "+getStrengthIncrease()+" Strength. NL Create a random upgraded Attack that costs 0 this combat.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster m)
     {
         addToBot(new VFXAction(new OfferingEffect(), 0.5F));
-        addToBot(new ApplyPowerAction(player, player, new StrengthPower(player, 1), 1));
         addToBot(new LoseHPAction(player, player, magicNumber));
+        addToBot(new BcApplyPowerAction(new StrengthPower(player, getStrengthIncrease())));
         addToBot(new TrueWaitAction(.4f));
         
         AbstractCard card = null;
         while (card == null)
         {
-            card = AbstractDungeon.returnTrulyRandomCardInCombat(CardType.ATTACK).makeCopy();
+            card = BcUtility.getRandomCard(
+                null,
+                CardType.ATTACK,
+                false,
+                true,
+                false,
+                true);
             card.upgrade();
             
             if ((card.exhaust) || (card.cost <= 0)) //-1 == x-cost
             {
                 //this is supposed to be a special blade. don't want
-                // to make a pummel or something that will
-                // disappear after only one use.
+                // to make something that will disappear after only
+                // one use.
                 //
-                // Also X-cost cards and 0 cost cards defeat the purpose
+                // Also creating 0 cost or X-cost cards defeat the purpose
                 // of making it free for the rest of combat.
                 card = null;
             }

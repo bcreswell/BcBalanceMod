@@ -35,7 +35,7 @@ public class Envenom extends BcPowerCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override
@@ -43,28 +43,26 @@ public class Envenom extends BcPowerCardBase
     {
         return !upgraded ? 1 : 0;
     }
-    
+
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Whenever an Attack deals unblocked damage, inflict 1 Poison.";
-        }
-        else
-        {
-            return "Whenever an Attack deals damage, inflict 1 Poison.";
-        }
+        return "Whenever an Attack deals unblocked damage, inflict 1 Poison.";
+        
+//        if (!upgraded)
+//        {
+//            return "Whenever an Attack deals unblocked damage, inflict 1 Poison.";
+//        }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         BcEnvenomPower envenomPower = new BcEnvenomPower(player, 1);
-        if (upgraded)
-        {
-            envenomPower.upgrade();
-        }
+//        if (upgraded)
+//        {
+//            envenomPower.upgrade();
+//        }
         
         addToBot(new BcApplyPowerAction(envenomPower));
     }

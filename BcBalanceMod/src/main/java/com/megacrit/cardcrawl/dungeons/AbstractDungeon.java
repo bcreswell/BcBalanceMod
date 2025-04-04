@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.dungeons;
 
+import bcBalanceMod.BcUtility;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,6 +22,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.credits.CreditsScreen;
 import com.megacrit.cardcrawl.events.AbstractEvent;
 import com.megacrit.cardcrawl.events.AbstractImageEvent;
+import com.megacrit.cardcrawl.events.shrines.FreeYourMindEvent;
 import com.megacrit.cardcrawl.events.shrines.NoteForYourself;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
 import com.megacrit.cardcrawl.helpers.CardHelper;
@@ -2592,6 +2594,11 @@ public abstract class AbstractDungeon
     
     public static AbstractEvent generateEvent(Random rng)
     {
+        if (BcUtility.shouldFreeYourMind())
+        {
+            return new FreeYourMindEvent();
+        }
+    
         if (rng.random(1.0F) < shrineChance)
         {
             if (shrineList.isEmpty() && specialOneTimeEventList.isEmpty())

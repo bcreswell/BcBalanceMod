@@ -4,16 +4,17 @@ import bcBalanceMod.baseCards.*;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
-import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
-import com.megacrit.cardcrawl.actions.utility.ShakeScreenAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.actions.common.DamageAction;
+import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.helpers.ScreenShake;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
+import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.powers.PoisonPower;
+import com.megacrit.cardcrawl.powers.WeakPower;
+import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
+import com.megacrit.cardcrawl.vfx.combat.ClawEffect;
 import com.megacrit.cardcrawl.vfx.combat.DieDieDieEffect;
+import com.megacrit.cardcrawl.vfx.combat.WeightyImpactEffect;
 
 public class DieDieDie extends BcAttackCardBase
 {
@@ -41,40 +42,45 @@ public class DieDieDie extends BcAttackCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return 2;
     }
     
     @Override
     public int getDamage()
     {
-        return !upgraded ? 17 : 24;
+        return !upgraded ? 12 : 16;
     }
     
     @Override
     public boolean isAoeAttack()
     {
-        return true;
-    }
-    
-    @Override
-    public boolean getExhaust()
-    {
-        return true;
+        return false;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage to ALL enemies.";
+        return "Deal !D! damage, and again if they're Weak, and again if they're Poisoned.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new VFXAction(new BorderLongFlashEffect(Color.LIGHT_GRAY)));
-        addToBot(new VFXAction(new DieDieDieEffect(), 0.7F));
-        addToBot(new ShakeScreenAction(0.0F, ScreenShake.ShakeDur.MED, ScreenShake.ShakeIntensity.HIGH));
+        addToBot(new VFXAction(new DieDieDieEffect(monster.hb.cX, monster.hb.cY, Color.GREEN, Color.WHITE,0), 0.12F));
+        addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.NONE));
+ 
+        AbstractPower weak = monster.getPower(WeakPower.POWER_ID);
+        if (weak != null)
+        {
+            addToBot(new VFXAction(new DieDieDieEffect(monster.hb.cX, monster.hb.cY, Color.GREEN, Color.WHITE,1), 0.12F));
+            addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.NONE));
+        }
         
-        addToBot(new DamageAllEnemiesAction(player, multiDamage, damageTypeForTurn, AbstractGameAction.AttackEffect.SLASH_HORIZONTAL));
+        AbstractPower poison = monster.getPower(PoisonPower.POWER_ID);
+        if (poison != null)
+        {
+            addToBot(new VFXAction(new DieDieDieEffect(monster.hb.cX, monster.hb.cY, Color.GREEN, Color.WHITE,2), 0.12F));
+            addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.NONE));
+        }
     }
 }

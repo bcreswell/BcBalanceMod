@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.megacrit.cardcrawl.orbs;
 
 import bcBalanceMod.*;
@@ -16,6 +11,8 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.powers.DecryptionDancePower;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.localization.OrbStrings;
 import com.megacrit.cardcrawl.vfx.combat.OrbFlareEffect;
@@ -46,20 +43,30 @@ public class Plasma extends AbstractOrb
         this.updateDescription();
         this.angle = MathUtils.random(360.0F);
         this.channelAnimTimer = 0.5F;
-        evokeColor = new Color(.9F, .9F, .9F, this.c.a);
-        hidePassiveValue = true;
-        hideEvokeUnlessShown = true;
+        evokeColor = new Color(1F, .5F, .5F, this.c.a);
+        hidePassiveValue = false;
+        hideEvokeUnlessShown = false;
     }
     
     public void updateDescription()
     {
-        this.applyFocus();
-        this.description = "#yPassive: Start of turn: Gain [B] . NL #yEvoke: Gain [B] [B] . NL Plasma is unaffected by #yFocus.";
+        applyFocus();
+        
+        //it's better to explain how the values are calculated in the tooltip. The final values are clearly visualized on the orb itself.
+        description = "#yEvoke: NL Gain [B] [B] NL NL #yStart #yof #yTurn: NL Gain [B] NL NL ( #yFocus has no effect )";
     }
     
     public void onEvoke()
     {
-        AbstractDungeon.actionManager.addToTop(new GainEnergyAction(this.evokeAmount));
+        if (evokeAmount > 0)
+        {
+            int evokeTimes = 1;
+            
+            for(int i =0; i < evokeTimes; i++)
+            {
+                AbstractDungeon.actionManager.addToTop(new GainEnergyAction(evokeAmount));
+            }
+        }
     }
     
     public void onStartOfTurn()

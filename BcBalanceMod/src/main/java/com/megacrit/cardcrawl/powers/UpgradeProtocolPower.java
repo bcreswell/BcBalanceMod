@@ -76,9 +76,9 @@ public class UpgradeProtocolPower extends BcPowerBase
     {
         flash();
         
+        addToBot(new TrueWaitAction(.3f));
         for (int i = 0; i < amount; i++)
         {
-            addToBot(new TrueWaitAction(.1f));
             addToBot(new UpgradeRandomCardAction());
         }
     }

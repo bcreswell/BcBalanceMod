@@ -59,7 +59,7 @@ public class RecklessCharge extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 7 : 11;
+        return !upgraded ? 7 : 10;
     }
     
     @Override

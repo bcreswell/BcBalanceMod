@@ -32,7 +32,7 @@ public class BcRetainCardsAction extends AbstractGameAction
                 }
             }
             
-            AbstractDungeon.handCardSelectScreen.open(TEXT[0], amount, false, true, false, false, true);
+            AbstractDungeon.handCardSelectScreen.open("Retain.", amount, false, true, false, false, true);
             addToBot(new WaitAction(0.25F));
             tickDuration();
         }

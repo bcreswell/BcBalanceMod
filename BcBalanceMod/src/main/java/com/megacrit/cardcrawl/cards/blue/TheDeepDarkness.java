@@ -37,19 +37,13 @@ public class TheDeepDarkness extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 2;
+        return !upgraded ? 2 : 1;
     }
     
     @Override
     public String getId()
     {
         return ID;
-    }
-    
-    @Override
-    public boolean getInnate()
-    {
-        return upgraded;
     }
     
     @Override
@@ -61,12 +55,12 @@ public class TheDeepDarkness extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "End of turn: NL Trigger the passive on ALL Dark orbs and, if you have an empty orb slot, Channel a Dark orb.";
+        return "End of turn: NL Trigger the passive on ALL Dark orbs then, NL if you have an empty orb slot, Channel a Dark orb.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new BcApplyPowerAction(new DeepDarknessPower(player, 1)));
+        addToBot(new BcApplyPowerAction(new DeepDarknessPower(player, 1, true)));
     }
 }

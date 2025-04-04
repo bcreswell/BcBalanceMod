@@ -31,7 +31,7 @@ public class Streamline extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.RARE;
     }
     
     @Override
@@ -49,7 +49,7 @@ public class Streamline extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 15 : 20;
+        return !upgraded ? 16 : 24;
     }
     
     @Override

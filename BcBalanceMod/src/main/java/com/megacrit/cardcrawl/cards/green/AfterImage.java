@@ -54,7 +54,7 @@ public class AfterImage extends BcPowerCardBase
         //block per card
         return 1;
     }
-    
+
     @Override
     public String getBaseDescription()
     {

@@ -27,7 +27,7 @@ public class EscapePlan extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return !upgraded ? 2 : 1 ;
     }
     
     @Override
@@ -57,14 +57,15 @@ public class EscapePlan extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Create one: NL - *Panic *Button, NL - *Dark *Shackles, or NL - *Force *of *Will.";
-        }
-        else
-        {
-            return "Create one: NL - *Panic *Button+, NL - *Dark *Shackles+ or NL - *Force *of *Will+.";
-        }
+        return "Create one: NL - *Panic *Button+, NL - *Dark *Shackles+ or NL - *Force *of *Will+.";
+//        if (!upgraded)
+//        {
+//            return "Create one: NL - *Panic *Button, NL - *Dark *Shackles, or NL - *Force *of *Will.";
+//        }
+//        else
+//        {
+//            return "Create one: NL - *Panic *Button+, NL - *Dark *Shackles+ or NL - *Force *of *Will+.";
+//        }
     }
     //endregion
     
@@ -75,13 +76,17 @@ public class EscapePlan extends BcSkillCardBase
         choices.add(new DarkShackles());
         choices.add(new ForceOfWill());
         
-        if (upgraded)
+        for (AbstractCard card : choices)
         {
-            for (AbstractCard card : choices)
-            {
-                card.upgrade();
-            }
+            card.upgrade();
         }
+//        if (upgraded)
+//        {
+//            for (AbstractCard card : choices)
+//            {
+//                card.upgrade();
+//            }
+//        }
         
         addToBot(new ChooseOneCard(choices));
     }

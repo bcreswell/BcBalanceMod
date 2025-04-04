@@ -1,38 +1,88 @@
 package com.megacrit.cardcrawl.cards.red;
 
+import bcBalanceMod.BcUtility;
+import bcBalanceMod.baseCards.BcSkillCardBase;
+import com.megacrit.cardcrawl.actions.common.BcApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.actions.common.GainEnergyAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.VulnerablePower;
 
-public class SeeingRed extends AbstractCard {
+public class SeeingRed extends BcSkillCardBase
+{
     public static final String ID = "Seeing Red";
-    private static final CardStrings cardStrings;
     
-    public SeeingRed() {
-        super("Seeing Red", cardStrings.NAME, "red/skill/seeing_red", 1, cardStrings.DESCRIPTION, AbstractCard.CardType.SKILL, AbstractCard.CardColor.RED, AbstractCard.CardRarity.COMMON, AbstractCard.CardTarget.NONE);
-        this.exhaust = true;
+    //region Description
+    @Override
+    public String getImagePath()
+    {
+        return "red/skill/seeing_red";
     }
     
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new GainEnergyAction(2));
+    @Override
+    public String getId()
+    {
+        return ID;
     }
     
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeBaseCost(0);
-        }
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.COMMON;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 0;
+    }
+    
+    @Override
+    public boolean getExhaust()
+    {
+        return true;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 2 : 3;
+    }
+    
+    int getCardDraw()
+    {
+        return 1;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        int cardDraw = getCardDraw();
         
+        if (cardDraw == 0)
+        {
+            return "Gain "+BcUtility.getEnergyString(magicNumber,this)+". NL Suffer 1 Vulnerable.";
+        }
+        else
+        {
+            return "Gain "+BcUtility.getEnergyString(magicNumber,this)+" and NL Draw "+getCardCountString(cardDraw)+". NL Suffer 1 Vulnerable.";
+        }
     }
+    //endregion
     
-    public AbstractCard makeCopy() {
-        return new SeeingRed();
-    }
-    
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Seeing Red");
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        int cardDraw = getCardDraw();
+        
+        addToBot(new GainEnergyAction(magicNumber));
+        if (cardDraw > 0)
+        {
+            addToBot(new DrawCardAction(cardDraw));
+        }
+        addToBot(new BcApplyPowerAction(new VulnerablePower(player, 1, false)));
     }
 }

@@ -36,7 +36,7 @@ public class Sanctity extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
@@ -48,7 +48,7 @@ public class Sanctity extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 6 : 9;
+        return !upgraded ? 6 : 8;
     }
     
     @Override

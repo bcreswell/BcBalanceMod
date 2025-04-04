@@ -25,7 +25,7 @@ public class SwivelPower extends AbstractPower
     {
         if (amount == 1)
         {
-            description = "Your next Attack that would cost 2 or more will instead cost 0.";
+            description = "Your next Attack that costs 2 or more will instead cost 0.";
         }
         else
         {
@@ -37,7 +37,8 @@ public class SwivelPower extends AbstractPower
     {
         if ((card.type == AbstractCard.CardType.ATTACK) &&
                     (card.costForTurn >= RefundThreshold) &&
-                    !card.purgeOnUse &&
+                    !card.freeToPlayOnce && //dont consume the swivel if it's already free
+                    //!card.purgeOnUse &&
                     (amount > 0))
         {
             return true;

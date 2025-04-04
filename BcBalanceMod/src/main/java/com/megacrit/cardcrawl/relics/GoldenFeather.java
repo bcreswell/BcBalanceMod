@@ -26,6 +26,8 @@ import com.megacrit.cardcrawl.shop.ShopScreen;
 import com.megacrit.cardcrawl.stances.*;
 import com.megacrit.cardcrawl.vfx.combat.*;
 
+import java.util.Objects;
+
 import static bcBalanceMod.BcBalanceMod.makeRelicOutlinePath;
 import static bcBalanceMod.BcBalanceMod.makeRelicPath;
 
@@ -34,6 +36,7 @@ public class GoldenFeather extends CustomRelic implements ClickableRelic
     public static final String ID = BcBalanceMod.makeID("GoldenFeather");
     static final Texture IMG = TextureLoader.getTexture(makeRelicPath("goldenFeather.png"));
     static final Texture outline = TextureLoader.getTexture(makeRelicOutlinePath("goldenFeather.png"));
+    public static final int StanceExitPerCombat = 2;
     boolean isEnabled;
     
     public GoldenFeather()
@@ -43,7 +46,14 @@ public class GoldenFeather extends CustomRelic implements ClickableRelic
     
     public String getUpdatedDescription()
     {
-        return "Once per combat: NL Right click to exit your stance.";
+        if (StanceExitPerCombat == 1)
+        {
+            return "Up to #b" + StanceExitPerCombat + " time per combat: NL Right click this relic to exit your stance.";
+        }
+        else
+        {
+            return "Up to #b" + StanceExitPerCombat + " times per combat: NL Right click this relic to exit your stance.";
+        }
     }
     
     public void atTurnStartPostDraw()
@@ -58,7 +68,7 @@ public class GoldenFeather extends CustomRelic implements ClickableRelic
     
     public void atBattleStart()
     {
-        setCounter(1);
+        setCounter(StanceExitPerCombat);
     }
     
     public void onVictory()
@@ -76,10 +86,12 @@ public class GoldenFeather extends CustomRelic implements ClickableRelic
         {
             AbstractPlayer player = AbstractDungeon.player;
             addToBot(new NotStanceCheckAction(NeutralStance.STANCE_ID, new VFXAction(new EmptyStanceEffect(player.hb.cX, player.hb.cY), 0.1F)));
-            addToBot(new ChangeStanceAction(NeutralStance.STANCE_ID));
-            flash();
-            
-            setCounter(counter - 1);
+            if (AbstractDungeon.player.stance.ID != NeutralStance.STANCE_ID)
+            {
+                addToBot(new ChangeStanceAction(NeutralStance.STANCE_ID));
+                flash();
+                setCounter(counter - 1);
+            }
         }
     }
     

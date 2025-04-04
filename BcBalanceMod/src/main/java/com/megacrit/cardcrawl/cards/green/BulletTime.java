@@ -37,12 +37,6 @@ public class BulletTime extends BcSkillCardBase
     }
     
     @Override
-    public int getCost()
-    {
-        return !upgraded ? 3 : 2;
-    }
-    
-    @Override
     public String getId()
     {
         return ID;
@@ -52,6 +46,18 @@ public class BulletTime extends BcSkillCardBase
     public CardRarity getCardRarity()
     {
         return CardRarity.RARE;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 2;
+    }
+    
+    @Override
+    public boolean getExhaust()
+    {
+        return !upgraded;
     }
     
     @Override

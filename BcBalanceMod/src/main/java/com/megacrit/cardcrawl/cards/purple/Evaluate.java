@@ -42,7 +42,7 @@ public class Evaluate extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 7 : 11;
+        return !upgraded ? 8 : 11;
     }
     
     @Override
@@ -62,7 +62,6 @@ public class Evaluate extends BcSkillCardBase
     {
         addToBot(new GainBlockAction(player, player, block));
         
-        AbstractCard card = new Insight();
-        addToBot(new MakeTempCardInDrawPileAction(card, 1, true, true, false));
+        addToBot(new MakeTempCardInDrawPileAction(cardsToPreview.makeStatEquivalentCopy(), 1, true, true, false));
     }
 }

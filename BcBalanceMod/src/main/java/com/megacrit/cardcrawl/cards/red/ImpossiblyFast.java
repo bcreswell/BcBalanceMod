@@ -57,7 +57,6 @@ public class ImpossiblyFast extends BcSkillCardBase
     }
     //endregion
     
-    
     @Override
     public String getTemporaryExtraDescription(AbstractMonster monster)
     {

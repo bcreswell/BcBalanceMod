@@ -127,7 +127,7 @@
       "NAMES": [
         "lock-on"
       ],
-      "DESCRIPTION": "Increases Lightning Orb damage by 50%. NL Attracts Dark Orbs and increases their damage by 25%."
+      "DESCRIPTION": "Increases Lightning Orb damage by 50%. NL Attracts Dark Orbs."
     },
     "OPENER": {
       "NAMES": [
@@ -162,7 +162,7 @@
         "shiv",
         "shivs"
       ],
-      "DESCRIPTION": "Shivs are #b0 cost Attack cards which Exhaust. NL NL #yHidden #yShiv is a Buff effect that is consumed like ammo. When you deal attack damage, a Shiv is automatically launched at your target."
+      "DESCRIPTION": "Shivs are #b0 cost Attack cards which Exhaust. NL NL #yHidden #yShiv is a Buff effect that is consumed like ammo. When you deal attack damage, a Shiv is automatically thrown at your target. #yHidden #yShivs don't trigger other damage effects (ex: Envenom)."
     },
     "STATUS": {
       "NAMES": [

@@ -47,7 +47,7 @@ public class Supermassive extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return 2;
     }
     
     @Override
@@ -59,11 +59,11 @@ public class Supermassive extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 3 : 8;
+        return !upgraded ? 8 : 12;
     }
     
     @Override
-    public int getChanneledOrbCount()
+    public int getOrbCountToChannel()
     {
         int newMass = getTotalDarkOrbMass();
         if (newMass > getMagicNumber())
@@ -81,7 +81,7 @@ public class Supermassive extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override
@@ -192,7 +192,7 @@ public class Supermassive extends BcSkillCardBase
     public String getTemporaryExtraDescription(AbstractMonster monster)
     {
         int newMass = getTotalDarkOrbMass();
-        return "new dark mass: " + newMass;
+        return "new mass: " + newMass;
     }
     
     int getTotalDarkOrbMass()

@@ -59,7 +59,7 @@ public class FearNoEvil extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 6 : 10;
+        return !upgraded ? 7 : 12;
     }
     
     @Override

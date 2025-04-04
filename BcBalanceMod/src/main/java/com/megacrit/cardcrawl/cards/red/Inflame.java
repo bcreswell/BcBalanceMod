@@ -59,15 +59,16 @@ public class Inflame extends BcPowerCardBase
     {
         if (!upgraded)
         {
-            return "Gain !M! Strength. NL Add a *Burn into your discard pile.";
+            return "Gain !M! Strength. NL Shuffle a *Burn into your draw pile.";
         }
         else
         {
-            return "Gain !M! Strength. NL Add a *Burn+ into your discard pile.";
+            return "Gain !M! Strength. NL Shuffle a *Burn+ into your draw pile.";
         }
     }
     //endregion
     
+    @Override
     protected void onUpgraded()
     {
         cardsToPreview.upgrade();
@@ -78,6 +79,6 @@ public class Inflame extends BcPowerCardBase
         addToBot(new VFXAction(player, new InflameEffect(player), 1.0F));
         addToBot(new ApplyPowerAction(player, player, new StrengthPower(player, magicNumber), magicNumber));
         
-        addToBot(new MakeTempCardInDiscardAction(cardsToPreview, 1));
+        addToBot(new MakeTempCardInDrawPileAction(cardsToPreview, 1, true, true));
     }
 }

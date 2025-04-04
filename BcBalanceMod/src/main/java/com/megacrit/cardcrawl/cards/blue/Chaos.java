@@ -9,8 +9,10 @@ import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.defect.ChannelAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
+import com.megacrit.cardcrawl.orbs.EmptyOrbSlot;
 
 public class Chaos extends BcSkillCardBase
 {
@@ -18,41 +20,21 @@ public class Chaos extends BcSkillCardBase
     
     //region card parameters
     @Override
-    public String getImagePath()
-    {
-        return "blue/skill/chaos";
-    }
-    
-    @Override
-    public int getChanneledOrbCount()
-    {
-        if (BcUtility.getCurrentFocus() == 0)
-        {
-            return getMagicNumber() + 1;
-        }
-        else
-        {
-            return getMagicNumber();
-        }
-    }
-    
-    @Override
     public String getId()
     {
         return ID;
     }
     
     @Override
-    public String getBaseDescription()
+    public String getImagePath()
     {
-        if (magicNumber == 1)
-        {
-            return "Channel a random Orb. NL If you have zero Focus, channel 1 more.";
-        }
-        else
-        {
-            return "Channel !M! random Orbs. NL If you have zero Focus, channel 1 more.";
-        }
+        return "blue/skill/chaos";
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.COMMON;
     }
     
     @Override
@@ -61,38 +43,67 @@ public class Chaos extends BcSkillCardBase
         return 1;
     }
     
-    //number of random orbs to Channel
+    //number of orbs to Channel
     public int getMagicNumber()
     {
-        if (!upgraded)
-        {
-            return 1;
-        }
-        else
-        {
-            return 2;
-        }
+        return !upgraded ? 1 : 2;
+    }
+    
+    public int getExtraOrbsToChannel()
+    {
+        return 1;
     }
     
     @Override
-    public CardRarity getCardRarity()
+    public int getOrbCountToChannel()
     {
-        return CardRarity.UNCOMMON;
+        int orbsToHardChannel = getMagicNumber();
+        int emptySlotCount = BcUtility.getEmptyOrbSlotCount();
+        emptySlotCount = Math.max(0, emptySlotCount - orbsToHardChannel);
+
+        return orbsToHardChannel + Math.min(emptySlotCount, getExtraOrbsToChannel());
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        String description;
+        if (magicNumber == 1)
+        {
+            description = "Channel a random Orb.";
+        }
+        else
+        {
+            description = "Channel !M! random Orbs.";
+        }
+        
+        int extraOrbs = getExtraOrbsToChannel();
+        if (extraOrbs == 1)
+        {
+            description += " NL NL If an empty Orb Slot remains, Channel 1 more.";
+        }
+        else if (extraOrbs >= 2)
+        {
+            description += " NL NL If empty Orb Slot(s) remain, Channel up to " + extraOrbs + " more.";
+        }
+        
+        return description;
     }
     //endregion
-    
-    public void use(AbstractPlayer player, AbstractMonster m)
-    {
-        int orbsToChannel = getChanneledOrbCount();
-        for (int i = 0; i < orbsToChannel; i++)
-        {
-            addToBot(new ChannelAction(AbstractOrb.getRandomOrb(true)));
-        }
-    }
     
     @Override
     public boolean isGlowingGold()
     {
-        return BcUtility.getCurrentFocus() == 0;
+        //glow when you'd channel the max orb count
+        return (getOrbCountToChannel() == magicNumber + getExtraOrbsToChannel());
+    }
+    
+    public void use(AbstractPlayer player, AbstractMonster m)
+    {
+        int orbsToChannel = getOrbCountToChannel();
+        for (int i = 0; i < orbsToChannel; i++)
+        {
+            addToBot(new ChannelAction(AbstractOrb.getRandomOrb(true), true));
+        }
     }
 }

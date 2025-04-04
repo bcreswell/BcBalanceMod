@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.ui.campfire;
 
+import bcBalanceMod.BcUtility;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
@@ -16,7 +17,7 @@ public class TokeOption extends AbstractCampfireOption
     {
         this.label = TEXT[0];
         this.usable = active;
-        this.description = "Select a Card to Remove. Heal " + BcBalancingScales.TokeHealAmount + " HP."; // TEXT[1];
+        this.description = "Select a Card to Remove. Upgrade a random card."; // TEXT[1];
         this.img = ImageMaster.CAMPFIRE_TOKE_BUTTON;
     }
     

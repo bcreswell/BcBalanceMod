@@ -18,12 +18,14 @@ import com.megacrit.cardcrawl.vfx.combat.*;
 
 public class EmptyBlahAction extends AbstractGameAction
 {
-    public static final String EmptyDescription;
-    public static final int MantraPerExit = 3;
-    
-    static
+    public static String GetEmptyDescription()
     {
-        EmptyDescription = "NL If you're in a Stance: NL Exit that Stance, NL Draw a card and gain [W].";
+        if (BcUtility.isPlayerInStance(NeutralStance.STANCE_ID))
+        {
+            return "#aAny #aStance: #aExit #ait, NL #aDraw #aa #acard #aand #again [W].";
+        }
+
+        return "#gAny #gStance: Exit it, NL Draw a card and gain [W].";
     }
     
     public EmptyBlahAction()
@@ -35,8 +37,8 @@ public class EmptyBlahAction extends AbstractGameAction
     {
         //this is called from inside card's use() so that the card doesn't draw itself
         if (BcUtility.isPlayerInStance(WrathStance.STANCE_ID) ||
-                    BcUtility.isPlayerInStance(CalmStance.STANCE_ID)||
-                    BcUtility.isPlayerInStance(DivinityStance.STANCE_ID))
+            BcUtility.isPlayerInStance(CalmStance.STANCE_ID)||
+            BcUtility.isPlayerInStance(DivinityStance.STANCE_ID))
         {
             AbstractDungeon.actionManager.addToBottom(new DrawCardAction(1));
         }

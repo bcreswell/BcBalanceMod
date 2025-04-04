@@ -6,17 +6,8 @@
 package com.megacrit.cardcrawl.cards.colorless;
 
 import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.MakeTempCardInHandAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardTarget;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardType;
+import com.megacrit.cardcrawl.actions.unique.CreateRandomCardAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 public class JackOfAllTrades extends BcSkillCardBase
@@ -49,28 +40,21 @@ public class JackOfAllTrades extends BcSkillCardBase
     }
     
     @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 2 : 3;
+    }
+    
+    @Override
     public boolean getExhaust()
     {
         return true;
     }
     
     @Override
-    public int getMagicNumber()
-    {
-        return 2;
-    }
-    
-    @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Create !M! random colorless cards.";
-        }
-        else
-        {
-            return "Create !M! random upgraded colorless cards.";
-        }
+        return "Create !M! random upgraded uncommon colorless cards.";
     }
     //endregion
     
@@ -78,12 +62,18 @@ public class JackOfAllTrades extends BcSkillCardBase
     {
         for (int i = 0; i < magicNumber; i++)
         {
-            AbstractCard card = AbstractDungeon.returnTrulyRandomColorlessCardInCombat(AbstractDungeon.cardRandomRng).makeCopy();
-            if (upgraded)
-            {
-                card.upgrade();
-            }
-            addToBot(new MakeTempCardInHandAction(card, 1));
+            addToBot(
+                new CreateRandomCardAction(
+                    upgraded,
+                    true,
+                    false,
+                    false,
+                    null,
+                    CardRarity.UNCOMMON,
+                    false,
+                    false,
+                    false,
+                    JackOfAllTrades.ID));
         }
     }
 }

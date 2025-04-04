@@ -37,7 +37,7 @@ public class Coolheaded extends BcSkillCardBase
     }
     
     @Override
-    public int getChanneledOrbCount()
+    public int getOrbCountToChannel()
     {
         return 1;
     }
@@ -75,16 +75,17 @@ public class Coolheaded extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        if (magicNumber == 1)
-        {
-            return "Channel 1 Frost. NL Draw !M! card. NL If you have zero Focus, NL Draw 1 more.";
-        }
-        else
-        {
-            return "Channel 1 Frost. NL Draw !M! cards. NL If you have zero Focus, NL Draw 1 more.";
-        }
+        return applyConditionalHighlight(
+            isFocusZero(),
+            "Channel 1 Frost. NL Draw "+BcUtility.getCardCountString(magicNumber)+". NL #g0 #gFocus: Draw 1 more.");
     }
     //endregion
+    
+    @Override
+    public boolean isGlowingGold()
+    {
+        return BcUtility.getCurrentFocus() == 0;
+    }
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
@@ -97,11 +98,5 @@ public class Coolheaded extends BcSkillCardBase
         }
         
         addToBot(new DrawCardAction(player, drawCount));
-    }
-    
-    @Override
-    public boolean isGlowingGold()
-    {
-        return BcUtility.getCurrentFocus() == 0;
     }
 }

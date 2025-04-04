@@ -89,10 +89,10 @@ public class GremlinNob extends AbstractMonster
             rushDmg = 14;
         }
         
-        strengthOnEnrage = 1;
+        strengthOnEnrage = 2;
         if (AbstractDungeon.ascensionLevel >= 18)
         {
-            strengthOnEnrage = 2;
+            strengthOnEnrage = 3;
         }
         
         damage.add(new DamageInfo(this, rushDmg));

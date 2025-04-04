@@ -1,8 +1,10 @@
 package com.megacrit.cardcrawl.cards.colorless;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.actions.common.PutOnDeckAction;
+import com.megacrit.cardcrawl.actions.unique.BcRetainCardsAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -42,28 +44,45 @@ public class ThinkingAhead extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return 3;
+        return !upgraded ? 2 : 3;
+    }
+    
+    public int getRetainCount()
+    {
+        return !upgraded ? 2 : 3;
     }
     
     @Override
     public boolean getExhaust()
     {
-        return !upgraded;
+        return true;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Draw !M! cards. NL Put a card from your hand on top of your draw pile.";
+        return "Draw "+ BcUtility.getCardCountString(magicNumber)+". NL Pick "+ BcUtility.getCardCountString(getRetainCount())+" to Retain.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new DrawCardAction(player, magicNumber));
-        if (AbstractDungeon.player.hand.size() > 0)
+        
+        int retainableCards = 0;
+        for (AbstractCard card : AbstractDungeon.player.hand.group)
         {
-            addToBot(new PutOnDeckAction(player, player, 1, false));
+            if (!card.selfRetain && !card.retain && !card.isEthereal)
+            {
+                retainableCards++;
+            }
+        }
+
+        if ((retainableCards > 0) &&
+            !AbstractDungeon.player.hasRelic("Runic Pyramid") &&
+            !AbstractDungeon.player.hasPower("Equilibrium"))
+        {
+            addToBot(new BcRetainCardsAction(player, retainableCards));
         }
     }
 }

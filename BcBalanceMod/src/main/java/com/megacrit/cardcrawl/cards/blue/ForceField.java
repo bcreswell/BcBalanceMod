@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.BcUtility;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -27,14 +28,17 @@ public class ForceField extends AbstractCard
     
     public void configureCostsOnNewCard()
     {
-        Iterator var1 = AbstractDungeon.actionManager.cardsPlayedThisCombat.iterator();
-        
-        while (var1.hasNext())
+        if (BcUtility.isPlayerInCombat())
         {
-            AbstractCard c = (AbstractCard) var1.next();
-            if (c.type == AbstractCard.CardType.POWER)
+            Iterator var1 = AbstractDungeon.actionManager.cardsPlayedThisCombat.iterator();
+            
+            while (var1.hasNext())
             {
-                updateCost(-1);
+                AbstractCard c = (AbstractCard) var1.next();
+                if (c.type == AbstractCard.CardType.POWER)
+                {
+                    updateCost(-1);
+                }
             }
         }
     }
@@ -59,6 +63,14 @@ public class ForceField extends AbstractCard
             upgradeName();
             upgradeBlock(5);
         }
+    }
+    
+    public AbstractCard makeStatEquivalentCopy()
+    {
+        ForceField card = (ForceField)super.makeStatEquivalentCopy();
+        card.configureCostsOnNewCard();
+        
+        return card;
     }
     
     public AbstractCard makeCopy()

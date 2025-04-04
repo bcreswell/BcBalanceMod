@@ -50,8 +50,8 @@ public class RetainCardPower extends AbstractPower
             }
             
             if ((retainableCards > 0) &&
-                        !AbstractDungeon.player.hasRelic("Runic Pyramid") &&
-                        !AbstractDungeon.player.hasPower("Equilibrium"))
+                !AbstractDungeon.player.hasRelic("Runic Pyramid") &&
+                !AbstractDungeon.player.hasPower("Equilibrium"))
             {
                 addToBot(new BcRetainCardsAction(owner, amount));
             }

@@ -49,13 +49,13 @@ public class EmptyBody extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 7 : 11;
+        return !upgraded ? 8 : 12;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Gain !B! Block. NL " + EmptyBlahAction.EmptyDescription;
+        return "Gain !B! Block. NL NL " + EmptyBlahAction.GetEmptyDescription();
     }
     //endregion
     

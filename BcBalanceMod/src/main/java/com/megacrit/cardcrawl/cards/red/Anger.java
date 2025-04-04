@@ -61,7 +61,7 @@ public class Anger extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 5 : 8;
+        return !upgraded ? 6 : 9;
     }
     
     @Override

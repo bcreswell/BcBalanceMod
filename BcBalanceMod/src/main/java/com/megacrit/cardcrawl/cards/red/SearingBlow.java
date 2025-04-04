@@ -24,7 +24,7 @@ public class SearingBlow extends AbstractCard
     public SearingBlow(int upgrades)
     {
         super("Searing Blow", cardStrings.NAME, "red/attack/searing_blow", 2, cardStrings.DESCRIPTION, AbstractCard.CardType.ATTACK, AbstractCard.CardColor.RED, AbstractCard.CardRarity.UNCOMMON, AbstractCard.CardTarget.ENEMY);
-        this.baseDamage = 16;
+        this.baseDamage = 12;
         this.timesUpgraded = upgrades;
     }
     
@@ -40,7 +40,7 @@ public class SearingBlow extends AbstractCard
     
     public void upgrade()
     {
-        this.upgradeDamage(4 + this.timesUpgraded);
+        this.upgradeDamage(6 + this.timesUpgraded*2);
         ++this.timesUpgraded;
         this.upgraded = true;
         this.name = cardStrings.NAME + "+" + this.timesUpgraded;

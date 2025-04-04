@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.cards.green;
 
+import bcBalanceMod.baseCards.BcAttackCardBase;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
 import com.megacrit.cardcrawl.actions.common.DiscardAction;
@@ -19,54 +20,57 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class AllOutAttack extends AbstractCard
+public class AllOutAttack extends BcAttackCardBase
 {
     public static final String ID = "All Out Attack";
-    private static final CardStrings cardStrings;
-
-    public AllOutAttack()
+   
+    //region card parameters
+    @Override
+    public String getImagePath()
     {
-        super("All Out Attack", cardStrings.NAME, "green/attack/all_out_attack", 1, cardStrings.DESCRIPTION, CardType.ATTACK, CardColor.GREEN, CardRarity.UNCOMMON, CardTarget.ALL_ENEMY);
-        this.baseDamage = 10;
-        this.isMultiDamage = true;
+        return "green/attack/all_out_attack";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m)
+    
+    @Override
+    public String getId()
     {
-        this.addToBot(new DamageAllEnemiesAction(p, this.multiDamage, this.damageTypeForTurn, AttackEffect.SLASH_HEAVY));
-        if (!upgraded)
-        {
-            this.addToBot(new DiscardAction(p, p, 1, true));
-        }
-        else
-        {
-            this.addToBot(new DiscardAction(p, p, 1, false));
-        }
+        return ID;
     }
-
-    public void upgrade()
+    
+    @Override
+    public CardRarity getCardRarity()
     {
-        if (!this.upgraded)
-        {
-            this.upgradeName();
-            this.upgradeDamage(3);
-
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
+        return CardRarity.UNCOMMON;
     }
-
-    public AbstractCard makeCopy()
+    
+    @Override
+    public int getCost()
     {
-        return new AllOutAttack();
+        return 1;
     }
+    
+    @Override
+    public int getDamage()
+    {
+        return !upgraded ? 9 : 13;
+    }
+    
+    @Override
+    public boolean isAoeAttack()
+    {
+        return true;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage to ALL enemies. NL Discard a card.";
+    }
+    //endregion
 
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("All Out Attack");
-        if (Settings.language == Settings.GameLanguage.ENG)
-        {
-            cardStrings.DESCRIPTION = "Deal !D! damage to ALL enemies. NL Discard 1 card at random.";
-            cardStrings.UPGRADE_DESCRIPTION = "Deal !D! damage to ALL enemies. NL Discard 1 card.";
-        }
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new DamageAllEnemiesAction(player, multiDamage, damageTypeForTurn, AttackEffect.SLASH_HEAVY));
+        addToBot(new DiscardAction(player, player, 1, false));
     }
 }

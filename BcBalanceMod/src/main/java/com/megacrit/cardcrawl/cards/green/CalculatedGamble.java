@@ -22,12 +22,6 @@ public class CalculatedGamble extends BcSkillCardBase
     }
     
     @Override
-    public int getCost()
-    {
-        return 0;
-    }
-    
-    @Override
     public String getId()
     {
         return ID;
@@ -40,32 +34,46 @@ public class CalculatedGamble extends BcSkillCardBase
     }
     
     @Override
+    public int getCost()
+    {
+        return 0;
+    }
+    
+    @Override
+    public boolean getInnate()
+    {
+        return upgraded;
+    }
+    
+    @Override
     public boolean getExhaust()
     {
-        return !upgraded;
+        return true;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return 1;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Choose any number of cards to discard, NL then draw that many cards.";
-//        if (!upgraded)
-//        {
-//            return "Choose any number of cards to discard, NL then draw that many cards.";
-//        }
-//        else
-//        {
-//            return "Choose any number of cards to discard, NL then draw that many cards + 1.";
-//        }
+        if (magicNumber > 0)
+        {
+            return "Discard your hand. Draw that many cards + !M!.";
+        }
+        else
+        {
+            return "Discard your hand. Draw that many cards.";
+        }
+        //return "Choose any number of cards to discard, NL then draw that many cards.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new CalculatedGambleAction(true));
-//        if (upgraded)
-//        {
-//            addToBot(new DrawCardAction(1));
-//        }
+        addToBot(new CalculatedGambleAction(false, magicNumber));
     }
 }

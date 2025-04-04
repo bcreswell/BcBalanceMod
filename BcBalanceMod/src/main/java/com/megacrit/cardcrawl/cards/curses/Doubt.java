@@ -37,13 +37,13 @@ public class Doubt extends BcCurseCardBase
     @Override
     public int getMagicNumber()
     {
-        return 2;
+        return 1;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Unplayable. NL At the end of your turn, gain !M! Weak.";
+        return "Unplayable. NL At the end of your turn, Suffer !M! Weak.";
     }
     //endregion
     

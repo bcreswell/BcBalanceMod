@@ -46,7 +46,7 @@ public class MasterOfStrategy extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 4 : 5;
+        return !upgraded ? 4 : 6;
     }
     
     @Override

@@ -13,6 +13,8 @@ import com.megacrit.cardcrawl.cards.colorless.*;
 import com.megacrit.cardcrawl.cards.optionCards.BecomeAlmighty;
 import com.megacrit.cardcrawl.cards.optionCards.FameAndFortune;
 import com.megacrit.cardcrawl.cards.optionCards.LiveForever;
+import com.megacrit.cardcrawl.cards.status.Burn;
+import com.megacrit.cardcrawl.cards.status.Nausea;
 import com.megacrit.cardcrawl.cards.tempCards.*;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
@@ -23,6 +25,7 @@ import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToHandEffect;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.logging.*;
 
 public class RefactorAction extends AbstractGameAction
@@ -48,7 +51,7 @@ public class RefactorAction extends AbstractGameAction
                 return;
             }
             
-            AbstractDungeon.handCardSelectScreen.open("Exhaust", 10, true, true);
+            AbstractDungeon.handCardSelectScreen.open("Exhaust", 1, false, false);
             tickDuration();
             return;
         }
@@ -95,10 +98,22 @@ public class RefactorAction extends AbstractGameAction
                     {
                         cardToCreate = null;
                     }
+                    
+                    //nausea is too punishing to accidentally create
+                    if (cardToCreate instanceof Nausea)
+                    {
+                        cardToCreate = null;
+                    }
                 }
                 
                 if (cardToCreate.canUpgrade() &&
-                            (createsUpgradedCards || cardToExhaust.upgraded))
+                    (createsUpgradedCards || cardToExhaust.upgraded))
+                {
+                    cardToCreate.upgrade();
+                }
+                
+                //special case to let refactor accidentally create a burn+
+                if (Objects.equals(cardToCreate.cardID, Burn.ID))
                 {
                     cardToCreate.upgrade();
                 }
@@ -154,7 +169,7 @@ public class RefactorAction extends AbstractGameAction
                 }
             }
             
-            if (illAllowIt && !card.hasTag(AbstractCard.CardTags.HEALING))
+            if (illAllowIt) // && !card.hasTag(AbstractCard.CardTags.HEALING))
             {
                 group.addToBottom(card);
             }

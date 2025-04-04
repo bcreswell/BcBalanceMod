@@ -1,10 +1,7 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
 
 package com.megacrit.cardcrawl.orbs;
 
+import bcBalanceMod.BcUtility;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,7 +29,7 @@ public class Dark extends AbstractOrb
     private static final float ORB_BORDER_SCALE = 1.2F;
     private float vfxTimer = 0.5F;
     private static final float VFX_INTERVAL_TIME = 0.25F;
-    public static final float LockOnMultiplier = 1.25f;
+    public static final float LockOnMultiplier = 1f;
     
     public Dark()
     {
@@ -45,7 +42,7 @@ public class Dark extends AbstractOrb
         this.passiveAmount = this.basePassiveAmount;
         this.updateDescription();
         this.channelAnimTimer = 0.5F;
-        showEvokeInsteadOfPassive = true;
+        //showEvokeInsteadOfPassive = true;
         evokeColor = new Color(1F, .7F, 1F, c.a);
     }
     
@@ -53,19 +50,21 @@ public class Dark extends AbstractOrb
     {
         applyFocus();
         
-        if (Settings.language == Settings.GameLanguage.ENG)
-        {
-            description = "#yMass: " + evokeAmount + " NL #yPassive: At the end of turn, increase this Orb's mass by #b" + passiveAmount + ". (minimum: " + basePassiveAmount + ") NL #yEvoke: Deal this orb's mass as damage to the weakest enemy.";
-        }
-        else
-        {
-            description = DESC[0] + passiveAmount + DESC[1] + evokeAmount + DESC[2] + basePassiveAmount + ".";
-        }
+        //it's better to explain how the values are calculated in the tooltip. The final values are clearly visualized on the orb itself.
+        description = "#yEvoke: NL Deal this Orb's #yMass as Damage to the weakest enemy. NL ( minimum #yMass increase: #b" + basePassiveAmount + " ) NL ( Prefers to target enemies with #yLock-On ) NL NL #yEnd #yof #yTurn: NL Increase the #yMass of this Orb by ( #b" + basePassiveAmount + " + #yFocus ).";
     }
     
     public void onEvoke()
     {
-        AbstractDungeon.actionManager.addToTop(new DarkOrbEvokeAction(new DamageInfo(AbstractDungeon.player, this.evokeAmount, DamageType.THORNS), AttackEffect.DARK));
+        if (evokeAmount > 0)
+        {
+            int evokeTimes = 1;
+            
+            for(int i =0; i < evokeTimes; i++)
+            {
+                AbstractDungeon.actionManager.addToTop(new DarkOrbEvokeAction(new DamageInfo(AbstractDungeon.player, this.evokeAmount, DamageType.THORNS), AttackEffect.DARK));
+            }
+        }
     }
     
     public void onEndOfTurn()
@@ -89,14 +88,14 @@ public class Dark extends AbstractOrb
     
     public void applyFocus()
     {
-        AbstractPower power = AbstractDungeon.player.getPower("Focus");
-        if (power != null)
+        AbstractPower focus = AbstractDungeon.player.getPower("Focus");
+        if (focus != null)
         {
-            this.passiveAmount = Math.max(this.basePassiveAmount, this.basePassiveAmount + power.amount);
+            passiveAmount = Math.max(basePassiveAmount, basePassiveAmount + focus.amount);
         }
         else
         {
-            this.passiveAmount = this.basePassiveAmount;
+            passiveAmount = basePassiveAmount;
         }
     }
     

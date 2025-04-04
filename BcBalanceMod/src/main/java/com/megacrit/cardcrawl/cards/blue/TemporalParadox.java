@@ -4,6 +4,7 @@ import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
 import com.badlogic.gdx.graphics.*;
 import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.actions.watcher.PressEndTurnButtonAction;
 import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.core.*;
 import com.megacrit.cardcrawl.dungeons.*;
@@ -12,7 +13,7 @@ import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.vfx.*;
 import com.megacrit.cardcrawl.vfx.combat.*;
 
-public class TemporalParadox extends BcSkillCardBase
+public class TemporalParadox extends BcPowerCardBase
 {
     public static final String ID = BcBalanceMod.makeID("TemporalParadox");
     
@@ -48,12 +49,6 @@ public class TemporalParadox extends BcSkillCardBase
     }
     
     @Override
-    public boolean getExhaust()
-    {
-         return true;
-    }
-    
-    @Override
     public boolean getEthereal()
     {
         return true;
@@ -75,11 +70,11 @@ public class TemporalParadox extends BcSkillCardBase
     @Override
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        //to trigger ptsd
+        addToBot(new BcApplyPowerAction(new TemporalParadoxPower(player, magicNumber)));
+
+        //to trigger ptsd from time eater
         CardCrawlGame.sound.play("POWER_TIME_WARP", 0.05F);
         AbstractDungeon.effectsQueue.add(new BorderFlashEffect(Color.GOLD, true));
         AbstractDungeon.topLevelEffectsQueue.add(new TimeWarpTurnEndEffect());
-        
-        addToBot(new BcApplyPowerAction(new TemporalParadoxPower(player, magicNumber)));
     }
 }

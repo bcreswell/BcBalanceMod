@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.monsters.*;
 import com.megacrit.cardcrawl.stances.*;
+import com.megacrit.cardcrawl.powers.watcher.*;
 
 public class Serenity extends BcSkillCardBase
 {
@@ -38,19 +39,27 @@ public class Serenity extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 7 : 9;
+        return !upgraded ? 6 : 8;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return 1;
     }
     
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Gain !B! Block. NL Calm: Gain another NL !B! Block.";
+        return applyConditionalHighlight(
+            isPlayerInStance(CalmStance.STANCE_ID),
+            "Gain !B! Block. NL Gain !M! Mantra. NL NL Calm: Repeat these effects.");
     }
     //endregion
     
@@ -58,9 +67,18 @@ public class Serenity extends BcSkillCardBase
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new GainBlockAction(player, player, block));
+        if (magicNumber > 0)
+        {
+            addToBot(new BcApplyPowerAction(new MantraPower(player, magicNumber)));
+        }
+        
         if (BcUtility.isPlayerInStance(CalmStance.STANCE_ID))
         {
             addToBot(new GainBlockAction(player, player, block));
+            if (magicNumber > 0)
+            {
+                addToBot(new BcApplyPowerAction(new MantraPower(player, magicNumber)));
+            }
         }
     }
 }

@@ -9,17 +9,14 @@ import com.megacrit.cardcrawl.cards.*;
 import com.megacrit.cardcrawl.cards.purple.*;
 import com.megacrit.cardcrawl.cards.tempCards.Smite;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.monsters.*;
-import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.vfx.combat.*;
 
 public class BattleHymnPower extends BcPowerBase
 {
     public static final String POWER_ID = "BattleHymn";
     int attacksThisTurn = 0;
+    int smitesAvailableThisTurn = 0;
     
     public BattleHymnPower(AbstractCreature owner, int amount)
     {
@@ -60,37 +57,50 @@ public class BattleHymnPower extends BcPowerBase
     @Override
     public String getBaseDescription()
     {
-        String description = null;
-        if (amount == 1)
+        String description = "After you play #b" + BattleHymn.AttacksPerSmite + " Attacks in a turn, create a zero cost Smite. NL NL ";
+        
+        if (smitesAvailableThisTurn > 0)
         {
-            description = "Once per turn: NL If you play #b" + BattleHymn.AttacksPerSmite + " Attacks (not counting Smites), create a zero cost Smite.";
-        }
-        else
-        {
-            description = "Once per turn: NL If you play #b" + BattleHymn.AttacksPerSmite + " Attacks (not counting Smites), create " + amount + " zero cost Smites.";
+            description += "Attacks needed: " + (BattleHymn.AttacksPerSmite - attacksThisTurn) +" NL ";
         }
         
-        description += " NL NL Non-Smite Attacks played this turn: " + attacksThisTurn;
+        description += "Smites available: "+ smitesAvailableThisTurn;
         
         return description;
     }
     //endregion
     
+    @Override
+    public void onInitialApplication()
+    {
+        smitesAvailableThisTurn = amount;
+    }
+    
+    @Override
+    public void onPowerStacked()
+    {
+        smitesAvailableThisTurn++;
+    }
+    
     public void atStartOfTurn()
     {
         attacksThisTurn = 0;
+        smitesAvailableThisTurn = amount;
         updateDescription();
     }
     
     public void onPlayCard(AbstractCard card, AbstractMonster monster)
     {
         if ((card.type == AbstractCard.CardType.ATTACK) &&
-                    !card.cardID.equals(Smite.ID))
+            (smitesAvailableThisTurn > 0))
         {
             attacksThisTurn++;
             
             if (attacksThisTurn == BattleHymn.AttacksPerSmite)
             {
+                attacksThisTurn = 0;
+                smitesAvailableThisTurn--;
+                
                 flash();
     
                 addToBot(new VFXAction(new FastingEffect(player.hb.cX, player.hb.cY, Color.CHARTREUSE)));
@@ -101,7 +111,7 @@ public class BattleHymnPower extends BcPowerBase
                 smite.costForTurn = 0;
                 smite.isCostModified = true;
     
-                addToBot(new MakeTempCardInHandAction(smite, amount, false));
+                addToBot(new MakeTempCardInHandAction(smite, 1, false));
             }
             
             updateDescription();

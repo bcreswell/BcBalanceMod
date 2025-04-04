@@ -30,6 +30,12 @@ public class Turbo extends BcSkillCardBase
     
     //region card parameters
     @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
     public String getImagePath()
     {
         return "blue/skill/turbo";
@@ -45,31 +51,6 @@ public class Turbo extends BcSkillCardBase
     public int getCost()
     {
         return 0;
-    }
-    
-    @Override
-    public String getId()
-    {
-        return ID;
-    }
-    
-    @Override
-    public String getDisplayName()
-    {
-        return "Turbo";
-    }
-    
-    @Override
-    public String getBaseDescription()
-    {
-        if (!upgraded)
-        {
-            return "Gain [B] [B]. NL Draw 1 card. NL Add a *Void into your discard pile.";
-        }
-        else
-        {
-            return "Gain [B] [B] [B]. NL Draw 1 card. NL Add a *Void into your discard pile.";
-        }
     }
     
     @Override
@@ -89,12 +70,25 @@ public class Turbo extends BcSkillCardBase
     {
         return true;
     }
+
+    @Override
+    public String getBaseDescription()
+    {
+        if (!upgraded)
+        {
+            return "Gain [B] [B]. NL Add a *Void into your discard pile.";
+        }
+        else
+        {
+            return "Gain [B] [B] [B]. NL Add a *Void into your discard pile.";
+        }
+    }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new GainEnergyAction(magicNumber));
-        addToBot(new DrawCardAction(1));
+        //addToBot(new DrawCardAction(1));
         addToBot(new MakeTempCardInDiscardAction(new VoidCard(), 1));
     }
 }

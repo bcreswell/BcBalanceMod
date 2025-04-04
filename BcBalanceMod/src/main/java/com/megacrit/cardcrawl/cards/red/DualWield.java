@@ -63,12 +63,12 @@ public class DualWield extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Choose an Attack Card in your hand. NL Create a copy of it that costs 0 until played.";
+        return "Choose an Attack Card in your hand. NL Create a copy of it.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new DualWieldAction(player, 1));
+        addToBot(new DualWieldAction(player, 1, false));
     }
 }

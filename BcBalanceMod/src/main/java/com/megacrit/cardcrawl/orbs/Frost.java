@@ -1,7 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
 
 package com.megacrit.cardcrawl.orbs;
 
@@ -18,6 +14,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.*;
 import com.megacrit.cardcrawl.localization.OrbStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.powers.DecryptionDancePower;
 import com.megacrit.cardcrawl.vfx.combat.FrostOrbActivateEffect;
 import com.megacrit.cardcrawl.vfx.combat.FrostOrbPassiveEffect;
 import com.megacrit.cardcrawl.vfx.combat.OrbFlareEffect;
@@ -49,21 +46,21 @@ public class Frost extends AbstractOrb
     public void updateDescription()
     {
         this.applyFocus();
-        if (Settings.language == Settings.GameLanguage.ENG)
-        {
-            this.description = "#yPassive: At the end of turn, gain #b" + this.passiveAmount + " #yBlock. NL #yEvoke: Gain #b" + this.evokeAmount + " #yBlock. (minimum: " + this.baseEvokeAmount + ").";
-        }
-        else
-        {
-            this.description = orbString.DESCRIPTION[0] + this.passiveAmount + orbString.DESCRIPTION[1] + this.evokeAmount + orbString.DESCRIPTION[2];
-        }
+        
+        //it's better to explain how the values are calculated in the tooltip. The final values are clearly visualized on the orb itself.
+        description = "#yEvoke: NL Gain ( #b" + baseEvokeAmount + " + #yFocus ) #yBlock. NL ( minimum Evoke: #b" + baseEvokeAmount + " #yBlock ) NL NL #yEnd #yof #yTurn: NL Gain ( #b" + basePassiveAmount + " + #yFocus ) #yBlock.";
     }
     
     public void onEvoke()
     {
         if (evokeAmount > 0)
         {
-            AbstractDungeon.actionManager.addToBottom(new GainBlockAction(AbstractDungeon.player, AbstractDungeon.player, evokeAmount));
+            int evokeTimes = 1;
+            
+            for(int i =0; i < evokeTimes; i++)
+            {
+                AbstractDungeon.actionManager.addToBottom(new GainBlockAction(AbstractDungeon.player, AbstractDungeon.player, evokeAmount));
+            }
         }
     }
     

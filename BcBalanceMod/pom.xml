@@ -6,8 +6,8 @@
     <groupId>bcBalanceMod</groupId>
     <artifactId>BcBalanceMod</artifactId> <!--Keep a note of this one: this is the ID used in the "auto add cards" method-->
     <name>BC Balance Mod</name>
-    <version>1.0.6</version>
-    <description>Lots of small changes to existing cards and relics. New cards for the original 4 characters, new relics, new potions.</description>
+    <version>1.0.7</version>
+    <description>New cards for the original 4 characters, new relics, new potions. Lots of changes to the original cards and relics. </description>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

@@ -8,6 +8,7 @@ package com.megacrit.cardcrawl.cards.red;
 import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.BcApplyPowerAction;
 import com.megacrit.cardcrawl.actions.common.LoseHPAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
@@ -55,7 +56,7 @@ public class DarkEmbrace extends BcPowerCardBase
     public int getMagicNumber()
     {
         //hp lost when played
-        return 3;
+        return 2;
     }
     
     @Override
@@ -67,7 +68,7 @@ public class DarkEmbrace extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Sacrifice !M! HP. NL Whenever a card is Exhausted, NL draw 1 card.";
+        return "Sacrifice !M! HP. NL Whenever a card is Exhausted, Draw a card.";
     }
     //endregion
     
@@ -75,6 +76,6 @@ public class DarkEmbrace extends BcPowerCardBase
     {
         addToBot(new VFXAction(new OfferingEffect(), 0.5F));
         addToBot(new LoseHPAction(player, player, magicNumber));
-        addToBot(new ApplyPowerAction(player, player, new DarkEmbracePower(player, 1), 1));
+        addToBot(new BcApplyPowerAction(new DarkEmbracePower(player, 1)));
     }
 }

@@ -28,7 +28,7 @@ public class DizzyPower extends BcPowerBase
     @Override
     public String getDisplayName()
     {
-        return "Dizzy (Ascension 13)";
+        return "Dizzy (Ascension 12)";
     }
     
     @Override
@@ -65,8 +65,8 @@ public class DizzyPower extends BcPowerBase
     public String getBaseDescription()
     {
         return "Shuffling causes you to suffer #b" + DizzyPerShuffle +
-                       " Dizzy. Each card you draw reduces your Dizzy by 1. NL NL If you would go over #b" +
-                       NauseousTheshold + " Dizzy, you'll get nauseous instead.";
+            " Dizzy. Each card you draw reduces your Dizzy by 1. NL NL If you would go over #b" +
+            NauseousTheshold + " Dizzy, you'll get nauseous instead.";
     }
     //endregion
     

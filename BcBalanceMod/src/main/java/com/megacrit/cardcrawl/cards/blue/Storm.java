@@ -23,13 +23,13 @@ public class Storm extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
     public boolean getInnate()
     {
-        return upgraded;
+        return true;
     }
     
     @Override
@@ -41,7 +41,7 @@ public class Storm extends BcPowerCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override

@@ -60,9 +60,9 @@ public class Lagavulin extends AbstractMonster {
         this.type = AbstractMonster.EnemyType.ELITE;
         this.dialogX = -100.0F * Settings.scale;
         if (AbstractDungeon.ascensionLevel >= 8) {
-            this.setHp(112, 115);
+            this.setHp(A_2_HP_MIN, A_2_HP_MAX);
         } else {
-            this.setHp(109, 111);
+            this.setHp(HP_MIN, HP_MAX);
         }
         
         if (AbstractDungeon.ascensionLevel >= 3) {
@@ -78,7 +78,7 @@ public class Lagavulin extends AbstractMonster {
         }
         
         this.damage.add(new DamageInfo(this, this.attackDmg));
-        //BC: laga that starts awake is just BS and poor design.
+        //BC: laga that starts awake is just BS
         this.asleep = true; //setAsleep;
         this.loadAnimation("images/monsters/theBottom/lagavulin/skeleton.atlas", "images/monsters/theBottom/lagavulin/skeleton.json", 1.0F);
         AnimationState.TrackEntry e = null;
@@ -100,8 +100,8 @@ public class Lagavulin extends AbstractMonster {
     public void usePreBattleAction() {
         if (this.asleep) {
             CardCrawlGame.music.precacheTempBgm("ELITE");
-            AbstractDungeon.actionManager.addToBottom(new GainBlockAction(this, this, 8));
-            AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(this, this, new MetallicizePower(this, 8), 8));
+            AbstractDungeon.actionManager.addToBottom(new GainBlockAction(this, this, ARMOR_AMT));
+            AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(this, this, new MetallicizePower(this, ARMOR_AMT), ARMOR_AMT));
         } else {
             CardCrawlGame.music.unsilenceBGM();
             AbstractDungeon.scene.fadeOutAmbiance();

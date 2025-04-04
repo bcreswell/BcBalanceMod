@@ -7,12 +7,10 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.UIStrings;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class DualWieldAction extends AbstractGameAction
 {
@@ -23,14 +21,16 @@ public class DualWieldAction extends AbstractGameAction
     private int dupeAmount = 1;
     private ArrayList<AbstractCard> cannotDuplicate = new ArrayList();
     boolean firstUpdate = true;
+    boolean costsZeroThisTurn = false;
     
-    public DualWieldAction(AbstractCreature source, int amount)
+    public DualWieldAction(AbstractCreature source, int amount, boolean costsZeroThisTurn)
     {
         setValues(AbstractDungeon.player, source, amount);
         actionType = AbstractGameAction.ActionType.DRAW;
         duration = DURATION_PER_CARD;
         player = AbstractDungeon.player;
         dupeAmount = amount;
+        this.costsZeroThisTurn = costsZeroThisTurn;
     }
     
     public void update()
@@ -101,8 +101,11 @@ public class DualWieldAction extends AbstractGameAction
     void dualWieldGivenCard(AbstractCard card)
     {
         AbstractCard dualWieldedCard = card.makeStatEquivalentCopy();
-        dualWieldedCard.glowColor = card.glowColor;
-        dualWieldedCard.freeToPlayOnce = true;
+        if (costsZeroThisTurn)
+        {
+            dualWieldedCard.glowColor = card.glowColor;
+            dualWieldedCard.freeToPlayOnce = true;
+        }
         addToTop(new MakeTempCardInHandAction(dualWieldedCard));
     }
     

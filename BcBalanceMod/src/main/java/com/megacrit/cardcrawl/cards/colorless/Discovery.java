@@ -36,22 +36,15 @@ public class Discovery extends BcSkillCardBase
     }
     
     @Override
-    public String getBaseDescription()
+    public int getMagicNumber()
     {
-        if (upgraded)
-        {
-            return "Choose 1 of 4 cards of your color to create. NL It costs 0 this turn.";
-        }
-        else
-        {
-            return "Choose 1 of 3 cards of your color to create. NL It costs 0 this turn.";
-        }
+        return !upgraded ? 3 : 5;
     }
     
     @Override
-    public boolean getExhaust()
+    public String getBaseDescription()
     {
-        return true;
+        return "Choose 1 of !M! cards of any color to create. NL It costs 0 and is temporary.";
     }
     
     @Override
@@ -61,8 +54,8 @@ public class Discovery extends BcSkillCardBase
     }
     //endregion
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new DiscoveryImprovedAction(upgraded ? 4 : 3, true, false, null, null));
+        addToBot(new DiscoveryImprovedAction(magicNumber, true, false, null, null, true));
     }
 }

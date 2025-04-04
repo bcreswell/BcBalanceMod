@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.powers;
 
+import bcBalanceMod.BcUtility;
 import com.megacrit.cardcrawl.actions.common.RetrieveRandomCardsAction;
 import com.megacrit.cardcrawl.actions.utility.*;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -41,7 +42,7 @@ public class MagnetismPower extends AbstractPower
         {
             addToBot(new TrueWaitAction(.3f));
             addToBot(new FlashBuffAction(this));
-            addToBot(new RetrieveRandomCardsAction(true, amount));
+            addToBot(new RetrieveRandomCardsAction(amount));
         }
     }
     
@@ -53,14 +54,7 @@ public class MagnetismPower extends AbstractPower
     
     public void updateDescription()
     {
-        if (amount == 1)
-        {
-            this.description = "Start of turn: NL Draw " + amount + " card randomly from your discard pile.";
-        }
-        else
-        {
-            this.description = "Start of turn: NL Draw " + amount + " cards randomly from your discard pile.";
-        }
+        description = "Start of turn: NL Retrieve "+ BcUtility.getCardCountString(amount) +" randomly.";
     }
     
     static

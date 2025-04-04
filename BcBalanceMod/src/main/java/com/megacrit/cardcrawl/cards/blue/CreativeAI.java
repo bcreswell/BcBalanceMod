@@ -45,18 +45,30 @@ public class CreativeAI extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 3 : 2;
+        return 2;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Start of turn: NL Create a random Power. It will become Ethereal. NL NL (Can't create itself or Self Repair.)";
+        if (!upgraded)
+        {
+            return "Start of turn: NL Create a random Skill. It's temporary and costs zero.";
+        }
+        else
+        {
+            return "Start of turn: NL Create a random Upgraded Skill. It's temporary and costs zero.";
+        }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new BcApplyPowerAction(new BcCreativeAiPower2(player, 1)));
+        BcCreativeAiPower2 power = new BcCreativeAiPower2(player, 1);
+        if (upgraded)
+        {
+            power.upgrade();
+        }
+        addToBot(new BcApplyPowerAction(power));
     }
 }

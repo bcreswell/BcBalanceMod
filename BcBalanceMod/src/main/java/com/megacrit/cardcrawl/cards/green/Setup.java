@@ -1,10 +1,7 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.megacrit.cardcrawl.cards.green;
 
+import bcBalanceMod.baseCards.BcSkillCardBase;
+import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.actions.unique.SetupAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
@@ -17,42 +14,51 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class Setup extends AbstractCard {
+public class Setup extends BcSkillCardBase
+{
     public static final String ID = "Setup";
-    private static final CardStrings cardStrings;
-
-    public Setup()
+    
+    //region card parameters
+    @Override
+    public String getImagePath()
     {
-        super("Setup", cardStrings.NAME, "green/skill/setup", 0, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.GREEN, CardRarity.COMMON, CardTarget.NONE);
-        this.exhaust = true;
+        return "green/skill/setup";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new SetupAction());
-    }
-
-    public AbstractCard makeCopy() {
-        return new Setup();
-    }
-
-    public void upgrade()
+    
+    @Override
+    public String getId()
     {
-        if (!this.upgraded)
+        return ID;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.COMMON;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 0;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        if (!upgraded)
         {
-            this.upgradeName();
-            //this.upgradeBaseCost(0);
-            this.exhaust = false;
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
+            return "Put a card on the bottom of your draw pile. NL It costs 0 until played.";
+        }
+        else
+        {
+            return "Put a card on top of your draw pile. NL It costs 0 until played.";
         }
     }
+    //endregion
 
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Setup");
-        if (Settings.language == Settings.GameLanguage.ENG)
-        {
-            cardStrings.DESCRIPTION = "Put a card from your hand on top of your draw pile. NL It costs 0 until played. Exhaust.";
-            cardStrings.UPGRADE_DESCRIPTION = "Put a card from your hand on top of your draw pile. NL It costs 0 until played.";
-        }
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new SetupAction(upgraded));
     }
 }

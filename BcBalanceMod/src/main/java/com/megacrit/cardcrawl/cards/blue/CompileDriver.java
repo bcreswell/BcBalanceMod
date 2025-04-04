@@ -55,13 +55,13 @@ public class CompileDriver extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 7 : 11;
+        return !upgraded ? 6 : 11;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Draw 1 card for each unique Orb you have.";
+        return "Deal !D! damage. NL Draw a card for each type of Orb you have.";
     }
     //endregion
     

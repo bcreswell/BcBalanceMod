@@ -55,7 +55,7 @@ public class IfYouStrikeMeDown extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 1 : 2;
+        return 1;
     }
     
     @Override

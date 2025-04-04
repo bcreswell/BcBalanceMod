@@ -40,7 +40,7 @@ public class WreathOfFlame extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 3 : 5;
+        return !upgraded ? 4 : 6;
     }
     
     @Override
@@ -48,18 +48,23 @@ public class WreathOfFlame extends BcSkillCardBase
     {
         return CardRarity.UNCOMMON;
     }
-    
+
+    int getScryAmount()
+    {
+        return 3;
+    }
+
     @Override
     public String getBaseDescription()
     {
-        return "Scry 3. NL Your next Attack played while in Wrath or Divinity deals !M! additional damage.";
+        return "Scry "+BcUtility.getScryString(getScryAmount())+". NL Your next Attack played while in Wrath or Divinity will deal + !M! damage.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new VFXAction(new ThirdEyeEffect(player.hb.cX, player.hb.cY)));
-        addToBot(new ScryAction(3));
+        addToBot(new ScryAction(getScryAmount()));
         
         addToBot(new VFXAction(player, new FlameBarrierEffect(player.hb.cX, player.hb.cY), 0.5F));
         addToBot(new BcApplyPowerAction(new WreathOfFlamePower(player, magicNumber)));

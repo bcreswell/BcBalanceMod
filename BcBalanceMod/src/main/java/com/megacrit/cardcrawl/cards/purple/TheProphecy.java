@@ -53,7 +53,7 @@ public class TheProphecy extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Choose 1 of your cards. NL The next time you draw it, enter Divinity. NL Shuffle ALL cards into your draw pile.";
+        return "Choose 1 of your cards. NL The next time you draw it, enter Divinity. NL Shuffle ALL of your cards into the draw pile.";
     }
     //endregion
     

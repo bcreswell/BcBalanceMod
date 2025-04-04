@@ -12,7 +12,7 @@ public class MedicalKit extends AbstractRelic {
     }
     
     public String getUpdatedDescription() {
-        return "#yUnplayable #yStatus cards can now be played at zero cost. Whenever you play a #yStatus card, #yExhaust it.";
+        return "#yStatus cards can now be played at zero cost. Whenever you play a #yStatus card, #yExhaust it.";
     }
     
     public void onDrawOrDiscard()

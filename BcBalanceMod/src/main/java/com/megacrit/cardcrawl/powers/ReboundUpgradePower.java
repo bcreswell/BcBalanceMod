@@ -7,6 +7,7 @@ package com.megacrit.cardcrawl.powers;
 
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.actions.utility.TrueWaitAction;
 import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.actions.utility.WaitAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -76,6 +77,7 @@ public class ReboundUpgradePower extends BcPowerBase
         {
             amount--;
             flash();
+            addToBot(new TrueWaitAction(.2f));
             addToBot(new UpgradeSpecificCardAction(card));
             addToBot(new RemovePowerIfEmptyAction(owner, POWER_ID));
         }

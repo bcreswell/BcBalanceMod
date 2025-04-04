@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.cards.red;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.actions.common.GainEnergyAction;
@@ -50,13 +51,13 @@ public class Sentinel extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
     public int getBlock()
     {
-        return !upgraded ? 8 : 11;
+        return !upgraded ? 7 : 9;
     }
     
     @Override
@@ -68,14 +69,7 @@ public class Sentinel extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Gain !B! Block. NL If this card is Exhausted, NL gain [R] [R].";
-        }
-        else
-        {
-            return "Gain !B! Block. NL If this card is Exhausted, NL gain [R] [R] [R].";
-        }
+        return "Gain !B! Block. NL NL If this card is Exhausted, NL gain "+ BcUtility.getEnergyString(magicNumber, this) +".";
     }
     //endregion
     

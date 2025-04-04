@@ -5,7 +5,6 @@ import basemod.helpers.RelicType;
 import basemod.interfaces.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.evacipated.cardcrawl.mod.stslib.Keyword;
 import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
@@ -13,7 +12,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.blue.*;
-import com.megacrit.cardcrawl.cards.green.*;
+import com.megacrit.cardcrawl.cards.green.Finisher;
 import com.megacrit.cardcrawl.cards.purple.*;
 import com.megacrit.cardcrawl.cards.red.*;
 import com.megacrit.cardcrawl.core.Settings;
@@ -77,7 +76,7 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
     //This is for the in-game mod settings panel.
     private static final String MODNAME = "BC Balance Mod";
     private static final String AUTHOR = "BC";
-    private static final String DESCRIPTION = "Lots of small changes to existing cards and relics. New cards for the original 4 characters, new relics, new potions.";
+    private static final String DESCRIPTION = "Lots of small changes to existing cards and relics. New cards for the original 4 characters, new relics, new potions. Extensive changes mean there are many mods that this mod isn't compatible with.";
     
     // =============== INPUT TEXTURE LOCATION =================
     
@@ -260,7 +259,7 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
         
         BaseMod.registerModBadge(badgeTexture, MODNAME, AUTHOR, DESCRIPTION, settingsPanel);
         
-        BcUtility.popuplateLocalizationPlaceholders();
+        BcUtility.populateLocalizationPlaceholders();
         
         //region removing relics
         //replacing these relics with new versions so it's not necessary to patch all the places where they hardcoded it into the system
@@ -286,15 +285,27 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
         BaseMod.removeRelic(oldAbacus);
         //endregion
         
-        BcUtility.removeCardFromMasterLibrary(Worship.ID);
-        BcUtility.removeCardFromMasterLibrary(Pray.ID);
-        BcUtility.removeCardFromMasterLibrary(Indignation.ID);
+        //ironclad
         BcUtility.removeCardFromMasterLibrary(Intimidate.ID);
         BcUtility.removeCardFromMasterLibrary(Rupture.ID);
-        BcUtility.removeCardFromMasterLibrary(Foresight.ID);
-        BcUtility.removeCardFromMasterLibrary(WaveOfTheHand.ID);
-        BcUtility.removeCardFromMasterLibrary(DoubleEnergy.ID);
+        
+        //silent
         BcUtility.removeCardFromMasterLibrary(Finisher.ID);
+        
+        //defect
+        BcUtility.removeCardFromMasterLibrary(Melter.ID);
+        BcUtility.removeCardFromMasterLibrary(DoubleEnergy.ID);
+        BcUtility.removeCardFromMasterLibrary(Aggregate.ID);
+        BcUtility.removeCardFromMasterLibrary(AutoShields.ID);
+        
+        //watcher
+        BcUtility.removeCardFromMasterLibrary(Worship.ID);
+        BcUtility.removeCardFromMasterLibrary(Wish.ID);
+        //BcUtility.removeCardFromMasterLibrary(Blasphemy.ID);
+        BcUtility.removeCardFromMasterLibrary(Pray.ID);
+        BcUtility.removeCardFromMasterLibrary(Indignation.ID);
+        BcUtility.removeCardFromMasterLibrary(WaveOfTheHand.ID);
+        BcUtility.removeCardFromMasterLibrary(Foresight.ID);
         
         for (String character : UnlockTracker.lockedCharacters)
         {
@@ -303,6 +314,8 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
         
         // =============== EVENTS =================
         // https://github.com/daviscook477/BaseMod/wiki/Custom-Events
+        
+        //BaseMod.addEvent(FreeYourMind.ID, FreeYourMind.class, TheCity.ID);
         
         // You can add the event like so:
         // BaseMod.addEvent(IdentityCrisisEvent.ID, IdentityCrisisEvent.class, TheCity.ID);
@@ -387,7 +400,7 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
         BaseMod.addRelic(new PowerGlove(), RelicType.SHARED);
         UnlockTracker.markRelicAsSeen(PowerGlove.ID);
         
-        //the following relics replace base game versions to work around them being hardcoded into the system
+        //the following relics replace base game versions to work around their effects being hardcoded into the system
         BaseMod.addRelic(new BcEctoplasm(), RelicType.SHARED);
         UnlockTracker.markRelicAsSeen(BcEctoplasm.ID);
         

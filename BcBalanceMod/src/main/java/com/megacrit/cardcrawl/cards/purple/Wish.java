@@ -54,12 +54,12 @@ public class Wish extends BcSkillCardBase
     {
         return true;
     }
-    
+
     @Override
     public int getBlock()
     {
         //regen
-        return !upgraded ? 5 : 6;
+        return !upgraded ? 7 : 8;
     }
     
     @Override

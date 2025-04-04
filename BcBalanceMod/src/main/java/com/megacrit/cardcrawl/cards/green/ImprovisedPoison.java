@@ -65,7 +65,7 @@ public class ImprovisedPoison extends  BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 3 : 5;
+        return !upgraded ? 4 : 5;
     }
     
     @Override

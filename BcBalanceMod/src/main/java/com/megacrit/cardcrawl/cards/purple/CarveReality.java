@@ -4,6 +4,7 @@ import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.MakeTempCardInHandAction;
+import com.megacrit.cardcrawl.actions.utility.ScryAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.cards.tempCards.Smite;
@@ -48,9 +49,15 @@ public class CarveReality extends BcAttackCardBase
     }
     
     @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 3 : 4;
+    }
+    
+    @Override
     public int getDamage()
     {
-        return !upgraded ? 7 : 11;
+        return !upgraded ? 6 : 9;
     }
     
     @Override
@@ -62,13 +69,14 @@ public class CarveReality extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Add a *Smite into your hand.";
+        return "Deal !D! damage. NL Scry " + BcUtility.getScryString(getMagicNumber()) + ". NL Create a *Smite.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.SLASH_HEAVY));
+        addToBot(new ScryAction(magicNumber));
         addToBot(new MakeTempCardInHandAction(cardsToPreview.makeStatEquivalentCopy(), 1));
     }
 }

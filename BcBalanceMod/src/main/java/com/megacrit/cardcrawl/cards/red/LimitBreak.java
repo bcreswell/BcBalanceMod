@@ -40,13 +40,25 @@ public class LimitBreak extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 0;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
     public String getId()
     {
         return ID;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return 2;
+    }
+    
+    @Override
+    public boolean getRetain()
+    {
+        return true;
     }
     
     @Override
@@ -58,28 +70,25 @@ public class LimitBreak extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
+        if (magicNumber == 2)
+        {
+            return "Double your Strength temporarily.";
+        }
+        else if (magicNumber == 3)
         {
             return "Triple your Strength temporarily.";
         }
         else
         {
-            return "Quadruple your Strength temporarily.";
+            return "Temporarily multiply your Strength by !M!.";
         }
     }
     
     @Override
     public String getTemporaryExtraDescription(AbstractMonster monster)
     {
-        int strengthAmount = BcUtility.getPowerAmount(StrengthPower.POWER_ID);
-        if (!upgraded)
-        {
-            strengthAmount *= 2;
-        }
-        else
-        {
-            strengthAmount *= 3;
-        }
+        int baseStr = BcUtility.getPowerAmount(StrengthPower.POWER_ID);
+        int strengthAmount = baseStr * (magicNumber-1);
         
         return "+"+strengthAmount+" strength";
     }
@@ -87,16 +96,8 @@ public class LimitBreak extends BcSkillCardBase
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        int strengthAmount = BcUtility.getPowerAmount(StrengthPower.POWER_ID);
-        
-        if (!upgraded)
-        {
-            strengthAmount *= 2;
-        }
-        else
-        {
-            strengthAmount *= 3;
-        }
+        int baseStr = BcUtility.getPowerAmount(StrengthPower.POWER_ID);
+        int strengthAmount = baseStr * (magicNumber-1);
         
         if (strengthAmount > 0)
         {

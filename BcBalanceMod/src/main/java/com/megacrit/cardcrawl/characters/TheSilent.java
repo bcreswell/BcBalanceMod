@@ -80,10 +80,12 @@ public class TheSilent extends AbstractPlayer {
         retVal.add("Strike_G");
         retVal.add("Strike_G");
         retVal.add("Strike_G");
+        
         retVal.add("Defend_G");
         retVal.add("Defend_G");
         retVal.add("Defend_G");
         retVal.add("Blur");
+        
         retVal.add("Survivor");
         retVal.add("Neutralize");
         return retVal;

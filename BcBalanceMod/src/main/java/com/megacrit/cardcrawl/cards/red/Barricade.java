@@ -76,11 +76,11 @@ public class Barricade extends BcPowerCardBase
     {
         if (magicNumber == 0)
         {
-            return "Block is now retained between turns.";
+            return "Your Block is now always Retained.";
         }
         else
         {
-            return "Gain !M! Block. NL Block is now retained between turns.";
+            return "Gain !M! Block. NL Your Block is now always Retained.";
         }
     }
     //endregion

@@ -34,6 +34,8 @@ import com.megacrit.cardcrawl.helpers.SaveHelper;
 import com.megacrit.cardcrawl.helpers.ScreenShake.ShakeDur;
 import com.megacrit.cardcrawl.helpers.ScreenShake.ShakeIntensity;
 import com.megacrit.cardcrawl.localization.CharacterStrings;
+import com.megacrit.cardcrawl.orbs.AbstractOrb;
+import com.megacrit.cardcrawl.orbs.EmptyOrbSlot;
 import com.megacrit.cardcrawl.relics.BcBalancingScales;
 import com.megacrit.cardcrawl.saveAndContinue.SaveAndContinue;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
@@ -91,27 +93,44 @@ public class Defect extends AbstractPlayer
     {
         ArrayList<String> retVal = new ArrayList();
         
-        //12 cards total
-        
-        //3 strikes
+        retVal.add("Strike_B");
         retVal.add("Strike_B");
         retVal.add("Strike_B");
         retVal.add("Strike_B");
         
-        //5 defends
-        retVal.add("Defend_B");
         retVal.add("Defend_B");
         retVal.add("Defend_B");
         retVal.add("Defend_B");
         retVal.add("Defend_B");
         
-        //4 utility/orb manipulation
         retVal.add("Zap");
-        retVal.add("Redo"); //recursion
         retVal.add("Dualcast");
-        retVal.add("Panacea");
         
         return retVal;
+    }
+    
+    public void increaseMaxOrbSlots(int amount, boolean playSfx)
+    {
+        if (maxOrbs != 10)
+        {
+            if (playSfx)
+            {
+                CardCrawlGame.sound.play("ORB_SLOT_GAIN", 0.1F);
+            }
+            
+            maxOrbs += amount;
+            
+            int i;
+            for (i = 0; i < amount; ++i)
+            {
+                orbs.add(new EmptyOrbSlot());
+            }
+            
+            for (i = 0; i < this.orbs.size(); ++i)
+            {
+                orbs.get(i).setSlot(i, maxOrbs);
+            }
+        }
     }
     
     public AbstractCard getStartCardForEvent()

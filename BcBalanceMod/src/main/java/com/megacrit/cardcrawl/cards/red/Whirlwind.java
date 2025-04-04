@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.megacrit.cardcrawl.cards.red;
 
 import bcBalanceMod.baseCards.*;
@@ -49,7 +44,7 @@ public class Whirlwind extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
@@ -61,7 +56,7 @@ public class Whirlwind extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 6 : 9;
+        return !upgraded ? 6 : 8;
     }
     
     @Override

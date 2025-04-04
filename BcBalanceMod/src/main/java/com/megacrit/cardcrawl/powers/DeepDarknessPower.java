@@ -17,9 +17,10 @@ public class DeepDarknessPower extends BcPowerBase
 {
     public static final String POWER_ID = "DeepDarknessPower";
     
-    public DeepDarknessPower(AbstractCreature owner, int amount)
+    public DeepDarknessPower(AbstractCreature owner, int amount, boolean upgraded)
     {
         super(owner, amount);
+        this.upgraded = upgraded;
     }
     
     //region parameters
@@ -58,7 +59,7 @@ public class DeepDarknessPower extends BcPowerBase
     {
         if (amount == 1)
         {
-            return "End of turn: NL Trigger the passive on all #yDark orbs. NL If you have an empty orb slot, NL Channel a #yDark orb. ";
+            return "End of turn: NL Trigger the passive on all #yDark orbs. NL If you have an empty orb slot, NL Channel a #yDark orb.";
         }
         else
         {
@@ -77,10 +78,9 @@ public class DeepDarknessPower extends BcPowerBase
                 addToBot(new BcDarkImpulseAction());
             }
             
-            addToBot(new TrueWaitAction(.1f));
-            
             if (AbstractDungeon.player.hasEmptyOrb())
             {
+                addToBot(new TrueWaitAction(.1f));
                 addToBot(new ChannelAction(new Dark()));
             }
         }

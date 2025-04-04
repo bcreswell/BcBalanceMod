@@ -51,8 +51,34 @@ public class BossChest extends AbstractChest
         {
             this.relics.clear();
             
-            relics.addAll(BcUtility.getRandomRelics(3, RelicTier.BOSS));
-            relics.addAll(BcUtility.getRandomRelics(2, RelicTier.RARE));
+            //bossToRare are boss relics that dont give energy and feel bad when they take up energy boss relic slots.
+            // but some can't be made rare easily because it would require ui rework (calling bell, tiny house).
+            ArrayList<String> bossToRare = BcUtility.getBossRelicsToTreatAsRare();
+            
+            ArrayList<String> toRemove = new ArrayList<>();
+            toRemove.addAll(bossToRare);
+            for(AbstractRelic r : AbstractDungeon.player.relics)
+            {
+                toRemove.add(r.relicId);
+            }
+            
+            //first 3 options show up in a triangle in the middle and are bossRelics - bossToRare
+            relics.addAll(BcUtility.getRandomRelics(3, RelicTier.BOSS, null, toRemove));
+            
+            toRemove.clear();
+            for(AbstractRelic r : AbstractDungeon.player.relics)
+            {
+                toRemove.add(r.relicId);
+            }
+            
+            bossToRare.addAll(BcUtility.getCharacterRelics());
+            
+            //the corners are rareRelics + bossToRare + class relics
+            relics.addAll(BcUtility.getRandomRelics(2, RelicTier.RARE, bossToRare, toRemove));
+            
+            //the first corner option is rareRelics + bossToRare
+            //the second corner option is class relics
+            //relics.addAll(BcUtility.getRandomRelics(1, null, BcUtility.getCharacterRelics(), toRemove));
         }
     }
     

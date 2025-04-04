@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -46,12 +47,26 @@ public class Skim extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Draw !M! cards.";
+        return applyConditionalHighlight(
+            isFocusZero(),
+            "Draw !M! cards. NL #g0 #gFocus: Draw 1 more.");
     }
     //endregion
     
+    @Override
+    public boolean isGlowingGold()
+    {
+        return BcUtility.getCurrentFocus() == 0;
+    }
+    
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new DrawCardAction(player, magicNumber));
+        int drawCount = magicNumber;
+        if (BcUtility.getCurrentFocus() == 0)
+        {
+            drawCount++;
+        }
+        
+        addToBot(new DrawCardAction(player, drawCount));
     }
 }

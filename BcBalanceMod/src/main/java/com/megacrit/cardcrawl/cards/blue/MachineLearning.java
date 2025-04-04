@@ -1,17 +1,23 @@
 package com.megacrit.cardcrawl.cards.blue;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.BcApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.powers.DrawPower;
+import com.megacrit.cardcrawl.powers.MachineLearningPower;
 
 public class MachineLearning extends BcPowerCardBase
 {
     public static final String ID = "Machine Learning";
+    
+    public static final int DamageThreshold = 2;
     
     //region card parameters
     @Override
@@ -29,7 +35,7 @@ public class MachineLearning extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return upgraded ? 0 : 1;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -59,12 +65,12 @@ public class MachineLearning extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Start of turn: NL Draw !M! additional card.";
+        return "When you take "+DamageThreshold+" or more total damage from an enemy's attack, gain !M! Dexterity.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new ApplyPowerAction(player, player, new DrawPower(player, magicNumber), magicNumber));
+        addToBot(new BcApplyPowerAction(new MachineLearningPower(player, magicNumber)));
     }
 }

@@ -39,12 +39,6 @@ public class EchoForm extends BcPowerCardBase
     }
     
     @Override
-    public boolean getEthereal()
-    {
-        return true;
-    }
-    
-    @Override
     public String getBaseDescription()
     {
         return "The first card you play each turn is played twice.";

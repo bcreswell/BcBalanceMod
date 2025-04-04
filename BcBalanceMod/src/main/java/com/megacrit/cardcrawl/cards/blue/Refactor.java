@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.megacrit.cardcrawl.cards.blue;
 
 import basemod.abstracts.CustomCard;
@@ -10,19 +5,6 @@ import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.ChooseOneCard;
 import com.megacrit.cardcrawl.actions.common.ExhaustAction;
 import com.megacrit.cardcrawl.actions.common.RefactorAction;
-import com.megacrit.cardcrawl.actions.watcher.ChooseOneAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardTags;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardTarget;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardType;
-import com.megacrit.cardcrawl.cards.colorless.BandageUp;
-import com.megacrit.cardcrawl.cards.colorless.Panacea;
-import com.megacrit.cardcrawl.cards.colorless.Purity;
-import com.megacrit.cardcrawl.cards.optionCards.BecomeAlmighty;
-import com.megacrit.cardcrawl.cards.optionCards.FameAndFortune;
-import com.megacrit.cardcrawl.cards.optionCards.LiveForever;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
@@ -59,13 +41,7 @@ public class Refactor extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
-    }
-    
-    @Override
-    public CardRarity getCardRarity()
-    {
-        return CardRarity.RARE;
+        return 0;
     }
     
     @Override
@@ -75,9 +51,22 @@ public class Refactor extends BcSkillCardBase
     }
     
     @Override
+    public boolean getRetain()
+    {
+        return upgraded;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.UNCOMMON;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
-        return "Exhaust any number of cards in your hand. Replace them with random upgraded cards of a the same color.";
+        String upgradeDescription = "upgraded "; //upgraded ? "upgraded " : "";
+        return "Exhaust a card and replace it with a random "+upgradeDescription+"card of the same color.";
     }
     //endregion
     

@@ -28,7 +28,7 @@ public class Glacier extends BcSkillCardBase
     }
     
     @Override
-    public int getChanneledOrbCount()
+    public int getOrbCountToChannel()
     {
         return getMagicNumber();
     }
@@ -54,7 +54,7 @@ public class Glacier extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 5 : 10;
+        return !upgraded ? 4 : 10;
     }
     
     @Override

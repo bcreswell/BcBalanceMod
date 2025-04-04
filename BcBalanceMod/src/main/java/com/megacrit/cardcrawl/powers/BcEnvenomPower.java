@@ -1,16 +1,14 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.megacrit.cardcrawl.powers;
 
+import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.BcApplyPowerAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.cards.DamageInfo.DamageType;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 
 public class BcEnvenomPower extends AbstractPower
@@ -31,34 +29,41 @@ public class BcEnvenomPower extends AbstractPower
         this.loadRegion("envenom");
     }
     
-    public void upgrade()
-    {
-        isUpgraded = true;
-        this.name = NAME + "+";
-        this.ID = "Envenom+";
-        this.updateDescription();
-    }
+//    public void upgrade()
+//    {
+//        isUpgraded = true;
+//        this.name = NAME + "+";
+//        this.ID = "Envenom+";
+//        this.updateDescription();
+//    }
     
     public void updateDescription()
     {
-        if (isUpgraded)
-        {
-            this.description = "Whenever an Attack deals damage, apply " + amount + " Poison.";
-        }
-        else
-        {
-            this.description = "Whenever an Attack deals unblocked damage, apply " + amount + " Poison.";
-        }
+        description = "Whenever an Attack deals unblocked damage, Inflict " + amount + " Poison.";
+        //description = "Whenever an Attack deals damage, apply " + amount + " Poison.";
+//        if (isUpgraded)
+//        {
+//            this.description = "Whenever an Attack deals damage, apply " + amount + " Poison.";
+//        }
+//        else
+//        {
+//            this.description = "Whenever an Attack deals unblocked damage, apply " + amount + " Poison.";
+//        }
     }
     
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature target)
     {
-        if (((damageAmount > 0) || isUpgraded) &&
-                    (target != this.owner) &&
-                    (info.type == DamageType.NORMAL))
+//        if ((target != this.owner) &&
+//            (info.type == DamageType.NORMAL))
+//        {
+        if ((damageAmount > 0) &&
+            (target != this.owner) &&
+            (info.type == DamageType.NORMAL))
         {
-            this.flash();
-            this.addToTop(new ApplyPowerAction(target, this.owner, new PoisonPower(target, this.owner, this.amount), this.amount, true));
+            flash();
+            PoisonPower poison = new PoisonPower(target, owner, amount);
+            poison.isQuiet = true;
+            addToTop(new BcApplyPowerAction(target, AbstractDungeon.player, poison, AbstractGameAction.AttackEffect.NONE, true));
         }
     }
     

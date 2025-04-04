@@ -23,7 +23,7 @@ public class Chrysalis extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 2;
+        return 1;
     }
     
     @Override
@@ -68,7 +68,14 @@ public class Chrysalis extends BcSkillCardBase
     {
         for (int i = 0; i < magicNumber; ++i)
         {
-            AbstractCard card = AbstractDungeon.returnTrulyRandomCardInCombat(AbstractCard.CardType.SKILL).makeCopy();
+            AbstractCard card = BcUtility.getRandomCard(
+                null,
+                CardType.SKILL,
+                false,
+                true,
+                false,
+                true);
+                
             if (upgraded)
             {
                 card.upgrade();

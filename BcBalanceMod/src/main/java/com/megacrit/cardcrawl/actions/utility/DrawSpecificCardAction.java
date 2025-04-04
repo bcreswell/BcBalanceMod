@@ -50,8 +50,12 @@ public class DrawSpecificCardAction extends AbstractGameAction
                     player.drawPile.removeCard(cardToDraw);
                     player.hand.addToTop(cardToDraw);
                     player.hand.refreshHandLayout();
-                    player.hand.applyPowers();
-                    player.hand.glowCheck();
+                    player.onCardDrawOrDiscard();
+                    
+                    for (AbstractPower power : player.powers)
+                    {
+                        power.onCardDraw(cardToDraw);
+                    }
                 }
             }
             else

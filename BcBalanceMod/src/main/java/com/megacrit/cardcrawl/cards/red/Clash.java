@@ -70,7 +70,7 @@ public class Clash extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Can only be played if you have no Skills, Powers or Curses in hand. NL Deal !D! damage.";
+        return "If you have no Skills, Powers, or Curses in hand, NL Deal !D! damage.";
     }
     //endregion
     

@@ -66,19 +66,21 @@ public class ConjureBlade extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
+        String upgradeDescription = "";
+        
         if (magicNumber == 0)
         {
-            return "Shuffle an *Expunger into your draw pile that attacks X times.";
+            return "Shuffle an "+upgradeDescription+"*Expunger into your draw pile that attacks X times.";
         }
         else
         {
-            return "Shuffle an *Expunger into your draw pile that attacks X+" + magicNumber + " times.";
+            return "Shuffle an "+upgradeDescription+"*Expunger into your draw pile that attacks X+" + magicNumber + " times.";
         }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new ConjureBladeAction(player, freeToPlayOnce, energyOnUse + magicNumber));
+        addToBot(new ConjureBladeAction(player, false, energyOnUse + magicNumber));
     }
 }

@@ -3,10 +3,7 @@ package com.megacrit.cardcrawl.cards.blue;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.defect.DecreaseMaxOrbAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.FocusPower;
 
@@ -30,7 +27,7 @@ public class Consume extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 2;
+        return 1;
     }
     
     @Override
@@ -48,25 +45,28 @@ public class Consume extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return 3;
+        return !upgraded ? 2 : 3;
     }
     
     @Override
     public boolean getExhaust()
     {
-        return !upgraded;
+        return true;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Gain !M! Focus. NL Lose 1 Orb slot.";
+        return "Lose 1 Orb slot to NL Gain !M! Focus.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new BcApplyPowerAction(new FocusPower(player, magicNumber)));
-        addToBot(new DecreaseMaxOrbAction(1));
+        if (getCurrentOrbSlotCount() > 0)
+        {
+            addToBot(new DecreaseMaxOrbAction(1));
+            addToBot(new BcApplyPowerAction(new FocusPower(player, magicNumber)));
+        }
     }
 }

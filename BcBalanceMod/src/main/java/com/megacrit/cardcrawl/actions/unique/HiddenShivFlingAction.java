@@ -30,7 +30,9 @@ public class HiddenShivFlingAction extends AbstractGameAction
     public void update()
     {
         int hiddenShivCount = BcUtility.getPowerAmount(HiddenShivPower.POWER_ID);
-        if (BcUtility.isPlayerInCombat() && !shouldCancelAction() && (hiddenShivCount > 0))
+        if (BcUtility.isPlayerInCombat() &&
+            !shouldCancelAction() &&
+            (hiddenShivCount > 0))
         {
             //addToTop and reverse order so that the shiv will resolve before the next shiv starts its fling
             //this makes it so it doesn't waste shivs when the target is already dead
@@ -42,6 +44,7 @@ public class HiddenShivFlingAction extends AbstractGameAction
             DamageInfo info = new DamageInfo(source, shiv.damage);
             info.base = shiv.damage;
             info.output = shiv.damage;
+            info.type = DamageInfo.DamageType.THORNS; //switch to thorns dmg to prevent triggering envenom, static discharge, etc.
             info.name = HiddenShivPower.POWER_ID; //used to prevent Hidden Shivs from triggering more Hidden Shivs
             addToTop(new DamageAction(target, info, AbstractGameAction.AttackEffect.SLASH_HORIZONTAL, true));
     

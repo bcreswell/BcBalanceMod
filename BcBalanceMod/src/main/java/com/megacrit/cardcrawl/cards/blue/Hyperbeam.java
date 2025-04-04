@@ -32,7 +32,7 @@ public class Hyperbeam extends BcAttackCardBase
     @Override
     public int getCost()
     {
-        return 2;
+        return 3;
     }
     
     @Override
@@ -56,13 +56,13 @@ public class Hyperbeam extends BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return 3;
+        return 2;
     }
     
     @Override
     public int getDamage()
     {
-        return !upgraded ? 22 : 30;
+        return !upgraded ? 26 : 34;
     }
     
     @Override

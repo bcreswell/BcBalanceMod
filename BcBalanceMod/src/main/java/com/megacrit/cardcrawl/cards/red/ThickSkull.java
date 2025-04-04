@@ -45,7 +45,7 @@ public class ThickSkull extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 5 : 8;
+        return !upgraded ? 4 : 7;
     }
     
     @Override

@@ -41,13 +41,13 @@ public class Blur extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 5 : 8;
+        return !upgraded ? 7 : 10;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Gain !B! Block. NL Retain your Block this turn.";
+        return "Gain !B! Block. NL Retain your Block.";
     }
     //endregion
     

@@ -49,17 +49,17 @@ public class ToolsOfTheTrade extends BcPowerCardBase
     }
     
     @Override
-    public CardRarity getCardRarity()
-    {
-        return CardRarity.RARE;
-    }
-    
-    @Override
     public boolean getInnate()
     {
         return true;
     }
     
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.UNCOMMON;
+    }
+
     @Override
     public String getBaseDescription()
     {

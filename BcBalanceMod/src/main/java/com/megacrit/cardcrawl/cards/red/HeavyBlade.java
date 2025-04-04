@@ -19,7 +19,7 @@ public class HeavyBlade extends AbstractCard {
     
     public HeavyBlade() {
         super("Heavy Blade", cardStrings.NAME, "red/attack/heavy_blade", 2, cardStrings.DESCRIPTION, AbstractCard.CardType.ATTACK, AbstractCard.CardColor.RED, AbstractCard.CardRarity.UNCOMMON, AbstractCard.CardTarget.ENEMY);
-        this.baseDamage = 14;
+        this.baseDamage = 12;
         this.baseMagicNumber = 3;
         this.magicNumber = this.baseMagicNumber;
     }

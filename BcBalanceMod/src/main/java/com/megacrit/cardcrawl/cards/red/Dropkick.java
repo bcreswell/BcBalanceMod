@@ -51,13 +51,13 @@ public class Dropkick extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 6 : 10;
+        return !upgraded ? 7 : 11;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL If the enemy has Vulnerable, NL gain [R] and NL draw 1 card.";
+        return "Deal !D! damage. NL If the enemy is Vulnerable, NL gain [R] and NL draw 1 card.";
     }
     //endregion
     

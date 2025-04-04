@@ -1860,11 +1860,11 @@
   },
   "Expunger": {
     "NAME": "Expunger",
-    "DESCRIPTION": "Retain. NL Deal !D! damage X+1 times.",
+    "DESCRIPTION": "Deal !D! damage X+1 times.",
     "UPGRADE_DESCRIPTION": "",
     "EXTENDED_DESCRIPTION": [
-      "Retain. NL Deal !D! damage !M! times.",
-      "Retain. NL Deal !D! damage !M! time."
+      "Deal !D! damage !M! times.",
+      "Deal !D! damage !M! time."
     ]
   },
   "WaveOfTheHand2": {

@@ -40,7 +40,7 @@ public class CrushJoints extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
@@ -52,19 +52,21 @@ public class CrushJoints extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 6 : 12;
+        return !upgraded ? 7 : 9;
     }
     
     @Override
     public int getMagicNumber()
     {
-        return 2;
+        return !upgraded ? 2 : 3;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Calm: Inflict !M! Vulnerable.";
+        return applyConditionalHighlight(
+            isPlayerInStance(CalmStance.STANCE_ID),
+            "Deal !D! damage. NL Calm: Inflict !M! Vulnerable.");
     }
     //endregion
     

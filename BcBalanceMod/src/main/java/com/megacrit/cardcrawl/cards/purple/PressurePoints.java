@@ -46,11 +46,11 @@ public class PressurePoints extends BcSkillCardBase
     {
         return 1;
     }
-    
+
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 8 : 11;
+        return !upgraded ? 8 : 12;
     }
     
     @Override

@@ -42,7 +42,13 @@ public class SpeedOfFate extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
+    }
+    
+    @Override
+    public boolean getInnate()
+    {
+        return false;
     }
     
     @Override
@@ -60,20 +66,26 @@ public class SpeedOfFate extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 4 : 5;
+        return 5;
     }
-    
+
+    int getCardDrawCount()
+    {
+        return !upgraded ? 0 : 1;
+    }
+
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
+        String description = "Scry " + BcUtility.getScryString(getMagicNumber()) + ".";
+
+        int cardDrawCount = getCardDrawCount();
+        if (cardDrawCount > 0)
         {
-            return "Scry " + BcUtility.getScryString(getMagicNumber()) + ".";
+            description += " NL Draw "+BcUtility.getCardCountString(cardDrawCount)+".";
         }
-        else
-        {
-            return "Scry " + BcUtility.getScryString(getMagicNumber()) + ". NL Draw a Card.";
-        }
+
+        return description;
     }
     //endregion
     
@@ -82,9 +94,11 @@ public class SpeedOfFate extends BcSkillCardBase
     {
         addToBot(new VFXAction(new ThirdEyeEffect(player.hb.cX, player.hb.cY)));
         addToBot(new ScryAction(magicNumber));
-        if (upgraded)
+        
+        int cardDrawCount = getCardDrawCount();
+        if (cardDrawCount > 0)
         {
-            addToBot(new DrawCardAction(1));
+            addToBot(new DrawCardAction(cardDrawCount));
         }
     }
 }

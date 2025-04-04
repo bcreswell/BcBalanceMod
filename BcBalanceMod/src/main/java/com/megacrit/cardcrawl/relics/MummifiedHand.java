@@ -27,7 +27,7 @@ public class MummifiedHand extends AbstractRelic {
     }
 
     public String getUpdatedDescription() {
-        return this.DESCRIPTIONS[0];
+        return "Whenever you play a Power, a random card in your hand costs 1 less this turn.";
     }
 
     public void onUseCard(AbstractCard card, UseCardAction action) {
@@ -74,7 +74,7 @@ public class MummifiedHand extends AbstractRelic {
 
                 if (c != null) {
                     logger.info("Mummified hand: " + c.name);
-                    c.setCostForTurn(0);
+                    if (c.costForTurn > 0) c.setCostForTurn(c.costForTurn - 1);
                 } else {
                     logger.info("ERROR: MUMMIFIED HAND NOT WORKING");
                 }

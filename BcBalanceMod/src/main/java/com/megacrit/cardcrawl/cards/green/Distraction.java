@@ -19,6 +19,8 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
+import java.util.Objects;
+
 public class Distraction extends BcSkillCardBase
 {
     public static final String ID = "Distraction";
@@ -70,7 +72,27 @@ public class Distraction extends BcSkillCardBase
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        AbstractCard cardToCreate = AbstractDungeon.returnTrulyRandomCardInCombat(CardType.SKILL).makeCopy();
+        AbstractCard cardToCreate = null;
+        while(cardToCreate == null)
+        {
+            cardToCreate = BcUtility.getRandomCard(
+                null,
+                CardType.SKILL,
+                false,
+                true,
+                false,
+                true);
+            
+            //reroll if its trying to create another distraction, X-cost, or card that exhausts
+            if ((cardToCreate == null) ||
+                (Objects.equals(cardToCreate.cardID, this.cardID)) ||
+                (cardToCreate.exhaust) ||
+                (cardToCreate.cost <= 0))
+            {
+                cardToCreate = null;
+            }
+        }
+            
         if (cardToCreate.cost > 0)
         {
             if (upgraded)

@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.megacrit.cardcrawl.cards.red;
 
 import bcBalanceMod.baseCards.*;
@@ -36,7 +31,7 @@ public class Bash extends BcAttackCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 2 : 1;
+        return 2;
     }
     
     @Override
@@ -54,13 +49,13 @@ public class Bash extends BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return 3;
+        return !upgraded ? 2 : 3;
     }
     
     @Override
     public int getDamage()
     {
-        return 8;
+        return !upgraded ? 8 : 15;
     }
     
     @Override
@@ -72,7 +67,7 @@ public class Bash extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Apply !M! Vulnerable.";
+        return "Deal !D! damage. NL Inflict !M! Vulnerable.";
     }
     //endregion
     

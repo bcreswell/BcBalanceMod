@@ -7,8 +7,7 @@ package com.megacrit.cardcrawl.cards.green;
 
 import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
-import com.megacrit.cardcrawl.actions.common.DamageAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
@@ -59,7 +58,12 @@ public class Neutralize extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 4 : 6;
+        return !upgraded ? 3 : 4;
+    }
+    
+    int getBlockRemoval()
+    {
+        return !upgraded ? 7 : 10;
     }
     
     @Override
@@ -71,13 +75,14 @@ public class Neutralize extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Inflict !M! Weak.";
+        return "Remove "+getBlockRemoval()+" Block from an enemy. NL Deal !D! damage. NL Inflict !M! Weak.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
+        addToBot(new RemoveSomeBlockAction(monster, player, getBlockRemoval()));
         addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AttackEffect.BLUNT_HEAVY));
-        addToBot(new ApplyPowerAction(monster, player, new WeakPower(monster, magicNumber, false), magicNumber));
+        addToBot(new BcApplyPowerAction(monster, new WeakPower(monster, magicNumber, false)));
     }
 }

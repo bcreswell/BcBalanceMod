@@ -42,7 +42,7 @@ public class Omniscience extends BcSkillCardBase
     {
         return true;
     }
-    
+
     @Override
     public int getMagicNumber()
     {
@@ -52,7 +52,7 @@ public class Omniscience extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Choose 1 of your cards. NL Play the chosen card twice and exhaust it.";
+        return "Pick a card from your hand, draw or discard piles. Play it !M! times then exhaust it.";
     }
     
     @Override

@@ -16,7 +16,7 @@ public class EvokeAllOrbsAction extends AbstractGameAction
         for (int i = 0; i < AbstractDungeon.player.orbs.size(); ++i)
         {
             addToTop(new EvokeOrbAction(1));
-            addToTop(new TrueWaitAction(.2f));
+            addToTop(new TrueWaitAction(.1f));
         }
         
         isDone = true;

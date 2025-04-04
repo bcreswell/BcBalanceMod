@@ -1,12 +1,14 @@
 package com.megacrit.cardcrawl.cards.blue;
 
 import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.defect.ChannelAction;
 import com.megacrit.cardcrawl.actions.defect.FissionAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.orbs.Plasma;
 
 public class Fission extends BcSkillCardBase
 {
@@ -34,7 +36,7 @@ public class Fission extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return 0;
     }
     
     @Override
@@ -44,26 +46,32 @@ public class Fission extends BcSkillCardBase
     }
     
     @Override
-    public int getNumberOfOrbsEvokedDirectly()
-    {
-        return 10;
-    }
-    
-    @Override
     public int getMagicNumber()
     {
-        return 1;
+        return 2;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Evoke all your Orbs. NL Gain [B] and draw !M! card for each Orb Evoked.";
+        if (!upgraded)
+        {
+            return "Remove all your Orbs. NL Gain [B] and draw !M! cards for each Orb removed.";
+        }
+        else
+        {
+            return "Remove all your Orbs. NL Gain [B] and draw !M! cards for each Orb removed. NL Channel a Plasma.";
+        }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new FissionAction(true));
+        addToBot(new FissionAction(false));
+        
+        if (upgraded)
+        {
+            addToBot(new ChannelAction(new Plasma()));
+        }
     }
 }

@@ -25,27 +25,20 @@ public class BladeFuryAction extends AbstractGameAction
     public void update()
     {
         int theSize = AbstractDungeon.player.hand.size();
-        if (this.isUpgraded)
+        if (isUpgraded)
         {
             AbstractCard s = (new Shiv()).makeCopy();
             s.upgrade();
-            this.addToTop(new MakeTempCardInHandAction(s, theSize));
+            addToTop(new MakeTempCardInHandAction(s, theSize));
         }
         else
         {
-            this.addToTop(new MakeTempCardInHandAction(new Shiv(), theSize));
+            addToTop(new MakeTempCardInHandAction(new Shiv(), theSize));
         }
         
-        if (isUpgraded)
-        {
-            this.addToBot(new GainBlockAction(AbstractDungeon.player, AbstractDungeon.player, theSize*2));
-        }
-        else
-        {
-            this.addToBot(new GainBlockAction(AbstractDungeon.player, AbstractDungeon.player, theSize));
-        }
+        addToBot(new GainBlockAction(AbstractDungeon.player, AbstractDungeon.player, theSize));
         
-        this.addToTop(new DiscardAction(AbstractDungeon.player, AbstractDungeon.player, theSize, false));
-        this.isDone = true;
+        addToTop(new DiscardAction(AbstractDungeon.player, AbstractDungeon.player, theSize, false));
+        isDone = true;
     }
 }

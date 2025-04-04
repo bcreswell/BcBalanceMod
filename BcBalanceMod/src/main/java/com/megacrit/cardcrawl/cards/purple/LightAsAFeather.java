@@ -47,7 +47,7 @@ public class LightAsAFeather extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 3 : 5;
+        return !upgraded ? 5 : 8;
     }
     
     @Override
@@ -59,7 +59,7 @@ public class LightAsAFeather extends BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 2 : 3;
+        return 1;
     }
     
     @Override

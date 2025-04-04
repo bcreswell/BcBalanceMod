@@ -42,7 +42,7 @@ public class BodySlam extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
@@ -56,26 +56,30 @@ public class BodySlam extends BcAttackCardBase
     {
         return 0;
     }
-    
+
+    public float getBlockToDmgFactor()
+    {
+        return 1;
+    }
+
     @Override
     public String getBaseDescription()
     {
-        String blockLosePercent = "25%";//!upgraded ? "30%" : "20%";
-        
         String description = null;
+
+        int blockToLose = getBlockToLose();
         if (BcUtility.isPlayerInCombat())
         {
-            int blockToLose = getBlockToLose();
-            description = "Deal !D! damage (based on your Block). NL Then lose " + blockToLose + " Block (" + blockLosePercent + ").";
+            description = "Deal your Block as Damage (!D!).";
         }
         else
         {
-            description = "Deal damage equal to your Block. NL Then lose " + blockLosePercent + " of your Block.";
+            description = "Deal your Block as Damage.";
         }
         
-        if (upgraded)
+        if (blockToLose > 0)
         {
-            description += " NL Draw a card.";
+            description += " NL Then lose " + blockToLose + " Block.";
         }
         
         return description;
@@ -91,17 +95,15 @@ public class BodySlam extends BcAttackCardBase
             bodySlamDmg += AbstractDungeon.player.currentBlock;
             bodySlamDmg += BcUtility.getPowerAmount(GhostlyBlockPower.POWER_ID);
         }
+
+        bodySlamDmg = (int)(bodySlamDmg * getBlockToDmgFactor());
         
         return bodySlamDmg;
     }
     
     int getBlockToLose()
     {
-        int ghostlyBlock = BcUtility.getPowerAmount(GhostlyBlockPower.POWER_ID);
-        int totalBlock = AbstractDungeon.player.currentBlock + ghostlyBlock;
-        
-        return (int) ((float) totalBlock * .25f);
-        //return (int) (!upgraded ? (totalBlock * .3f) : (totalBlock * .2f));
+        return !upgraded ? 5 : 0;
     }
     
     public void applyPowers()
@@ -129,7 +131,7 @@ public class BodySlam extends BcAttackCardBase
         calculateCardDamage(monster);
         addToBot(new DamageAction(monster, new DamageInfo(player, damage, DamageType.NORMAL), AttackEffect.BLUNT_HEAVY));
         
-        int blockToRemove = getBlockToLose();
+        int blockToRemove = Math.min(getBlockToLose(), player.currentBlock);
         
         if (blockToRemove > 0)
         {
@@ -141,11 +143,6 @@ public class BodySlam extends BcAttackCardBase
             {
                 addToBot(new GainBlockAction(player, -blockToRemove));
             }
-        }
-        
-        if (upgraded)
-        {
-            addToBot(new DrawCardAction(1));
         }
     }
 }

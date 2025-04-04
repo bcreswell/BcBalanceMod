@@ -55,14 +55,7 @@ public class EmptyMind extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        if (magicNumber == 1)
-        {
-            return "Draw !M! card. NL " + EmptyBlahAction.EmptyDescription;
-        }
-        else
-        {
-            return "Draw !M! cards. NL " + EmptyBlahAction.EmptyDescription;
-        }
+        return "Draw "+BcUtility.getCardCountString(magicNumber)+". NL NL " + EmptyBlahAction.GetEmptyDescription();
     }
     //endregion
     

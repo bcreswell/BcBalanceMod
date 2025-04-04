@@ -4,6 +4,7 @@ import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.actions.defect.ScrapeAction;
 import com.megacrit.cardcrawl.actions.defect.ScrapeFollowUpAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -45,7 +46,7 @@ public class Scrape extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
@@ -57,13 +58,14 @@ public class Scrape extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 7 : 11;
+        return !upgraded ? 7 : 10;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Draw any zero cost cards from the next !M! cards of your draw pile.";
+        //return "Deal !D! damage. NL Draw any zero cost cards from the top !M! cards of your draw pile.";
+        return "Deal !D! damage. NL Draw !M! cards and Discard any that do not cost 0.";
     }
     //endregion
     
@@ -75,6 +77,7 @@ public class Scrape extends BcAttackCardBase
         }
         
         addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.SLASH_HEAVY));
-        addToBot(new BcScrapeAction(magicNumber));
+        addToBot(new DrawCardAction(magicNumber, new ScrapeFollowUpAction()));
+        //addToBot(new BcScrapeAction(magicNumber));
     }
 }

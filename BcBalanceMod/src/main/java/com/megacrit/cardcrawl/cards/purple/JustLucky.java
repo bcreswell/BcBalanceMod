@@ -44,24 +44,33 @@ public class JustLucky extends BcAttackCardBase
     {
         return CardRarity.RARE;
     }
-    
+
+    //4*2*3 = 24
+    //5*2*3 = 30
+    //6*2*3 = 36
     @Override
     public int getDamage()
     {
-        return 4;
+        return !upgraded ? 4 : 5;
     }
     
     @Override
     public int getBlock()
     {
-        return 3;
+        return !upgraded ? 3 : 4;
     }
     
     @Override
     public int getMagicNumber()
     {
         //scry
-        return 2;
+        return !upgraded ? 2 : 3;
+    }
+
+    public int getCardDrawCount()
+    {
+        //return !upgraded ? 0 : 1;
+        return 0;
     }
     
     @Override
@@ -73,25 +82,28 @@ public class JustLucky extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
+        int cardDrawCount = getCardDrawCount();
+        if (cardDrawCount > 0)
         {
-            return "Scry " + BcUtility.getScryString(getMagicNumber()) + ". NL Gain !B! Block. NL Deal !D! damage. NL 50% chance: 3x damage.";
+            return "Draw "+cardDrawCount+". NL Scry " + BcUtility.getScryString(getMagicNumber()) + ". NL Gain !B! Block. NL Deal !D! damage. NL 50% chance: 3x damage.";
         }
         else
         {
-            return "Draw 1. NL Scry " + BcUtility.getScryString(getMagicNumber()) + ". NL Gain !B! Block. NL Deal !D! damage. NL 50% chance: 3x damage.";
+            return "Scry " + BcUtility.getScryString(getMagicNumber()) + ". NL Gain !B! Block. NL Deal !D! damage. NL 50% chance: 3x damage.";
         }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        if (upgraded)
+        int cardDrawCount = getCardDrawCount();
+        if (cardDrawCount > 0)
         {
-            addToBot(new DrawCardAction(1));
-            //wait to give them time to see the drawn card before scry window pops up
+            addToBot(new DrawCardAction(cardDrawCount));
+            //wait to give them time to see the drawn cards before scry window pops up
             addToBot(new TrueWaitAction(.8f));
         }
+
         addToBot(new ScryAction(magicNumber));
         addToBot(new GainBlockAction(player, player, block));
         addToBot(new JustLuckyAction(monster, player, this));

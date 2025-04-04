@@ -23,4 +23,9 @@ public class TrueWaitAction extends AbstractGameAction
     {
         this.tickDuration();
     }
+
+    @Override
+    protected boolean shouldCancelAction() {
+        return false;
+    }
 }

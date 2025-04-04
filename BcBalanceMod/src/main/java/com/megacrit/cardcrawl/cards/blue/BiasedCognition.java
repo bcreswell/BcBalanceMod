@@ -34,7 +34,7 @@ public class BiasedCognition extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return 2;
     }
     
     @Override
@@ -58,7 +58,7 @@ public class BiasedCognition extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Gain !M! Focus. NL Lose !M! Focus over !M! turns.";
+        return "Gain !M! Focus that decays over !M! turns.";
     }
     //endregion
     

@@ -59,11 +59,11 @@ public class ConserveEnergyPower extends BcPowerBase
     {
         if (amount <= 1)
         {
-            return "Any left over #yEnergy will be conserved for next turn.";
+            return "Any left over #yEnergy will be Retained for next turn.";
         }
         else
         {
-            return "Any left over #yEnergy will be conserved for next turn. #b" + amount + " turns remaining.";
+            return "Any left over #yEnergy will be Retained for next turn. #b" + amount + " turns remaining.";
         }
     }
     //endregion

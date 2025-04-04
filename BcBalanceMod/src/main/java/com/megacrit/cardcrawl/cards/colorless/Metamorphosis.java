@@ -23,7 +23,7 @@ public class Metamorphosis extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 2;
+        return 1;
     }
     
     @Override
@@ -68,7 +68,13 @@ public class Metamorphosis extends BcSkillCardBase
     {
         for (int i = 0; i < this.magicNumber; ++i)
         {
-            AbstractCard card = AbstractDungeon.returnTrulyRandomCardInCombat(AbstractCard.CardType.ATTACK).makeCopy();
+            AbstractCard card = BcUtility.getRandomCard(
+                null,
+                CardType.ATTACK,
+                false,
+                true,
+                false,
+                true);
             if (upgraded)
             {
                 card.upgrade();

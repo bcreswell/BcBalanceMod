@@ -34,13 +34,13 @@ public class SecondWind extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
     public int getBlock()
     {
-        return !upgraded ? 5 : 7;
+        return !upgraded ? 6 : 8;
     }
     
     @Override

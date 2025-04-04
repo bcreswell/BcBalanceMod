@@ -49,20 +49,23 @@ public class AllNaturalIngredientsPower extends BcPowerBase
     @Override
     public String getBaseDescription()
     {
-        return "For each #yWeak you inflict on an enemy, also inflict #b" + amount + " #yPoison.";
+        return "When you Inflict #yWeak on an enemy, also Inflict #b" + amount + " #yPoison.";
     }
     //endregion
     
     public void onApplyPower(AbstractPower power, AbstractCreature target, AbstractCreature source)
     {
-        if ((target != AbstractDungeon.player) && (power.ID.equals(WeakPower.POWER_ID)))
+        if ((target != AbstractDungeon.player) &&
+            (power.ID.equals(WeakPower.POWER_ID)))
         {
             flash();
-            //apply it multiple times for sake of snecko skull
-            for (int i = 0; i < power.amount; i++)
-            {
-                addToBot(new BcApplyPowerAction(target, source, new PoisonPower(target, source, amount), AbstractGameAction.AttackEffect.POISON));
-            }
+            //dont apply it multiple times because that's way too strong with snecko skull and Sadistic Nature
+//            for (int i = 0; i < weak.amount; i++)
+//            {
+//                addToBot(new BcApplyPowerAction(target, source, new PoisonPower(target, source, amount), AbstractGameAction.AttackEffect.POISON));
+//            }
+            
+            addToBot(new BcApplyPowerAction(target, source, new PoisonPower(target, source, amount), AbstractGameAction.AttackEffect.POISON, false));
         }
     }
 }

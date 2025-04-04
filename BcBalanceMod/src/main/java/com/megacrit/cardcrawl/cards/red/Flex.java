@@ -19,21 +19,9 @@ public class Flex extends BcSkillCardBase
     }
     
     @Override
-    public int getCost()
-    {
-        return 0;
-    }
-    
-    @Override
     public String getId()
     {
         return ID;
-    }
-    
-    @Override
-    public int getMagicNumber()
-    {
-        return !upgraded ? 1 : 2;
     }
     
     @Override
@@ -43,9 +31,21 @@ public class Flex extends BcSkillCardBase
     }
     
     @Override
+    public int getCost()
+    {
+        return 0;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 3 : 5;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
-        return "Gain !M! temporary Strength. NL Draw a card.";
+        return "Gain !M! temporary Strength.";
     }
     //endregion
     
@@ -53,7 +53,5 @@ public class Flex extends BcSkillCardBase
     {
         addToBot(new BcApplyPowerAction(new StrengthPower(player, magicNumber)));
         addToBot(new BcApplyPowerAction(new LoseStrengthPower(player, magicNumber)));
-        
-        addToBot(new DrawCardAction(1));
     }
 }

@@ -2,6 +2,7 @@ package com.megacrit.cardcrawl.cards.red;
 
 import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.BcApplyPowerAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -47,12 +48,12 @@ public class FireBreathing extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Whenever you draw a Status card, deal !M! damage to ALL enemies.";
+        return "Whenever you draw a Status card, deal !M! damage to ALL enemies. NL Burns trigger this twice.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new ApplyPowerAction(player, player, new FireBreathingPower(player, magicNumber), magicNumber));
+        addToBot(new BcApplyPowerAction(new FireBreathingPower(player, magicNumber)));
     }
 }

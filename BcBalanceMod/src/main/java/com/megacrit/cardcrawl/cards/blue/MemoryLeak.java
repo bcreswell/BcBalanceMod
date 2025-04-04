@@ -12,6 +12,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.defect.AnimateOrbAction;
 import com.megacrit.cardcrawl.actions.defect.EvokeOrbAction;
+import com.megacrit.cardcrawl.actions.defect.EvokeWithoutRemovingOrbAction;
 import com.megacrit.cardcrawl.actions.defect.IncreaseMaxOrbAction;
 import com.megacrit.cardcrawl.actions.utility.*;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -43,7 +44,13 @@ public class MemoryLeak extends BcAttackCardBase
     {
         return 1;
     }
-    
+
+    @Override
+    public int getEvokeIterations()
+    {
+        return !upgraded ? 1 : 2;
+    }
+
     @Override
     public String getImagePath()
     {
@@ -65,7 +72,7 @@ public class MemoryLeak extends BcAttackCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 2 : 1;
+        return 2;
     }
     
     @Override
@@ -83,21 +90,34 @@ public class MemoryLeak extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Evoke your next orb. NL Gain an orb slot.";
+        if (!upgraded)
+        {
+            return "Deal !D! damage. NL Evoke your next orb. NL Gain an extra orb slot.";
+        }
+        else
+        {
+            return "Deal !D! damage. NL Evoke your next orb twice. NL Gain an extra orb slot.";
+        }
     }
     //endregion
     
-    public void use(AbstractPlayer player, AbstractMonster monster)
-    {
+    public void use(AbstractPlayer player, AbstractMonster monster) {
         addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_LIGHT));
+
         addToBot(new TrueWaitAction(.1f));
-        
+
+        if (upgraded)
+        {
+            addToBot(new AnimateOrbAction(1));
+            addToBot(new EvokeWithoutRemovingOrbAction(1, true));
+        }
+
         addToBot(new AnimateOrbAction(1));
         addToBot(new EvokeOrbAction(1));
+
         addToBot(new TrueWaitAction(.1f));
-        
-        if (player.maxOrbs < 10)
-        {
+
+        if (player.maxOrbs < 10) {
             addToBot(new IncreaseMaxOrbAction(1));
         }
     }

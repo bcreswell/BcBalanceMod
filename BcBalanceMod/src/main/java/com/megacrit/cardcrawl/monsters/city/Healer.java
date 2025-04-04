@@ -70,14 +70,14 @@ public class Healer extends AbstractMonster
         {
             magicDmg = 9;
             strAmt = 2;
-            healAmt = 38;
+            healAmt = 30;
             healThreshold = 30;
         }
         else if (AbstractDungeon.ascensionLevel >= 2)
         {
             magicDmg = 9;
             strAmt = 2;
-            healAmt = 24;
+            healAmt = 20;
             healThreshold = 20;
         }
         else

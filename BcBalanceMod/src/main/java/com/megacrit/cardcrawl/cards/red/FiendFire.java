@@ -59,7 +59,7 @@ public class FiendFire extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 7 : 10;
+        return !upgraded ? 8 : 11;
     }
     
     @Override

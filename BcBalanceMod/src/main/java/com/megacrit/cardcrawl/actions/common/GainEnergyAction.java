@@ -15,13 +15,13 @@ public class GainEnergyAction extends AbstractGameAction
     public GainEnergyAction(int amount)
     {
         setValues(AbstractDungeon.player, AbstractDungeon.player, 0);
-        duration = Settings.ACTION_DUR_FAST;
+        duration = Settings.ACTION_DUR_XFAST;
         energyGain = amount;
     }
     
     public void update()
     {
-        if (duration == Settings.ACTION_DUR_FAST)
+        if (duration == Settings.ACTION_DUR_XFAST)
         {
             int newEnergyAmount = energyGain + EnergyPanel.totalCount;
             if (newEnergyAmount < 0)

@@ -30,7 +30,7 @@ public class DemonFormPower extends AbstractPower
     
     public void updateParticles()
     {
-        if (!Settings.DISABLE_EFFECTS)
+        if (!Settings.DISABLE_EFFECTS && (amount > 0))
         {
             this.particleTimer -= Gdx.graphics.getDeltaTime();
             if (this.particleTimer < 0.0F)

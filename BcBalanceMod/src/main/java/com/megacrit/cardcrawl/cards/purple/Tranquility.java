@@ -50,54 +50,62 @@ public class Tranquility extends BcSkillCardBase
     }
     
     @Override
-    public boolean getExhaust()
-    {
-        return !upgraded;
-    }
-    
-    @Override
     public int getMagicNumber()
     {
-        return 0; //!upgraded ? 0 : 1;
+        return !upgraded ? 0 : 3;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (magicNumber > 0)
+        if (getMagicNumber() == 0)
         {
-            return "Inflict !M! Weak NL on ALL Enemies. NL Enter Calm.";
+            return "Enter Calm.";
         }
         else
         {
-            return "Enter Calm.";
+            return "Enter Calm. NL When Retained, gain !M! Block.";
         }
     }
     //endregion
     
+    @Override
+    public void onRetained()
+    {
+        if ((magicNumber > 0) && (AbstractDungeon.player != null))
+        {
+            addToBot(new GainBlockAction(AbstractDungeon.player, block));
+        }
+    }
+    
     public void use(AbstractPlayer player, AbstractMonster notUsed)
     {
-        if (magicNumber > 0)
+        addToBot(new ChangeStanceAction("Calm"));
+        
+        if (block > 0)
         {
-            addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.BLUE_TEXT_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.2F));
-            
-            //inflict Weak on all enemies
-            for (AbstractMonster monster : AbstractDungeon.getCurrRoom().monsters.monsters)
-            {
-                addToBot(
-                        new ApplyPowerAction(
-                                monster,
-                                player,
-                                new WeakPower(
-                                        monster,
-                                        magicNumber,
-                                        false),
-                                magicNumber,
-                                true,
-                                AbstractGameAction.AttackEffect.NONE));
-            }
+            addToBot(new GainBlockAction(player, block));
         }
         
-        addToBot(new ChangeStanceAction("Calm"));
+//        if (magicNumber > 0)
+//        {
+//            addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.BLUE_TEXT_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.2F));
+//
+//            //inflict Weak on all enemies
+//            for (AbstractMonster monster : AbstractDungeon.getCurrRoom().monsters.monsters)
+//            {
+//                addToBot(
+//                        new ApplyPowerAction(
+//                                monster,
+//                                player,
+//                                new WeakPower(
+//                                        monster,
+//                                        magicNumber,
+//                                        false),
+//                                magicNumber,
+//                                true,
+//                                AbstractGameAction.AttackEffect.NONE));
+//            }
+//        }
     }
 }

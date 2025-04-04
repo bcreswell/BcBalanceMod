@@ -33,7 +33,7 @@ public class WheelKick extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
     }
     
     @Override
@@ -45,13 +45,19 @@ public class WheelKick extends BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return 2;
+        return !upgraded ? 4 : 5;
+    }
+    
+    @Override
+    public boolean getRetain()
+    {
+        return true;
     }
     
     @Override
     public int getDamage()
     {
-        return !upgraded ? 15 : 20;
+        return !upgraded ? 12 : 16;
     }
     
     @Override
@@ -63,19 +69,24 @@ public class WheelKick extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Draw !M! cards and NL Retain them.";
+        return "Deal !D! damage. NL Temporarily reduce the enemy's Strength by !M!.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_HEAVY));
+        applyTempStrengthLoss(magicNumber, player, monster);
+    }
+    
+    void applyTempStrengthLoss(int strengthLoss, AbstractPlayer player, AbstractMonster monster)
+    {
+        addToBot(new ApplyPowerAction(monster, player, new StrengthPower(monster, -strengthLoss), -strengthLoss, true, AbstractGameAction.AttackEffect.NONE));
         
-        if (!BcUtility.playerHasPower(NoDrawPower.POWER_ID))
+        //only do strength up if the strength down wasn't blocked by artifact
+        if (monster.getPower("Artifact") == null)
         {
-            addToBot(new BcApplyPowerAction(new RetainDrawnCardsPower(player, magicNumber)));
+            addToBot(new ApplyPowerAction(monster, player, new GainStrengthPower(monster, strengthLoss), strengthLoss, true, AbstractGameAction.AttackEffect.NONE));
         }
-        
-        addToBot(new DrawCardAction(player, magicNumber));
     }
 }

@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.megacrit.cardcrawl.actions.unique;
 
 import bcBalanceMod.BcUtility;
@@ -26,6 +21,7 @@ public class DiscoveryImprovedAction extends AbstractGameAction
     AbstractCard.CardRarity cardRarity;
     boolean upgradeCard = false;
     String generatorId;
+    boolean includeForeign = false;
     
     public DiscoveryImprovedAction(int choiceCount, boolean makeItFree, boolean upgradeCard, AbstractCard.CardType cardType,
                                    AbstractCard.CardRarity cardRarity)
@@ -37,6 +33,18 @@ public class DiscoveryImprovedAction extends AbstractGameAction
         this.cardRarity = cardRarity;
         actionType = ActionType.CARD_MANIPULATION;
         duration = Settings.ACTION_DUR_FAST;
+    }
+    public DiscoveryImprovedAction(int choiceCount, boolean makeItFree, boolean upgradeCard, AbstractCard.CardType cardType,
+                                   AbstractCard.CardRarity cardRarity, boolean includeForeign)
+    {
+        this.choiceCount = choiceCount;
+        this.makeItFree = makeItFree;
+        this.upgradeCard = upgradeCard;
+        this.cardType = cardType;
+        this.cardRarity = cardRarity;
+        actionType = ActionType.CARD_MANIPULATION;
+        duration = Settings.ACTION_DUR_FAST;
+        this.includeForeign = includeForeign;
     }
     
     public DiscoveryImprovedAction(int choiceCount, boolean makeItFree, boolean upgradeCard, AbstractCard.CardType cardType,
@@ -74,6 +82,7 @@ public class DiscoveryImprovedAction extends AbstractGameAction
                     if (makeItFree)
                     {
                         discoveryCard.setCostForTurn(0);
+                        BcUtility.makeCardTemporary(discoveryCard);
                     }
                     
                     discoveryCard.current_x = -1000.0F * Settings.xScale;
@@ -100,10 +109,12 @@ public class DiscoveryImprovedAction extends AbstractGameAction
         ArrayList<AbstractCard> choices = BcUtility.getRandomCards(
                 cardRarity,
                 cardType,
+                includeForeign,
+                true,
+                includeForeign,
+                choiceCount,
                 false,
                 true,
-                false,
-                choiceCount,
                 generatorId);
         
         if (upgradeCard)

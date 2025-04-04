@@ -46,12 +46,6 @@ public class Terror extends BcSkillCardBase
     }
     
     @Override
-    public boolean getInnate()
-    {
-        return false;
-    }
-    
-    @Override
     public boolean getExhaust()
     {
         return true;
@@ -60,13 +54,13 @@ public class Terror extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        if (upgraded)
+        if (!upgraded)
         {
-            return "Strip all Artifact from the target. NL Inflict 99 Vulnerable.";
+            return "Inflict 99 Vulnerable.";
         }
         else
         {
-            return "Inflict 99 Vulnerable.";
+            return "Strip all Artifact from the target. NL Inflict 99 Vulnerable.";
         }
     }
     //endregion

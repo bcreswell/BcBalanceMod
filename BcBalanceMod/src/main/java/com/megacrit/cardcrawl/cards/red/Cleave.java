@@ -59,7 +59,7 @@ public class Cleave extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 15 : 22;
+        return !upgraded ? 16 : 22;
     }
     
     @Override

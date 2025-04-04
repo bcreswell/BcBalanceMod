@@ -56,7 +56,7 @@ public class QuickSlash extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 9 : 13;
+        return !upgraded ? 8 : 12;
     }
     
     @Override
@@ -68,13 +68,13 @@ public class QuickSlash extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Draw a card. NL If it costs zero, draw another.";
+        return "Deal !D! damage. NL Draw a card. NL If it costs 0, Draw another.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster m)
     {
-        this.addToBot(new DamageAction(m, new DamageInfo(player, this.damage, this.damageTypeForTurn), AttackEffect.SLASH_HORIZONTAL));
-        this.addToBot(new DrawCardAction(1, new QuickSlashAction()));
+        addToBot(new DamageAction(m, new DamageInfo(player, damage, damageTypeForTurn), AttackEffect.SLASH_HORIZONTAL));
+        addToBot(new DrawCardAction(1, new QuickSlashAction()));
     }
 }

@@ -7,6 +7,7 @@ package com.megacrit.cardcrawl.cards.red;
 
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.BcApplyPowerAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
@@ -32,7 +33,7 @@ public class Brutality extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return 0;
     }
     
     @Override
@@ -48,6 +49,12 @@ public class Brutality extends BcPowerCardBase
     }
     
     @Override
+    public boolean getInnate()
+    {
+        return upgraded;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
         return "Start of turn: NL Sacrifice 1 HP and NL Draw a card.";
@@ -56,6 +63,6 @@ public class Brutality extends BcPowerCardBase
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new ApplyPowerAction(player, player, new BrutalityPower(player, 1), 1));
+        addToBot(new BcApplyPowerAction(new BrutalityPower(player, 1)));
     }
 }

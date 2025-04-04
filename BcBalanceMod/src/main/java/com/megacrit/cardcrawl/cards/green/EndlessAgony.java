@@ -3,6 +3,7 @@ package com.megacrit.cardcrawl.cards.green;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
+import com.megacrit.cardcrawl.actions.common.MakeTempCardInDiscardAction;
 import com.megacrit.cardcrawl.actions.common.MakeTempCardInHandAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -31,7 +32,7 @@ public class EndlessAgony extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override
@@ -43,7 +44,7 @@ public class EndlessAgony extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 5 : 7;
+        return !upgraded ? 4 : 6;
     }
     
     @Override
@@ -61,12 +62,13 @@ public class EndlessAgony extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Whenever you draw this card, add a copy of it into your hand.";
+        return "Deal !D! damage. NL Whenever you draw this card, add 2 copies of it to your hand.";
     }
     //endregion
     
     public void triggerWhenDrawn()
     {
+        addToTop(new MakeTempCardInHandAction(makeStatEquivalentCopy()));
         addToTop(new MakeTempCardInHandAction(makeStatEquivalentCopy()));
     }
     

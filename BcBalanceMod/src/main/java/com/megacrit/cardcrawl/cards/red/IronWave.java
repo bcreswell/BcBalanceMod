@@ -68,9 +68,15 @@ public class IronWave extends BcAttackCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 4 : 7;
+        return !upgraded ? 3 : 4;
     }
-    
+
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 1 : 2;
+    }
+
     @Override
     public boolean isAoeAttack()
     {
@@ -80,7 +86,7 @@ public class IronWave extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return " Deal !D! damage. NL Gain !B! Block. NL Gain 1 Metallicize.";
+        return " Deal !D! damage. NL Gain !B! Block. NL Gain !M! Block at the end of each turn.";
     }
     //endregion
     
@@ -92,6 +98,6 @@ public class IronWave extends BcAttackCardBase
         addToBot(new TrueWaitAction(0.1F));
         addToBot(new GainBlockAction(player, player, block));
     
-        addToBot(new BcApplyPowerAction(new MetallicizePower(player, 1)));
+        addToBot(new BcApplyPowerAction(new MetallicizePower(player, getMagicNumber())));
     }
 }

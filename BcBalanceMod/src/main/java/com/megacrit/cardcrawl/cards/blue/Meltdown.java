@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.actions.defect.*;
 import com.megacrit.cardcrawl.actions.utility.*;
 import com.megacrit.cardcrawl.cards.*;
 import com.megacrit.cardcrawl.characters.*;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.*;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.vfx.*;
@@ -58,13 +59,7 @@ public class Meltdown extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 12 : 15;
-    }
-    
-    @Override
-    public int getMagicNumber()
-    {
-        return !upgraded ? 2 : 3;
+        return !upgraded ? 8 : 12;
     }
     
     @Override
@@ -74,24 +69,25 @@ public class Meltdown extends BcAttackCardBase
     }
     
     @Override
-    public boolean getExhaust()
-    {
-        return true;
-    }
-    
-    @Override
     public String getBaseDescription()
     {
-        return "NL Gain !M! Focus. NL Deal !D! damage. NL Evoke all of your Orbs.";
+        return "Remove enemy's Block. NL Evoke ALL Orbs. NL Deal !D! damage for each Orb Evoked.";
     }
     //endregion
     
     @Override
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new BcApplyPowerAction(new FocusPower(player, magicNumber)));
-        addToBot(new VFXAction(player, new FlameBarrierEffect(player.hb.cX, player.hb.cY, true), 1.5F));
-        addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.FIRE));
+        int orbCount = BcUtility.getFilledOrbSlotCount();
+        
+        addToBot(new VFXAction(player, new ScreenOnFireEffect(), 1.0F));
+        //addToBot(new VFXAction(player, new FlameBarrierEffect(player.hb.cX, player.hb.cY, true), 1.5F));
+        addToBot(new RemoveAllBlockAction(monster, player));
         addToBot(new EvokeAllOrbsAction());
+        
+        for(int i = 0; i < orbCount; i++)
+        {
+            addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.FIRE));
+        }
     }
 }

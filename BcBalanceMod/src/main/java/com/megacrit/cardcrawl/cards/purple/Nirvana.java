@@ -14,6 +14,7 @@ import com.megacrit.cardcrawl.vfx.*;
 public class Nirvana extends BcPowerCardBase
 {
     public static final String ID = "Nirvana";
+    public static final int BlockPerInsight = 2;
     
     //region card parameters
     @Override
@@ -37,19 +38,32 @@ public class Nirvana extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return 0;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 1 : 2;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "When you Scry or gain Mantra, also gain Block for the same amount. NL NL When play an *Insight or *Miracle, gain 1 Block.";
+        if (magicNumber == 1 )
+        {
+            return "When you Scry or gain Mantra, also gain that amount of Block.";
+        }
+        else
+        {
+            return "When you Scry or gain Mantra, also gain that amount of Block x!M!.";
+        }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         AbstractDungeon.effectsQueue.add(new SpotlightPlayerEffect());
-        addToBot(new BcApplyPowerAction(new NirvanaPower(player, 1)));
+        addToBot(new BcApplyPowerAction(new NirvanaPower(player, magicNumber)));
     }
 }

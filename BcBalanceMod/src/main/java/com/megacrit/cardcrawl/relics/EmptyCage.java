@@ -14,7 +14,9 @@ public class EmptyCage extends AbstractRelic
 {
     public static final String ID = "Empty Cage";
     private boolean cardsSelected = true;
-    
+
+    public static final int CardCountToRemove = 2;
+
     public EmptyCage()
     {
         super("Empty Cage", "cage.png", RelicTier.RARE, AbstractRelic.LandingSound.SOLID);
@@ -22,7 +24,14 @@ public class EmptyCage extends AbstractRelic
     
     public String getUpdatedDescription()
     {
-        return this.DESCRIPTIONS[0];
+        if (CardCountToRemove == 1)
+        {
+            return "Remove a card from your deck.";
+        }
+        else
+        {
+            return "Remove " + CardCountToRemove + " cards from your deck.";
+        }
     }
     
     public void onEquip()
@@ -51,26 +60,17 @@ public class EmptyCage extends AbstractRelic
         }
         else
         {
-            if (tmp.group.size() <= 2)
-            {
-                this.deleteCards(tmp.group);
-            }
-            else
-            {
-                AbstractDungeon.gridSelectScreen.open(AbstractDungeon.player.masterDeck.getPurgeableCards(), 2, this.DESCRIPTIONS[1], false, false, true, true);
-            }
-            
+            AbstractDungeon.gridSelectScreen.open(AbstractDungeon.player.masterDeck.getPurgeableCards(), CardCountToRemove, this.DESCRIPTIONS[1], false, false, true, true);
         }
     }
     
     public void update()
     {
         super.update();
-        if (!this.cardsSelected && AbstractDungeon.gridSelectScreen.selectedCards.size() == 2)
+        if (!this.cardsSelected && AbstractDungeon.gridSelectScreen.selectedCards.size() == CardCountToRemove)
         {
             this.deleteCards(AbstractDungeon.gridSelectScreen.selectedCards);
         }
-        
     }
     
     public void deleteCards(ArrayList<AbstractCard> group)

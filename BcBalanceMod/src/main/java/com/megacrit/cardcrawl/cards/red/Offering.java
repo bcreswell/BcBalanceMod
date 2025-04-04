@@ -51,25 +51,18 @@ public class Offering extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 4 : 6;
+        return !upgraded ? 3 : 6;
     }
     
     int getEnergyGain()
     {
-        return !upgraded ? 2 : 3;
+        return 2;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Sacrifice 6 HP. NL Gain [R] [R]. NL Draw !M! cards.";
-        }
-        else
-        {
-            return "Sacrifice 6 HP. NL Gain [R] [R] [R]. NL Draw !M! cards.";
-        }
+        return "Sacrifice 6 HP. NL Gain [R] [R]. NL Draw !M! cards.";
     }
     //endregion
     

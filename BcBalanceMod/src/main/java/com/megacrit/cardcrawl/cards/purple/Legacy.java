@@ -27,7 +27,7 @@ public class Legacy extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return !upgraded ? 2 : 1;
     }
     
     @Override
@@ -45,13 +45,13 @@ public class Legacy extends BcPowerCardBase
     @Override
     public boolean getInnate()
     {
-        return upgraded;
+        return false;
     }
     
     @Override
     public int getMagicNumber()
     {
-        return 2;
+        return 1;
     }
     
     @Override

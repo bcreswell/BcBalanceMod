@@ -86,8 +86,7 @@ public class DrawOfPlayersChoiceAction extends AbstractGameAction
                         continue;
                     }
                     
-                    //hardcoded Haunted Whispers "no exhaust" restriction
-                    if (onlyEthereal && (!exhaustPileCard.isEthereal || exhaustPileCard.exhaust || exhaustPileCard.exhaustOnUseOnce))
+                    if (onlyEthereal && (!exhaustPileCard.isEthereal))
                     {
                         continue;
                     }

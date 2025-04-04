@@ -48,26 +48,29 @@ public class Instruction extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 7 : 9;
+        return !upgraded ? 5 : 7;
     }
     
     public int getMantra()
     {
-        return 2;
+        return !upgraded ? 2 : 3;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Scry !M!. NL Gain " + getMantra() + " Mantra.";
+        return "Shuffle an *Insight into your draw pile. NL Scry " + BcUtility.getScryString(getMagicNumber()) + ". NL Gain " + getMantra() + " Mantra.";
     }
     //endregion
     
     @Override
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
+        addToBot(new MakeTempCardInDrawPileAction(cardsToPreview.makeStatEquivalentCopy(), 1, true, true, false));
+        
         addToBot(new VFXAction(new ThirdEyeEffect(player.hb.cX, player.hb.cY)));
         addToBot(new ScryAction(magicNumber));
+        
         addToBot(new BcApplyPowerAction(new MantraPower(player, getMantra())));
     }
 }

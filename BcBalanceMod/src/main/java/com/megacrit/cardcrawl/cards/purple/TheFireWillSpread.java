@@ -42,12 +42,12 @@ public class TheFireWillSpread extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 7 : 9;
+        return 3;
     }
     
     public int getScryBonus()
     {
-        return !upgraded ? 2 : 3;
+        return !upgraded ? 2 : 4;
     }
     
     @Override
@@ -57,15 +57,9 @@ public class TheFireWillSpread extends BcPowerCardBase
     }
     
     @Override
-    public boolean getEthereal()
-    {
-        return !upgraded;
-    }
-    
-    @Override
     public String getBaseDescription()
     {
-        return "+" + getScryBonus() + " to ALL Scrying. NL When you Scry, deal !M! damage to a random enemy 3 times.";
+        return "+" + getScryBonus() + " to ALL Scrying. NL When you Scry, enemies are randomly struck for that much damage, !M! times.";
     }
     //endregion
     

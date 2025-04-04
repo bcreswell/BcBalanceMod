@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.cards.blue;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -38,7 +39,7 @@ public class Heatsinks extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -56,20 +57,13 @@ public class Heatsinks extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 1 : 2;
+        return 1;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (magicNumber == 1)
-        {
-            return "Whenever you play a Power, draw !M! card. NL NL Conserve up to !M! left over energy each turn.";
-        }
-        else
-        {
-            return "Whenever you play a Power, draw !M! cards. NL NL Conserve up to !M! left over energy each turn.";
-        }
+        return "Whenever you play a Power, Draw "+ BcUtility.getCardCountString(magicNumber) +". NL NL Retain one left over [B] each turn.";
     }
     //endregion
     

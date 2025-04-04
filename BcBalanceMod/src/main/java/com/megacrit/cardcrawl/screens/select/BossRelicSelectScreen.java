@@ -274,11 +274,11 @@ public class BossRelicSelectScreen
         
         choice.put("not_picked", notPicked);
         
-        //remove the boss relics and the chosen relic, but leave any rare relics in the pool
+        //remove the boss relics and the chosen relic, but leave any rare or character relics in the pool
         for (AbstractRelic rel : relics)
         {
             if ((rel.tier == AbstractRelic.RelicTier.BOSS) ||
-                        (rel.relicId.equals(r.relicId)))
+                (rel.relicId.equals(r.relicId)))
             {
                 BcUtility.removeRelicFromDungeon(rel.relicId);
             }

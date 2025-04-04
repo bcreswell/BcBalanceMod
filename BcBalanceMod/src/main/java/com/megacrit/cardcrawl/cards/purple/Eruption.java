@@ -10,6 +10,7 @@ import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
+import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -22,6 +23,10 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.VulnerablePower;
+import com.megacrit.cardcrawl.powers.WeakPower;
+import com.megacrit.cardcrawl.stances.AbstractStance;
+import com.megacrit.cardcrawl.stances.WrathStance;
 
 public class Eruption extends BcAttackCardBase
 {
@@ -55,7 +60,7 @@ public class Eruption extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 8 : 12;
+        return !upgraded ? 9 : 12;
     }
     
     @Override
@@ -71,15 +76,21 @@ public class Eruption extends BcAttackCardBase
     }
     
     @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 0 : 1;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
+        if (magicNumber == 0)
         {
-            return "Deal !D! damage. NL Enter Wrath.";
+            return "Deal !D! Damage. NL Enter Wrath.";
         }
         else
         {
-            return "Deal !D! damage. NL Enter Wrath. NL Draw a card.";
+            return "Deal !D! Damage. NL Enter Wrath. NL Draw "+BcUtility.getCardCountString(magicNumber)+".";
         }
     }
     //endregion
@@ -89,9 +100,9 @@ public class Eruption extends BcAttackCardBase
         addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AttackEffect.FIRE));
         addToBot(new ChangeStanceAction("Wrath"));
         
-        if (upgraded)
+        if (magicNumber > 0)
         {
-            addToBot(new DrawCardAction(player, 1));
+            addToBot(new DrawCardAction(player, magicNumber));
         }
     }
 }

@@ -27,17 +27,15 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.powers.FocusPower;
-import com.megacrit.cardcrawl.powers.FrailPower;
-import com.megacrit.cardcrawl.powers.WeakPower;
+import com.megacrit.cardcrawl.powers.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import static bcBalanceMod.BcBalanceMod.makeCardPath;
 
-public class SerpentSkin extends BcSkillCardBase
+public class
+SerpentSkin extends BcPowerCardBase
 {
     public static final String ID = BcBalanceMod.makeID("SerpentSkin");
     
@@ -63,85 +61,24 @@ public class SerpentSkin extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override
     public int getCost()
     {
-        return 0;
+        return !upgraded ? 1 : 0;
     }
-    
-    @Override
-    public boolean getRetain()
-    {
-        return true;
-    }
-    
-    @Override
-    public boolean getExhaust()
-    {
-        return true;
-    }
-    
-    @Override
-    public boolean getInnate()
-    {
-        return upgraded;
-    }
-    
-    //    @Override
-//    public int getMagicNumber()
-//    {
-//        return !upgraded ? 0 : 2;
-//    }
     
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Shed ALL Weak and Frail.";
-        }
-        else
-        {
-            return "Shed ALL Weak and Frail. NL Draw a card.";
-        }
+        return "When you Discard: NL Shed a stack of either Vulnerable, Frail or Weak.";
     }
     //endregion
     
-    @Override
-    public boolean isGlowingGold()
-    {
-        AbstractPlayer player = AbstractDungeon.player;
-        
-        return player.hasPower(WeakPower.POWER_ID) || player.hasPower(FrailPower.POWER_ID);
-    }
-    
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        int weakAmount = BcUtility.getPowerAmount(WeakPower.POWER_ID);
-        int frailAmount = BcUtility.getPowerAmount(FrailPower.POWER_ID);
-        int blockToGain = (weakAmount + frailAmount) * magicNumber;
-        
-        if (weakAmount > 0)
-        {
-            addToBot(new RemoveSpecificPowerAction(player, player, WeakPower.POWER_ID));
-        }
-        
-        if (frailAmount > 0)
-        {
-            addToBot(new RemoveSpecificPowerAction(player, player, FrailPower.POWER_ID));
-        }
-
-        if (upgraded)
-        {
-            addToBot(new DrawCardAction(1));
-        }
-        
-//        if (blockToGain > 0)
-//        {
-//            addToBot(new GainBlockAction(player, player, blockToGain));
-//        }
+        addToBot(new BcApplyPowerAction(new SerpentSkinPower(player, 1)));
     }
 }

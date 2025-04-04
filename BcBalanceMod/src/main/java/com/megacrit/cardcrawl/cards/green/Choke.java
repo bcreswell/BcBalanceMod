@@ -25,7 +25,7 @@ public class Choke extends BcAttackCardBase
     @Override
     public int getCost()
     {
-        return 2;
+        return 1;
     }
     
     @Override
@@ -37,14 +37,9 @@ public class Choke extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
-    @Override
-    public int getMagicNumber()
-    {
-        return !upgraded ? 5 : 7;
-    }
     
     @Override
     public boolean isAoeAttack()
@@ -55,19 +50,26 @@ public class Choke extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return 9;
+        return !upgraded ? 3 : 5;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        //dmg per card played
+        return !upgraded ? 3 : 4;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Whenever you play a card this turn, the enemy loses !M! HP.";
+        return "Deal !D! damage. NL Whenever you play a card this turn, the target loses !M! HP.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.SLASH_HEAVY));
+        addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.SLASH_HORIZONTAL));
         addToBot(new BcApplyPowerAction(monster,new ChokePower(monster, magicNumber)));
     }
 }

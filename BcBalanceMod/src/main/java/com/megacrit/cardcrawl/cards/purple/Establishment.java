@@ -24,7 +24,7 @@ public class Establishment extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 2 : 1;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -46,9 +46,21 @@ public class Establishment extends BcPowerCardBase
     }
     
     @Override
+    public boolean getInnate() {
+        return true;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
-        return "End of turn: NL Reduce the cost of a random Retained non-Rare card by 1 for the rest of combat.";
+        if (getMagicNumber() == 1)
+        {
+            return "End of turn: NL Reduce the cost by 1 of a random Retained card for the rest of combat.";
+        }
+        else
+        {
+            return "End of turn: NL Reduce the cost by 1 of !M! random Retained cards for the rest of combat.";
+        }
     }
     //endregion
     

@@ -56,11 +56,11 @@ public class Study extends BcPowerCardBase
     {
         if (magicNumber == 1)
         {
-            return "End of turn: NL Shuffle an *Insight into your draw pile.";
+            return "Start of Turn: NL Shuffle an *Insight into your draw pile.";
         }
         else
         {
-            return "End of turn: NL Shuffle !M! *Insights into your draw pile.";
+            return "Start of Turn: NL Shuffle !M! *Insights into your draw pile.";
         }
     }
     //endregion

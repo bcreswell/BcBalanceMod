@@ -47,16 +47,15 @@ public class UnnaturalRegenerationPower extends BcPowerBase
     }
     
     @Override
+    public BuffDebuffApplicationType getApplicationType()
+    {
+        return BuffDebuffApplicationType.Unique;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
-        if (amount == 1)
-        {
-            return "When you lose HP from a card, heal back that amount at the end of combat.";
-        }
-        else
-        {
-            return "When you lose HP from a card, heal back #b" + amount + " times that amount at the end of combat.";
-        }
+        return "When you lose HP from a card, heal back that amount at the end of combat. NL ( Doesn't stack. )";
     }
     //endregion
     
@@ -66,8 +65,7 @@ public class UnnaturalRegenerationPower extends BcPowerBase
         {
             flash();
     
-            int healAmount = damageAmount * amount;
-            addToTop(new BcApplyPowerAction(new UnnaturalHealPower(owner, healAmount)));
+            addToBot(new BcApplyPowerAction(new UnnaturalHealPower(owner, damageAmount)));
         }
     }
 }

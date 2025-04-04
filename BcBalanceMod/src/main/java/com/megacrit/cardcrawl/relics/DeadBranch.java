@@ -22,7 +22,7 @@ public class DeadBranch extends AbstractRelic
             flash();
             addToBot(new RelicAboveCreatureAction(AbstractDungeon.player, this));
             AbstractCard newCard = AbstractDungeon.returnTrulyRandomCardInCombat().makeCopy();
-            BcUtility.makeCardManuallyEthereal(newCard);
+            BcUtility.makeCardEthereal(newCard);
             BcUtility.setGlowColor(newCard, BcUtility.corruptedGlow);
             addToBot(new MakeTempCardInHandAction(newCard, false));
         }

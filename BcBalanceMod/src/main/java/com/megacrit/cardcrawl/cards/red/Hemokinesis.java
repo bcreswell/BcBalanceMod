@@ -39,7 +39,7 @@ public class Hemokinesis extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
@@ -57,9 +57,12 @@ public class Hemokinesis extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 16 : 21;
+        return !upgraded ? 15 : 20;
     }
-    
+
+    @Override
+    public boolean getEthereal() { return true; }
+
     @Override
     public String getBaseDescription()
     {

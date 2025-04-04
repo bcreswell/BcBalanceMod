@@ -2,12 +2,8 @@ package com.megacrit.cardcrawl.cards.blue;
 
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.defect.*;
-import com.megacrit.cardcrawl.actions.unique.TempestAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.*;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.*;
 import com.megacrit.cardcrawl.relics.*;
@@ -25,7 +21,7 @@ public class Tempest extends BcSkillCardBase
     }
     
     @Override
-    public int getChanneledOrbCount()
+    public int getOrbCountToChannel()
     {
         int lightningToChannel = EnergyPanel.totalCount + 1;
         if (upgraded)
@@ -81,7 +77,7 @@ public class Tempest extends BcSkillCardBase
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        int lightningToChannel = getChanneledOrbCount();
+        int lightningToChannel = getOrbCountToChannel();
         
         if (lightningToChannel > 0)
         {

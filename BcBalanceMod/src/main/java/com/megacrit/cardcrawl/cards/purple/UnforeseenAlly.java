@@ -39,19 +39,26 @@ public class UnforeseenAlly extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return 1;
+    }
+    
+    @Override
+    public boolean getInnate()
+    {
+        return upgraded;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Start of turn: NL Create a random upgraded foreign Skill. NL It will become Ethereal.";
+        return "Start of Turn: NL Create a random Foreign Skill. It's temporary.";
     }
     //endregion
     
     @Override
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new BcApplyPowerAction(new UnforeseenAllyPower(player, 1)));
+        UnforeseenAllyPower power = new UnforeseenAllyPower(player, 1);
+        addToBot(new BcApplyPowerAction(power));
     }
 }

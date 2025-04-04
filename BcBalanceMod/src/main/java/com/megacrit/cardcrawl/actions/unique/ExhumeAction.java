@@ -59,7 +59,8 @@ public class ExhumeAction extends AbstractGameAction
                 else
                 {
                     numCardsToExhume = Math.min(numCardsToExhume, exhumeCandidates.size());
-                    AbstractDungeon.gridSelectScreen.open(exhumeCandidates, numCardsToExhume, true, TEXT[0]);
+                    boolean anyNum = numCardsToExhume > 1 ? true : false;
+                    AbstractDungeon.gridSelectScreen.open(exhumeCandidates, numCardsToExhume, anyNum, TEXT[0]);
                     tickDuration();
                 }
             }

@@ -56,25 +56,26 @@ public class Doppelganger extends BcSkillCardBase
     @Override
     public boolean getExhaust()
     {
-        return true;
+        return !upgraded;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Next turn, draw X cards and gain X [G].";
-        }
-        else
-        {
-            return "Next turn, draw X+1 cards and gain X+1 [G].";
-        }
+        return "Next turn, draw X cards and gain X [G].";
+//        if (!upgraded)
+//        {
+//            return "Next turn, draw X cards and gain X [G].";
+//        }
+//        else
+//        {
+//            return "Next turn, draw X+1 cards and gain X+1 [G].";
+//        }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new DoppelgangerAction(player, upgraded, freeToPlayOnce, energyOnUse));
+        addToBot(new DoppelgangerAction(player, false, freeToPlayOnce, energyOnUse));
     }
 }

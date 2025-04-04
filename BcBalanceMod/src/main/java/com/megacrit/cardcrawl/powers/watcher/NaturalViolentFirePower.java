@@ -3,10 +3,12 @@ package com.megacrit.cardcrawl.powers.watcher;
 import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.cards.green.Blur;
 import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.*;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.powers.BlurPower;
 import com.megacrit.cardcrawl.stances.*;
 
 public class NaturalViolentFirePower extends BcPowerBase
@@ -52,17 +54,22 @@ public class NaturalViolentFirePower extends BcPowerBase
     @Override
     public String getBaseDescription()
     {
-        if (amount == 1)
-        {
-            return "If you're in Wrath at the start of the turn, NL Gain #b" + amount + " energy and draw #b" + amount + " card.";
-        }
-        else
-        {
-            return "If you're in Wrath at the start of the turn, NL Gain #b" + amount + " energy and draw #b" + amount + " cards.";
-        }
+        return "Start Turn in Wrath: NL Gain #b" + amount + " energy and draw #b"+BcUtility.getCardCountString(amount)+". NL NL End Turn in Wrath: NL Retain your Block.";
     }
     //endregion
-    
+
+    public void atEndOfTurnPreEndTurnCards(boolean isPlayer)
+    {
+        //implemented this directly in GameActionManager.java instead.
+//        AbstractPower blurPower = player.getPower(BlurPower.POWER_ID);
+//        //Dont apply blur if you already have it
+//        if (BcUtility.isPlayerInStance(WrathStance.STANCE_ID) &&
+//            (blurPower == null))
+//        {
+//            addToBot(new BcApplyPowerAction(new BlurPower(player, 1)));
+//        }
+    }
+
     public void atStartOfTurnPostDraw()
     {
         AbstractPlayer player = AbstractDungeon.player;

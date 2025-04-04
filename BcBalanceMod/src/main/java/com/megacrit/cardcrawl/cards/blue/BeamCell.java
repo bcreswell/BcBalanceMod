@@ -52,7 +52,7 @@ public class BeamCell extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
     }
     
     @Override
@@ -62,21 +62,21 @@ public class BeamCell extends BcAttackCardBase
     }
     
     @Override
+    public int getDamage()
+    {
+        return 4;
+    }
+    
+    @Override
     public int getMagicNumber()
     {
         return !upgraded ? 1 : 2;
     }
     
     @Override
-    public int getDamage()
-    {
-        return !upgraded ? 3 : 4;
-    }
-    
-    @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Apply !M! Vulnerable.";
+        return "Deal !D! damage. NL Inflict !M! Vulnerable.";
     }
     //endregion
     

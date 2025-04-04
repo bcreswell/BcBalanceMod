@@ -60,54 +60,74 @@ public class BcCorruptionPower extends BcPowerBase
     @Override
     public String getBaseDescription()
     {
+//        if (!upgraded)
+//        {
+//            return "ALL Skills cost 1 less and Exhaust when played. NL End of turn: NL Exhaust all remaining Skills in your hand.";
+//        }
+//        else
+//        {
+//            return "ALL Skills cost 0 and Exhaust when played. NL End of turn: NL Exhaust all remaining Skills in your hand.";
+//        }
         if (!upgraded)
         {
-            return "ALL Skills cost 1 less and Exhaust when played. NL End of turn: NL Exhaust all remaining Skills in your hand.";
+            return "ALL Skills cost 0 and Exhaust when played. NL End of turn: NL Exhaust all remaining Skills in your hand.";
         }
         else
         {
-            return "ALL Skills cost 0 and Exhaust when played. NL End of turn: NL Exhaust all remaining Skills in your hand.";
+            return "ALL Skills cost 0 and Exhaust when played.";
         }
     }
     //endregion
     
-    @Override
-    public void update(int slot)
-    {
-        super.update(slot);
+//    @Override
+//    public void update(int slot)
+//    {
+//        super.update(slot);
+//
+//        //putting this in update() to win the war against snecko oil.
+//        for (AbstractCard card : AbstractDungeon.player.hand.group)
+//        {
+//            applyCorruptionToCard(card);
+//        }
+//    }
 
-        //putting this in update() to win the war against snecko oil.
+    @Override
+    public void onInitialApplication()
+    {
         for (AbstractCard card : AbstractDungeon.player.hand.group)
         {
             applyCorruptionToCard(card);
         }
     }
-    
-//    @Override
-//    public void onCardCreated(AbstractCard card)
-//    {
-//        applyCorruptionToCard(card);
-//    }
-//
-//    @Override
-//    public void onCardDraw(AbstractCard card)
-//    {
-//        applyCorruptionToCard(card);
-//    }
+
+    @Override
+    public void onCardCreated(AbstractCard card)
+    {
+        applyCorruptionToCard(card);
+    }
+
+    @Override
+    public void onCardDraw(AbstractCard card)
+    {
+        applyCorruptionToCard(card);
+    }
     
     void applyCorruptionToCard(AbstractCard card)
     {
         if (card.type == AbstractCard.CardType.SKILL)
         {
-            if (upgraded)
-            {
-                card.setCostForTurn(0);
-            }
-            else
-            {
-                card.modifyCostForCombat(-1);
-            }
-            
+            card.modifyCostForCombat(-9999);
+
+//            if (upgraded)
+//            {
+//                card.setCostForTurn(0);
+//            }
+//            else
+//            {
+//                card.modifyCostForCombat(-1);
+//            }
+
+            //glow == ethereal, which isn't technically what is happening here
             //BcUtility.setGlowColor(card, BcUtility.corruptedGlow);
         }
     }
@@ -121,17 +141,17 @@ public class BcCorruptionPower extends BcPowerBase
         }
     }
     
-    public void atEndOfTurnPreEndTurnCards(boolean isPlayer)
-    {
-        if (isPlayer)
-        {
-            for (AbstractCard card : AbstractDungeon.player.hand.group)
-            {
-                if (card.type == AbstractCard.CardType.SKILL)
-                {
-                    addToBot(new ExhaustSpecificCardAction(card, AbstractDungeon.player.hand));
-                }
-            }
-        }
-    }
+//    public void atEndOfTurnPreEndTurnCards(boolean isPlayer)
+//    {
+//        if (isPlayer && !upgraded)
+//        {
+//            for (AbstractCard card : AbstractDungeon.player.hand.group)
+//            {
+//                if (card.type == AbstractCard.CardType.SKILL)
+//                {
+//                    addToBot(new ExhaustSpecificCardAction(card, AbstractDungeon.player.hand));
+//                }
+//            }
+//        }
+//    }
 }

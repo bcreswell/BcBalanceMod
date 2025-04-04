@@ -23,7 +23,7 @@ public class Evolve extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -47,20 +47,13 @@ public class Evolve extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 1 : 2;
+        return 1;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (magicNumber == 1)
-        {
-            return "Whenever you draw a Status card, draw 1 card.";
-        }
-        else
-        {
-            return "Whenever you draw a Status card, draw !M! cards.";
-        }
+        return "Whenever you draw a Status card, Draw "+getCardCountString(magicNumber)+".";
     }
     //endregion
     

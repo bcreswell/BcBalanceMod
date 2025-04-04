@@ -4,21 +4,27 @@
 //
 
 package com.megacrit.cardcrawl.cards.blue;
+import com.megacrit.cardcrawl.actions.animations.VFXAction;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 import com.megacrit.cardcrawl.actions.common.*;
-import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.actions.defect.AnimateOrbAction;
+import com.megacrit.cardcrawl.actions.defect.EvokeNextOrbOfTypeAction;
+import com.megacrit.cardcrawl.actions.defect.EvokeOrbAction;
+import com.megacrit.cardcrawl.actions.utility.TrueWaitAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardTarget;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardType;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.localization.CardStrings;
+import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.powers.ArtifactPower;
+import com.megacrit.cardcrawl.orbs.*;
+import com.megacrit.cardcrawl.vfx.combat.ShockWaveEffect;
+import com.badlogic.gdx.graphics.*;
+
+import java.util.Collections;
+import java.util.Objects;
 
 public class CoreSurge extends BcAttackCardBase
 {
@@ -46,25 +52,13 @@ public class CoreSurge extends BcAttackCardBase
     @Override
     public int getCost()
     {
-        return 1;
-    }
-    
-    @Override
-    public boolean getExhaust()
-    {
-        return true;
+        return 2;
     }
     
     @Override
     public int getDamage()
     {
-        return !upgraded ? 10 : 15;
-    }
-    
-    @Override
-    public int getMagicNumber()
-    {
-        return !upgraded ? 1 : 2;
+        return !upgraded ? 7 : 11;
     }
     
     @Override
@@ -74,21 +68,88 @@ public class CoreSurge extends BcAttackCardBase
     }
     
     @Override
-    public String getBaseDescription()
+    public int getMagicNumber()
     {
-        return "Deal !D! damage. NL Gain !M! Artifact.";
+        return 10;
     }
     
     @Override
-    public String getFootnote()
+    public int getNumberOfOrbsEvokedDirectly()
     {
-        return ArtifactPower.CaveatString;
+        int count = 0;
+        if (!AbstractDungeon.player.orbs.isEmpty())
+        {
+            String targetOrbType = AbstractDungeon.player.orbs.get(0).ID;
+            
+            for (int i = 0; i < AbstractDungeon.player.orbs.size(); i++)
+            {
+                if (Objects.equals(AbstractDungeon.player.orbs.get(i).ID, targetOrbType))
+                {
+                    count++;
+                }
+            }
+        }
+        
+        return Math.min(count, getMagicNumber());
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Deal !D! damage. NL Evoke your next Orb and all Orbs of that type.";
     }
     //endregion
+    
+    @Override
+    public void showWhichOrbsWillEvoke(int evokedOrbsCount, int evokeTimes)
+    {
+        if (!AbstractDungeon.player.orbs.isEmpty())
+        {
+            String targetOrbType = AbstractDungeon.player.orbs.get(0).ID;
+            
+            int count = 0;
+            for (AbstractOrb orb : AbstractDungeon.player.orbs)
+            {
+                if ((count < evokedOrbsCount) &&
+                            (Objects.equals(orb.ID, targetOrbType)))
+                {
+                    orb.showEvokeValue();
+                    orb.evokeTimes = evokeTimes;
+                    count++;
+                }
+            }
+        }
+    }
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AttackEffect.BLUNT_HEAVY));
-        addToBot(new BcApplyPowerAction(new ArtifactPower(player, magicNumber)));
+        
+        int toEvokeCount = getNumberOfOrbsEvokedDirectly();
+        if (toEvokeCount > 0)
+        {
+            String targetOrbType = AbstractDungeon.player.orbs.get(0).ID;
+            
+            if (targetOrbType == Frost.ORB_ID)
+            {
+                addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.BLUE_TEXT_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.5F));
+            }
+            else if (targetOrbType == Lightning.ORB_ID)
+            {
+                addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.LIGHT_YELLOW_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.5F));
+            }
+            else if (targetOrbType == Dark.ORB_ID)
+            {
+                addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.PURPLE_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.5F));
+            }
+            
+            addToBot(new TrueWaitAction(.1f));
+            
+            for (int i = 0; i < toEvokeCount; i++)
+            {
+                addToBot(new EvokeNextOrbOfTypeAction(targetOrbType));
+                addToBot(new TrueWaitAction(.05f));
+            }
+        }
     }
 }

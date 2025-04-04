@@ -12,13 +12,15 @@ import com.megacrit.cardcrawl.orbs.EmptyOrbSlot;
 
 public class RecursionAction extends AbstractGameAction
 {
-    boolean triggerPassive;
-    boolean triggerEvoke;
-    
-    public RecursionAction(boolean triggerPassive, boolean triggerEvoke)
+    int channelCount;
+    int triggerPassiveCount;
+    boolean evoke;
+
+    public RecursionAction(int channelCount, int triggerPassiveCount, boolean evoke)
     {
-        this.triggerPassive = triggerPassive;
-        this.triggerEvoke = triggerEvoke;
+        this.channelCount = channelCount;
+        this.triggerPassiveCount = triggerPassiveCount;
+        this.evoke = evoke;
     }
     
     public void update()
@@ -28,21 +30,31 @@ public class RecursionAction extends AbstractGameAction
             AbstractOrb orb = AbstractDungeon.player.orbs.get(0);
             if (!(orb instanceof EmptyOrbSlot))
             {
-                if (triggerEvoke)
+                for(int i = 0; i < triggerPassiveCount; i++)
                 {
+                    addToBot(new TriggerOrbPassiveAction(orb));
+                    addToBot(new AnimateSpecificOrbAction(orb));
+                }
+
+                if (evoke)
+                {
+                    addToBot(new AnimateSpecificOrbAction(orb));
                     addToBot(new EvokeOrbAction(1));
                 }
                 else
                 {
                     addToBot(new RemoveNextOrbAction());
                 }
-    
-                addToBot(new ChannelAction(orb, false));
-                
-                if (triggerPassive)
+
+                if (channelCount > 0)
                 {
-                    addToBot(new TriggerOrbPassiveAction(orb));
-                    addToBot(new AnimateSpecificOrbAction(orb));
+                    addToBot(new ChannelAction(orb, false));
+
+                    for(int i = 0; i < channelCount - 1; i++)
+                    {
+                        AbstractOrb newOrb = orb.makeCopy();
+                        addToBot(new ChannelAction(newOrb, true));
+                    }
                 }
             }
         }

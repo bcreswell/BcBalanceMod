@@ -9,10 +9,8 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.*;
-import com.megacrit.cardcrawl.helpers.*;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.*;
-import com.megacrit.cardcrawl.orbs.*;
 import com.megacrit.cardcrawl.powers.*;
 
 import java.util.*;
@@ -53,6 +51,8 @@ public abstract class BcCardBase extends AbstractCard
         color = getCardColor();
         rarity = getCardRarity();
         target = getCardTarget();
+        
+        onInitialized();
         
         damageType = getDamageType();
         damageTypeForTurn = damageType;
@@ -133,8 +133,6 @@ public abstract class BcCardBase extends AbstractCard
             }
         }
         
-        onInitialized();
-        
         rawDescription = getFullDescription();
         initializeTitle();
         initializeDescription();
@@ -143,73 +141,60 @@ public abstract class BcCardBase extends AbstractCard
         createCardImage.invoke(this);
     }
     
-    @Override
-    public void update()
+    protected boolean isPlayerInStance(String stanceId)
     {
-        super.update();
-        //doing this manually below instead of using these fields
-        showEvokeValue = false;
-        showEvokeOrbCount = 0;
-        
-        AbstractPlayer player = AbstractDungeon.player;
+        return BcUtility.isPlayerInStance(stanceId);
+    }
+    
+    protected boolean isFocusZero()
+    {
+        return BcUtility.getCurrentFocus() == 0;
+    }
+
+    protected String getCardCountString(int cardCount)
+    {
+        return BcUtility.getCardCountString(cardCount);
+    }
+
+    protected String applyConditionalHighlight(boolean condition, String segment)
+    {
         if (BcUtility.isPlayerInCombat() &&
-                    (this == player.hoveredCard) &&
-                    player.isHoveringDropZone &&
-                    (player.orbs != null))
+            !condition)
         {
-            int channeledOrbCount = getChanneledOrbCount();
-            channeledOrbCount += getExtraOrbChannelCount();
-            
-            int filledOrbCount = player.filledOrbCount();
-            int currentOrbCount = player.orbs.size();
-            int maxOrbCount = player.maxOrbs;
-            
-            int createdOrbSlots = getNumberOfOrbsSlotsCreated();
-            createdOrbSlots = BcUtility.clamp(maxOrbCount - currentOrbCount, createdOrbSlots, 10);
-            
-            int evokedOrbsCount = (channeledOrbCount + filledOrbCount) - (currentOrbCount + createdOrbSlots);
-            evokedOrbsCount = BcUtility.clamp(0, evokedOrbsCount, 10);
-            evokedOrbsCount += getNumberOfOrbsEvokedDirectly();
-            evokedOrbsCount = BcUtility.clamp(0, evokedOrbsCount, 10);
-            
-            int evokeTimes = getEvokeIterations();
-            if ((evokeTimes < 1) && (evokedOrbsCount > 0))
-            {
-                evokeTimes = 1;
-            }
-            
-            int i = 0;
-            for (AbstractOrb orb : AbstractDungeon.player.orbs)
-            {
-                if ((i < evokedOrbsCount) &&
-                            !(orb instanceof EmptyOrbSlot))
-                {
-                    orb.showEvokeValue();
-                    orb.evokeTimes = evokeTimes;
-                }
-                
-                i++;
-            }
+            return segment.replace("#g", "#a");
+        }
+        else
+        {
+            return segment;
         }
     }
     
-    int getExtraOrbChannelCount()
+    protected String applyConditionalHighlight(boolean condition, String primarySegment, String elseSegment)
     {
-        int extraCount = 0;
+        if (!primarySegment.endsWith(" NL ") &&
+            !elseSegment.startsWith(" NL "))
+        {
+            primarySegment += " NL ";
+        }
+        
         if (BcUtility.isPlayerInCombat())
         {
-            if (type == CardType.POWER)
+            if (!condition)
             {
-                return BcUtility.getPowerAmount(StormPower.POWER_ID);
+                primarySegment = primarySegment.replace("#g", "#a");
             }
-            else if (type == CardType.ATTACK)
+            else
             {
-                //just assuming here that the static discharge will deal unblocked attack to whichever target.
-                return BcUtility.getPowerAmount(DecryptionDancePower.POWER_ID) + BcUtility.getPowerAmount(StaticDischargePower.POWER_ID);
+                elseSegment = elseSegment.replace("#g", "#a");
             }
         }
         
-        return extraCount;
+        return primarySegment + elseSegment;
+    }
+    
+    public int getCurrentOrbSlotCount()
+    {
+        return AbstractDungeon.player.orbs.size();
     }
     
     protected void onInitialized()
@@ -320,23 +305,11 @@ public abstract class BcCardBase extends AbstractCard
         return -1;
     }
     
-    public static boolean isARetrieveCard(AbstractCard card)
+    public boolean canBeRetrieved()
     {
-        if (card instanceof BcCardBase)
-        {
-            return ((BcCardBase) card).isARetrieveCard();
-        }
-        else
-        {
-            return false;
-        }
+        return true;
     }
-    
-    public boolean isARetrieveCard()
-    {
-        return false;
-    }
-    
+
     public boolean isAoeAttack()
     {
         return false;
@@ -367,30 +340,14 @@ public abstract class BcCardBase extends AbstractCard
         return false;
     }
     
-    public int getChanneledOrbCount()
-    {
-        return 0;
-    }
-    
-    public int getNumberOfOrbsSlotsCreated()
-    {
-        return 0;
-    }
-    
-    public int getNumberOfOrbsEvokedDirectly()
-    {
-        return 0;
-    }
-    
-    //dualcast is 2 for example
-    public int getEvokeIterations()
-    {
-        //this is just a reasonable default value. it is overriden in dualcast/multicast
-        return (getNumberOfOrbsEvokedDirectly() > 0) ? 1 : 0;
-    }
     
     public String getFootnote()
     {
+        if (!canBeRetrieved())
+        {
+            return BcUtility.CantRetrieveFootnote;
+        }
+        
         return null;
     }
     
@@ -419,15 +376,26 @@ public abstract class BcCardBase extends AbstractCard
         {
             line1 += "Ethereal. ";
         }
-        
+
+        boolean describedExhaust = false;
+
+        int l1Length = line1.length();
+        if (getExhaust() &&
+            (l1Length > 0) &&
+            (l1Length < 11))
+        {
+            line1 += "Exhaust. ";
+            describedExhaust = true;
+        }
+
         if (!line1.equals(""))
         {
             line1 += "NL ";
         }
-        
+
         fullDescription = line1 + fullDescription;
         
-        if (getExhaust())
+        if (getExhaust() && !describedExhaust)
         {
             fullDescription += " NL Exhaust.";
         }
@@ -545,7 +513,7 @@ public abstract class BcCardBase extends AbstractCard
         }
         glowColor = isGlowingGold() ? AbstractCard.GOLD_BORDER_GLOW_COLOR.cpy() : defaultGlow;
     }
-    
+
     @Override
     public AbstractCard makeStatEquivalentCopy()
     {

@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.cards.red;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.ExhaustAction;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
@@ -12,7 +13,6 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 public class TrueGrit extends BcSkillCardBase
 {
     public static final String ID = "True Grit";
-    public static final String NothingFootnote = "Does nothing if it NL lacks a target card.";
     
     //region card parameters
     @Override
@@ -42,26 +42,26 @@ public class TrueGrit extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return 9;
+        return !upgraded ? 8 : 11;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Exhaust a random card. NL Gain !B! Block.";
-        }
-        else
-        {
+//        if (!upgraded)
+//        {
+//            return "Exhaust a random card. NL Gain !B! Block.";
+//        }
+//        else
+//        {
             return "Exhaust a card. NL Gain !B! Block.";
-        }
+        //}
     }
     
     @Override
     public String getFootnote()
     {
-        return TrueGrit.NothingFootnote;
+        return BcUtility.ExhaustTargetFootnote;
     }
     //endregion
     
@@ -70,14 +70,14 @@ public class TrueGrit extends BcSkillCardBase
         //does nothing if there's no target to exhaust
         if (player.hand.size() >= 2)
         {
-            if (upgraded)
-            {
+//            if (upgraded)
+//            {
                 addToBot(new ExhaustAction(1, false));
-            }
-            else
-            {
-                addToBot(new ExhaustAction(1, true, false, false));
-            }
+//            }
+//            else
+//            {
+                //addToBot(new ExhaustAction(1, true, false, false));
+            //}
             
             addToBot(new GainBlockAction(player, player, block));
         }

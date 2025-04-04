@@ -6,6 +6,7 @@
 package com.megacrit.cardcrawl.potions;
 
 import com.megacrit.cardcrawl.actions.common.ExhaustAction;
+import com.megacrit.cardcrawl.actions.common.PurityAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
@@ -29,25 +30,20 @@ public class Elixir extends AbstractPotion {
         this.isThrown = false;
     }
 
-    public void initializeData() {
+    public void initializeData()
+    {
         this.potency = this.getPotency();
-        if (potency > 1)
-        {
-            this.description = "#yExhaust any number of cards in your hand. NL Sacred Bark: Heal for 5.";
-        }
-        else
-        {
-            this.description = potionStrings.DESCRIPTIONS[0];
-        }
-
+        this.description = "#yExhaust any number of cards in your hand then Draw that many Cards. NL NL (If you have Sacred Bark, Heal 5 HP.)";
+        
         this.tips.clear();
         this.tips.add(new PowerTip(this.name, this.description));
-        this.tips.add(new PowerTip(TipHelper.capitalize(GameDictionary.EXHAUST.NAMES[0]), (String)GameDictionary.keywords.get(GameDictionary.EXHAUST.NAMES[0])));
+        this.tips.add(new PowerTip(TipHelper.capitalize(GameDictionary.EXHAUST.NAMES[0]), (String) GameDictionary.keywords.get(GameDictionary.EXHAUST.NAMES[0])));
     }
 
     public void use(AbstractCreature target) {
         if (AbstractDungeon.getCurrRoom().phase == RoomPhase.COMBAT) {
-            this.addToBot(new ExhaustAction(false, true, true));
+           //this.addToBot(new ExhaustAction(false, true, true));
+           addToBot(new PurityAction(10, false, true, true));
         }
 
         //sacred bark

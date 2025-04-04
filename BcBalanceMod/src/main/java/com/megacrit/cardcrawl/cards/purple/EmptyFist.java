@@ -67,7 +67,7 @@ public class EmptyFist extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL " + EmptyBlahAction.EmptyDescription;
+        return "Deal !D! damage. NL NL " + EmptyBlahAction.GetEmptyDescription();
     }
     //endregion
     

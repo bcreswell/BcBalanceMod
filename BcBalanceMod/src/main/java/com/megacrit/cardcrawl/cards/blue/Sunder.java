@@ -68,8 +68,7 @@ public class Sunder extends BcAttackCardBase
         {
             if (!monster.isDeadOrEscaped())
             {
-                calculateCardDamage(monster);
-                if (monster.currentHealth < damage)
+                if (monster.currentHealth + monster.currentBlock <= damage)
                 {
                     return true;
                 }

@@ -15,7 +15,7 @@ import com.megacrit.cardcrawl.vfx.combat.*;
 public class Fear extends BcCurseCardBase
 {
     public static final String ID = BcBalanceMod.makeID("Fear");
-    
+
     //region card parameters
     @Override
     public String getDisplayName()
@@ -62,13 +62,7 @@ public class Fear extends BcCurseCardBase
     @Override
     public String getBaseDescription()
     {
-        return null;
-    }
-    
-    @Override
-    public String getFullDescription()
-    {
-        return "Retain. Exhaust. NL End of turn: Lose 1 HP. NL When exhausted: NL Suffer 1 Vulnerable.";
+        return "When exhausted: NL Suffer 1 Vulnerable. NL End of turn: NL Lose !M! HP then increase this value by 1.";
     }
     //endregion
     
@@ -87,6 +81,7 @@ public class Fear extends BcCurseCardBase
         flash();
         addToBot(new LoseHPAction(player, player, magicNumber));
         addToBot(new TrueWaitAction(.1f));
+        upgradeMagicNumber(1);
     }
     
     @Override

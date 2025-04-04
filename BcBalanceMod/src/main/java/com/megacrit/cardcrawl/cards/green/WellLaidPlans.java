@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.cards.green;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -35,7 +36,7 @@ public class WellLaidPlans extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 1;
+        return 0;
     }
     
     @Override
@@ -45,22 +46,9 @@ public class WellLaidPlans extends BcPowerCardBase
     }
     
     @Override
-    public boolean getInnate()
-    {
-        return true;
-    }
-    
-    @Override
     public String getBaseDescription()
     {
-        if (magicNumber == 1)
-        {
-            return "End of turn: NL Retain a card.";
-        }
-        else
-        {
-            return "End of turn: NL Retain !M! cards.";
-        }
+        return "End of turn: NL Retain "+ BcUtility.getCardCountString(magicNumber) +".";
     }
     //endregion
     

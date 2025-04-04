@@ -55,17 +55,17 @@ public class Malaise extends BcSkillCardBase
     {
         if (!upgraded)
         {
-            return "Enemy loses X Strength. Inflict X+1 Weak.";
+            return "Enemy loses X Strength. NL Inflict X+1 Weak.";
         }
         else
         {
-            return "Enemy loses X+1 Strength. Inflict X+1 Weak.";
+            return "Enemy loses X+1 Strength. NL Inflict X+2 Weak.";
         }
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        this.addToBot(new MalaiseAction(player, monster, upgraded, freeToPlayOnce, energyOnUse));
+        addToBot(new MalaiseAction(player, monster, upgraded, freeToPlayOnce, energyOnUse));
     }
 }

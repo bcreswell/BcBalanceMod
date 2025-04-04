@@ -1,10 +1,6 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.megacrit.cardcrawl.cards.green;
 
+import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -38,7 +34,7 @@ public class Outmaneuver extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
     }
     
     @Override
@@ -54,21 +50,26 @@ public class Outmaneuver extends BcSkillCardBase
     }
     
     @Override
+    public int getBlock()
+    {
+        return 4;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Next turn, NL gain [G] [G].";
-        }
-        else
-        {
-            return "Next turn, NL gain [G] [G] [G].";
-        }
+        String energyString = BcUtility.getEnergyString(getMagicNumber(), this);
+
+        return "Gain !B! Block. NL NL Next turn, NL Gain "+energyString+".";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
+        if (block > 0)
+        {
+            addToBot(new GainBlockAction(player, block));
+        }
         addToBot(new BcApplyPowerAction(new EnergizedPower(player, magicNumber)));
     }
 }

@@ -21,6 +21,12 @@ public class NinjaVanish extends BcSkillCardBase
     }
     
     @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
     public String getImagePath()
     {
         return "green/ninjaVanish.png";
@@ -29,13 +35,7 @@ public class NinjaVanish extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 2;
-    }
-    
-    @Override
-    public String getId()
-    {
-        return ID;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
@@ -45,27 +45,21 @@ public class NinjaVanish extends BcSkillCardBase
     }
     
     @Override
-    public boolean getRetain()
-    {
-        return true;
-    }
-    
-    @Override
-    public boolean getInnate()
-    {
-        return upgraded;
-    }
-    
-    @Override
     public boolean getExhaust()
     {
         return true;
     }
     
     @Override
+    public int getMagicNumber()
+    {
+        return 2;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
-        return "Gain 1 Intangible. NL End your turn.";
+        return "Gain 1 Intangible. NL End your turn. NL Next turn, Draw "+getCardCountString(magicNumber)+".";
     }
     //endregion
     
@@ -73,7 +67,8 @@ public class NinjaVanish extends BcSkillCardBase
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new VFXAction(new NinjaVanishEffect(player.hb.cX, player.hb.cY)));
-        addToBot(new ApplyPowerAction(player, player, new IntangiblePlayerPower(player, 1), 1));
+        addToBot(new BcApplyPowerAction(new IntangiblePlayerPower(player, 1)));
+        addToBot(new BcApplyPowerAction(new DrawCardNextTurnPower(player, magicNumber)));
         addToBot(new PressEndTurnButtonAction());
     }
 }

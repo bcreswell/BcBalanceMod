@@ -44,7 +44,7 @@ public class Equilibrium extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 6 : 8;
+        return !upgraded ? 3 : 4;
     }
     
     @Override
@@ -56,31 +56,10 @@ public class Equilibrium extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        int zeroB = BcUtility.getModifiedBlock(getMagicNumber());
-        int b = BcUtility.getModifiedBlock(getBlock());
-        String zeroFocusBlock = null;
-        String otherwiseBlock = null;
-        
-        if (BcUtility.isPlayerInCombat())
-        {
-            if (BcUtility.getCurrentFocus() == 0)
-            {
-                zeroFocusBlock = "Zero Focus: " + BcUtility.getModifiedValueString(getMagicNumber(), zeroB) + " Block.";
-                otherwiseBlock = "#aOtherwise: #a" + b + " #aBlock.";
-            }
-            else
-            {
-                zeroFocusBlock = "#aZero #aFocus: #a" + zeroB + " #aBlock.";
-                otherwiseBlock = "Otherwise: " + BcUtility.getModifiedValueString(getBlock(), b) + " Block.";
-            }
-        }
-        else
-        {
-            zeroFocusBlock = "Zero Focus: " + zeroB + " Block.";
-            otherwiseBlock = "Otherwise: " + b + " Block.";
-        }
-        
-        return "Retain your hand and Block this turn. NL Gain some Block. NL " + zeroFocusBlock + " NL " + otherwiseBlock;
+        return applyConditionalHighlight(
+            isFocusZero(),
+            "Retain your hand. NL Retain your Block. NL #g0 #gFocus: Gain " + BcUtility.getModifiedBlockString(getMagicNumber()) + " Block.",
+            "#gElse: Gain !B! Block.");
     }
     //endregion
     

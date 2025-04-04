@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.GameDictionary;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -31,7 +32,7 @@ public class AllInGoodTime extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 4 : 3;
+        return 3;
     }
     
     @Override
@@ -61,23 +62,29 @@ public class AllInGoodTime extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Gain !M! Mantra. NL When Retained, lower this card's cost by 1.";
+        if (!upgraded)
+        {
+            return "Gain !M! Mantra. NL When Retained, reduce the cost by 1 until played.";
+        }
+        else
+        {
+            return "Gain !M! Mantra. NL When Retained, gain 3 Block and reduce the cost by 1 until played.";
+        }
     }
     //endregion
-    
-    public void use(AbstractPlayer player, AbstractMonster m)
-    {
-        addToBot(new BcApplyPowerAction(new MantraPower(player, magicNumber)));
-    }
     
     public void onRetained()
     {
         addToBot(new ReduceCostAction(this));
+        if (upgraded)
+        {
+            addToBot(new GainBlockAction(AbstractDungeon.player, 3));
+        }
     }
-
-//    public void initializeDescription()
-//    {
-//        super.initializeDescription();
-//        keywords.add(GameDictionary.ENLIGHTENMENT.NAMES[0].toLowerCase());
-//    }
+    
+    public void use(AbstractPlayer player, AbstractMonster m)
+    {
+        addToBot(new BcApplyPowerAction(new MantraPower(player, magicNumber)));
+        addToBot(new SetCostAction(this, getCost()));
+    }
 }

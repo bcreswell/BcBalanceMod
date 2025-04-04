@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.monsters.ending;
 
+import bcBalanceMod.BcUtility;
 import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.spine.AnimationState;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
@@ -22,14 +23,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.beyond.*;
 import com.megacrit.cardcrawl.monsters.city.*;
 import com.megacrit.cardcrawl.monsters.exordium.*;
-import com.megacrit.cardcrawl.powers.ArtifactPower;
-import com.megacrit.cardcrawl.powers.BeatOfDeathPower;
-import com.megacrit.cardcrawl.powers.FrailPower;
-import com.megacrit.cardcrawl.powers.InvinciblePower;
-import com.megacrit.cardcrawl.powers.PainfulStabsPower;
-import com.megacrit.cardcrawl.powers.StrengthPower;
-import com.megacrit.cardcrawl.powers.VulnerablePower;
-import com.megacrit.cardcrawl.powers.WeakPower;
+import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
 import com.megacrit.cardcrawl.vfx.combat.BloodShotEffect;
 import com.megacrit.cardcrawl.vfx.combat.HeartBuffEffect;
@@ -117,38 +111,44 @@ public class CorruptHeart extends AbstractMonster
         
         if (AbstractDungeon.ascensionLevel >= 20)
         {
-            setHp(1600);
+            setHp(2000);
+            damageCap = 500;
         }
         else if (AbstractDungeon.ascensionLevel >= 9)
         {
             //setHp(800);
-            setHp(1100);
+            setHp(1250);
+            damageCap = 350;
         }
         else
         {
-            setHp(750);
+            setHp(800);
+            damageCap = 250;
         }
     
         initialBeatOfDeath = 1;
-        damageCap = 350;
         blockAfterNotAttacking = 20;
         
         multiAttackBase = 2;
         multiAttackCount = 15;
         
         bigAttackBase = 20;
-        bigAttackIncrement = 10;
+        bigAttackIncrement = 15;
         
         if (AbstractDungeon.ascensionLevel >= 4)
         {
-            bigAttackBase = 25;
+            bigAttackBase = 30;
+            blockAfterNotAttacking = 30;
         }
         
         if (AbstractDungeon.ascensionLevel >= 19)
         {
-            initialBeatOfDeath = 2;
-            blockAfterNotAttacking = 30;
-            bigAttackIncrement = 15;
+            //heart fight requires crazy scaling now. 2 beat of death is too punishing to
+            //  decks that play lots of cards, which are some of the most fun decks.
+            //  The fight is harder in other ways now to compensate.
+            //initialBeatOfDeath = 2;
+            multiAttackBase = 3;
+            bigAttackIncrement = 20;
         }
         
         multiAttackInfo = new DamageInfo(this, multiAttackBase);
@@ -186,7 +186,7 @@ public class CorruptHeart extends AbstractMonster
             }
             else if (summonVal == 3)
             {
-                //str scaling
+                //fast str scaling
                 monstersToSummon.add(new Cultist(x, y));
             }
         }
@@ -245,14 +245,18 @@ public class CorruptHeart extends AbstractMonster
             addToBot(new VFXAction(new BorderFlashEffect(new Color(0.8F, 0.5F, 1.0F, 1.0F))));
             addToBot(new VFXAction(new HeartBuffEffect(hb.cX, hb.cY)));
             
-            if (cycleNumber <= 4)
+            bigAttackInfo.base += bigAttackIncrement;
+            
+            AbstractPower str = getPower(StrengthPower.POWER_ID);
+            if (((str == null)||(str.amount <= 0)) && (cycleNumber >= 3))
             {
-                addToBot(new ApplyPowerAction(this, this, new StrengthPower(this, 1), 1));
+                addToBot(new ApplyPowerAction(this, this, new StrengthPower(this, 1), 2));
             }
             else
             {
-                addToBot(new ApplyPowerAction(this, this, new StrengthPower(this, 2), 2));
+                addToBot(new ApplyPowerAction(this, this, new StrengthPower(this, 1), 1));
             }
+            
             addToBot(new GainBlockAction(this, this, blockAfterNotAttacking));
             
             if (cycleNumber == 3)
@@ -332,8 +336,6 @@ public class CorruptHeart extends AbstractMonster
     
     public void doBigAttackMove(boolean showIntent)
     {
-        bigAttackInfo.base = bigAttackBase + (cycleNumber - 1) * bigAttackIncrement;
-        
         if (showIntent)
         {
             setMove(HeartMoves.BigAttack, Intent.ATTACK, bigAttackInfo.base);

@@ -41,6 +41,12 @@ public class SpiritShield extends BcSkillCardBase
         return 2;
     }
     
+//    @Override
+//    public boolean getEthereal()
+//    {
+//        return !upgraded;
+//    }
+//
     @Override
     public int getMagicNumber()
     {

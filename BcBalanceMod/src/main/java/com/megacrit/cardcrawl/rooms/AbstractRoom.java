@@ -83,8 +83,8 @@ public abstract class AbstractRoom implements Disposable
     public boolean rewardAllowed = true;
     public boolean rewardTime = false;
     public boolean skipMonsterTurn = false;
-    public int baseRareCardChance = 2;
-    public int baseUncommonCardChance = 37;
+    public int baseRareCardChance = 3;
+    public int baseUncommonCardChance = 30;
     public int rareCardChance;
     public int uncommonCardChance;
     public static float waitTimer;

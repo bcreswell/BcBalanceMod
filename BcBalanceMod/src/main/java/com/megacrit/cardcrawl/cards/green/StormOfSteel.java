@@ -1,19 +1,23 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.megacrit.cardcrawl.cards.green;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
-import com.megacrit.cardcrawl.actions.common.*;
+import bcBalanceMod.baseCards.BcAttackCardBase;
+import bcBalanceMod.baseCards.BcSkillCardBase;
+import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import com.megacrit.cardcrawl.actions.animations.VFXAction;
+import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
+import com.megacrit.cardcrawl.actions.unique.BladeFuryAction;
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
+import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
+import com.megacrit.cardcrawl.cards.AbstractCard.CardTarget;
+import com.megacrit.cardcrawl.cards.AbstractCard.CardType;
 import com.megacrit.cardcrawl.cards.tempCards.Shiv;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.powers.*;
-
-import java.security.acl.*;
+import com.megacrit.cardcrawl.vfx.combat.DaggerSprayEffect;
 
 public class StormOfSteel extends BcAttackCardBase
 {
@@ -21,15 +25,34 @@ public class StormOfSteel extends BcAttackCardBase
     
     //region card parameters
     @Override
-    protected void onInitialized()
+    public String getImagePath()
     {
-        cardsToPreview = new Shiv();
+        //return "green/skill/storm_of_steel";
+        return "green/stormOfSteel.png";
     }
     
     @Override
-    public String getImagePath()
+    public String getId()
     {
-        return "green/stormOfSteel.png";
+        return ID;
+    }
+//
+//    @Override
+//    protected void onInitialized()
+//    {
+//        cardsToPreview = new Shiv();
+//    }
+    
+//    @Override
+//    protected void onUpgraded()
+//    {
+//        cardsToPreview.upgrade();
+//    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.RARE;
     }
     
     @Override
@@ -39,58 +62,43 @@ public class StormOfSteel extends BcAttackCardBase
     }
     
     @Override
-    public String getId()
-    {
-        return ID;
-    }
-    
-    @Override
-    public CardRarity getCardRarity()
-    {
-        return CardRarity.RARE;
-    }
-    
-    @Override
-    public int getMagicNumber()
-    {
-        return !upgraded ? 5 : 8;
-    }
-    
-    @Override
-    public String getBaseDescription()
-    {
-        return "Create !M! *Hidden Shivs. NL Launch ALL remaining NL *Hidden Shivs at random targets.";
-    }
-    
-    @Override
-    public String getTemporaryExtraDescription(AbstractMonster monster)
-    {
-        int shivCount = BcUtility.getPowerAmount(HiddenShivPower.POWER_ID) + getMagicNumber();
-        return "total: " + shivCount + " shivs";
-    }
-    
-    @Override
     public int getDamage()
     {
-        return 0;
+        return !upgraded ? 6 : 8;
     }
     
     @Override
     public boolean isAoeAttack()
     {
-        return false;
+        return true;
     }
     
     @Override
-    public CardTarget getCardTarget()
+    public String getBaseDescription()
     {
-        return CardTarget.NONE;
+        return "Deal !D! damage to ALL enemies 3 times.";
+//        if (!upgraded)
+//        {
+//            return "Discard your hand, then gain 1 Block and create a *Shiv for each discard.";
+//        }
+//        else
+//        {
+//            return "Discard your hand, then Gain 1 Block and Create a *Shiv+ for each discard.";
+//        }
     }
     //endregion
-    
+
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new BcApplyPowerAction(new HiddenShivPower(player, magicNumber)));
-        addToBot(new StormOfSteelAction(player));
+        //addToBot(new BladeFuryAction(upgraded));
+        
+        addToBot(new VFXAction(new DaggerSprayEffect(AbstractDungeon.getMonsters().shouldFlipVfx()), 0.0F));
+        addToBot(new DamageAllEnemiesAction(player, multiDamage, damageTypeForTurn, AbstractGameAction.AttackEffect.NONE));
+        
+        addToBot(new VFXAction(new DaggerSprayEffect(AbstractDungeon.getMonsters().shouldFlipVfx()), 0.0F));
+        addToBot(new DamageAllEnemiesAction(player, multiDamage, damageTypeForTurn, AbstractGameAction.AttackEffect.NONE));
+        
+        addToBot(new VFXAction(new DaggerSprayEffect(AbstractDungeon.getMonsters().shouldFlipVfx()), 0.0F));
+        addToBot(new DamageAllEnemiesAction(player, multiDamage, damageTypeForTurn, AbstractGameAction.AttackEffect.NONE));
     }
 }

@@ -25,7 +25,7 @@ public class Tantrum extends BcAttackCardBase
     @Override
     public int getCost()
     {
-        return 2;
+        return 1;
     }
     
     @Override
@@ -50,39 +50,52 @@ public class Tantrum extends BcAttackCardBase
     public int getMagicNumber()
     {
         //number of attacks
-        return !upgraded ? 3 : 4;
+        return !upgraded ? 4 : 5;
     }
     
     @Override
     public boolean isAoeAttack()
     {
-        return false;
+        return true;
+    }
+    
+    @Override
+    public CardTarget getCardTarget()
+    {
+        if (!BcUtility.isPlayerInStance(WrathStance.STANCE_ID))
+        {
+            //doesn't do damage when not in Wrath.
+            return CardTarget.NONE;
+        }
+        else
+        {
+            return super.getCardTarget();
+        }
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Enter Wrath. NL Deal !D! damage !M! times. NL Shuffle this back into your draw pile.";
-//        if (!upgraded)
-//        {
-//            return "Enter Wrath. NL Deal !D! damage !M! times.";
-//        }
-//        else
-//        {
-//            return "Enter Wrath. NL Deal !D! damage !M! times. NL Shuffle this back into your draw pile.";
-//        }
+        return applyConditionalHighlight(
+            isPlayerInStance(WrathStance.STANCE_ID),
+            "#gWrath: Deal !D! damage !M! times to random enemies.",
+            "#gElse: Enter Wrath and Shuffle this into your draw pile.");
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new ChangeStanceAction(WrathStance.STANCE_ID));
-        addToBot(new TantrumAction(this, player, monster, getDamage(), getMagicNumber()));
-    
-        shuffleBackIntoDrawPile = true;
-//        if (upgraded)
-//        {
-//            shuffleBackIntoDrawPile = true;
-//        }
+        if (BcUtility.isPlayerInStance(WrathStance.STANCE_ID))
+        {
+            for(int i = 0; i < magicNumber; i++)
+            {
+                addToBot(new AttackDamageRandomEnemyAction(this,AbstractGameAction.AttackEffect.BLUNT_LIGHT));
+            }
+        }
+        else
+        {
+            addToBot(new ChangeStanceAction(WrathStance.STANCE_ID));
+            shuffleBackIntoDrawPile = true;
+        }
     }
 }

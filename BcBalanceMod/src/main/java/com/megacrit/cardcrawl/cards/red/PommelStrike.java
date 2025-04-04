@@ -61,7 +61,7 @@ public class PommelStrike extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 9 : 10;
+        return !upgraded ? 8 : 10;
     }
     
     @Override

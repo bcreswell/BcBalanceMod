@@ -20,7 +20,7 @@ public class ChannelAction extends AbstractGameAction
     
     public ChannelAction(AbstractOrb newOrbType, boolean autoEvoke)
     {
-        duration =  (Settings.FAST_MODE) ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST;
+        duration = (Settings.FAST_MODE) ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST;
         startDuration = duration;
         orbType = newOrbType;
         this.autoEvoke = autoEvoke;

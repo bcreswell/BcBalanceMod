@@ -72,7 +72,7 @@ public class BladeOfLegend extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage to a random enemy 3 times.";
+        return "Deal !D! damage to random enemies 3 times.";
     }
     //endregion
     

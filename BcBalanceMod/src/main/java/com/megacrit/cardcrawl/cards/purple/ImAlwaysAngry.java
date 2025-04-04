@@ -49,7 +49,7 @@ public class ImAlwaysAngry extends BcAttackCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 4 : 6;
+        return !upgraded ? 8 : 12;
     }
     
     @Override
@@ -79,8 +79,10 @@ public class ImAlwaysAngry extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        //return "Deal !D! damage. NL Gain !B! Block. NL Wrath: Gain [W] [W] . NL Otherwise: NL Enter Wrath.";
-        return "Wrath: This costs 0. NL Deal !D! damage. NL Gain !B! Block. NL Enter Wrath.";
+        return applyConditionalHighlight(
+            isPlayerInStance(WrathStance.STANCE_ID),
+            "Deal !D! damage. NL Gain !B! Block. NL #gWrath: This costs 0.",
+            "#gElse: Enter Wrath.");
     }
     //endregion
     

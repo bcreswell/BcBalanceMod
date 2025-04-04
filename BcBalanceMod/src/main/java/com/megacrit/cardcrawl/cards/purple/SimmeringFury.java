@@ -50,13 +50,16 @@ public class SimmeringFury extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.COMMON;
+        return CardRarity.UNCOMMON;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Wrath: Draw !M! cards. NL Otherwise: Next turn, enter Wrath and draw !M! cards.";
+        return applyConditionalHighlight(
+            isPlayerInStance(WrathStance.STANCE_ID),
+            "#gWrath: Draw "+BcUtility.getCardCountString(magicNumber)+".",
+            "#gElse: Next turn, enter Wrath and Draw "+BcUtility.getCardCountString(magicNumber)+".");
     }
     //endregion
     

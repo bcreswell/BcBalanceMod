@@ -33,25 +33,25 @@ public class AllNaturalIngredients extends BcPowerCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.RARE;
+        return CardRarity.UNCOMMON;
     }
     
     @Override
     public int getCost()
     {
-        return 2;
+        return !upgraded ? 1 : 0;
     }
     
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 3 : 5;
+        return !upgraded ? 4 : 5;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "For each Weak you inflict on an enemy, also inflict !M! Poison.";
+        return "When you Inflict Weak on an enemy, also Inflict !M! Poison.";
     }
     //endregion
     

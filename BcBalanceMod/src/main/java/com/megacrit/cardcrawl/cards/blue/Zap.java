@@ -7,6 +7,7 @@ package com.megacrit.cardcrawl.cards.blue;
 
 import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.actions.defect.ChannelAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
@@ -49,7 +50,7 @@ public class Zap extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return 0;
     }
     
     @Override
@@ -58,8 +59,13 @@ public class Zap extends BcSkillCardBase
         return 1;
     }
     
+    public int getCardDraw()
+    {
+        return !upgraded ? 0: 1;
+    }
+    
     @Override
-    public int getChanneledOrbCount()
+    public int getOrbCountToChannel()
     {
         return getLightningCount();
     }
@@ -67,27 +73,38 @@ public class Zap extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Channel !M! Lightning. NL If you have zero Focus, NL Channel 1 more.";
+        //return "Channel !M! Lightning. NL 0 Focus: Channel 1 more.";
+        int cardDrawCount = getCardDraw();
+        
+        String description = "Channel !M! Lightning.";
+        
+        if (cardDrawCount > 0)
+        {
+            description += " NL Draw "+BcUtility.getCardCountString(cardDrawCount)+".";
+        }
+        
+        return description;
     }
     //endregion
     
     int getLightningCount()
     {
-        if (BcUtility.getCurrentFocus() == 0)
-        {
-            return getMagicNumber() + 1;
-        }
-        else
-        {
-            return getMagicNumber();
-        }
+        return getMagicNumber();
+//        if (BcUtility.getCurrentFocus() == 0)
+//        {
+//            return getMagicNumber() + 1;
+//        }
+//        else
+//        {
+//            return getMagicNumber();
+//        }
     }
     
-    @Override
-    public boolean isGlowingGold()
-    {
-        return (BcUtility.getCurrentFocus() == 0);
-    }
+//    @Override
+//    public boolean isGlowingGold()
+//    {
+//        return (BcUtility.getCurrentFocus() == 0);
+//    }
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
@@ -96,6 +113,12 @@ public class Zap extends BcSkillCardBase
         for (int i = 0; i < lightningCount; i++)
         {
             addToBot(new ChannelAction(new Lightning()));
+        }
+        
+        int cardDraw = getCardDraw();
+        if (cardDraw > 0)
+        {
+            addToBot(new DrawCardAction(cardDraw));
         }
     }
 }

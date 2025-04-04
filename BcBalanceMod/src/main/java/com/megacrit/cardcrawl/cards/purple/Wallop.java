@@ -29,7 +29,7 @@ public class Wallop extends BcAttackCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
@@ -41,7 +41,7 @@ public class Wallop extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 9 : 13;
+        return !upgraded ? 10 : 15;
     }
     
     @Override

@@ -60,7 +60,14 @@ public class Collect extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Put a *Miracle into your hand at the start of your next X+" + magicNumber + " turns.";
+        if (magicNumber == 0)
+        {
+            return "Put a *Miracle into your hand at the start of your next X turns.";
+        }
+        else
+        {
+            return "Put a *Miracle into your hand at the start of your next X+" + magicNumber + " turns.";
+        }
     }
     //endregion
     

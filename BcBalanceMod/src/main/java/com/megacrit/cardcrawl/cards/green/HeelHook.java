@@ -66,7 +66,7 @@ public class HeelHook extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL If the enemy has Weak, NL gain [G] and NL draw 1 card.";
+        return "Deal !D! damage. NL If the enemy is Weak, NL gain [G] and NL draw a card.";
     }
     //endregion
     

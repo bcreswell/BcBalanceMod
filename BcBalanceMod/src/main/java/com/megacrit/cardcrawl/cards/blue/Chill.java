@@ -30,7 +30,7 @@ public class Chill extends BcSkillCardBase
     }
     
     @Override
-    public int getChanneledOrbCount()
+    public int getOrbCountToChannel()
     {
         return getEnemyCount();
     }

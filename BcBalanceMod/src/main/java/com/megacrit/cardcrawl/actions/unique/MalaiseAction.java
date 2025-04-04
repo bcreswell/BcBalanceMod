@@ -13,14 +13,14 @@ public class MalaiseAction extends AbstractGameAction
 {
     private boolean freeToPlayOnce = false;
     private boolean upgraded = false;
-    private AbstractPlayer p;
-    private AbstractMonster m;
+    private AbstractPlayer player;
+    private AbstractMonster monster;
     private int energyOnUse = -1;
     
-    public MalaiseAction(AbstractPlayer p, AbstractMonster m, boolean upgraded, boolean freeToPlayOnce, int energyOnUse)
+    public MalaiseAction(AbstractPlayer player, AbstractMonster monster, boolean upgraded, boolean freeToPlayOnce, int energyOnUse)
     {
-        this.p = p;
-        this.m = m;
+        this.player = player;
+        this.monster = monster;
         this.freeToPlayOnce = freeToPlayOnce;
         this.upgraded = upgraded;
         this.duration = Settings.ACTION_DUR_XFAST;
@@ -30,44 +30,40 @@ public class MalaiseAction extends AbstractGameAction
     
     public void update()
     {
-        int effect = EnergyPanel.totalCount;
-        if (this.energyOnUse != -1)
+        int strengthDownEffect = EnergyPanel.totalCount;
+        if (energyOnUse != -1)
         {
-            effect = this.energyOnUse;
+            strengthDownEffect = this.energyOnUse;
         }
         
-        if (this.p.hasRelic("Chemical X"))
+        if (player.hasRelic("Chemical X"))
         {
-            effect += 2;
-            this.p.getRelic("Chemical X").flash();
+            strengthDownEffect += 2;
+            player.getRelic("Chemical X").flash();
         }
         
         if (upgraded)
         {
-            effect++;
+            strengthDownEffect++;
         }
         
-        int drawEffect = effect;
-        if (!upgraded)
+        int weakEffect = strengthDownEffect + 1;
+        
+        if (strengthDownEffect > 0)
         {
-            drawEffect++;
+            addToBot(new ApplyPowerAction(monster, player, new StrengthPower(monster, -strengthDownEffect), -strengthDownEffect));
         }
         
-        if (effect > 0)
+        if (weakEffect > 0)
         {
-            addToBot(new ApplyPowerAction(this.m, this.p, new StrengthPower(this.m, -effect), -effect));
+            addToBot(new ApplyPowerAction(monster, player, new WeakPower(monster, weakEffect, false), weakEffect));
         }
         
-        if (drawEffect > 0)
+        if (!freeToPlayOnce)
         {
-            addToBot(new ApplyPowerAction(this.m, this.p, new WeakPower(this.m, drawEffect, false), drawEffect));
+            player.energy.use(EnergyPanel.totalCount);
         }
         
-        if (!this.freeToPlayOnce)
-        {
-            this.p.energy.use(EnergyPanel.totalCount);
-        }
-        
-        this.isDone = true;
+        isDone = true;
     }
 }

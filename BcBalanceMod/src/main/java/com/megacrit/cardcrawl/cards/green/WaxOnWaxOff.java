@@ -45,7 +45,7 @@ public class WaxOnWaxOff extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 2 : 3;
+        return !upgraded ? 3 : 5;
     }
     
     @Override

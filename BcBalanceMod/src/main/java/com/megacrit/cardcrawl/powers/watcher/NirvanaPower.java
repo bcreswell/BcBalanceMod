@@ -5,6 +5,7 @@ import bcBalanceMod.*;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.*;
+import com.megacrit.cardcrawl.cards.purple.Nirvana;
 import com.megacrit.cardcrawl.cards.tempCards.*;
 import com.megacrit.cardcrawl.core.*;
 import com.megacrit.cardcrawl.dungeons.*;
@@ -55,13 +56,14 @@ public class NirvanaPower extends BcPowerBase
     @Override
     public String getBaseDescription()
     {
+        int blockPerInsight = amount * Nirvana.BlockPerInsight;
         if (amount == 1)
         {
-            return "Whenever you #yScry or gain #yMantra, also gain #yBlock for the same amount. NL When play an #yInsight or #yMiracle, gain #b" + amount + " #yBlock.";
+            return "Whenever you #yScry or gain #yMantra, also gain that amount of #yBlock.";
         }
         else
         {
-            return "Whenever you #yScry or gain #yMantra, also gain #yBlock for the same amount, #b" + amount + " times. NL When play an #yInsight or #yMiracle, gain #b" + amount + " #yBlock.";
+            return "Whenever you #yScry or gain #yMantra, also gain that amount of #yBlock, #b" + amount + " times.";
         }
     }
     //endregion
@@ -93,9 +95,10 @@ public class NirvanaPower extends BcPowerBase
     @Override
     public void onPlayCard(AbstractCard card, AbstractMonster monster)
     {
-        if (card.cardID.equals(Insight.ID) || card.cardID.equals(Miracle.ID))
-        {
-            addToBot(new GainBlockAction(owner, amount, Settings.FAST_MODE));
-        }
+//        if (card.cardID.equals(Insight.ID) || card.cardID.equals(Miracle.ID))
+//        {
+//             int blockPerInsight = amount * Nirvana.BlockPerInsight;
+//            addToBot(new GainBlockAction(owner, blockPerInsight, Settings.FAST_MODE));
+//        }
     }
 }

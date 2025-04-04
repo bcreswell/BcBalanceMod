@@ -17,7 +17,9 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
 import com.megacrit.cardcrawl.cards.DamageInfo.DamageType;
+import com.megacrit.cardcrawl.cards.colorless.Bite;
 import com.megacrit.cardcrawl.cards.red.Bash;
+import com.megacrit.cardcrawl.cards.red.TrueGrit;
 import com.megacrit.cardcrawl.characters.AbstractPlayer.PlayerClass;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.EnergyManager;
@@ -88,12 +90,17 @@ public class Ironclad extends AbstractPlayer {
         retVal.add("Strike_R");
         retVal.add("Strike_R");
         retVal.add("Strike_R");
+        retVal.add(Bite.ID);
+        
         retVal.add("Defend_R");
         retVal.add("Defend_R");
         retVal.add("Defend_R");
         retVal.add("Defend_R");
-        retVal.add("Bash");
-        retVal.add("Bite");
+        
+        retVal.add(Bash.ID);
+        retVal.add(TrueGrit.ID);
+        
+        
         return retVal;
     }
 
