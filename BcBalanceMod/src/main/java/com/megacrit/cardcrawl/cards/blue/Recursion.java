@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard.CardType;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
@@ -60,7 +61,13 @@ public class Recursion extends BcSkillCardBase
     {
         return 1;
     }
-
+    
+    @Override
+    public int getOrbCountToChannel()
+    {
+        return Math.min(AbstractDungeon.player.filledOrbCount(), 1);
+    }
+    
     @Override
     public String getBaseDescription()
     {

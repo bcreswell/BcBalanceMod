@@ -55,7 +55,7 @@ public class CastToDark extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Convert all Orbs, except the first one, to Dark Orbs.";
+        return "Convert all Orbs to Dark Orbs.";
     }
     //endregion
     

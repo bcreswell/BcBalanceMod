@@ -300,7 +300,7 @@ public class BcBalanceMod implements EditCardsSubscriber, EditRelicsSubscriber, 
         
         //watcher
         BcUtility.removeCardFromMasterLibrary(Worship.ID);
-        BcUtility.removeCardFromMasterLibrary(Wish.ID);
+        //BcUtility.removeCardFromMasterLibrary(Wish.ID);
         //BcUtility.removeCardFromMasterLibrary(Blasphemy.ID);
         BcUtility.removeCardFromMasterLibrary(Pray.ID);
         BcUtility.removeCardFromMasterLibrary(Indignation.ID);

@@ -43,9 +43,9 @@ public class BcUtility
     //region gameplay constants
     public static final int RitualCurseRemovalSacrifice = 6;
     static final int InitialRemovalCost = 75;
-    static final int InitialRemovalCostA16 = 100;
+    static final int InitialRemovalCostA16 = 85;
     static final int RemovalCostIncrement = 25;
-    static final int RemovalCostIncrementA16 = 50;
+    static final int RemovalCostIncrementA16 = 30;
     //endregion
     
     public static boolean LogCardCounts = true;
@@ -171,6 +171,13 @@ public class BcUtility
         }
         
         return 0;
+    }
+    
+    public static boolean isZeroCostCard(AbstractCard card)
+    {
+        return (card.costForTurn == 0) ||
+            card.freeToPlayOnce ||
+            ((card.cost == -1) && (EnergyPanel.totalCount == 0)); //x-cost with zero energy remaining
     }
     
     public static void markFreeYourMind()

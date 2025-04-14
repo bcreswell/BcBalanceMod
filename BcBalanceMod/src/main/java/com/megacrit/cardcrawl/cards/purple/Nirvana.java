@@ -3,6 +3,7 @@ package com.megacrit.cardcrawl.cards.purple;
 import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.tempCards.Insight;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.*;
@@ -44,19 +45,19 @@ public class Nirvana extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 1 : 2;
+        return 1;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (magicNumber == 1 )
+        if (!upgraded)
         {
             return "When you Scry or gain Mantra, also gain that amount of Block.";
         }
         else
         {
-            return "When you Scry or gain Mantra, also gain that amount of Block x!M!.";
+            return "Create an *Insight. NL When you Scry or gain Mantra, also gain that amount of Block.";
         }
     }
     //endregion
@@ -64,6 +65,10 @@ public class Nirvana extends BcPowerCardBase
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         AbstractDungeon.effectsQueue.add(new SpotlightPlayerEffect());
+        if (upgraded)
+        {
+            addToBot(new MakeTempCardInHandAction(new Insight()));
+        }
         addToBot(new BcApplyPowerAction(new NirvanaPower(player, magicNumber)));
     }
 }

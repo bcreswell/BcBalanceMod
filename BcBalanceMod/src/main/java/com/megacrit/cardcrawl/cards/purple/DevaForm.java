@@ -56,7 +56,7 @@ public class DevaForm extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "When Retained, reduce this card's cost by 1. NL Start of Turn: NL Gain "+BcUtility.getEnergyString(getMagicNumber(), this)+".";
+        return "When Retained, reduce this card's cost by 1. NL Start of Turn: NL Gain "+getEnergyString(getMagicNumber())+".";
     }
     //endregion
     

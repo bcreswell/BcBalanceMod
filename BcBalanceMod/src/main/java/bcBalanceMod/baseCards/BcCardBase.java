@@ -155,6 +155,11 @@ public abstract class BcCardBase extends AbstractCard
     {
         return BcUtility.getCardCountString(cardCount);
     }
+    
+    protected String getEnergyString(int energyAmount)
+    {
+        return BcUtility.getEnergyString(energyAmount, this);
+    }
 
     protected String applyConditionalHighlight(boolean condition, String segment)
     {

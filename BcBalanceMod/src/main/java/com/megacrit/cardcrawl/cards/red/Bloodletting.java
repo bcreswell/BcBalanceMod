@@ -57,16 +57,7 @@ public class Bloodletting extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Sacrifice " + getHealthLost() + " HP. NL Gain " + BcUtility.getEnergyString(getEnergyGained(), this) + ". NL Retain any leftover energy for next turn.";
-        
-//        String description = "Sacrifice " + getHealthLost() + " HP. NL Gain " + BcUtility.getEnergyString(getEnergyGained(), this) + ".";
-//
-//        if (upgraded)
-//        {
-//            description += " NL Conserve any leftover energy for next turn.";
-//        }
-//
-//        return description;
+        return "Sacrifice " + getHealthLost() + " HP. NL Gain " + getEnergyString(getEnergyGained()) + ". NL Retain any leftover energy for next turn.";
     }
     //endregion
     
@@ -75,9 +66,6 @@ public class Bloodletting extends BcSkillCardBase
         addToBot(new VFXAction(new OfferingEffect(), 0.1F));
         addToBot(new LoseHPAction(player, player, getHealthLost()));
         addToBot(new GainEnergyAction(getEnergyGained()));
-//        if (upgraded)
-//        {
-            addToBot(new BcApplyPowerAction(new ConserveEnergyPower(player, 1)));
-        //}
+        addToBot(new BcApplyPowerAction(new ConserveEnergyPower(player, 1)));
     }
 }

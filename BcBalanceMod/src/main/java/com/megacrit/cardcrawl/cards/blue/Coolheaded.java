@@ -77,7 +77,7 @@ public class Coolheaded extends BcSkillCardBase
     {
         return applyConditionalHighlight(
             isFocusZero(),
-            "Channel 1 Frost. NL Draw "+BcUtility.getCardCountString(magicNumber)+". NL #g0 #gFocus: Draw 1 more.");
+            "Channel 1 Frost. NL Draw "+getCardCountString(magicNumber)+". NL #g0 #gFocus: Draw 1 more.");
     }
     //endregion
     

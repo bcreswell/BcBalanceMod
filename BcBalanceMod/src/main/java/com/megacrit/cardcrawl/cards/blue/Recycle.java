@@ -50,22 +50,17 @@ public class Recycle extends BcSkillCardBase
         return 0;
     }
     
-    @Override
-    public int getBlock()
-    {
-        return !upgraded ? 0 : 3;
-    }
     
     @Override
     public String getBaseDescription()
     {
-        if (block > 0)
+        if (!upgraded)
         {
-            return "Exhaust a card to Gain its cost as [B] NL and Gain !B! Block.";
+            return "Exhaust a card to NL Gain its cost as [B].";
         }
         else
         {
-            return "Exhaust a card to NL Gain its cost as [B].";
+            return "Exhaust a card to NL Gain its cost as [B]. NL If it cost at least 1, Draw a card.";
         }
     }
     
@@ -81,12 +76,9 @@ public class Recycle extends BcSkillCardBase
         //does nothing if there's no target to exhaust
         if (player.hand.size() >= 2)
         {
-            addToBot(new RecycleAction());
-    
-            if (block > 0)
-            {
-                addToBot(new GainBlockAction(player, block));
-            }
+            RecycleAction action = new RecycleAction();
+            action.isUpgraded = upgraded;
+            addToBot(action);
         }
     }
 }

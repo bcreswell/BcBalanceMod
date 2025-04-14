@@ -63,7 +63,7 @@ public class Heatsinks extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Whenever you play a Power, Draw "+ BcUtility.getCardCountString(magicNumber) +". NL NL Retain one left over [B] each turn.";
+        return "Whenever you play a Power, Draw "+ getCardCountString(magicNumber) +". NL NL Retain one left over [B] each turn.";
     }
     //endregion
     

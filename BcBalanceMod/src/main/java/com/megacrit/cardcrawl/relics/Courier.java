@@ -17,7 +17,7 @@ public class Courier extends AbstractRelic
     
     public String getUpdatedDescription()
     {
-        return "The Merchant restocks cards, relics, and potions. All prices are reduced by #b20%. NL (doesn't reduce the cost of the #bCard #bRemoval #bService.)";
+        return "The Merchant restocks cards, relics, and potions. All prices are reduced by #b20%, including the #bCard #bRemoval #bService.";
     }
     
     public void onEnterRoom(AbstractRoom room)

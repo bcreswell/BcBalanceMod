@@ -2,6 +2,7 @@ package com.megacrit.cardcrawl.cards.colorless;
 
 import bcBalanceMod.BcUtility;
 import bcBalanceMod.baseCards.*;
+import com.megacrit.cardcrawl.actions.common.BcApplyPowerAction;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.actions.common.PutOnDeckAction;
 import com.megacrit.cardcrawl.actions.unique.BcRetainCardsAction;
@@ -11,6 +12,7 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.DrawReductionPower;
 
 public class ThinkingAhead extends BcSkillCardBase
 {
@@ -24,6 +26,12 @@ public class ThinkingAhead extends BcSkillCardBase
     }
     
     @Override
+    public CardColor getCardColor()
+    {
+        return CardColor.GREEN;
+    }
+    
+    @Override
     public String getId()
     {
         return ID;
@@ -32,7 +40,7 @@ public class ThinkingAhead extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.RARE;
+        return CardRarity.COMMON;
     }
     
     @Override
@@ -44,24 +52,19 @@ public class ThinkingAhead extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 2 : 3;
+        //card draw
+        return 2;
     }
     
     public int getRetainCount()
     {
-        return !upgraded ? 2 : 3;
-    }
-    
-    @Override
-    public boolean getExhaust()
-    {
-        return true;
+        return !upgraded ? 1 : 2;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Draw "+ BcUtility.getCardCountString(magicNumber)+". NL Pick "+ BcUtility.getCardCountString(getRetainCount())+" to Retain.";
+        return "Draw "+ getCardCountString(magicNumber)+". NL Pick "+ getCardCountString(getRetainCount())+" to Retain. NL NL Draw 1 less card next turn.";
     }
     //endregion
     
@@ -82,7 +85,9 @@ public class ThinkingAhead extends BcSkillCardBase
             !AbstractDungeon.player.hasRelic("Runic Pyramid") &&
             !AbstractDungeon.player.hasPower("Equilibrium"))
         {
-            addToBot(new BcRetainCardsAction(player, retainableCards));
+            addToBot(new BcRetainCardsAction(player, getRetainCount()));
         }
+        
+        addToBot(new BcApplyPowerAction(new DrawReductionPower(player, 1)));
     }
 }

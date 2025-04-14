@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.actions.unique;
 
+import bcBalanceMod.BcUtility;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
@@ -22,9 +23,7 @@ public class QuickSlashAction extends AbstractGameAction
         AbstractPlayer player = AbstractDungeon.player;
         for (AbstractCard card : DrawCardAction.drawnCards)
         {
-            if ((card.costForTurn == 0) ||
-                card.freeToPlayOnce ||
-                (card.cost < 0)) // && (card.type == AbstractCard.CardType.SKILL)))
+            if (BcUtility.isZeroCostCard(card))
             {
                 if ((player.drawPile.size() == 0) && (player.discardPile.size() == 1))
                 {

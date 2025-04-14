@@ -66,7 +66,7 @@ public class Adrenaline extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Gain "+ BcUtility.getEnergyString(magicNumber,this) +". NL Draw "+getCardCountString(getCardDraw())+".";
+        return "Gain "+ getEnergyString(magicNumber) +". NL Draw "+getCardCountString(getCardDraw())+".";
     }
     //endregion
     

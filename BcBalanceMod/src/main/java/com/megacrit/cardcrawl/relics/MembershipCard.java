@@ -15,7 +15,7 @@ public class MembershipCard extends AbstractRelic
     
     public String getUpdatedDescription()
     {
-        return "#b50% discount on all products! NL (except the #bCard #bRemoval #bService. Terms and conditions may apply.)";
+        return "#b50% discount on all products! Includes the #bCard #bRemoval #bService.";
     }
     
     public void onEnterRoom(AbstractRoom room)

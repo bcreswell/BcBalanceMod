@@ -69,7 +69,10 @@ public class OldWoundsAction extends AbstractGameAction
                     }
                 }
                 
-                addToBot(new GainBlockAction(player, blockToGain));
+                if (blockToGain > 0)
+                {
+                    addToBot(new GainBlockAction(player, blockToGain));
+                }
                 
                 isDone = true;
             }

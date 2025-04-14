@@ -9,19 +9,20 @@ import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.dungeons.*;
 import com.megacrit.cardcrawl.monsters.*;
 import com.megacrit.cardcrawl.orbs.Dark;
-import com.megacrit.cardcrawl.orbs.Frost;
 import com.megacrit.cardcrawl.orbs.Lightning;
+import com.megacrit.cardcrawl.orbs.Plasma;
 import com.megacrit.cardcrawl.powers.*;
 
-public class CastToFrost extends BcSkillCardBase
+
+public class CastToPlasma extends BcSkillCardBase
 {
-    public static final String ID = BcBalanceMod.makeID("CastToLightning");
+    public static final String ID = BcBalanceMod.makeID("CastToPlasma");
     
     //region card parameters
     @Override
     public String getDisplayName()
     {
-        return "Cast to Frost";
+        return "Cast to Plasma";
     }
     
     @Override
@@ -33,7 +34,7 @@ public class CastToFrost extends BcSkillCardBase
     @Override
     public String getImagePath()
     {
-        return "blue/skill/chill";
+        return "blue/skill/fusion";
     }
     
     @Override
@@ -57,7 +58,7 @@ public class CastToFrost extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Convert all Orbs to Frost Orbs.";
+        return "Convert all Orbs to Plasma Orbs.";
     }
     //endregion
     
@@ -71,7 +72,7 @@ public class CastToFrost extends BcSkillCardBase
     {
         for (int i = 0; i < AbstractDungeon.player.orbs.size(); ++i)
         {
-            addToBot(new CastOrbAction(i, new Frost()));
+            addToBot(new CastOrbAction(i, new Plasma()));
         }
     }
 }

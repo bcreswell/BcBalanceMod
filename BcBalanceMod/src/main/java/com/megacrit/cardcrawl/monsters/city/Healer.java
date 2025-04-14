@@ -57,13 +57,17 @@ public class Healer extends AbstractMonster
     public Healer(float x, float y)
     {
         super(NAME, "Healer", 56, 0.0F, -20.0F, 230.0F, 250.0F, (String) null, x, y);
+        
+        //bc: lowering her health to tempt players into killing her first.
         if (AbstractDungeon.ascensionLevel >= 7)
         {
-            setHp(44, 48);
+            setHp(34, 38);
+            //setHp(44, 48);
         }
         else
         {
-            setHp(42, 46);
+            setHp(32, 36);
+            //setHp(42, 46);
         }
         
         if (AbstractDungeon.ascensionLevel >= 17)

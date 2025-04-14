@@ -5,6 +5,7 @@ C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\v
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\powers\SerpentSkinPower.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\purple\DevaForm.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\blue\Coolheaded.java
+C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\blue\CastToPlasma.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\potions\BufferPotion.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\purple\ImAlwaysAngry.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\actions\defect\EvokeNextOrbOfTypeAction.java
@@ -61,6 +62,7 @@ C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\m
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\blue\Streamline.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\vfx\combat\NinjaSmokeEffect.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\green\Predator.java
+C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\actions\common\DmgIfPoisonedAction.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\purple\ThirdEye.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\red\Hemokinesis.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\actions\common\StormOfSteelAction.java
@@ -142,6 +144,7 @@ C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\c
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\powers\MagnetismPower.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\powers\OutnumberedPower.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\actions\common\BcApplyPowerAction.java
+C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\green\Alchemize.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\powers\AscensionPower.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\actions\utility\RetrieveWeaveAction.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\actions\defect\EvokeWithoutRemovingOrbAction.java
@@ -615,6 +618,7 @@ C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\c
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\orbs\AbstractOrb.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\purple\Halt.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\neow\NeowRoom.java
+C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\powers\DashPower.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\colorless\Magnetism.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\purple\CrushJoints.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\actions\unique\EnlightenmentAction.java
@@ -717,6 +721,7 @@ C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\a
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\actions\utility\FlashBuffAction.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\powers\DoubleDamagePower.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\powers\WaxOnPower.java
+C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\powers\DrawReductionPower.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\purple\DeceiveReality.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\vfx\combat\NinjaVanishEffect.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\purple\EmptyBody.java
@@ -733,6 +738,7 @@ C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\r
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\red\BodySlam.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\red\Dropkick.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\monsters\city\TorchHead.java
+C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\actions\defect\ScrapeFollowUpAction.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\powers\CreativeAIPower.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\purple\Protect.java
 C:\Code\BcBalanceMod (spire)\BcBalanceMod\src\main\java\com\megacrit\cardcrawl\cards\blue\MachineLearning.java

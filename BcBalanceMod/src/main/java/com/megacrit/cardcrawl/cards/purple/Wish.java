@@ -38,6 +38,12 @@ public class Wish extends BcSkillCardBase
     }
     
     @Override
+    public CardColor getCardColor()
+    {
+        return CardColor.COLORLESS;
+    }
+    
+    @Override
     public CardRarity getCardRarity()
     {
         return CardRarity.RARE;
@@ -55,17 +61,13 @@ public class Wish extends BcSkillCardBase
         return true;
     }
 
-    @Override
-    public int getBlock()
+    public int getRegen()
     {
-        //regen
-        return !upgraded ? 7 : 8;
+        return !upgraded ? 6 : 7;
     }
     
-    @Override
-    public int getDamage()
+    public int getStrength()
     {
-        //strength
         return !upgraded ? 3 : 4;
     }
     
@@ -79,7 +81,7 @@ public class Wish extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Choose one: NL -Gain !B! Regen, NL -Gain !D! Strength, NL -Gain !M! Gold.";
+        return "Choose one: NL -Gain "+getRegen()+" Regen, NL -Gain "+getStrength()+" Strength, NL -Gain !M! Gold.";
     }
     //endregion
     

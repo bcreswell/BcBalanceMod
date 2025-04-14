@@ -101,6 +101,8 @@ public class MemoryLeak extends BcAttackCardBase
     }
     //endregion
     
+    
+    
     public void use(AbstractPlayer player, AbstractMonster monster) {
         addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_LIGHT));
 

@@ -44,7 +44,7 @@ public class SimmeringFury extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return 2;
+        return 3;
     }
     
     @Override
@@ -58,8 +58,8 @@ public class SimmeringFury extends BcSkillCardBase
     {
         return applyConditionalHighlight(
             isPlayerInStance(WrathStance.STANCE_ID),
-            "#gWrath: Draw "+BcUtility.getCardCountString(magicNumber)+".",
-            "#gElse: Next turn, enter Wrath and Draw "+BcUtility.getCardCountString(magicNumber)+".");
+            "#gWrath: Draw "+getCardCountString(magicNumber)+".",
+            "#gElse: Next turn, enter Wrath and Draw "+getCardCountString(magicNumber)+".");
     }
     //endregion
     

@@ -1,9 +1,5 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.megacrit.cardcrawl.cards.blue;
+
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
 
 import bcBalanceMod.BcUtility;
@@ -58,7 +54,7 @@ public class CoreSurge extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 7 : 11;
+        return !upgraded ? 13 : 18;
     }
     
     @Override

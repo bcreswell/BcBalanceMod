@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.stances;
 
+import bcBalanceMod.BcUtility;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
@@ -12,6 +13,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.StanceStrings;
 import com.megacrit.cardcrawl.powers.*;
+import com.megacrit.cardcrawl.powers.watcher.MantraPower;
 import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
 import com.megacrit.cardcrawl.vfx.stance.DivinityParticleEffect;
 import com.megacrit.cardcrawl.vfx.stance.StanceAuraEffect;
@@ -48,7 +50,6 @@ public class DivinityStance extends AbstractStance
             this.particleTimer2 = MathUtils.random(0.45F, 0.55F);
             AbstractDungeon.effectsQueue.add(new StanceAuraEffect("Divinity"));
         }
-        
     }
     
     public void atStartOfTurn()
@@ -63,8 +64,8 @@ public class DivinityStance extends AbstractStance
     
     public void updateDescription()
     {
-        //this.description = "Upon triggering this #yStance, gain [W] [W] [W] . Attacks deal triple damage. Retain your energy until next turn. Exit this #yStance at the start of your next turn.";
-        description = "Upon triggering this #yStance, gain [W] [W] [W] . Attacks deal triple damage. Exit this #yStance at the start of your next turn.";
+        description = "Upon triggering this #yStance, gain [W] [W] [W] . Attacks deal triple damage. Retain your energy until next turn. Exit this #yStance at the start of your next turn.";
+        //description = "Upon triggering this #yStance, gain [W] [W] [W] . Attacks deal triple damage. Exit this #yStance at the start of your next turn.";
     }
     
     //happens even if you're already in the stance
@@ -87,7 +88,13 @@ public class DivinityStance extends AbstractStance
         AbstractDungeon.actionManager.addToBottom(new GainEnergyAction(3));
         
         AbstractPlayer player = AbstractDungeon.player;
-        //AbstractDungeon.actionManager.addToBottom(new BcApplyPowerAction(new ConserveEnergyPower(player, 1)));
+        AbstractDungeon.actionManager.addToBottom(new BcApplyPowerAction(new ConserveEnergyPower(player, 1)));
+        
+        AbstractPower mantra = BcUtility.getPower(MantraPower.POWER_ID);
+        if (mantra != null)
+        {
+            ((MantraPower)mantra).convertToHealingInDivinity();
+        }
     }
     
     public void onExitStance()
@@ -102,7 +109,6 @@ public class DivinityStance extends AbstractStance
             CardCrawlGame.sound.stop("STANCE_LOOP_DIVINITY", sfxId);
             sfxId = -1L;
         }
-        
     }
     
     static

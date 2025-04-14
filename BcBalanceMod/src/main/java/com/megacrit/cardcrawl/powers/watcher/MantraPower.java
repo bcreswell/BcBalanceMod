@@ -52,24 +52,27 @@ public class MantraPower extends AbstractPower
         AbstractPlayer player = AbstractDungeon.player;
         if (!BcUtility.isPlayerInStance(DivinityStance.STANCE_ID))
         {
-            while (amount >= 10)
+            if (amount >= 10)
             {
-                addToTop(new ChangeStanceAction(DivinityStance.STANCE_ID));
                 amount -= 10;
-                //extra mantra is converted into healing
-                if (amount > 0)
-                {
-                    addToBot(new HealAction(player, player, amount));
-                    amount = 0;
-                    addToBot(new RemovePowerIfEmptyAction(owner, MantraPower.POWER_ID));
-                }
+                //this will indirectly call convertToHealingInDivinity();
+                addToTop(new ChangeStanceAction(DivinityStance.STANCE_ID));
             }
         }
         else
         {
-            //extra mantra is converted into healing
+            convertToHealingInDivinity();
+        }
+    }
+    
+    public void convertToHealingInDivinity()
+    {
+        AbstractPlayer player = AbstractDungeon.player;
+        if (BcUtility.isPlayerInStance(DivinityStance.STANCE_ID))
+        {
             if (amount > 0)
             {
+                //extra mantra is converted into healing
                 addToBot(new HealAction(player, player, amount));
                 amount = 0;
                 addToBot(new RemovePowerIfEmptyAction(owner, MantraPower.POWER_ID));

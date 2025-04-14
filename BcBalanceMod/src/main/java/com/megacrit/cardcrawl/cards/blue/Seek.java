@@ -45,8 +45,14 @@ public class Seek extends BcSkillCardBase
         return 1;
     }
     
+//    @Override
+//    public boolean canBeRetrieved()
+//    {
+//        return upgraded;
+//    }
+    
     @Override
-    public boolean canBeRetrieved()
+    public boolean getRetain()
     {
         return upgraded;
     }
@@ -54,7 +60,7 @@ public class Seek extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Pick "+ BcUtility.getCardCountString(magicNumber) +" to Draw.";
+        return "Pick "+ getCardCountString(magicNumber) +" to Draw.";
     }
     //endregion
 

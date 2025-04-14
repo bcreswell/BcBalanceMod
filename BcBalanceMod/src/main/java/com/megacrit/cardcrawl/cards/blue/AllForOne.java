@@ -47,7 +47,7 @@ public class AllForOne extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 10 : 14;
+        return !upgraded ? 10 : 16;
     }
     
     @Override

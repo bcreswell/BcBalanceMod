@@ -1418,13 +1418,17 @@ public abstract class AbstractCard implements Comparable<AbstractCard>
             int filledOrbCount = player.filledOrbCount();
             int currentOrbCount = player.orbs.size();
             int maxOrbCount = player.maxOrbs;
+            int directEvokeCount = Math.min(filledOrbCount, getNumberOfOrbsEvokedDirectly());
+            
+            filledOrbCount -= directEvokeCount;
+            filledOrbCount = BcUtility.clamp(0, filledOrbCount, 10);
             
             int createdOrbSlots = getNumberOfOrbsSlotsCreated();
             createdOrbSlots = BcUtility.clamp(maxOrbCount - currentOrbCount, createdOrbSlots, 10);
             
             int evokedOrbsCount = (channeledOrbCount + filledOrbCount) - (currentOrbCount + createdOrbSlots);
             evokedOrbsCount = BcUtility.clamp(0, evokedOrbsCount, 10);
-            evokedOrbsCount += getNumberOfOrbsEvokedDirectly();
+            evokedOrbsCount += directEvokeCount;
             evokedOrbsCount = BcUtility.clamp(0, evokedOrbsCount, 10);
             
             int evokeTimes = getEvokeIterations();
@@ -1446,7 +1450,16 @@ public abstract class AbstractCard implements Comparable<AbstractCard>
                 !(orb instanceof EmptyOrbSlot))
             {
                 orb.showEvokeValue();
-                orb.evokeTimes = evokeTimes;
+                //bc: the first orb is the only one that evokes multiple times. except with necronomicon,
+                // but that's too much logic and i dont feel like doing that.
+                if (i == 0)
+                {
+                    orb.evokeTimes = evokeTimes;
+                }
+                else
+                {
+                    orb.evokeTimes = 1;
+                }
             }
 
             i++;

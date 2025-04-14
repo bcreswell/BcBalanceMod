@@ -52,19 +52,13 @@ public class EquivalencePrinciple extends BcSkillCardBase
     }
     
     @Override
-    public boolean getExhaust()
-    {
-        return !upgraded;
-    }
-    
-    @Override
     public String getBaseDescription()
     {
-        String description = "Remove your first Orb without evoking it to gain "+BcUtility.getEnergyString(magicNumber, this)+".";
-//        if (upgraded)
-//        {
-//            description += " NL Create a temporary *Equivalence *Principle.";
-//        }
+        String description = "Remove your first Orb without evoking it to Gain "+getEnergyString(magicNumber)+".";
+        if (upgraded)
+        {
+            description += " NL Create a temporary *Equivalence *Principle.";
+        }
         
         return description;
     }
@@ -78,11 +72,11 @@ public class EquivalencePrinciple extends BcSkillCardBase
             addToBot(new GainEnergyAction(magicNumber));
         }
         
-//        if (upgraded)
-//        {
-//            EquivalencePrinciple card = new EquivalencePrinciple();
-//            BcUtility.makeCardTemporary(card);
-//            BcUtility.addNewCardToHandOrDiscard(card);
-//        }
+        if (upgraded)
+        {
+            EquivalencePrinciple card = new EquivalencePrinciple();
+            BcUtility.makeCardTemporary(card);
+            BcUtility.addNewCardToHandOrDiscard(card);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.cards.green;
 
+import bcBalanceMod.baseCards.BcSkillCardBase;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.unique.BouncingFlaskAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -14,38 +15,62 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.vfx.combat.PotionBounceEffect;
 
-public class BouncingFlask extends AbstractCard {
+public class BouncingFlask extends BcSkillCardBase
+{
     public static final String ID = "Bouncing Flask";
-    private static final CardStrings cardStrings;
-
-    public BouncingFlask() {
-        super("Bouncing Flask", cardStrings.NAME, "green/skill/bouncing_flask", 2, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.GREEN, CardRarity.UNCOMMON, CardTarget.ALL_ENEMY);
-        this.baseMagicNumber = 4;
-        this.magicNumber = this.baseMagicNumber;
+    
+    //region card parameters
+    @Override
+    public String getImagePath()
+    {
+        return "green/skill/bouncing_flask";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        AbstractMonster randomMonster = AbstractDungeon.getMonsters().getRandomMonster((AbstractMonster)null, true, AbstractDungeon.cardRandomRng);
-        if (randomMonster != null) {
-            this.addToBot(new VFXAction(new PotionBounceEffect(p.hb.cX, p.hb.cY, randomMonster.hb.cX, this.hb.cY), 0.4F));
+    
+    @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.RARE;
+    }
+    
+    @Override
+    public int getCost()
+    {
+        return 2;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        // how many times
+        return !upgraded ? 4 : 5;
+    }
+    
+    public int getPoisonAmount()
+    {
+        return 3;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "Inflict "+getPoisonAmount()+" Poison to a random enemy !M! times.";
+    }
+    //endregion
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
+        AbstractMonster randomMonster = AbstractDungeon.getMonsters().getRandomMonster(null, true, AbstractDungeon.cardRandomRng);
+        if (randomMonster != null)
+        {
+            addToBot(new VFXAction(new PotionBounceEffect(player.hb.cX, player.hb.cY, randomMonster.hb.cX, hb.cY), 0.3F));
         }
 
-        this.addToBot(new BouncingFlaskAction(randomMonster, 3, this.magicNumber));
-    }
-
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeMagicNumber(1);
-        }
-
-    }
-
-    public AbstractCard makeCopy() {
-        return new BouncingFlask();
-    }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Bouncing Flask");
+        addToBot(new BouncingFlaskAction(randomMonster, getPoisonAmount(), magicNumber));
     }
 }

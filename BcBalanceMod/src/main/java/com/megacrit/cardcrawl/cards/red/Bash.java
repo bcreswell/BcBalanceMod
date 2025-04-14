@@ -55,7 +55,7 @@ public class Bash extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 8 : 15;
+        return !upgraded ? 8 : 14;
     }
     
     @Override

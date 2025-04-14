@@ -56,7 +56,7 @@ public class CastToLightning extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Convert all Orbs, except the first one, to Lightning Orbs.";
+        return "Convert all Orbs to Lightning Orbs.";
     }
     //endregion
     

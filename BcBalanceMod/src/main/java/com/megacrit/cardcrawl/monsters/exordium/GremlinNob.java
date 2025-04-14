@@ -80,19 +80,19 @@ public class GremlinNob extends AbstractMonster
         
         if (AbstractDungeon.ascensionLevel >= 3)
         {
-            bashDmg = 8;
+            bashDmg = 8; //vuln inflicting attack
             rushDmg = 16;
         }
         else
         {
-            bashDmg = 6;
+            bashDmg = 6; //vuln inflicting attack
             rushDmg = 14;
         }
         
-        strengthOnEnrage = 2;
+        strengthOnEnrage = 1;
         if (AbstractDungeon.ascensionLevel >= 18)
         {
-            strengthOnEnrage = 3;
+            strengthOnEnrage = 2;
         }
         
         damage.add(new DamageInfo(this, rushDmg));

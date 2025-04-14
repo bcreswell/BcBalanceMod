@@ -72,7 +72,7 @@ public class ReachHeaven extends BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 2 : 3;
+        return !upgraded ? 3 : 4;
     }
     
     @Override
@@ -84,7 +84,7 @@ public class ReachHeaven extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Shuffle a NL *Through *Violence into your draw pile. NL Gain !M! Mantra.";
+        return "Deal !D! damage. NL Shuffle a NL *Through *Violence NL into your draw pile. NL Gain !M! Mantra.";
     }
     //endregion
     

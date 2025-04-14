@@ -92,7 +92,7 @@ public class BcCreativeAiPower2 extends BcPowerBase
                         true,
                         AbstractCard.CardType.SKILL,
                         null,
-                        false,
+                        true,
                         true,
                         true,
                         null));

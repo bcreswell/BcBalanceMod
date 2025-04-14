@@ -92,7 +92,7 @@ public class Centurion extends AbstractMonster
         else
         {
             slashDmg = 12;
-            furyDmg = 7;
+            furyDmg = 6;
             furyHits = 3;
         }
         

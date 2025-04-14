@@ -77,7 +77,8 @@ public class IfYouStrikeMeDownPower extends BcPowerBase
     public int onAttacked(DamageInfo info, int damageAmount)
     {
         AbstractPlayer player = AbstractDungeon.player;
-        if ((damageAmount >= player.currentHealth) && (amount > 0))
+        if ((damageAmount >= player.currentHealth) &&
+            (amount > 0))
         {
             amount--;
             player.currentHealth = 0;

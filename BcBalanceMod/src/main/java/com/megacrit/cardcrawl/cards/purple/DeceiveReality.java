@@ -42,7 +42,7 @@ public class DeceiveReality extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 5 : 8;
+        return !upgraded ? 4 : 8;
     }
     
     @Override

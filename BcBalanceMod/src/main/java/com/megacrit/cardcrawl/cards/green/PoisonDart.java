@@ -52,7 +52,7 @@ public class PoisonDart extends BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 4 : 5;
+        return !upgraded ? 3 : 4;
     }
     
     @Override
@@ -64,7 +64,7 @@ public class PoisonDart extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Inflict !M! poison.";
+        return "Deal !D! damage. NL Inflict !M! Poison.";
     }
     //endregion
     

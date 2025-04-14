@@ -39,13 +39,7 @@ public class UnforeseenAlly extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 1;
-    }
-    
-    @Override
-    public boolean getInnate()
-    {
-        return upgraded;
+        return !upgraded ? 1 : 0;
     }
     
     @Override

@@ -61,7 +61,7 @@ public class Rebound extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 8 : 10;
+        return !upgraded ? 8 : 12;
     }
     
     @Override

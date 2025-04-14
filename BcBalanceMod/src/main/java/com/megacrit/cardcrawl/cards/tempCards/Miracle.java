@@ -64,7 +64,7 @@ public class Miracle extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Gain "+ BcUtility.getEnergyString(magicNumber, this)+". NL Gain 1 Mantra.";
+        return "Gain "+ getEnergyString(magicNumber)+". NL Gain 1 Mantra.";
     }
     
     @Override

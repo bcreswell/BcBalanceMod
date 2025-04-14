@@ -48,7 +48,7 @@ public class WellLaidPlans extends BcPowerCardBase
     @Override
     public String getBaseDescription()
     {
-        return "End of turn: NL Retain "+ BcUtility.getCardCountString(magicNumber) +".";
+        return "End of turn: NL Retain "+ getCardCountString(magicNumber) +".";
     }
     //endregion
     

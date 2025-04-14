@@ -22,6 +22,7 @@ public class RecycleAction extends AbstractGameAction
 {
     private static final UIStrings uiStrings;
     public static final String[] TEXT;
+    public boolean isUpgraded;
     
     public RecycleAction()
     {
@@ -94,6 +95,11 @@ public class RecycleAction extends AbstractGameAction
         if (energyToGain > 0)
         {
             addToTop(new GainEnergyAction(energyToGain));
+            
+            if (isUpgraded)
+            {
+                addToBot(new DrawCardAction(1));
+            }
         }
     }
     

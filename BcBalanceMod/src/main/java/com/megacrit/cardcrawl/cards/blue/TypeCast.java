@@ -22,6 +22,7 @@ public class TypeCast extends BcSkillCardBase
     CastToDark castToDark;
     CastToLightning castToLightning;
     CastToFrost castToFrost;
+    CastToPlasma castToPlasma;
     
     //region card parameters
     @Override
@@ -48,12 +49,13 @@ public class TypeCast extends BcSkillCardBase
         castToDark = new CastToDark();
         castToLightning = new CastToLightning();
         castToFrost = new CastToFrost();
+        castToPlasma = new CastToPlasma();
     }
     
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.RARE;
     }
     
     @Override
@@ -63,16 +65,18 @@ public class TypeCast extends BcSkillCardBase
     }
     
     @Override
-    public boolean getExhaust()
-    {
-        return !upgraded;
-    }
-    
-    @Override
     public String getBaseDescription()
     {
         //return "Choose One: NL Dark, Lightning or Frost. NL NL Convert all Orbs, except the first one, to the chosen type.";
-        return "Convert your Orbs to Dark, Lightning or Frost. NL NL Doesn't convert Plasma or large ("+LargeDarkThreshold+" mass) Dark Orbs.";
+        //return "Convert your Orbs to Dark, Lightning or Frost. NL NL Doesn't convert Plasma or large ("+LargeDarkThreshold+" mass) Dark Orbs.";
+        if (!upgraded)
+        {
+            return "Convert your Orbs to Dark, Lightning or Frost. NL NL Doesn't convert large Dark Orbs (mass >= "+LargeDarkThreshold+").";
+        }
+        else
+        {
+            return "Convert your Orbs to Dark, Lightning, Frost or Plasma. NL NL Doesn't convert large Dark Orbs (mass >= "+LargeDarkThreshold+").";
+        }
     }
     //endregion
     
@@ -84,6 +88,10 @@ public class TypeCast extends BcSkillCardBase
         choices.add(castToDark.makeStatEquivalentCopy());
         choices.add(castToLightning.makeStatEquivalentCopy());
         choices.add(castToFrost.makeStatEquivalentCopy());
+        if (upgraded)
+        {
+            choices.add(castToPlasma.makeStatEquivalentCopy());
+        }
         
         addToBot(new ChooseOneAction(choices));
     }

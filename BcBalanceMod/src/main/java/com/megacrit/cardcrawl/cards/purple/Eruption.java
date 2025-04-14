@@ -90,7 +90,7 @@ public class Eruption extends BcAttackCardBase
         }
         else
         {
-            return "Deal !D! Damage. NL Enter Wrath. NL Draw "+BcUtility.getCardCountString(magicNumber)+".";
+            return "Deal !D! Damage. NL Enter Wrath. NL Draw "+getCardCountString(magicNumber)+".";
         }
     }
     //endregion

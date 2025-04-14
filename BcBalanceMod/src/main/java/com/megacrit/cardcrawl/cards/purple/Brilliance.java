@@ -43,7 +43,7 @@ public class Brilliance extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 8 : 13;
+        return !upgraded ? 9 : 14;
     }
     
     @Override
@@ -61,20 +61,20 @@ public class Brilliance extends BcAttackCardBase
     
     public void applyPowers()
     {
-        int realBaseDamage = this.baseDamage;
-        this.baseDamage += AbstractDungeon.actionManager.mantraGained;
+        int realBaseDamage = baseDamage;
+        baseDamage += AbstractDungeon.actionManager.mantraGained;
         super.applyPowers();
-        this.baseDamage = realBaseDamage;
-        this.isDamageModified = this.damage != this.baseDamage;
+        baseDamage = realBaseDamage;
+        isDamageModified = damage != baseDamage;
     }
     
     public void calculateCardDamage(AbstractMonster mo)
     {
-        int realBaseDamage = this.baseDamage;
-        this.baseDamage += AbstractDungeon.actionManager.mantraGained;
+        int realBaseDamage = baseDamage;
+        baseDamage += AbstractDungeon.actionManager.mantraGained;
         super.calculateCardDamage(mo);
-        this.baseDamage = realBaseDamage;
-        this.isDamageModified = this.damage != this.baseDamage;
+        baseDamage = realBaseDamage;
+        isDamageModified = damage != baseDamage;
     }
     
     public void use(AbstractPlayer player, AbstractMonster monster)

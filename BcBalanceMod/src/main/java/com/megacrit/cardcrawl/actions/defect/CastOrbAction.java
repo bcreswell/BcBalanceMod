@@ -31,14 +31,13 @@ public class CastOrbAction extends AbstractGameAction
         {
             ArrayList<AbstractOrb> orbs = AbstractDungeon.player.orbs;
             
-            //dont convert the first one. Lets you save an orb of your choice.
             if ((orbIndex >= 0) && (orbIndex < orbs.size()))
             {
                 AbstractOrb existingOrb = orbs.get(orbIndex);
 
                 if ((existingOrb.ID != newOrb.ID) &&
                     !(existingOrb instanceof EmptyOrbSlot) &&
-                    !(existingOrb instanceof Plasma) &&
+                    //!(existingOrb instanceof Plasma) &&
                     (!(existingOrb instanceof Dark) || (existingOrb.evokeAmount < TypeCast.LargeDarkThreshold)))
                 {
                     orbs.set(orbIndex, newOrb);

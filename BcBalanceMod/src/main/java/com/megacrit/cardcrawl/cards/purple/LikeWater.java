@@ -35,7 +35,7 @@ public class LikeWater extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 6 : 10;
+        return !upgraded ? 6 : 9;
     }
     
     @Override

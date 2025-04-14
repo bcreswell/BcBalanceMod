@@ -40,21 +40,15 @@ public class CalculatedGamble extends BcSkillCardBase
     }
     
     @Override
-    public boolean getInnate()
-    {
-        return upgraded;
-    }
-    
-    @Override
     public boolean getExhaust()
     {
-        return true;
+        return !upgraded;
     }
     
     @Override
     public int getMagicNumber()
     {
-        return 1;
+        return 0;
     }
     
     @Override

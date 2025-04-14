@@ -36,7 +36,7 @@ public class Injury extends BcCurseCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Unplayable. NL Draw 1 fewer cards next turn.";
+        return "Unplayable. NL Draw 1 less card next turn.";
     }
     //endregion
     

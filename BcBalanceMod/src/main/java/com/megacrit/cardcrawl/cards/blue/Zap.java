@@ -80,7 +80,7 @@ public class Zap extends BcSkillCardBase
         
         if (cardDrawCount > 0)
         {
-            description += " NL Draw "+BcUtility.getCardCountString(cardDrawCount)+".";
+            description += " NL Draw "+getCardCountString(cardDrawCount)+".";
         }
         
         return description;

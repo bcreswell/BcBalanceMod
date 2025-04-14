@@ -31,7 +31,7 @@ public class IfYouStrikeMeDown extends BcPowerCardBase
     public void onInitialized()
     {
         tags.add(AbstractCard.CardTags.STRIKE);
-        cardsToPreview = new Insight();
+        //cardsToPreview = new Insight();
     }
     
     @Override
@@ -55,22 +55,22 @@ public class IfYouStrikeMeDown extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return 1;
+        return 0;
     }
     
     @Override
     public String getBaseDescription()
     {
-        String description = null;
+        String description = "";
         if (magicNumber == 1)
         {
-            description = "Create an *Insight.";
+            description = "Create an *Insight. NL ";
         }
-        else
+        else if (magicNumber > 1)
         {
-            description = "Create !M! *Insights.";
+            description = "Create !M! *Insights. NL ";
         }
-        description += " NL If you die, return with " + getHpToReviveWith() + " HP, become Intangible, and next turn enter Divinity.";
+        description += "If you die, return with " + getHpToReviveWith() + " HP, become Intangible, and next turn enter Divinity.";
         
         //description += "NL If you die: NL Return with " + getHpToReviveWith() + " health, NL Gain 1 Intangible, NL and on the next turn, Enter Divinity.";
         if (BcUtility.playerHasRelic(StrikeDummy.ID))

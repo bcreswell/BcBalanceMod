@@ -49,7 +49,7 @@ public class Uppercut extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 8 : 14;
+        return !upgraded ? 7 : 13;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class Uppercut extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Inflict !M! Weak NL and !M! Vulnerable.";
+        return "Deal !D! damage. NL Inflict !M! Weak. NL Inflict !M! Vulnerable.";
     }
     //endregion
 

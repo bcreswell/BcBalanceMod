@@ -53,6 +53,7 @@ public class Predator extends BcAttackCardBase
     {
         return !upgraded ? 15 : 20;
     }
+    
     @Override
     public int getMagicNumber()
     {
@@ -75,7 +76,7 @@ public class Predator extends BcAttackCardBase
     public String getBaseDescription()
     {
         //return "Deal !D! damage. NL NL Start of Next Turn: NL Draw " + BcUtility.getCardCountString(magicNumber) + ".";
-        return "Deal !D! damage. NL If this kills an enemy, Draw "+getCardCountString(magicNumber)+", and NL Gain "+BcUtility.getEnergyString(getBonusEnergy(),this)+".";
+        return "Deal !D! damage. NL If this kills an enemy, Draw "+getCardCountString(magicNumber)+" and NL Gain "+getEnergyString(getBonusEnergy())+".";
     }
     //endregion
     

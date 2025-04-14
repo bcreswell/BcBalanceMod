@@ -43,12 +43,6 @@ public class Legacy extends BcPowerCardBase
     }
     
     @Override
-    public boolean getInnate()
-    {
-        return false;
-    }
-    
-    @Override
     public int getMagicNumber()
     {
         return 1;

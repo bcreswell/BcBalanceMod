@@ -59,13 +59,13 @@ public class Reboot extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 3 : 5;
+        return !upgraded ? 4 : 7;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Shuffle ALL cards into your draw pile. NL Draw "+ BcUtility.getCardCountString(magicNumber)+".";
+        return "Shuffle ALL cards into your draw pile. NL Draw "+ getCardCountString(magicNumber)+".";
     }
     //endregion
     

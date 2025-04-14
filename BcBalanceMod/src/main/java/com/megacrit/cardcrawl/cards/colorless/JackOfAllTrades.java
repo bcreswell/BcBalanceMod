@@ -64,7 +64,7 @@ public class JackOfAllTrades extends BcSkillCardBase
         {
             addToBot(
                 new CreateRandomCardAction(
-                    upgraded,
+                    true,
                     true,
                     false,
                     false,

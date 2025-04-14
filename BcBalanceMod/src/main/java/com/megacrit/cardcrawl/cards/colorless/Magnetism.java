@@ -57,7 +57,7 @@ public class Magnetism extends BcPowerCardBase
         }
         else
         {
-            return "Start of turn: NL Retrieve " + BcUtility.getCardCountString(magicNumber) + " randomly.";
+            return "Start of turn: NL Retrieve " + getCardCountString(magicNumber) + " randomly.";
         }
     }
     //endregion

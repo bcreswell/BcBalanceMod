@@ -75,10 +75,6 @@ public class BossChest extends AbstractChest
             
             //the corners are rareRelics + bossToRare + class relics
             relics.addAll(BcUtility.getRandomRelics(2, RelicTier.RARE, bossToRare, toRemove));
-            
-            //the first corner option is rareRelics + bossToRare
-            //the second corner option is class relics
-            //relics.addAll(BcUtility.getRandomRelics(1, null, BcUtility.getCharacterRelics(), toRemove));
         }
     }
     

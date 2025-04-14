@@ -123,6 +123,7 @@ com\megacrit\cardcrawl\actions\watcher\ForeignInfluenceAction.class
 com\megacrit\cardcrawl\cards\purple\Rushdown.class
 com\megacrit\cardcrawl\cards\blue\Overclock.class
 com\megacrit\cardcrawl\cards\red\LimitBreak.class
+com\megacrit\cardcrawl\cards\green\Alchemize.class
 com\megacrit\cardcrawl\powers\LoopPower.class
 com\megacrit\cardcrawl\cards\blue\ReinforcedBody.class
 com\megacrit\cardcrawl\cards\blue\ThunderStrike.class
@@ -194,6 +195,7 @@ com\megacrit\cardcrawl\cards\blue\Tempest.class
 com\megacrit\cardcrawl\screens\select\HandCardSelectScreen.class
 com\megacrit\cardcrawl\characters\Watcher.class
 com\megacrit\cardcrawl\powers\GhostlyBlockPower.class
+com\megacrit\cardcrawl\cards\blue\CastToPlasma.class
 com\megacrit\cardcrawl\cards\purple\EmptyMind.class
 com\megacrit\cardcrawl\cards\green\DeadlyPoison.class
 com\megacrit\cardcrawl\relics\RunicPyramid.class
@@ -217,6 +219,7 @@ com\megacrit\cardcrawl\actions\defect\RandomHiddenShivAction.class
 com\megacrit\cardcrawl\cards\red\PommelStrike.class
 com\megacrit\cardcrawl\cards\purple\JustLucky.class
 com\megacrit\cardcrawl\cards\tempCards\Beta.class
+com\megacrit\cardcrawl\powers\DashPower.class
 com\megacrit\cardcrawl\cards\blue\CreativeAI.class
 com\megacrit\cardcrawl\relics\Necronomicon.class
 com\megacrit\cardcrawl\actions\defect\RemoveNextOrbAction.class
@@ -362,6 +365,7 @@ com\megacrit\cardcrawl\cards\green\DodgeAndRoll.class
 com\megacrit\cardcrawl\cards\red\HeavyBlade.class
 com\megacrit\cardcrawl\cards\green\Outmaneuver.class
 com\megacrit\cardcrawl\actions\common\RefactorAction.class
+com\megacrit\cardcrawl\actions\defect\ScrapeFollowUpAction.class
 com\megacrit\cardcrawl\cards\purple\PressurePoints.class
 com\megacrit\cardcrawl\actions\unique\HeartSummonAction.class
 com\megacrit\cardcrawl\cards\blue\ParallelProcessing.class
@@ -639,6 +643,7 @@ com\megacrit\cardcrawl\cards\colorless\BandageUp.class
 com\megacrit\cardcrawl\cards\green\Caltrops.class
 com\megacrit\cardcrawl\cards\green\QuickSlash.class
 com\megacrit\cardcrawl\actions\common\DependencyInversionDrawAction.class
+com\megacrit\cardcrawl\actions\common\DmgIfPoisonedAction.class
 com\megacrit\cardcrawl\cards\green\Distraction.class
 com\megacrit\cardcrawl\actions\common\AbominationAction.class
 com\megacrit\cardcrawl\relics\Shovel.class
@@ -692,6 +697,7 @@ com\megacrit\cardcrawl\cards\red\Barricade.class
 com\megacrit\cardcrawl\powers\LoseDexterityPower.class
 com\megacrit\cardcrawl\vfx\cardManip\ShowCardBrieflyEffect.class
 com\megacrit\cardcrawl\cards\blue\CastToFrost.class
+com\megacrit\cardcrawl\powers\DrawReductionPower.class
 com\megacrit\cardcrawl\actions\common\MakeTempCardInDiscardAction.class
 com\megacrit\cardcrawl\actions\common\RetrieveAction.class
 com\megacrit\cardcrawl\actions\unique\SecondWindAction.class

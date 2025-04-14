@@ -69,7 +69,7 @@ public class Sentinel extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Gain !B! Block. NL NL If this card is Exhausted, NL gain "+ BcUtility.getEnergyString(magicNumber, this) +".";
+        return "Gain !B! Block. NL NL If this card is Exhausted, NL Gain "+ getEnergyString(magicNumber) +".";
     }
     //endregion
     

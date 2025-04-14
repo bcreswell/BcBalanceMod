@@ -5,12 +5,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
+import com.megacrit.cardcrawl.actions.common.DmgIfPoisonedAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.powers.PoisonPower;
-import com.megacrit.cardcrawl.powers.WeakPower;
+import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
 import com.megacrit.cardcrawl.vfx.combat.ClawEffect;
 import com.megacrit.cardcrawl.vfx.combat.DieDieDieEffect;
@@ -76,11 +75,7 @@ public class DieDieDie extends BcAttackCardBase
             addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.NONE));
         }
         
-        AbstractPower poison = monster.getPower(PoisonPower.POWER_ID);
-        if (poison != null)
-        {
-            addToBot(new VFXAction(new DieDieDieEffect(monster.hb.cX, monster.hb.cY, Color.GREEN, Color.WHITE,2), 0.12F));
-            addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.NONE));
-        }
+        //special action here so envenom as a chance to apply poison after the attack starts
+        addToBot(new DmgIfPoisonedAction(monster, new DamageInfo(player, damage, damageTypeForTurn)));
     }
 }

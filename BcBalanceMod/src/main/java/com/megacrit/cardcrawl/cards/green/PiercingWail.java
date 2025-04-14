@@ -71,12 +71,6 @@ public class PiercingWail extends BcSkillCardBase
     }
     
     @Override
-    public boolean getRetain()
-    {
-        return false;
-    }
-    
-    @Override
     public String getBaseDescription()
     {
         return "Wail !M! times. NL ALL enemies temporarily lose 1 Strength each time.";

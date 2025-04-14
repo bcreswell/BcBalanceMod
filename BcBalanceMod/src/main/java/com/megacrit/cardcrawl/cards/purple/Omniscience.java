@@ -34,7 +34,7 @@ public class Omniscience extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 4 : 3;
+        return 3;
     }
     
     @Override
@@ -52,18 +52,25 @@ public class Omniscience extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Pick a card from your hand, draw or discard piles. Play it !M! times then exhaust it.";
+        if (!upgraded)
+        {
+            return "Pick a card from your Draw Pile. Play it !M! times then Exhaust it.";
+        }
+        else
+        {
+            return "Pick a card from your Hand, Draw Pile or Discard Pile. Play it !M! times then Exhaust it.";
+        }
     }
     
     @Override
     public String getFootnote()
     {
-        return "Can't target Omniscience.";
+        return "Can't pick Omniscience.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        addToBot(new OmniscienceAction(magicNumber));
+        addToBot(new OmniscienceAction(magicNumber, upgraded));
     }
 }

@@ -5,6 +5,7 @@
 
 package com.megacrit.cardcrawl.cards.green;
 
+import bcBalanceMod.baseCards.BcSkillCardBase;
 import com.megacrit.cardcrawl.actions.common.GainEnergyAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
@@ -16,43 +17,66 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class Tactician extends AbstractCard {
+public class Tactician extends BcSkillCardBase
+{
     public static final String ID = "Tactician";
-    private static final CardStrings cardStrings;
-
-    public Tactician() {
-        super("Tactician", cardStrings.NAME, "green/skill/tactician", -2, cardStrings.DESCRIPTION, CardType.SKILL, CardColor.GREEN, CardRarity.COMMON, CardTarget.NONE);
-        this.baseMagicNumber = 1;
-        this.magicNumber = this.baseMagicNumber;
+    
+    //region card parameters
+    @Override
+    public String getImagePath()
+    {
+        return "green/skill/tactician";
     }
-
-    public void use(AbstractPlayer p, AbstractMonster m) {
+    
+    @Override
+    public int getCost()
+    {
+        return -2;
     }
-
-    public boolean canUse(AbstractPlayer p, AbstractMonster m) {
-        this.cantUseMessage = cardStrings.EXTENDED_DESCRIPTION[0];
+    
+    @Override
+    public String getId()
+    {
+        return ID;
+    }
+    
+    @Override
+    public CardRarity getCardRarity()
+    {
+        return CardRarity.COMMON;
+    }
+    
+    @Override
+    public CardTarget getCardTarget()
+    {
+        return CardTarget.NONE;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        return !upgraded ? 1 : 2;
+    }
+    
+    @Override
+    public String getBaseDescription()
+    {
+        return "When this is discarded, Gain "+getEnergyString(magicNumber)+".";
+    }
+    //endregion
+    
+    public boolean canUse(AbstractPlayer p, AbstractMonster m)
+    {
+        cantUseMessage = "Can't play that.";
         return false;
     }
-
-    public void triggerOnManualDiscard() {
-        this.addToTop(new GainEnergyAction(this.magicNumber));
+    
+    public void triggerOnManualDiscard()
+    {
+        addToTop(new GainEnergyAction(magicNumber));
     }
-
-    public AbstractCard makeCopy() {
-        return new Tactician();
-    }
-
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeMagicNumber(1);
-            this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
-
-    }
-
-    static {
-        cardStrings = CardCrawlGame.languagePack.getCardStrings("Tactician");
+    
+    public void use(AbstractPlayer player, AbstractMonster monster)
+    {
     }
 }

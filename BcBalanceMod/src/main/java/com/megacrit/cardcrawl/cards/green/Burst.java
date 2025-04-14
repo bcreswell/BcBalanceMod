@@ -46,19 +46,13 @@ public class Burst extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 0;
+        return 1;
     }
     
     @Override
     public int getMagicNumber()
     {
-        return 1;
-    }
-    
-    @Override
-    public boolean getExhaust()
-    {
-        return !upgraded;
+        return !upgraded ? 1 : 2;
     }
     
     @Override

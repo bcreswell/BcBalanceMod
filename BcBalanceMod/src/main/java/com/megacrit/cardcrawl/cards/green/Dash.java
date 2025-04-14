@@ -16,6 +16,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.DashPower;
 import com.megacrit.cardcrawl.powers.watcher.VigorPower;
 
 public class Dash extends BcAttackCardBase
@@ -83,6 +84,6 @@ public class Dash extends BcAttackCardBase
     {
         addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AttackEffect.SLASH_HORIZONTAL));
         addToBot(new GainBlockAction(player, player, block));
-        addToBot(new BcApplyPowerAction(new VigorPower(player, magicNumber)));
+        addToBot(new BcApplyPowerAction(new DashPower(magicNumber)));
     }
 }

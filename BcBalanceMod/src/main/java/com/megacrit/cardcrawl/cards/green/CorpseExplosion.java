@@ -43,13 +43,13 @@ public class CorpseExplosion extends BcSkillCardBase
     @Override
     public int getCost()
     {
-        return 2;
+        return !upgraded ? 2 : 1;
     }
     
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 6 : 11;
+        return !upgraded ? 6 : 7;
     }
     
     @Override

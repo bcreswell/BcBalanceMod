@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.megacrit.cardcrawl.cards.blue;
 
 import bcBalanceMod.*;
@@ -35,7 +30,7 @@ public class MultiCast extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.RARE;
+        return CardRarity.UNCOMMON;
     }
     
     @Override
@@ -48,6 +43,13 @@ public class MultiCast extends BcSkillCardBase
     public int getNumberOfOrbsEvokedDirectly()
     {
         return (getEvokeIterations() > 0) ? 1 : 0;
+    }
+    
+    @Override
+    public int getMagicNumber()
+    {
+        //X + magicNumber times
+        return !upgraded ? 0 : 1;
     }
     
     @Override
@@ -69,10 +71,8 @@ public class MultiCast extends BcSkillCardBase
                 evokeCount += 2;
             }
             
-            if (upgraded)
-            {
-                evokeCount++;
-            }
+            //upgraded evokes more
+            evokeCount += getMagicNumber();
             
             AbstractOrb orbToEvoke = AbstractDungeon.player.orbs.get(0);
             if ((orbToEvoke instanceof Frost) ||
@@ -88,14 +88,22 @@ public class MultiCast extends BcSkillCardBase
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
+        String xStr = "X";
+        if (magicNumber > 0)
         {
-            return "If your next Orb is Dark or Plasma, Evoke it X times. NL NL If your next Orb is Lightning or Frost, NL Evoke it X+1 times.";
+            xStr += "+"+magicNumber;
         }
-        else
-        {
-            return "If your next Orb is Dark or Plasma, Evoke it X+1 times. NL NL If your next Orb is Lightning or Frost, NL Evoke it X+2 times.";
-        }
+        
+        return "Evoke your next Orb NL "+xStr+" times. NL NL If it's Lightning or Frost, Evoke it 1 more time.";
+        
+//        if (!upgraded)
+//        {
+//            return "If your next Orb is Dark or Plasma, Evoke it X times. NL NL If your next Orb is Lightning or Frost, NL Evoke it X+1 times.";
+//        }
+//        else
+//        {
+//            return "If your next Orb is Dark or Plasma, Evoke it X+1 times. NL NL If your next Orb is Lightning or Frost, NL Evoke it X+2 times.";
+//        }
     }
     //endregion
     

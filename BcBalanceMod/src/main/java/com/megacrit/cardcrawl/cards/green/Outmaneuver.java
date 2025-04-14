@@ -34,7 +34,7 @@ public class Outmaneuver extends BcSkillCardBase
     @Override
     public CardRarity getCardRarity()
     {
-        return CardRarity.UNCOMMON;
+        return CardRarity.COMMON;
     }
     
     @Override
@@ -46,21 +46,19 @@ public class Outmaneuver extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 2 : 3;
+        return 2;
     }
     
     @Override
     public int getBlock()
     {
-        return 4;
+        return !upgraded ? 3 : 7;
     }
     
     @Override
     public String getBaseDescription()
     {
-        String energyString = BcUtility.getEnergyString(getMagicNumber(), this);
-
-        return "Gain !B! Block. NL NL Next turn, NL Gain "+energyString+".";
+        return "Gain !B! Block. NL NL Next turn, NL Gain "+getEnergyString(getMagicNumber())+".";
     }
     //endregion
     

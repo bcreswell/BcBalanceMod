@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.megacrit.cardcrawl.cards.green;
 
 import bcBalanceMod.baseCards.*;
@@ -50,27 +45,13 @@ public class Doppelganger extends BcSkillCardBase
     @Override
     public boolean getRetain()
     {
-        return true;
-    }
-    
-    @Override
-    public boolean getExhaust()
-    {
-        return !upgraded;
+        return upgraded;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Next turn, draw X cards and gain X [G].";
-//        if (!upgraded)
-//        {
-//            return "Next turn, draw X cards and gain X [G].";
-//        }
-//        else
-//        {
-//            return "Next turn, draw X+1 cards and gain X+1 [G].";
-//        }
+        return "Next turn, Draw X cards and Gain X [G].";
     }
     //endregion
     

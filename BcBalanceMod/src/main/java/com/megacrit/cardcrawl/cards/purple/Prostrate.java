@@ -54,13 +54,13 @@ public class Prostrate extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 4 : 6;
+        return 4;
     }
     
     @Override
     public int getMagicNumber()
     {
-        return 1;
+        return !upgraded ? 2 : 3;
     }
     
     @Override

@@ -54,10 +54,15 @@ public class Concentrate extends BcSkillCardBase
         return !upgraded ? 1 : 2;
     }
     
+    public int getDiscardCount()
+    {
+        return 2;
+    }
+    
     @Override
     public String getBaseDescription()
     {
-        return "Discard 2 cards. NL Gain "+BcUtility.getEnergyString(magicNumber, this)+".";
+        return "Discard " + getCardCountString(getDiscardCount()) + ". NL Gain " + getEnergyString(magicNumber) + ".";
     }
     //endregion
     

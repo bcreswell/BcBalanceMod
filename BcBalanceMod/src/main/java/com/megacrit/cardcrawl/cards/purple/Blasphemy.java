@@ -6,9 +6,11 @@ import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.watcher.EndTurnDeathPower;
+import com.megacrit.cardcrawl.vfx.SpotlightPlayerEffect;
 
 public class Blasphemy extends BcSkillCardBase
 {
@@ -77,6 +79,7 @@ public class Blasphemy extends BcSkillCardBase
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
+        AbstractDungeon.effectsQueue.add(new SpotlightPlayerEffect());
         addToBot(new ChangeStanceAction("Divinity"));
         
         if (magicNumber > 0)

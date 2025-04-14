@@ -56,7 +56,7 @@ public class Clothesline extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 13 : 15;
+        return !upgraded ? 12 : 14;
     }
 
     @Override

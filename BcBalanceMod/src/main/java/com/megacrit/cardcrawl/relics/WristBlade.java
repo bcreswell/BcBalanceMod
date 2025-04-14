@@ -1,5 +1,6 @@
 package com.megacrit.cardcrawl.relics;
 
+import bcBalanceMod.BcUtility;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.relics.AbstractRelic.LandingSound;
 import com.megacrit.cardcrawl.relics.AbstractRelic.RelicTier;
@@ -22,9 +23,7 @@ public class WristBlade extends AbstractRelic {
 
     public float atDamageModify(float damage, AbstractCard c)
     {
-        if ((c.costForTurn == 0) ||
-            c.freeToPlayOnce ||
-            ((c.cost == -1) && (EnergyPanel.totalCount == 0))) //x-cost with zero energy remaining
+        if (BcUtility.isZeroCostCard(c))
         {
             return  damage + 4.0F;
         }
@@ -32,6 +31,5 @@ public class WristBlade extends AbstractRelic {
         {
             return damage;
         }
-        //return c.costForTurn != 0 && (!c.freeToPlayOnce || c.cost == -1) ? damage : damage + 4.0F;
     }
 }

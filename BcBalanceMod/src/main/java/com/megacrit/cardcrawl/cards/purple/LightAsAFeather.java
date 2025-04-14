@@ -8,6 +8,8 @@ import com.megacrit.cardcrawl.cards.tempCards.*;
 import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.monsters.*;
 import com.megacrit.cardcrawl.powers.watcher.*;
+import com.megacrit.cardcrawl.stances.WrathStance;
+import org.apache.logging.log4j.core.jackson.ContextDataAsEntryListSerializer;
 
 public class LightAsAFeather extends BcAttackCardBase
 {
@@ -47,7 +49,7 @@ public class LightAsAFeather extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 5 : 8;
+        return !upgraded ? 5 : 7;
     }
     
     @Override
@@ -59,20 +61,16 @@ public class LightAsAFeather extends BcAttackCardBase
     @Override
     public int getMagicNumber()
     {
-        return 1;
+        return !upgraded? 1 : 2;
     }
     
     @Override
     public String getBaseDescription()
     {
-        if (getMagicNumber() == 0)
-        {
-            return "Deal !D! damage.";
-        }
-        else
-        {
-            return "Deal !D! damage. NL Gain !M! Mantra.";
-        }
+        return applyConditionalHighlight(
+            isPlayerInStance(WrathStance.STANCE_ID),
+            "Deal !D! damage. NL #gWrath: Gain "+(magicNumber+1)+" Mantra.",
+            "#gElse: Gain !M! Mantra.");
     }
     //endregion
     
@@ -81,7 +79,11 @@ public class LightAsAFeather extends BcAttackCardBase
     {
         addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_LIGHT));
         
-        if (magicNumber > 0)
+        if (isPlayerInStance(WrathStance.STANCE_ID))
+        {
+            addToBot(new BcApplyPowerAction(new MantraPower(player, magicNumber+1)));
+        }
+        else
         {
             addToBot(new BcApplyPowerAction(new MantraPower(player, magicNumber)));
         }

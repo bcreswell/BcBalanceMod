@@ -65,11 +65,11 @@ public class SeeingRed extends BcSkillCardBase
         
         if (cardDraw == 0)
         {
-            return "Gain "+BcUtility.getEnergyString(magicNumber,this)+". NL Suffer 1 Vulnerable.";
+            return "Gain "+getEnergyString(magicNumber)+". NL Suffer 1 Vulnerable.";
         }
         else
         {
-            return "Gain "+BcUtility.getEnergyString(magicNumber,this)+" and NL Draw "+getCardCountString(cardDraw)+". NL Suffer 1 Vulnerable.";
+            return "Gain "+getEnergyString(magicNumber)+" and NL Draw "+getCardCountString(cardDraw)+". NL Suffer 1 Vulnerable.";
         }
     }
     //endregion

@@ -13,7 +13,9 @@ import com.megacrit.cardcrawl.dungeons.*;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.*;
+import com.megacrit.cardcrawl.stances.DivinityStance;
 import com.megacrit.cardcrawl.vfx.combat.*;
+import com.megacrit.cardcrawl.stances.WrathStance;
 
 public class Crescendo extends BcSkillCardBase
 {
@@ -59,20 +61,20 @@ public class Crescendo extends BcSkillCardBase
     @Override //vulnerable count
     public int getMagicNumber()
     {
-        return !upgraded ? 1 : 2;
+        return 2;
     }
     
     @Override
     public String getBaseDescription()
     {
-        String description = "Remove your Weak. NL Enter Wrath.";
-        
-        if (magicNumber > 0)
-        {
-            description = "Inflict !M! Vulnerable NL on ALL Enemies. NL " + description;
-        }
-        
-        return description;
+        return applyConditionalHighlight(
+            isPlayerInStance(WrathStance.STANCE_ID) || isPlayerInStance(DivinityStance.STANCE_ID),
+            "#gWrath or #gDivinity: NL Inflict !M! Vulnerable on ALL Enemies.",
+            "#gElse: Enter Wrath.");
+//        return applyConditionalHighlight(
+//            isPlayerInStance(WrathStance.STANCE_ID),
+//            "Remove your Weak. NL #gWrath: Inflict !M! Vulnerable on enemies.",
+//            "#gElse: Enter Wrath.");
     }
     //endregion
     
@@ -80,30 +82,36 @@ public class Crescendo extends BcSkillCardBase
     {
         addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.RED_TEXT_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.3F));
         
-        if (magicNumber > 0)
+//        if (BcUtility.getPowerAmount(WeakPower.POWER_ID) > 0)
+//        {
+//            addToBot(new RemoveSpecificPowerAction(player, player, WeakPower.POWER_ID));
+//        }
+        
+        if (isPlayerInStance(WrathStance.STANCE_ID) ||
+            isPlayerInStance(DivinityStance.STANCE_ID))
         {
-            //inflict Vulnerable on all enemies
-            for (AbstractMonster monster : AbstractDungeon.getCurrRoom().monsters.monsters)
+            if (magicNumber > 0)
             {
-                addToBot(
-                    new ApplyPowerAction(
-                        monster,
-                        player,
-                        new VulnerablePower(
+                //inflict Vulnerable on all enemies
+                for (AbstractMonster monster : AbstractDungeon.getCurrRoom().monsters.monsters)
+                {
+                    addToBot(
+                        new ApplyPowerAction(
                             monster,
+                            player,
+                            new VulnerablePower(
+                                monster,
+                                magicNumber,
+                                false),
                             magicNumber,
-                            false),
-                        magicNumber,
-                        true,
-                        AbstractGameAction.AttackEffect.NONE));
+                            true,
+                            AbstractGameAction.AttackEffect.NONE));
+                }
             }
         }
-        
-        if (BcUtility.getPowerAmount(WeakPower.POWER_ID) > 0)
+        else
         {
-            addToBot(new RemoveSpecificPowerAction(player, player, WeakPower.POWER_ID));
+            addToBot(new ChangeStanceAction("Wrath"));
         }
-        
-        addToBot(new ChangeStanceAction("Wrath"));
     }
 }

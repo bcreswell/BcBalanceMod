@@ -5,26 +5,16 @@
 
 package com.megacrit.cardcrawl.cards.red;
 
-import bcBalanceMod.*;  import bcBalanceMod.baseCards.*;
+import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardTarget;
-import com.megacrit.cardcrawl.cards.AbstractCard.CardType;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.stances.*;
 import com.megacrit.cardcrawl.vfx.combat.ClashEffect;
-
-import java.util.Iterator;
 
 public class Clash extends BcAttackCardBase
 {
@@ -70,31 +60,31 @@ public class Clash extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "If you have no Skills, Powers, or Curses in hand, NL Deal !D! damage.";
+        return "If you have no Skills or Powers in hand, NL Deal !D! damage.";
     }
     //endregion
     
-    public void use(AbstractPlayer p, AbstractMonster m)
+    public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        if (m != null)
+        if (monster != null)
         {
-            this.addToBot(new VFXAction(new ClashEffect(m.hb.cX, m.hb.cY), 0.1F));
+            addToBot(new VFXAction(new ClashEffect(monster.hb.cX, monster.hb.cY), 0.1F));
         }
         
-        this.addToBot(new DamageAction(m, new DamageInfo(p, this.damage, this.damageTypeForTurn), AttackEffect.NONE));
+        addToBot(new DamageAction(monster, new DamageInfo(player, damage, damageTypeForTurn), AttackEffect.NONE));
     }
     
     @Override
     public boolean isGlowingGold()
     {
-        return !hasSkillsPowersOrCursesInHand();
+        return !hasSkillsOrPowersInHand();
     }
     
-    boolean hasSkillsPowersOrCursesInHand()
+    boolean hasSkillsOrPowersInHand()
     {
         for(AbstractCard c : AbstractDungeon.player.hand.group)
         {
-            if ((c.type == CardType.POWER) || (c.type == CardType.SKILL) || (c.type == CardType.CURSE))
+            if ((c.type == CardType.POWER) || (c.type == CardType.SKILL))
             {
                 return true;
             }
@@ -103,19 +93,19 @@ public class Clash extends BcAttackCardBase
         return false;
     }
     
-    public boolean canUse(AbstractPlayer p, AbstractMonster m)
+    public boolean canUse(AbstractPlayer player, AbstractMonster monster)
     {
-        if (!super.canUse(p, m))
+        if (!super.canUse(player, monster))
         {
             return false;
         }
         else
         {
-            for(AbstractCard c : AbstractDungeon.player.hand.group)
+            for(AbstractCard card : AbstractDungeon.player.hand.group)
             {
-                if ((c.type == CardType.CURSE) || (c.type == CardType.SKILL) || (c.type == CardType.POWER))
+                if ((card.type == CardType.SKILL) || (card.type == CardType.POWER))
                 {
-                    this.cantUseMessage = "Can't Clash with " + c.name + " in hand.";
+                    cantUseMessage = "Can't Clash with " + card.name + " in hand.";
                     return false;
                 }
             }

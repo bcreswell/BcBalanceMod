@@ -32,7 +32,7 @@ public class DeepBreath extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 2 : 3;
+        return !upgraded ? 3 : 4;
     }
     
     @Override

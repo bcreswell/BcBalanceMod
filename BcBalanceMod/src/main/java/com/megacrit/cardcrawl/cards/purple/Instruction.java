@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.characters.*;
 import com.megacrit.cardcrawl.monsters.*;
 import com.megacrit.cardcrawl.powers.watcher.*;
 import com.megacrit.cardcrawl.vfx.combat.*;
+import com.megacrit.cardcrawl.cards.tempCards.Insight;
 
 public class Instruction extends BcSkillCardBase
 {
@@ -34,6 +35,12 @@ public class Instruction extends BcSkillCardBase
     }
     
     @Override
+    public void onInitialized()
+    {
+        cardsToPreview = new Insight();
+    }
+    
+    @Override
     public CardRarity getCardRarity()
     {
         return CardRarity.UNCOMMON;
@@ -53,7 +60,7 @@ public class Instruction extends BcSkillCardBase
     
     public int getMantra()
     {
-        return !upgraded ? 2 : 3;
+        return !upgraded ? 3 : 4;
     }
     
     @Override

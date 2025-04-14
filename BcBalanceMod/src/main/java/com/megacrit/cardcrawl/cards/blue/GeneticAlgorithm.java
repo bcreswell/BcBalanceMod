@@ -60,7 +60,7 @@ public class GeneticAlgorithm extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 2 : 3;
+        return !upgraded ? 1 : 4;
     }
     
     @Override

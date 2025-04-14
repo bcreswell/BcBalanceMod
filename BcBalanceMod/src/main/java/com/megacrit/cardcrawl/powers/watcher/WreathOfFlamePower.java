@@ -15,7 +15,6 @@ import com.megacrit.cardcrawl.stances.*;
 public class WreathOfFlamePower extends AbstractPower
 {
     public static final String POWER_ID = "WreathOfFlamePower";
-    boolean hasAppliedExtraDamage;
     
     public WreathOfFlamePower(AbstractCreature owner, int amount)
     {
@@ -36,7 +35,8 @@ public class WreathOfFlamePower extends AbstractPower
     
     public float atDamageGive(float damage, DamageInfo.DamageType type)
     {
-        if (BcUtility.isPlayerInStance(WrathStance.STANCE_ID) || BcUtility.isPlayerInStance(DivinityStance.STANCE_ID))
+        if (BcUtility.isPlayerInStance(WrathStance.STANCE_ID) ||
+            BcUtility.isPlayerInStance(DivinityStance.STANCE_ID))
         {
             if (type == DamageInfo.DamageType.NORMAL)
             {
@@ -49,10 +49,8 @@ public class WreathOfFlamePower extends AbstractPower
     
     public void onUseCard(AbstractCard card, UseCardAction action)
     {
-        //tantrum is a special case were you can start outside wrath/divinity, but you'll be in wrath/divinity by the time the damage is applied
         if (BcUtility.isPlayerInStance(WrathStance.STANCE_ID) ||
-                    BcUtility.isPlayerInStance(DivinityStance.STANCE_ID) ||
-                    (card.cardID.equals(Tantrum.ID)))
+            BcUtility.isPlayerInStance(DivinityStance.STANCE_ID))
         {
             if (card.type == AbstractCard.CardType.ATTACK)
             {

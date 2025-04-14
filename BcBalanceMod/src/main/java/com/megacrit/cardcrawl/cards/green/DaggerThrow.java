@@ -79,7 +79,7 @@ public class DaggerThrow extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Draw "+ BcUtility.getCardCountString(magicNumber) +". NL Discard 1 card.";
+        return "Deal !D! damage. NL Draw "+ getCardCountString(magicNumber) +". NL Discard "+getCardCountString(1)+".";
     }
     //endregion
     

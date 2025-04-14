@@ -40,7 +40,7 @@ public class PredatorAction extends AbstractGameAction
             if ((target.isDying || target.currentHealth <= 0) &&
                 !target.halfDead)
             {
-                addToBot(new VFXAction(new BorderFlashEffect(Color.GREEN)));
+                //addToBot(new VFXAction(new BorderFlashEffect(Color.GREEN)));
                 //on killing target
                 addToBot(new DrawCardAction(draw));
                 addToBot(new GainEnergyAction(energyGain));

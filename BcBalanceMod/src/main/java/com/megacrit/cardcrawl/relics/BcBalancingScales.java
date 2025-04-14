@@ -240,10 +240,22 @@ public class BcBalancingScales extends CustomRelic
     {
         int currentRemovalPrice = BcUtility.getInitialCardRemovalCost() + removalCountForThisShop * BcUtility.getCardRemovalCostIncrement();
         
+        if (BcUtility.playerHasRelic(MembershipCard.ID))
+        {
+            currentRemovalPrice = (int)(currentRemovalPrice * .5f);
+        }
+        
+        if (BcUtility.playerHasRelic(Courier.ID))
+        {
+            currentRemovalPrice = (int)(currentRemovalPrice * .8f);
+        }
+        
         if (BcUtility.playerHasRelic(SmilingMask.ID))
         {
             currentRemovalPrice -= SmilingMask.CostReduction;
         }
+        
+        currentRemovalPrice = Math.max(1, currentRemovalPrice);
         
         return currentRemovalPrice;
     }

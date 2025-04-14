@@ -17,6 +17,7 @@ public class OmniscienceAction extends AbstractGameAction
     public static final String[] TEXT;
     private AbstractPlayer player;
     private int playAmt;
+    private boolean isUpgraded;
     CardGroup allCards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
     
     public OmniscienceAction(int numberOfCards)
@@ -26,18 +27,28 @@ public class OmniscienceAction extends AbstractGameAction
         player = AbstractDungeon.player;
         playAmt = numberOfCards;
     }
+    public OmniscienceAction(int numberOfCards, boolean isUpgraded)
+    {
+        actionType = AbstractGameAction.ActionType.CARD_MANIPULATION;
+        duration = startDuration = Settings.ACTION_DUR_FAST;
+        player = AbstractDungeon.player;
+        playAmt = numberOfCards;
+        this.isUpgraded = isUpgraded;
+    }
     
     public void update()
     {
         if (duration == startDuration)
         {
-            allCards.group.addAll(player.hand.group);
             allCards.group.addAll(player.drawPile.group);
-            allCards.group.addAll(player.discardPile.group);
+            if (isUpgraded)
+            {
+                allCards.group.addAll(player.hand.group);
+                allCards.group.addAll(player.discardPile.group);
+            }
             allCards.sortAlphabetically(true);
             allCards.sortByRarity(false);
             
-            //can't omni another omni.
             for (int i = 0; i < allCards.group.size(); i++)
             {
                 AbstractCard card = allCards.group.get(i);
@@ -46,6 +57,7 @@ public class OmniscienceAction extends AbstractGameAction
                 card.setAngle(0.0F, true);
                 card.lighten(false);
                 
+                //can't omni another omni.
                 if (card.cardID.equals(Omniscience.ID))
                 {
                     allCards.group.remove(i);
@@ -73,16 +85,19 @@ public class OmniscienceAction extends AbstractGameAction
                         AbstractDungeon.player.drawPile.group.remove(c);
                     }
                     
-                    if (AbstractDungeon.player.discardPile.group.contains(c))
+                    if (isUpgraded)
                     {
-                        AbstractDungeon.player.discardPile.group.remove(c);
-                    }
-                    
-                    if (AbstractDungeon.player.hand.group.contains(c))
-                    {
-                        //bugs out if you try to remove from hand directly. But you can omni -> omni same card if its in hand.
-                        AbstractDungeon.player.hand.moveToDeck(c, true);
-                        AbstractDungeon.player.drawPile.group.remove(c);
+                        if (AbstractDungeon.player.discardPile.group.contains(c))
+                        {
+                            AbstractDungeon.player.discardPile.group.remove(c);
+                        }
+                        
+                        if (AbstractDungeon.player.hand.group.contains(c))
+                        {
+                            //bugs out if you try to remove from hand directly. But you can omni -> omni same card if its in hand.
+                            AbstractDungeon.player.hand.moveToDeck(c, true);
+                            AbstractDungeon.player.drawPile.group.remove(c);
+                        }
                     }
                     
                     c.exhaust = true;

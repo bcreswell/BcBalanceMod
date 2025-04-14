@@ -64,7 +64,8 @@ public class MonkeyPaw extends CustomRelic implements ClickableRelic
     
     public String getUpdatedDescription()
     {
-        return "Right click to Wish for new card choices. NL #b3 Wishes total. NL Boss Card Rewards use up #b2 Wishes. NL Can also spend a Wish to bring the card rewards back up and pick another card.";
+        return "While viewing your card reward options, Right click to Wish for new cards rewards. NL #b3 Wishes total.";
+        //return "Right click to Wish for new card reward choices. NL #b3 Wishes total.";
     }
     
     @Override
@@ -90,129 +91,25 @@ public class MonkeyPaw extends CustomRelic implements ClickableRelic
     public void onRightClick()
     {
         AbstractRoom room = AbstractDungeon.getCurrRoom();
-        if ((counter > 0) &&
-            (room != null) &&
+        if ((room != null) &&
             (room.phase == AbstractRoom.RoomPhase.COMPLETE) &&
+            (AbstractDungeon.screen == AbstractDungeon.CurrentScreen.CARD_REWARD) &&
+            (counter > 0) &&
             (AbstractDungeon.cardRewardScreen.rewardGroup != null) &&
             (AbstractDungeon.cardRewardScreen.rewardGroup.size() > 0))
         {
-            //region calculate required wishes
-            int requiredWishes = 1;
-            if (AbstractDungeon.cardRewardScreen.rItem != null)
-            {
-                boolean isBoss = false;
-                
-                Class clz = AbstractDungeon.cardRewardScreen.rItem.getClass();
-                Field field = null;
-                try
-                {
-                    field = clz.getDeclaredField("isBoss");
-                    field.setAccessible(true);
-                    Object obj = field.get(AbstractDungeon.cardRewardScreen.rItem);
-                    if (obj instanceof Boolean)
-                    {
-                        isBoss = (boolean) obj;
-                    }
-                }
-                catch (NoSuchFieldException | IllegalAccessException e)
-                {
-                    e.printStackTrace();
-                }
-                
-                if (isBoss)
-                {
-                    requiredWishes = 2;
-                }
-            }
-            //endregion
+            flash();
+            setCounter(counter - 1);
             
-            if (counter >= requiredWishes)
-            {
-                if (AbstractDungeon.screen == AbstractDungeon.CurrentScreen.CARD_REWARD)
-                {
-                    //region Wish to reroll current card options
-                    flash();
-                    setCounter(counter - requiredWishes);
-                    
-                    AbstractDungeon.cardRewardScreen.rewardGroup.clear();
-                    AbstractDungeon.cardRewardScreen.rewardGroup.addAll(AbstractDungeon.getRewardCards());
-                    
-                    AbstractDungeon.cardRewardScreen.open(
-                            AbstractDungeon.cardRewardScreen.rewardGroup,
-                            AbstractDungeon.cardRewardScreen.rItem,
-                            "You wish to see different cards?");
-                    //endregion
-                }
-                else
-                {
-                    //region Wish to see card rewards again
-                    for (int i = 0; i < AbstractDungeon.cardRewardScreen.rewardGroup.size(); i++)
-                    {
-                        for (AbstractCard existingCard : AbstractDungeon.player.masterDeck.group)
-                        {
-                            if (existingCard == AbstractDungeon.cardRewardScreen.rewardGroup.get(i))
-                            {
-                                AbstractDungeon.cardRewardScreen.rewardGroup.remove(i);
-                                i--;
-                                break;
-                            }
-                        }
-                    }
-                    
-                    if (AbstractDungeon.cardRewardScreen.rewardGroup.size() > 0)
-                    {
-                        flash();
-                        setCounter(counter - requiredWishes);
-                        
-                        AbstractDungeon.cardRewardScreen.open(
-                                AbstractDungeon.cardRewardScreen.rewardGroup,
-                                AbstractDungeon.cardRewardScreen.rItem,
-                                "Choose Another Card");
-                    }
-                    //endregion
-                }
-            }
+            AbstractDungeon.cardRewardScreen.rewardGroup.clear();
+            AbstractDungeon.cardRewardScreen.rewardGroup.addAll(AbstractDungeon.getRewardCards());
+            
+            AbstractDungeon.cardRewardScreen.open(
+                AbstractDungeon.cardRewardScreen.rewardGroup,
+                AbstractDungeon.cardRewardScreen.rItem,
+                "You wish to see different cards?");
         }
     }
-    
-//    private void placeCards()
-//    {
-//        float x = Settings.WIDTH / 2.0F;
-//        float y = (float)Settings.HEIGHT * 0.45F;;
-//        int maxPossibleStartingIndex = AbstractDungeon.cardRewardScreen.rewardGroup.size() - 4;
-//        int indexToStartAt = (int) ((float) (maxPossibleStartingIndex + 1) * MathHelper.percentFromValueBetween(this.scrollLowerBound, this.scrollUpperBound, this.scrollX));
-//        if (indexToStartAt > maxPossibleStartingIndex)
-//        {
-//            indexToStartAt = maxPossibleStartingIndex;
-//        }
-//
-//        AbstractCard c;
-//        for (Iterator var5 = this.rewardGroup.iterator(); var5.hasNext(); c.current_y = y)
-//        {
-//            c = (AbstractCard) var5.next();
-//            c.drawScale = 0.75F;
-//            c.targetDrawScale = 0.75F;
-//            if (this.rewardGroup.size() > 5)
-//            {
-//                if (this.rewardGroup.indexOf(c) < indexToStartAt)
-//                {
-//                    c.current_x = (float) (-Settings.WIDTH) * 0.25F;
-//                }
-//                else if (this.rewardGroup.indexOf(c) >= indexToStartAt + 4)
-//                {
-//                    c.current_x = (float) Settings.WIDTH * 1.25F;
-//                }
-//                else
-//                {
-//                    c.current_x = x;
-//                }
-//            }
-//            else
-//            {
-//                c.current_x = x;
-//            }
-//        }
-//    }
     
     void updateImage()
     {

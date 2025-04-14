@@ -45,12 +45,6 @@ public class Refactor extends BcSkillCardBase
     }
     
     @Override
-    public boolean getExhaust()
-    {
-        return true;
-    }
-    
-    @Override
     public boolean getRetain()
     {
         return upgraded;
