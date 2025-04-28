@@ -72,7 +72,7 @@ public class PoisonedStab extends BcAttackCardBase
     @Override
     public String getBaseDescription()
     {
-        return "Deal !D! damage. NL Inflict !M! poison.";
+        return "Deal !D! damage. NL Inflict !M! Poison.";
     }
     //endregion
 

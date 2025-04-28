@@ -65,7 +65,7 @@ public class Blizzard extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 4 : 6;
+        return !upgraded ? 6 : 10;
     }
     
     @Override

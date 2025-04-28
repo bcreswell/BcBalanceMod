@@ -64,7 +64,7 @@ public class DivinityStance extends AbstractStance
     
     public void updateDescription()
     {
-        description = "Upon triggering this #yStance, gain [W] [W] [W] . Attacks deal triple damage. Retain your energy until next turn. Exit this #yStance at the start of your next turn.";
+        description = "Upon triggering this #yStance, gain [W] [W] [W] . Attacks deal triple damage. Mantra gained will heal instead. Retain your energy until next turn. Exit this #yStance at the start of your next turn.";
         //description = "Upon triggering this #yStance, gain [W] [W] [W] . Attacks deal triple damage. Exit this #yStance at the start of your next turn.";
     }
     

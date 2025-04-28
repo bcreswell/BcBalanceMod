@@ -23,8 +23,8 @@ public class SwordBoomerang extends AbstractCard {
 
     public SwordBoomerang() {
         super("Sword Boomerang", cardStrings.NAME, "red/attack/sword_boomerang", 1, cardStrings.DESCRIPTION, CardType.ATTACK, CardColor.RED, CardRarity.COMMON, CardTarget.ALL_ENEMY);
-        this.baseDamage = 4;
-        this.baseMagicNumber = 3;
+        this.baseDamage = 3;
+        this.baseMagicNumber = 4;
         this.magicNumber = this.baseMagicNumber;
     }
 

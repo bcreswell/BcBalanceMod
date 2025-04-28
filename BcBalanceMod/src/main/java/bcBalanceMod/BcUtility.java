@@ -1376,7 +1376,7 @@ public class BcUtility
             
             addKeyword(
                     new String[]{"exhume", "exhumes", "exhumed"},
-                    "Exhuming a card brings it back from the Exhaust Pile and adds it to your hand.");
+                    "Exhuming a card brings it back from the Exhaust Pile and puts it to your hand.");
             
             addKeyword(
                     new String[]{"retrieve", "retrieves", "retrieved", "retrieved.", "retrieved.)"},

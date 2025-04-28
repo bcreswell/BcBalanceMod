@@ -38,7 +38,13 @@ public class Discovery extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 3 : 5;
+        return 3;
+    }
+    
+    @Override
+    public boolean getExhaust()
+    {
+        return !upgraded;
     }
     
     @Override

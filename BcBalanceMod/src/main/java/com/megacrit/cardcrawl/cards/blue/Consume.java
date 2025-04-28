@@ -45,11 +45,17 @@ public class Consume extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 2 : 3;
+        return 2;
     }
     
     @Override
     public boolean getExhaust()
+    {
+        return !upgraded;
+    }
+    
+    @Override
+    public boolean getEthereal()
     {
         return true;
     }

@@ -10,6 +10,7 @@ import bcBalanceMod.baseCards.*;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.actions.common.GainEnergyAction;
 import com.megacrit.cardcrawl.actions.common.MakeTempCardInDiscardAction;
+import com.megacrit.cardcrawl.actions.common.MakeTempCardInDrawPileAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor;
 import com.megacrit.cardcrawl.cards.AbstractCard.CardRarity;
@@ -65,30 +66,25 @@ public class Turbo extends BcSkillCardBase
         return !upgraded ? 2 : 3;
     }
     
-    @Override
-    public boolean getExhaust()
+    public int getCardDraw()
     {
-        return true;
+        return 1;
     }
-
+    
     @Override
     public String getBaseDescription()
     {
-        if (!upgraded)
-        {
-            return "Gain [B] [B]. NL Add a *Void into your discard pile.";
-        }
-        else
-        {
-            return "Gain [B] [B] [B]. NL Add a *Void into your discard pile.";
-        }
+        return "Gain "+getEnergyString(magicNumber)+". NL Draw "+getCardCountString(getCardDraw())+". NL NL Shuffle a *Void into your Draw Pile.";
+        //return "Gain "+getEnergyString(magicNumber)+". NL Draw "+getCardCountString(getCardDraw())+". NL NL Add a *Void into your discard pile.";
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
         addToBot(new GainEnergyAction(magicNumber));
-        //addToBot(new DrawCardAction(1));
-        addToBot(new MakeTempCardInDiscardAction(new VoidCard(), 1));
+        addToBot(new DrawCardAction(getCardDraw()));
+        
+        addToBot(new MakeTempCardInDrawPileAction(new VoidCard(), 1, true, true, false));
+        //addToBot(new MakeTempCardInDiscardAction(new VoidCard(), 1));
     }
 }

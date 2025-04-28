@@ -14,7 +14,7 @@ public class WristBlade extends AbstractRelic {
     }
     
     public String getUpdatedDescription() {
-      return this.DESCRIPTIONS[0];
+      return this.DESCRIPTIONS[0]+" NL This includes Hidden Shivs.";
     }
     
     public AbstractRelic makeCopy() {

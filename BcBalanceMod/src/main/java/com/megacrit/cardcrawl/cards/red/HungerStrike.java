@@ -81,7 +81,9 @@ public class HungerStrike extends BcAttackCardBase
     {
         for (AbstractMonster monster : AbstractDungeon.getCurrRoom().monsters.monsters)
         {
-            if (!monster.isDeadOrEscaped() && (monster.getIntentBaseDmg() < 0))
+            if (!monster.isDeadOrEscaped() &&
+                (monster.intent != AbstractMonster.Intent.DEBUG) && //this can happen briefly at the start of combat
+                (monster.getIntentBaseDmg() < 0))
             {
                 return true;
             }

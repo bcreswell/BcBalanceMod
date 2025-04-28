@@ -26,16 +26,19 @@ public class JustLuckyAction extends AbstractGameAction
     @Override
     public void update()
     {
+        //50% crit chance
         if (AbstractDungeon.cardRng.random(0, 1) == 1)
         {
             AbstractCard tempCard = card.makeStatEquivalentCopy();
             tempCard.calculateCardDamage((AbstractMonster) target);
             tempCard.damage = tempCard.damage * 3;
             
-            //slo-mo coin
+            //slo-mo coin when it crits
             addToBot(new VFXAction(new FlickCoinEffect(source.hb.cX, source.hb.cY, target.hb.cX, target.hb.cY, 2f), 2F));
             addToBot(new ShakeScreenAction(0.0F, ScreenShake.ShakeDur.MED, ScreenShake.ShakeIntensity.HIGH));
-            addToBot(new VFXAction(new BorderLongFlashEffect(Color.GOLD)));
+            
+            addToBot(new VFXAction(new FlashAtkImgEffect(target.hb.cX, target.hb.cY, AttackEffect.FIRE, false)));
+            //addToBot(new VFXAction(new BorderLongFlashEffect(Color.GOLD)));
             addToBot(new DamageAction(target, new DamageInfo(source, tempCard.damage, DamageInfo.DamageType.NORMAL), AttackEffect.BLUNT_HEAVY));
         }
         else

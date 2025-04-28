@@ -71,21 +71,14 @@ public class Crescendo extends BcSkillCardBase
             isPlayerInStance(WrathStance.STANCE_ID) || isPlayerInStance(DivinityStance.STANCE_ID),
             "#gWrath or #gDivinity: NL Inflict !M! Vulnerable on ALL Enemies.",
             "#gElse: Enter Wrath.");
-//        return applyConditionalHighlight(
-//            isPlayerInStance(WrathStance.STANCE_ID),
-//            "Remove your Weak. NL #gWrath: Inflict !M! Vulnerable on enemies.",
-//            "#gElse: Enter Wrath.");
     }
     //endregion
     
     public void use(AbstractPlayer player, AbstractMonster notUsed)
     {
-        addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.RED_TEXT_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.3F));
-        
-//        if (BcUtility.getPowerAmount(WeakPower.POWER_ID) > 0)
-//        {
-//            addToBot(new RemoveSpecificPowerAction(player, player, WeakPower.POWER_ID));
-//        }
+        addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.RED_TEXT_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.1F));
+        addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.RED_TEXT_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.1F));
+        addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.RED_TEXT_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.1F));
         
         if (isPlayerInStance(WrathStance.STANCE_ID) ||
             isPlayerInStance(DivinityStance.STANCE_ID))

@@ -56,7 +56,7 @@ public class Shockwave extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return 4;
+        return 3;
     }
     
     @Override

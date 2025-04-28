@@ -74,38 +74,13 @@ public class Tranquility extends BcSkillCardBase
     {
         if ((magicNumber > 0) && (AbstractDungeon.player != null))
         {
-            addToBot(new GainBlockAction(AbstractDungeon.player, block));
+            flash();
+            addToBot(new GainBlockAction(AbstractDungeon.player, magicNumber));
         }
     }
     
     public void use(AbstractPlayer player, AbstractMonster notUsed)
     {
         addToBot(new ChangeStanceAction("Calm"));
-        
-        if (block > 0)
-        {
-            addToBot(new GainBlockAction(player, block));
-        }
-        
-//        if (magicNumber > 0)
-//        {
-//            addToBot(new VFXAction(player, new ShockWaveEffect(player.hb.cX, player.hb.cY, Settings.BLUE_TEXT_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.2F));
-//
-//            //inflict Weak on all enemies
-//            for (AbstractMonster monster : AbstractDungeon.getCurrRoom().monsters.monsters)
-//            {
-//                addToBot(
-//                        new ApplyPowerAction(
-//                                monster,
-//                                player,
-//                                new WeakPower(
-//                                        monster,
-//                                        magicNumber,
-//                                        false),
-//                                magicNumber,
-//                                true,
-//                                AbstractGameAction.AttackEffect.NONE));
-//            }
-//        }
     }
 }

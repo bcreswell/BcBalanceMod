@@ -44,7 +44,7 @@ public class HiddenShivFlingAction extends AbstractGameAction
             DamageInfo info = new DamageInfo(source, shiv.damage);
             info.base = shiv.damage;
             info.output = shiv.damage;
-            info.type = DamageInfo.DamageType.THORNS; //switch to thorns dmg to prevent triggering envenom, static discharge, etc.
+            info.type = DamageInfo.DamageType.NORMAL; //switch to thorns dmg if you want to prevent triggering envenom, static discharge, etc.
             info.name = HiddenShivPower.POWER_ID; //used to prevent Hidden Shivs from triggering more Hidden Shivs
             addToTop(new DamageAction(target, info, AbstractGameAction.AttackEffect.SLASH_HORIZONTAL, true));
     

@@ -46,9 +46,15 @@ public class WraithForm extends BcPowerCardBase
     }
     
     @Override
+    public boolean getRetain()
+    {
+        return upgraded;
+    }
+    
+    @Override
     public String getBaseDescription()
     {
-        return "Become Intangible this turn and every 3rd turn for the rest of combat. ";
+        return "Become Intangible this turn and every 3rd turn for the rest of combat.";
     }
     
     @Override

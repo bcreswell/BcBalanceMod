@@ -28,7 +28,7 @@ public class DecryptionDance extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return 3;
+        return !upgraded ? 3 : 2;
     }
     
     @Override
@@ -48,10 +48,10 @@ public class DecryptionDance extends BcPowerCardBase
     {
         String description = "Attacks that cost 1 or more will Channel a random Orb and NL Lose 1 Focus.";
         
-        if (upgraded)
-        {
+//        if (upgraded)
+//        {
             description += " NL Your Focus can no longer be negative.";
-        }
+        //}
         
         return description;
     }
@@ -59,7 +59,7 @@ public class DecryptionDance extends BcPowerCardBase
     
     public void use(AbstractPlayer player, AbstractMonster monster)
     {
-        DecryptionDancePower power = new DecryptionDancePower(player, 1, upgraded);
+        DecryptionDancePower power = new DecryptionDancePower(player, 1, true);
         //power.upgraded = upgraded;
         addToBot(new BcApplyPowerAction(power));
     }

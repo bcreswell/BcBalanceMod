@@ -59,7 +59,7 @@ public class Supermassive extends BcSkillCardBase
     @Override
     public int getMagicNumber()
     {
-        return !upgraded ? 8 : 12;
+        return !upgraded ? 6 : 12;
     }
     
     @Override

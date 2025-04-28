@@ -23,7 +23,7 @@ public class Storm extends BcPowerCardBase
     @Override
     public int getCost()
     {
-        return !upgraded ? 1 : 0;
+        return 1;
     }
     
     @Override
@@ -47,13 +47,13 @@ public class Storm extends BcPowerCardBase
     @Override
     public int getMagicNumber()
     {
-        return 1;
+        return !upgraded ? 1 : 2;
     }
     
     @Override
     public String getBaseDescription()
     {
-        return "Whenever you play a Power card, Channel 1 Lightning.";
+        return "Whenever you play a Power card, Channel !M! Lightning.";
     }
     //endregion
     

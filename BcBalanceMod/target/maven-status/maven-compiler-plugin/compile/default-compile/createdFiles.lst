@@ -79,6 +79,7 @@ bcBalanceMod\BcBalanceMod$1.class
 com\megacrit\cardcrawl\actions\unique\DiscoveryImprovedAction.class
 com\megacrit\cardcrawl\powers\NightmarePower.class
 com\megacrit\cardcrawl\actions\AbstractGameAction$ActionType.class
+com\megacrit\cardcrawl\powers\ThinkingAheadPower.class
 com\megacrit\cardcrawl\screens\MasterDeckSortHeader$1.class
 com\megacrit\cardcrawl\vfx\cardManip\ShowCardAndAddToDiscardEffect.class
 com\megacrit\cardcrawl\cards\red\Warcry.class
@@ -179,6 +180,7 @@ com\megacrit\cardcrawl\relics\BcAbacus.class
 com\megacrit\cardcrawl\cards\green\Expertise.class
 com\megacrit\cardcrawl\cards\red\BurningPact.class
 com\megacrit\cardcrawl\powers\ReinforcementsPower.class
+com\megacrit\cardcrawl\cards\colorless\Impatience.class
 com\megacrit\cardcrawl\actions\unique\DoppelgangerAction.class
 com\megacrit\cardcrawl\cards\AbstractCard$CardTarget.class
 com\megacrit\cardcrawl\powers\AllNaturalIngredientsPower.class
@@ -243,6 +245,7 @@ com\megacrit\cardcrawl\actions\defect\FissionAction.class
 com\megacrit\cardcrawl\cards\purple\Evaluate.class
 com\megacrit\cardcrawl\cards\red\BattleTrance.class
 com\megacrit\cardcrawl\powers\InfiniteBladesPower.class
+com\megacrit\cardcrawl\cards\purple\Conclude.class
 com\megacrit\cardcrawl\cards\tempCards\Miracle.class
 com\megacrit\cardcrawl\monsters\city\BookOfStabbing.class
 com\megacrit\cardcrawl\cards\red\DoubleTap.class

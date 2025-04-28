@@ -760,6 +760,12 @@ public class HandCardSelectScreen
             FontHelper.renderFontCentered(sb, FontHelper.buttonLabelFont, this.message, (float) (Settings.WIDTH / 2), (float) Settings.HEIGHT - 180.0F * Settings.scale, Settings.CREAM_COLOR);
             if (!Settings.FAST_HAND_CONF || this.numCardsToSelect != 1 || this.canPickZero)
             {
+                if (!this.anyNumber)
+                {
+                    int numLeft = Math.min(hand.size(), numCardsToSelect - selectedCards.group.size());
+                    //extra indicator close to the confirm button showing you how many you have left
+                    FontHelper.renderFontCentered(sb, FontHelper.buttonLabelFont, Integer.toString(numLeft), (Settings.WIDTH / 2.0F), (float)  (475.0F * Settings.scale) + 80.0F, Settings.CREAM_COLOR);
+                }
                 this.button.render(sb);
             }
             

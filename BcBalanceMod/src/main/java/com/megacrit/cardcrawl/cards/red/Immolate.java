@@ -56,7 +56,7 @@ public class Immolate extends BcAttackCardBase
     @Override
     public int getDamage()
     {
-        return !upgraded ? 22 : 29;
+        return !upgraded ? 22 : 30;
     }
     
     @Override

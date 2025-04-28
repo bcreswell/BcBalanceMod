@@ -22,7 +22,7 @@ public class ScrapeFollowUpAction extends AbstractGameAction {
 
             while(var1.hasNext()) {
                 AbstractCard c = (AbstractCard)var1.next();
-                if (BcUtility.isZeroCostCard(c)) {
+                if (!BcUtility.isZeroCostCard(c)) {
                     AbstractDungeon.player.hand.moveToDiscardPile(c);
                     c.triggerOnManualDiscard();
                     GameActionManager.incrementDiscard(false);

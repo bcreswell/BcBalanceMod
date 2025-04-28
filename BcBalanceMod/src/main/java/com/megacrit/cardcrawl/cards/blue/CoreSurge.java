@@ -48,13 +48,13 @@ public class CoreSurge extends BcAttackCardBase
     @Override
     public int getCost()
     {
-        return 2;
+        return 1;
     }
     
     @Override
     public int getDamage()
     {
-        return !upgraded ? 13 : 18;
+        return !upgraded ? 7 : 12;
     }
     
     @Override

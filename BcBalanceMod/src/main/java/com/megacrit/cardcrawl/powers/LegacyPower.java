@@ -79,8 +79,8 @@ public class LegacyPower extends BcPowerBase
     public void onApplyPower(AbstractPower power, AbstractCreature target, AbstractCreature source)
     {
         if ((target == AbstractDungeon.player) &&
-                    (power.ID.equals(MantraPower.POWER_ID)) &&
-                    (power.amount >= mantraThreshold))
+            (power.ID.equals(MantraPower.POWER_ID)) &&
+            (power.amount >= mantraThreshold))
         {
             flash();
             addToBot(new DrawCardAction(amount));

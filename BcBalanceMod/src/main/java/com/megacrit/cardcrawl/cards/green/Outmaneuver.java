@@ -52,7 +52,7 @@ public class Outmaneuver extends BcSkillCardBase
     @Override
     public int getBlock()
     {
-        return !upgraded ? 3 : 7;
+        return !upgraded ? 3 : 6;
     }
     
     @Override
